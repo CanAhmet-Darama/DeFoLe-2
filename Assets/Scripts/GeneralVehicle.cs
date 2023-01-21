@@ -11,6 +11,7 @@ public class GeneralVehicle : MonoBehaviour
 
     [Header("Driving")]
     public float motorPower;
+    public float maxSpeed;
     public float steerAngle;
     public float steerSpeed;
     public float brakePower;
@@ -25,7 +26,7 @@ public class GeneralVehicle : MonoBehaviour
     protected void VehicleStart()
     {
         vehicleRb = GetComponent<Rigidbody>();
-        vehicleRb.centerOfMass = centerOfMassOffset;
+        vehicleRb.centerOfMass += centerOfMassOffset;
         Debug.Log("VehicleStart works");
     }
     protected void VehicleUpdate()
@@ -39,14 +40,17 @@ public class GeneralVehicle : MonoBehaviour
     {
         for (int i = axles.Length; i > 0; i--)
         {
-            axles[i - 1].leftMesh.transform.rotation = OffsetQuaternion(axles[i - 1].leftCol.transform.rotation, rotateOffset);
-            axles[i - 1].rightMesh.transform.rotation = OffsetQuaternion(axles[i - 1].rightCol.transform.rotation, rotateOffset);
-
+            SetWheelPosRot(axles[i - 1].leftCol, axles[i - 1].leftMesh.transform);
+            SetWheelPosRot(axles[i - 1].rightCol, axles[i - 1].rightMesh.transform);
         }
     }
-    Quaternion OffsetQuaternion(Quaternion wheelQua, float yOffset)
+    void SetWheelPosRot(WheelCollider wheelCol, Transform wheelMesh)
     {
-        return new Quaternion(wheelQua.x, wheelQua.y + yOffset, wheelQua.z, wheelQua.w);
+        Vector3 position;
+        Quaternion rotation;
+        wheelCol.GetWorldPose(out position, out rotation);
+        wheelMesh.position = position;
+        wheelMesh.rotation = rotation;
     }
 
 }

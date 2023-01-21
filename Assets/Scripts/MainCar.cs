@@ -11,7 +11,7 @@ public class MainCar : GeneralVehicle
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         VehicleUpdate();
         Drive();
@@ -19,7 +19,7 @@ public class MainCar : GeneralVehicle
 
     void Drive()
     {
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && vehicleRb.velocity.magnitude <= maxSpeed)
         {
             for(int i = axles.Length; i > 0; i--)
             {
@@ -27,7 +27,7 @@ public class MainCar : GeneralVehicle
                 axles[i-1].rightCol.motorTorque = motorPower;
             }
         }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && vehicleRb.velocity.magnitude <= maxSpeed)
         {
             for (int i = axles.Length; i > 0; i--)
             {
@@ -56,11 +56,8 @@ public class MainCar : GeneralVehicle
         }
         else
         {
-            if(vehicleRb.velocity.magnitude != 0)
-            {
-                    axles[0].leftCol.steerAngle = 0;
-                    axles[0].rightCol.steerAngle = 0;
-            }
+               axles[0].leftCol.steerAngle = 0;
+               axles[0].rightCol.steerAngle = 0;
         }
 
 
