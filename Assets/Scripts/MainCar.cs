@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MainCar : GeneralVehicle
@@ -14,7 +16,10 @@ public class MainCar : GeneralVehicle
     void FixedUpdate()
     {
         VehicleUpdate();
-        Drive();
+        if(GameManager.mainState == PlayerState.inMainCar)
+        {
+            Drive();
+        }
     }
 
     void Drive()
@@ -46,18 +51,21 @@ public class MainCar : GeneralVehicle
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            axles[0].leftCol.steerAngle = -steerAngle;
-            axles[0].rightCol.steerAngle = -steerAngle;
+            axles[0].leftCol.steerAngle = Mathf.Lerp(axles[0].leftCol.steerAngle, -steerAngle, steerSpeed * Time.deltaTime);
+            axles[0].rightCol.steerAngle = Mathf.Lerp(axles[0].rightCol.steerAngle, -steerAngle, steerSpeed * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            axles[0].leftCol.steerAngle = steerAngle;
-            axles[0].rightCol.steerAngle = steerAngle;
+            axles[0].leftCol.steerAngle = Mathf.Lerp(axles[0].leftCol.steerAngle, steerAngle, steerSpeed * Time.deltaTime);
+            axles[0].rightCol.steerAngle = Mathf.Lerp(axles[0].rightCol.steerAngle, steerAngle, steerSpeed * Time.deltaTime);
         }
         else
         {
-               axles[0].leftCol.steerAngle = 0;
-               axles[0].rightCol.steerAngle = 0;
+            if (axles[0].leftCol.steerAngle != 0 && axles[0].rightCol.steerAngle != 0)
+            {
+                axles[0].leftCol.steerAngle = Mathf.Lerp(axles[0].leftCol.steerAngle, 0, steerSpeed * Time.deltaTime);
+                axles[0].rightCol.steerAngle = Mathf.Lerp(axles[0].rightCol.steerAngle, 0, steerSpeed * Time.deltaTime);
+            }
         }
 
 

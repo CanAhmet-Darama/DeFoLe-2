@@ -27,13 +27,10 @@ public class GeneralVehicle : MonoBehaviour
     {
         vehicleRb = GetComponent<Rigidbody>();
         vehicleRb.centerOfMass += centerOfMassOffset;
-        Debug.Log("VehicleStart works");
     }
     protected void VehicleUpdate()
     {
         UpdateWheelMeshes();
-        Debug.Log("VehicleUpdate works");
-        Debug.Log(vehicleRb.centerOfMass);
     }
 
     protected void UpdateWheelMeshes()
