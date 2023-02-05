@@ -88,7 +88,7 @@ public class MainCar : GeneralVehicle
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.L))
         {
             gameObject.transform.rotation = new Quaternion(0,gameObject.transform.rotation.y + 90,0,0);
             vehicleRb.velocity = new Vector3(0, 0, 0);

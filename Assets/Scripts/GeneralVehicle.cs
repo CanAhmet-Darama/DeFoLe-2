@@ -15,7 +15,6 @@ public class GeneralVehicle : MonoBehaviour
     public float steerAngle;
     public float steerSpeed;
     public float brakePower;
-    float rotateOffset = -90;
 
     [Header("Health and Other")]
     public short vehicleHealth;

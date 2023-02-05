@@ -11,14 +11,24 @@ public class GeneralCharacter : MonoBehaviour
     public float runAcceleration;
     public byte health;
     public Rigidbody rb;
+   
 
     [Header("Animation")]
     public Animator animator;
 
+
+    [Header("Not to meddle with")]
+    #region Some Variables
+    public bool charMoving;
+    Vector3 refVelo = Vector3.zero;
+    protected Vector3 targetRotation;
+    protected Direction dirToMove;
+    protected Vector3 direction = Vector3.zero;
+    #endregion
+
     public void MoveChar(Vector3 direction, float speed)
     {
         rb.velocity = direction.normalized * speed;
-        Debug.Log(rb.velocity.magnitude);
     }
     public void AccelerateChar(Vector3 direction, float acc)
     {
@@ -30,14 +40,10 @@ public class GeneralCharacter : MonoBehaviour
         if (rb.velocity.magnitude < walkSpeed)
         {
             AccelerateChar(direction, walkAcceleration);
-            Debug.Log("3rd working");
-
         }
         else
         {
             MoveChar(direction, walkSpeed);
-            Debug.Log("4th working");
-
         }
     }
     public void AccAndRun(Vector3 direction)
@@ -45,16 +51,15 @@ public class GeneralCharacter : MonoBehaviour
         if (rb.velocity.magnitude < runSpeed)
         {
             AccelerateChar(direction, runAcceleration);
-            Debug.Log("5th working");
-
         }
         else
         {
             MoveChar(direction, runSpeed);
-            Debug.Log("6th working");
-
         }
     }
-
-
+    public void RotateChar(Vector3 amount, float smoothTime)
+    {
+        transform.eulerAngles = Vector3.SmoothDamp(transform.eulerAngles, amount, ref refVelo, smoothTime);
+    }
+    protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight }
 }
