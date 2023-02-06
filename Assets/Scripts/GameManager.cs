@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,11 +20,16 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        mainState = PlayerState.onFoot;
-        mainCam = mainCamIsThis;
-        mainCam.GetComponent<CameraScript>().AdjustCameraPivot();
-        mainChar = mainCharIsThis;
-        mainChar.GetComponent<MainCharacter>().RegulateMainChar();
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Level 1":
+                mainState = PlayerState.onFoot;
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivot();
+                mainChar = mainCharIsThis;
+                mainChar.GetComponent<MainCharacter>().RegulateMainChar();
+                break;
+        }
+
     }
 
 

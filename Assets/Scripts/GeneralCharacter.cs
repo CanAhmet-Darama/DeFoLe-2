@@ -21,7 +21,8 @@ public class GeneralCharacter : MonoBehaviour
     #region Some Variables
     public bool charMoving;
     Vector3 refVelo = Vector3.zero;
-    protected Vector3 targetRotation;
+    float floRefVelo = 0;
+    protected Quaternion targetRotation;
     protected Direction dirToMove;
     protected Vector3 direction = Vector3.zero;
     #endregion
@@ -37,29 +38,40 @@ public class GeneralCharacter : MonoBehaviour
 
     public void AccAndWalk(Vector3 direction)
     {
-        if (rb.velocity.magnitude < walkSpeed)
+        if (rb.velocity.magnitude > walkSpeed)
         {
-            AccelerateChar(direction, walkAcceleration);
+            MoveChar(direction, walkSpeed);
         }
         else
         {
-            MoveChar(direction, walkSpeed);
+            AccelerateChar(direction, walkAcceleration);
         }
     }
     public void AccAndRun(Vector3 direction)
     {
-        if (rb.velocity.magnitude < runSpeed)
-        {
-            AccelerateChar(direction, runAcceleration);
-        }
-        else
+        if (rb.velocity.magnitude > runSpeed)
         {
             MoveChar(direction, runSpeed);
         }
+        else
+        {
+            AccelerateChar(direction, runAcceleration);
+        }
     }
-    public void RotateChar(Vector3 amount, float smoothTime)
+    public void RotateChar(Vector3 target, float smoothTime)
     {
-        transform.eulerAngles = Vector3.SmoothDamp(transform.eulerAngles, amount, ref refVelo, smoothTime);
+        if (Mathf.Abs((transform.eulerAngles.y - target.y)) < 5)
+        {
+            transform.eulerAngles = target;
+        }
+        else if((transform.eulerAngles.y - target.y) < 0)
+        {
+            transform.Rotate(Vector3.up, 5);
+        }
+        else //if((transform.eulerAngles.y - target.y) > 0)
+        {
+            transform.Rotate(Vector3.up, -5);
+        }
     }
-    protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight }
+    protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
 }

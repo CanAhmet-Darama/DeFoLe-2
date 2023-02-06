@@ -15,14 +15,14 @@ public class CameraScript : MonoBehaviour
     float camFollowCooldown = 1.5f;
     bool camCanFollow = true;
     Vector3 velocity = Vector3.zero;
-    float carPivotStartingDistance;
     Coroutine holdNumeratorCar;
 
     [Header("For On Foot")]
     [SerializeField] Transform mainChar;
     public Transform freeLookPivotOnFoot;
     [SerializeField] Transform camPointOnFoot;
-    [SerializeField] Vector3 offsetChar;
+    [SerializeField] Vector3 offsetCharPivot;
+    [SerializeField] Vector3 offsetCharFollow;
     float smoothTimeOnFoot = 0.15f;
 
 
@@ -37,8 +37,12 @@ public class CameraScript : MonoBehaviour
     {
         GameManager.mainCam = transform;
         freeLookPivotCar.localPosition = offsetVehicle;
-        carPivotStartingDistance = (freeLookPivotCar.position - transform.position).magnitude;
         mainChar.GetComponent<MainCharacter>().charMoving = false;
+        if(GameManager.mainState == PlayerState.onFoot)
+        {
+            Debug.Log("on foot found");
+
+        }
     }
 
     void Update()
@@ -68,6 +72,7 @@ public class CameraScript : MonoBehaviour
             mouseY = 0;
         }
     }
+
     void CamFollowMainCar()
     {
         if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -109,27 +114,41 @@ public class CameraScript : MonoBehaviour
     void CamFollowMainCharacter()
     {
         camPointOnFoot.position = Vector3.SmoothDamp(camPointOnFoot.transform.position, mainChar.position, ref velocity, smoothTimeOnFoot);
-        camPointOnFoot.eulerAngles = Vector3.Lerp(camPointOnFoot.eulerAngles, mainChar.eulerAngles, 0.2f);
+        if(Mathf.Abs((camPointOnFoot.eulerAngles.y - mainChar.eulerAngles.y)) < 180 || !mouseMoved)
+        {
+            camPointOnFoot.eulerAngles = Vector3.Lerp(camPointOnFoot.eulerAngles, mainChar.eulerAngles, 0.2f);
+        }
+        else
+        {
+            camPointOnFoot.eulerAngles = mainChar.eulerAngles;
+        }
+
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            AdjustCameraPivot();
+            AdjustCameraPivot(CamState.pivot);
         }
+        else if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            AdjustCameraPivot(CamState.follow);
+        }
+
         if (Input.GetKey(KeyCode.Mouse1))
         {
             mouseX += Input.GetAxis("Mouse X") * GameManager.mouseSensitivity;
             mouseY -= Input.GetAxis("Mouse Y") * GameManager.mouseSensitivity;
-            freeLookPivotOnFoot.rotation = Quaternion.Euler(Mathf.Clamp(mouseY, -30, 50), mouseX, 0);
+            mouseY = Mathf.Clamp(mouseY, -30, 50);
+            freeLookPivotOnFoot.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+        }
+        else
+        {
+            UncontrolledCameraFollowChar();
         }
     }
     public void AdjustCameraPivot()
     {
         if (GameManager.mainState == PlayerState.onFoot)
         {
-            mouseX = 0; mouseY = 0;
-            transform.SetParent(freeLookPivotOnFoot);
-            transform.localPosition = offsetChar;
-            freeLookPivotOnFoot.eulerAngles = transform.eulerAngles;
-            transform.localEulerAngles = Vector3.zero;
+            AdjustCameraPivot(CamState.follow);
         }
         else if (GameManager.mainState == PlayerState.inMainCar)
         {
@@ -139,6 +158,26 @@ public class CameraScript : MonoBehaviour
              transform.localPosition = freeOffsetCar;
         }
     }
+    public void AdjustCameraPivot(CamState stateCam)
+    {
+        //mouseX = 0; mouseY = 0;
+        switch (stateCam)
+        {
+            case CamState.pivot:
+                transform.SetParent(freeLookPivotOnFoot);
+                transform.localPosition = offsetCharPivot;
+                freeLookPivotOnFoot.eulerAngles = transform.eulerAngles;
+                transform.localEulerAngles = Vector3.zero;
+                break;
+            case CamState.follow:
+                camPointOnFoot.eulerAngles = transform.eulerAngles;
+                transform.SetParent(camPointOnFoot);
+                transform.localPosition = offsetCharFollow;
+                break;
+        }
+    }
+
+
     public void DetectMouseMotion()
     {
         if(lastMousePos != new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")))
@@ -151,4 +190,12 @@ public class CameraScript : MonoBehaviour
         }
         lastMousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
+    void UncontrolledCameraFollowChar()
+    {
+        mouseX += Input.GetAxis("Mouse X") * GameManager.mouseSensitivity;
+        mouseY -= Input.GetAxis("Mouse Y") * GameManager.mouseSensitivity;
+        mouseY = Mathf.Clamp(mouseY, -30, 50);
+        camPointOnFoot.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+    }
 }
+public enum CamState { pivot, follow}
