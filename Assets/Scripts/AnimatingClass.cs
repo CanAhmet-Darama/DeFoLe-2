@@ -39,25 +39,24 @@ public class AnimatingClass : MonoBehaviour
                     case AnimStatePriDir.front:
                         switch (seconState)
                         {
-                            case AnimStateSecDir.none: character.animator.Play(""); break;
-                            case AnimStateSecDir.left: character.animator.Play(""); break;
-                            case AnimStateSecDir.right: character.animator.Play(""); break;
+                            case AnimStateSecDir.none: character.animator.Play("Running"); break;
+                            case AnimStateSecDir.left: character.animator.Play("Run Front Left"); break;
+                            case AnimStateSecDir.right: character.animator.Play("Run Front Right"); break;
                         }
                         break;
                     case AnimStatePriDir.back:
                         switch (seconState)
                         {
-                            case AnimStateSecDir.none: character.animator.Play(""); break;
-                            case AnimStateSecDir.left: character.animator.Play(""); break;
-                            case AnimStateSecDir.right: character.animator.Play(""); break;
+                            case AnimStateSecDir.none: character.animator.Play("Run Back"); break;
+                            case AnimStateSecDir.left: character.animator.Play("Run Back Left"); break;
+                            case AnimStateSecDir.right: character.animator.Play("Run Back Right"); break;
                         }
                         break;
                     case AnimStatePriDir.none:
                         switch (seconState)
                         {
-                            case AnimStateSecDir.none: character.animator.Play(""); break;
-                            case AnimStateSecDir.left: character.animator.Play(""); break;
-                            case AnimStateSecDir.right: character.animator.Play(""); break;
+                            case AnimStateSecDir.left: character.animator.Play("Run Left"); break;
+                            case AnimStateSecDir.right: character.animator.Play("Run Right"); break;
                         }
                         break;
                 }
@@ -84,8 +83,8 @@ public class AnimatingClass : MonoBehaviour
                     case AnimStatePriDir.none:
                         switch (seconState)
                         {
-                            case AnimStateSecDir.left: character.animator.Play(""); break;
-                            case AnimStateSecDir.right: character.animator.Play(""); break;
+                            case AnimStateSecDir.left: character.animator.Play("Walk Left"); break;
+                            case AnimStateSecDir.right: character.animator.Play("Walk Right"); break;
                         }
                         break;
                 }
