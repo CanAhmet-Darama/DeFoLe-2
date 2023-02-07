@@ -8,7 +8,7 @@ public class AnimatingClass : MonoBehaviour
     MainCharacter character;
     void Start()
     {
-        character = GetComponent<MainCharacter>();
+        character = transform.parent.GetComponent<MainCharacter>();
         character.animator = GetComponent<Animator>();
         character.animator.Play("Idle");
         character.animStateSpeed = AnimStateSpeed.idle;

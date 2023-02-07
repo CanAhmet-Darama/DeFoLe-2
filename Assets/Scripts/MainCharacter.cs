@@ -5,11 +5,12 @@ using UnityEngine;
 public class MainCharacter : GeneralCharacter
 {
     [SerializeField] Transform camFreeLookPivot;
+    [SerializeField] Transform meshAndArmature;
     AnimatingClass playerAnimating;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        playerAnimating = GetComponent<AnimatingClass>();
+        playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
     }
 
