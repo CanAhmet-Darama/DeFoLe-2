@@ -68,12 +68,6 @@ public class GeneralCharacter : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
     }
     protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
-    //public enum AnimState { idle, walkFo, walkBa, walkFoLeft, walkBaLeft, walkFoRight,walkBaRight, 
-    //                        walkLeft, walkRight, runFo, runBa, runFoLeft, runBaLeft, runFoRight, runBaRight,
-    //                        runLeft, runRight}
-    //public enum AnimStateSpeed { idle, walk, run}
-    //public enum AnimStatePriDir { front, back, none }
-    //public enum AnimStateSecDir { left, right, none }
 }
 public enum AnimStateSpeed { idle, walk, run }
 public enum AnimStatePriDir { front, back, none }
