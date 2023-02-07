@@ -15,14 +15,17 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
+    public AnimStateSpeed animStateSpeed;
+    public AnimStatePriDir animStatePriDir;
+    public AnimStateSecDir animStateSecDir;
 
 
     [Header("Not to meddle with")]
     #region Some Variables
     public bool charMoving;
     Vector3 refVelo = Vector3.zero;
-    float floRefVelo = 0;
-    protected Quaternion targetRotation;
+    //float floRefVelo = 0;
+    protected Vector3 targetRotation;
     protected Direction dirToMove;
     protected Vector3 direction = Vector3.zero;
     #endregion
@@ -60,18 +63,16 @@ public class GeneralCharacter : MonoBehaviour
     }
     public void RotateChar(Vector3 target, float smoothTime)
     {
-        if (Mathf.Abs((transform.eulerAngles.y - target.y)) < 5)
-        {
-            transform.eulerAngles = target;
-        }
-        else if((transform.eulerAngles.y - target.y) < 0)
-        {
-            transform.Rotate(Vector3.up, 5);
-        }
-        else //if((transform.eulerAngles.y - target.y) > 0)
-        {
-            transform.Rotate(Vector3.up, -5);
-        }
+        Quaternion targetQua = new Quaternion(0,0,0,0);
+        targetQua = Quaternion.Euler(transform.eulerAngles.x, target.y, transform.eulerAngles.z);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
     }
     protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
+    //public enum AnimState { idle, walkFo, walkBa, walkFoLeft, walkBaLeft, walkFoRight,walkBaRight, 
+    //                        walkLeft, walkRight, runFo, runBa, runFoLeft, runBaLeft, runFoRight, runBaRight,
+    //                        runLeft, runRight}
+    public enum AnimStateSpeed { idle, walk, run}
+    public enum AnimStatePriDir { front, back, none }
+    public enum AnimStateSecDir { left, right, none }
+
 }

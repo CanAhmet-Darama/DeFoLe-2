@@ -5,10 +5,12 @@ using UnityEngine;
 public class MainCharacter : GeneralCharacter
 {
     Transform camFreeLookPivot;
+    AnimatingClass playerAnimating;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator.Play("Idle");
+        playerAnimating = GetComponent<AnimatingClass>();
     }
 
     void FixedUpdate()
@@ -131,25 +133,25 @@ public class MainCharacter : GeneralCharacter
                 switch (dirToMove)
                 {
                     case Direction.forward: 
-                        targetRotation = new Vector3(transform.eulerAngles.x, (GameManager.mainCam.rotation.eulerAngles.y), transform.eulerAngles.z);
+                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y, transform.eulerAngles.z);
                         break;
                     case Direction.back:
                         targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 180, transform.eulerAngles.z);
                         break;
                     case Direction.left:
-                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 270, transform.eulerAngles.z);
+                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y - 90, transform.eulerAngles.z);
                         break;
                     case Direction.right:
                         targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 90, transform.eulerAngles.z);
                         break;
                     case Direction.foLeft:
-                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 315, transform.eulerAngles.z);
+                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y - 45, transform.eulerAngles.z);
                         break;
                     case Direction.foRight:
                         targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 45, transform.eulerAngles.z);
                         break;
                     case Direction.baLeft:
-                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 225, transform.eulerAngles.z);
+                        targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y - 135, transform.eulerAngles.z);
                         break;
                     case Direction.baRight:
                         targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 135, transform.eulerAngles.z);
@@ -183,16 +185,22 @@ public class MainCharacter : GeneralCharacter
                 }
                 if (targetRotation.y != transform.eulerAngles.y)
                 {
-                    RotateChar(targetRotation, 0.25f);
+                    RotateChar(targetRotation, 0.20f);
                 }
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     AccAndRun(transform.forward);
+                    playerAnimating.SetAnimStates(AnimStateSpeed.run,AnimStatePriDir.none,AnimStateSecDir.none);
                 }
                 else
                 {
                     AccAndWalk(transform.forward);
+                    playerAnimating.SetAnimStates(AnimStateSpeed.walk, AnimStatePriDir.none, AnimStateSecDir.none);
                 }
+            }
+            else
+            {
+                playerAnimating.SetAnimStates(AnimStateSpeed.idle, AnimStatePriDir.none, AnimStateSecDir.none);
             }
         }
 
