@@ -71,8 +71,10 @@ public class GeneralCharacter : MonoBehaviour
     //public enum AnimState { idle, walkFo, walkBa, walkFoLeft, walkBaLeft, walkFoRight,walkBaRight, 
     //                        walkLeft, walkRight, runFo, runBa, runFoLeft, runBaLeft, runFoRight, runBaRight,
     //                        runLeft, runRight}
-    public enum AnimStateSpeed { idle, walk, run}
-    public enum AnimStatePriDir { front, back, none }
-    public enum AnimStateSecDir { left, right, none }
-
+    //public enum AnimStateSpeed { idle, walk, run}
+    //public enum AnimStatePriDir { front, back, none }
+    //public enum AnimStateSecDir { left, right, none }
 }
+public enum AnimStateSpeed { idle, walk, run }
+public enum AnimStatePriDir { front, back, none }
+public enum AnimStateSecDir { left, right, none }

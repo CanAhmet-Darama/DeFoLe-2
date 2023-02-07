@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MainCharacter : GeneralCharacter
 {
-    Transform camFreeLookPivot;
+    [SerializeField] Transform camFreeLookPivot;
     AnimatingClass playerAnimating;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        animator.Play("Idle");
         playerAnimating = GetComponent<AnimatingClass>();
+        GameManager.mainChar = transform;
     }
 
     void FixedUpdate()
@@ -29,14 +29,17 @@ public class MainCharacter : GeneralCharacter
                 if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 {
                     direction = -transform.right + transform.forward;
+                    playerAnimating.SetAnimStates(AnimStatePriDir.front, AnimStateSecDir.left);
                 }
                 else if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
                 {
                     direction = transform.right + transform.forward;
+                    playerAnimating.SetAnimStates(AnimStatePriDir.front, AnimStateSecDir.right);
                 }
                 else
                 {
                     direction = transform.forward;
+                    playerAnimating.SetAnimStates(AnimStatePriDir.front, AnimStateSecDir.none);
                 }
             }
             else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
@@ -44,32 +47,46 @@ public class MainCharacter : GeneralCharacter
                 if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
                 {
                     direction = -transform.right - transform.forward;
+                    playerAnimating.SetAnimStates(AnimStatePriDir.back, AnimStateSecDir.left);
                 }
                 else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
                 {
                     direction = transform.right - transform.forward;
+                    playerAnimating.SetAnimStates(AnimStatePriDir.back, AnimStateSecDir.right);
                 }
                 else
                 {
                     direction = -transform.forward;
+                    playerAnimating.SetAnimStates(AnimStatePriDir.back, AnimStateSecDir.none);
                 }
             }
             else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 direction = -transform.right;
+                playerAnimating.SetAnimStates(AnimStatePriDir.none, AnimStateSecDir.left);
+
             }
             else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 direction = transform.right;
+                playerAnimating.SetAnimStates(AnimStatePriDir.none, AnimStateSecDir.right);
+
             }
 
-            if((direction != Vector3.zero) && Input.GetKey(KeyCode.LeftShift))
+            if ((direction != Vector3.zero) && Input.GetKey(KeyCode.LeftShift))
             {
                 AccAndRun(direction);
+                playerAnimating.SetAnimStateSpeed(AnimStateSpeed.run);
             }
             else if (direction != Vector3.zero)
             {
                 AccAndWalk(direction);
+                playerAnimating.SetAnimStateSpeed(AnimStateSpeed.walk);
+
+            }
+            else
+            {
+                playerAnimating.SetAnimStateSpeed(AnimStateSpeed.idle);
             }
             targetRotation = new Vector3(transform.eulerAngles.x,camFreeLookPivot.eulerAngles.y, transform.eulerAngles.z);
 
@@ -187,15 +204,16 @@ public class MainCharacter : GeneralCharacter
                 {
                     RotateChar(targetRotation, 0.20f);
                 }
+
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     AccAndRun(transform.forward);
-                    playerAnimating.SetAnimStates(AnimStateSpeed.run,AnimStatePriDir.none,AnimStateSecDir.none);
+                    playerAnimating.SetAnimStates(AnimStateSpeed.run,AnimStatePriDir.front,AnimStateSecDir.none);
                 }
                 else
                 {
                     AccAndWalk(transform.forward);
-                    playerAnimating.SetAnimStates(AnimStateSpeed.walk, AnimStatePriDir.none, AnimStateSecDir.none);
+                    playerAnimating.SetAnimStates(AnimStateSpeed.walk, AnimStatePriDir.front, AnimStateSecDir.none);
                 }
             }
             else

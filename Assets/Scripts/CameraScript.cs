@@ -40,7 +40,6 @@ public class CameraScript : MonoBehaviour
         mainChar.GetComponent<MainCharacter>().charMoving = false;
         if(GameManager.mainState == PlayerState.onFoot)
         {
-            Debug.Log("on foot found");
 
         }
     }
