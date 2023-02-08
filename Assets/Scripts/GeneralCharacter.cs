@@ -32,7 +32,7 @@ public class GeneralCharacter : MonoBehaviour
 
     public void MoveChar(Vector3 direction, float speed)
     {
-        rb.velocity = direction.normalized * speed;
+        rb.velocity = new Vector3(direction.normalized.x*speed,rb.velocity.y,direction.normalized.z*speed);
     }
     public void AccelerateChar(Vector3 direction, float acc)
     {
@@ -68,6 +68,19 @@ public class GeneralCharacter : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
     }
     protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
+    
+    protected void GeneralCharUpdate()
+    {
+        if(rb.velocity.y > 20)
+        {
+            rb.velocity = new Vector3(rb.velocity.x,20,rb.velocity.z);
+        }
+        else if (rb.velocity.y < -20)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
+        }
+
+    }
 }
 public enum AnimStateSpeed { idle, walk, run }
 public enum AnimStatePriDir { front, back, none }

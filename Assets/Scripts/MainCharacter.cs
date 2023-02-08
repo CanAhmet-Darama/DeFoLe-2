@@ -20,6 +20,7 @@ public class MainCharacter : GeneralCharacter
         {
             ControlMovement();
         }
+        GeneralCharUpdate();
     }
     void ControlMovement()
     {
