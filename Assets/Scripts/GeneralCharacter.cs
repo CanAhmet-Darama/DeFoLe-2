@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class GeneralCharacter : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class GeneralCharacter : MonoBehaviour
     public float walkAcceleration;
     public float runSpeed;
     public float runAcceleration;
+    public float jumpForce;
+    public float jumpCooldown;
     public byte health;
     public Rigidbody rb;
    
@@ -19,6 +22,10 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
 
+    [Header("Some Stuff")]
+    public BoxCollider groundChecker;
+
+
 
     [Header("Not to meddle with")]
     #region Some Variables
@@ -28,6 +35,7 @@ public class GeneralCharacter : MonoBehaviour
     protected Vector3 targetRotation;
     protected Direction dirToMove;
     protected Vector3 direction = Vector3.zero;
+    protected bool canJump;
     #endregion
 
     public void MoveChar(Vector3 direction, float speed)
@@ -38,6 +46,24 @@ public class GeneralCharacter : MonoBehaviour
     {
         rb.AddForce(direction.normalized * acc, ForceMode.Impulse);
     }
+    public void Jump(float waitDurat)
+    {
+        StartCoroutine(WaitForJump(waitDurat));
+        StartCoroutine(JumpCooldown());
+    }
+    #region Jump IEnumerators
+    IEnumerator WaitForJump(float durat)
+    {
+        canJump = false;
+        yield return new WaitForSeconds(durat);
+        rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
+    }
+    IEnumerator JumpCooldown()
+    {
+        yield return new WaitForSeconds(jumpCooldown);
+        canJump = true;
+    }
+    #endregion
 
     public void AccAndWalk(Vector3 direction)
     {
@@ -79,6 +105,10 @@ public class GeneralCharacter : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
+
+    }
+    protected void GeneralCharOnCollisionEnter()
+    {
 
     }
 }
