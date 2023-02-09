@@ -90,6 +90,7 @@ public class MainCharacter : GeneralCharacter
             {
                 playerAnimating.SetAnimStateSpeed(AnimStateSpeed.idle);
             }
+
             targetRotation = new Vector3(transform.eulerAngles.x,camFreeLookPivot.eulerAngles.y, transform.eulerAngles.z);
 
             if(Mathf.Abs((targetRotation.y - transform.eulerAngles.y)) > 180)

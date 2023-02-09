@@ -36,6 +36,9 @@ public class GeneralCharacter : MonoBehaviour
     protected Direction dirToMove;
     protected Vector3 direction = Vector3.zero;
     protected bool canJump;
+
+    public float blendAnimX;
+    public float blendAnimY;
     #endregion
 
     public void MoveChar(Vector3 direction, float speed)
