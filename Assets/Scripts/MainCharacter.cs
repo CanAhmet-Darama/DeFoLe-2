@@ -7,6 +7,7 @@ public class MainCharacter : GeneralCharacter
     [SerializeField] Transform camFreeLookPivot;
     [SerializeField] Transform meshAndArmature;
     AnimatingClass playerAnimating;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();

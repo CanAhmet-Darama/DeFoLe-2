@@ -26,19 +26,25 @@ public class AnimatingClass : MonoBehaviour
             case AnimStateSpeed.walk: ManageAnimatorParameters(false); break;
             case AnimStateSpeed.run: ManageAnimatorParameters(true); break;
             default:
-                character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0, blendLerpSpeed);
-                character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0, blendLerpSpeed);
+                targetBlendX = 0;
+                targetBlendY = 0;
                 break;
         }
         Debug.Log(/*character.blendAnimX + " " + character.blendAnimY + " " + */character.animator.GetFloat("blendVeloX") + " " + character.animator.GetFloat("blendVeloY"));
+        character.blendAnimX = SnapOrLerpVaule(character.blendAnimX, targetBlendX, blendLerpSpeed);
+        character.blendAnimY = SnapOrLerpVaule(character.blendAnimY, targetBlendY, blendLerpSpeed);
         character.animator.SetFloat("blendVeloX", character.blendAnimX);
         character.animator.SetFloat("blendVeloY", character.blendAnimY);
     }
-    void SnapVaule(float whatTo, float whereTo)
+    static float SnapOrLerpVaule(float whatTo, float whereTo, float lerpSpeed)
     {
-        if(Mathf.Abs(whatTo - whereTo) < 0.01f)
+        if(Mathf.Abs(whatTo - whereTo) > 0.01f)
         {
-            whatTo = whereTo;
+            return Mathf.Lerp(whatTo, whereTo, lerpSpeed);
+        }
+        else
+        {
+            return whereTo;
         }
     }
     void ManageAnimatorParameters(bool isRunning)
@@ -50,17 +56,17 @@ public class AnimatingClass : MonoBehaviour
                 case AnimStatePriDir.front:
                     switch (character.animStateSecDir)
                     {
-                        case AnimStateSecDir.left: 
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, -0.7f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0.7f, blendLerpSpeed);
+                        case AnimStateSecDir.left:
+                            targetBlendX = -0.7f;
+                            targetBlendY = 0.7f;
                             break;
                         case AnimStateSecDir.right:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0.7f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0.7f, blendLerpSpeed);
+                            targetBlendX = 0.7f;
+                            targetBlendY = 0.7f;
                             break;
                         default:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 1, blendLerpSpeed);
+                            targetBlendX = 0;
+                            targetBlendY = 1;
                             break;
                     }
                     break;
@@ -68,16 +74,16 @@ public class AnimatingClass : MonoBehaviour
                     switch (character.animStateSecDir)
                     {
                         case AnimStateSecDir.left:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, -0.7f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, -0.7f, blendLerpSpeed);
+                            targetBlendX = -0.7f;
+                            targetBlendY = -0.7f;
                             break;
                         case AnimStateSecDir.right:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0.7f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, -0.7f, blendLerpSpeed);
+                            targetBlendX = 0.7f;
+                            targetBlendY = -0.7f;
                             break;
                         default:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, -1, blendLerpSpeed);
+                            targetBlendX = 0;
+                            targetBlendY = 1;
                             break;
                     }
                     break;
@@ -85,12 +91,12 @@ public class AnimatingClass : MonoBehaviour
                     switch (character.animStateSecDir)
                     {
                         case AnimStateSecDir.left:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, -1, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0, blendLerpSpeed);
+                            targetBlendX = -1;
+                            targetBlendY = 0;
                             break;
                         case AnimStateSecDir.right:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 1, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0, blendLerpSpeed);
+                            targetBlendX = 1;
+                            targetBlendY = 0;
                             break;
                     }
                     break;
@@ -104,16 +110,16 @@ public class AnimatingClass : MonoBehaviour
                     switch (character.animStateSecDir)
                     {
                         case AnimStateSecDir.left:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, -0.35f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0.35f, blendLerpSpeed);
+                            targetBlendX = -0.35f;
+                            targetBlendY = 0.35f;
                             break;
                         case AnimStateSecDir.right:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0.35f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0.35f, blendLerpSpeed);
+                            targetBlendX = 0.35f;
+                            targetBlendY = 0.35f;
                             break;
                         default:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0.5f, blendLerpSpeed);
+                            targetBlendX = 0;
+                            targetBlendY = 0.5f;
                             break;
                     }
                     break;
@@ -121,16 +127,16 @@ public class AnimatingClass : MonoBehaviour
                     switch (character.animStateSecDir)
                     {
                         case AnimStateSecDir.left:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, -0.35f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, -0.35f, blendLerpSpeed);
+                            targetBlendX = -0.35f;
+                            targetBlendY = -0.35f;
                             break;
                         case AnimStateSecDir.right:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0.35f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, -0.35f, blendLerpSpeed);
+                            targetBlendX = 0.35f;
+                            targetBlendY = -0.35f;
                             break;
                         default:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, -0.5f, blendLerpSpeed);
+                            targetBlendX = 0;
+                            targetBlendY = -0.5f;
                             break;
                     }
                     break;
@@ -138,12 +144,12 @@ public class AnimatingClass : MonoBehaviour
                     switch (character.animStateSecDir)
                     {
                         case AnimStateSecDir.left:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, -0.5f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0, blendLerpSpeed);
+                            targetBlendX = -0.5f;
+                            targetBlendY = 0;
                             break;
                         case AnimStateSecDir.right:
-                            character.blendAnimX = Mathf.Lerp(character.blendAnimX, 0.5f, blendLerpSpeed);
-                            character.blendAnimY = Mathf.Lerp(character.blendAnimY, 0, blendLerpSpeed);
+                            targetBlendX = 0.5f;
+                            targetBlendY = 0;
                             break;
                     }
                     break;
