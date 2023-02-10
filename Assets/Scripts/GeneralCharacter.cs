@@ -23,8 +23,6 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStateSecDir animStateSecDir;
 
     [Header("Some Stuff")]
-    public BoxCollider groundChecker;
-
 
 
     [Header("Not to meddle with")]
@@ -35,7 +33,9 @@ public class GeneralCharacter : MonoBehaviour
     protected Vector3 targetRotation;
     protected Direction dirToMove;
     protected Vector3 direction = Vector3.zero;
+
     protected bool canJump;
+    public bool isGround;
 
     public float blendAnimX;
     public float blendAnimY;
@@ -58,12 +58,15 @@ public class GeneralCharacter : MonoBehaviour
     IEnumerator WaitForJump(float durat)
     {
         canJump = false;
+        animator.SetBool("isJumping",true);
         yield return new WaitForSeconds(durat);
+        Debug.Log("Thrust started");
         rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
     }
     IEnumerator JumpCooldown()
     {
         yield return new WaitForSeconds(jumpCooldown);
+        Debug.Log("Can jump now");
         canJump = true;
     }
     #endregion
@@ -108,9 +111,16 @@ public class GeneralCharacter : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
-
     }
     protected void GeneralCharOnCollisionEnter()
+    {
+
+    }
+    protected void OnTriggerEnterGC(Collider other)
+    {
+
+    }
+    protected void OnTriggerExitGC(Collider other)
     {
 
     }

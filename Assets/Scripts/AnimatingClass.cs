@@ -30,7 +30,6 @@ public class AnimatingClass : MonoBehaviour
                 targetBlendY = 0;
                 break;
         }
-        Debug.Log(/*character.blendAnimX + " " + character.blendAnimY + " " + */character.animator.GetFloat("blendVeloX") + " " + character.animator.GetFloat("blendVeloY"));
         character.blendAnimX = SnapOrLerpVaule(character.blendAnimX, targetBlendX, blendLerpSpeed);
         character.blendAnimY = SnapOrLerpVaule(character.blendAnimY, targetBlendY, blendLerpSpeed);
         character.animator.SetFloat("blendVeloX", character.blendAnimX);

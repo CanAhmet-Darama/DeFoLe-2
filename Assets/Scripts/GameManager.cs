@@ -40,10 +40,6 @@ public class GameManager : MonoBehaviour
             ChangeState();
         }
     }
-    void LateUpdate()
-    {
-        Debug.Log(mainChar.GetComponent<MainCharacter>().animStateSpeed + " " + mainChar.GetComponent<MainCharacter>().animStatePriDir + " " + mainChar.GetComponent<MainCharacter>().animStateSecDir);
-    }
 
     public static void ChangeState()
     {
