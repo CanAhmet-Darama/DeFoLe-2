@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
@@ -35,7 +37,7 @@ public class GeneralCharacter : MonoBehaviour
     protected Vector3 direction = Vector3.zero;
 
     protected bool canJump;
-    public bool isGround;
+    public bool isGrounded;
 
     public float blendAnimX;
     public float blendAnimY;
@@ -111,6 +113,8 @@ public class GeneralCharacter : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
+        isGrounded = GroundedChecker();
+        animator.SetBool("isGrounded", isGrounded);
     }
     protected void GeneralCharOnCollisionEnter()
     {
@@ -123,6 +127,21 @@ public class GeneralCharacter : MonoBehaviour
     protected void OnTriggerExitGC(Collider other)
     {
 
+    }
+
+    protected bool GroundedChecker()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        RaycastHit hitInfo;
+        bool isHit = Physics.Raycast(ray, out hitInfo, 1.6f);
+        Debug.DrawRay(ray.origin, Vector3.down*1.6f, Color.green);
+        if(isHit && hitInfo.collider.tag == "Ground")
+        {
+             Debug.Log("GROUNDED");
+             return true;
+        }
+        Debug.Log("AIRED");
+        return false;
     }
 }
 public enum AnimStateSpeed { idle, walk, run }

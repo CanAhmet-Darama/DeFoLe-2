@@ -11,9 +11,14 @@ public class MainCharacter : GeneralCharacter
     void Start()
     {
         canJump = true;
+        isGrounded = true;
         rb = GetComponent<Rigidbody>();
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
+    }
+    void Update()
+    {
+        GeneralCharUpdate();
     }
 
     void FixedUpdate()
@@ -22,11 +27,10 @@ public class MainCharacter : GeneralCharacter
         {
             ControlMovement();
         }
-        GeneralCharUpdate();
     }
     void ControlMovement()
     {
-        if (isGround)
+        if (isGrounded)
         {
             if (Input.GetKey(KeyCode.Mouse1))
             {
