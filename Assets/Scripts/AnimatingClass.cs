@@ -34,6 +34,10 @@ public class AnimatingClass : MonoBehaviour
         character.blendAnimY = SnapOrLerpVaule(character.blendAnimY, targetBlendY, blendLerpSpeed);
         character.animator.SetFloat("blendVeloX", character.blendAnimX);
         character.animator.SetFloat("blendVeloY", character.blendAnimY);
+
+        character.animator.SetBool("isGrounded", character.isGrounded);
+        character.animator.SetBool("hasJumped", character.hasJumped);
+        character.animator.SetBool("isFalling", character.isFalling);
     }
     static float SnapOrLerpVaule(float whatTo, float whereTo, float lerpSpeed)
     {

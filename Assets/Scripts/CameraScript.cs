@@ -35,7 +35,6 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
-        GameManager.mainCam = transform;
         freeLookPivotCar.localPosition = offsetVehicle;
         mainChar.GetComponent<MainCharacter>().charMoving = false;
         if(GameManager.mainState == PlayerState.onFoot)

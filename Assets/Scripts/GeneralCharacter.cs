@@ -20,6 +20,7 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
+    public GroundCheckScript groundCheckScr;
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
@@ -37,10 +38,14 @@ public class GeneralCharacter : MonoBehaviour
     protected Vector3 direction = Vector3.zero;
 
     protected bool canJump;
+    public bool hasJumped;
+    public bool isFalling;
     public bool isGrounded;
+    //protected bool previousFrameGrounded;
 
     public float blendAnimX;
     public float blendAnimY;
+
     #endregion
 
     public void MoveChar(Vector3 direction, float speed)
@@ -60,7 +65,7 @@ public class GeneralCharacter : MonoBehaviour
     IEnumerator WaitForJump(float durat)
     {
         canJump = false;
-        animator.SetBool("isJumping",true);
+        hasJumped = true;
         yield return new WaitForSeconds(durat);
         Debug.Log("Thrust started");
         rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
@@ -103,6 +108,12 @@ public class GeneralCharacter : MonoBehaviour
     }
     protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
     
+    protected void GeneralCharStart()
+    {
+        canJump = true;
+        isGrounded = true;
+        rb = GetComponent<Rigidbody>();
+    }
     protected void GeneralCharUpdate()
     {
         if(rb.velocity.y > 20)
@@ -113,8 +124,6 @@ public class GeneralCharacter : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
-        isGrounded = GroundedChecker();
-        animator.SetBool("isGrounded", isGrounded);
     }
     protected void GeneralCharOnCollisionEnter()
     {
@@ -131,17 +140,53 @@ public class GeneralCharacter : MonoBehaviour
 
     protected bool GroundedChecker()
     {
-        Ray ray = new Ray(transform.position, Vector3.down);
-        RaycastHit hitInfo;
-        bool isHit = Physics.Raycast(ray, out hitInfo, 1.6f);
-        Debug.DrawRay(ray.origin, Vector3.down*1.6f, Color.green);
-        if(isHit && hitInfo.collider.tag == "Ground")
-        {
-             Debug.Log("GROUNDED");
-             return true;
-        }
-        Debug.Log("AIRED");
-        return false;
+        string[] tags = { "Ground", "Vehicle" };
+
+        return true;
+
+
+
+        //Ray ray = new Ray(transform.position + new Vector3(0,-1.2f,0), Vector3.down);
+        //Vector3 extents = new Vector3(0.15f,0.05f,0.15f);
+        //LayerMask mask = 0;
+        //float castDistance = 0.65f;
+        //RaycastHit hitInfo;
+        //bool isHit = Physics.BoxCast(ray.origin,extents,ray.direction, out hitInfo,transform.rotation, castDistance, ~mask);
+        //#region DrawRays
+        //Debug.DrawRay(ray.origin + new Vector3(extents.x,0,extents.z), Vector3.down * castDistance, Color.green);
+        //Debug.DrawRay(ray.origin + new Vector3(-extents.x, 0, extents.z), Vector3.down * castDistance, Color.green);
+        //Debug.DrawRay(ray.origin + new Vector3(-extents.x, 0, -extents.z), Vector3.down * castDistance, Color.green);
+        //Debug.DrawRay(ray.origin + new Vector3(extents.x, 0, -extents.z), Vector3.down * castDistance, Color.green);
+        //#endregion
+
+
+        //if (isHit)
+        //{
+        //    for (byte i = (byte)tags.Length; i > 0; i--)
+        //    {
+        //        if (hitInfo.collider.tag == tags[i - 1])
+        //        {
+        //            if (!previousFrameGrounded)
+        //            {
+        //                animator.SetBool("isJumping",true);
+        //                animator.SetBool("isFalling", true);
+        //                animator.SetBool("isGrounded", false);
+        //            }
+        //            else
+        //            {
+        //                animator.SetBool("isJumping", false);
+        //                animator.SetBool("isFalling", false);
+        //                animator.SetBool("isGrounded", true);
+        //            }
+        //            previousFrameGrounded = isHit;
+        //            Debug.Log("GROUNDED");
+        //            return true;
+        //        }
+        //    }
+
+        //}
+        //Debug.Log("AIRED");
+        //return false;
     }
 }
 public enum AnimStateSpeed { idle, walk, run }

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
         {
             case "Level 1":
                 mainState = PlayerState.onFoot;
+                mainCam = Camera.main.transform;
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivot();
                 mainChar = mainCharIsThis;
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();

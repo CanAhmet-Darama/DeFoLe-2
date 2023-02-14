@@ -10,9 +10,7 @@ public class MainCharacter : GeneralCharacter
 
     void Start()
     {
-        canJump = true;
-        isGrounded = true;
-        rb = GetComponent<Rigidbody>();
+        GeneralCharStart();
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
     }
