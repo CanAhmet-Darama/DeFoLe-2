@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GroundCheckScript : MonoBehaviour
 {
-    bool isFalling;
-    bool isJumping;
     GeneralCharacter Char;
 
     void Start()
@@ -18,9 +16,8 @@ public class GroundCheckScript : MonoBehaviour
     {
         if(other.tag == "Ground" || other.tag == "Vehicle")
         {
-            Char.isGrounded = true;
-            Char.hasJumped = false;
-            Char.isFalling = false;
+            Char.isGrounded= true;
+            Char.isJumping = false;
         }
     }
     void OnTriggerStay(Collider other)
@@ -35,10 +32,7 @@ public class GroundCheckScript : MonoBehaviour
         if (other.tag == "Ground" || other.tag == "Vehicle")
         {
             Char.isGrounded = false;
-            if (!Char.hasJumped)
-            {
-                Char.isFalling = true;
-            }
+
         }
     }
 

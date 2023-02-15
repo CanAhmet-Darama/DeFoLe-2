@@ -241,12 +241,28 @@ public class MainCharacter : GeneralCharacter
                 Jump(0.1f);
             }
         }
+        else
+        {
+            if (isJumping)
+            {
+                if(rb.velocity.y > 0)
+                {
+                    if (!Input.GetKey(KeyCode.Space))
+                    {
+                        rb.AddForce((Physics.gravity * rb.mass));
+                    }
+                }
+                else
+                {
+                    rb.AddForce((Physics.gravity * rb.mass));
+                }
+            }
+        }
 
     }
 
     public void RegulateMainChar()
     {
         camFreeLookPivot = GameManager.mainCam.GetComponent<CameraScript>().freeLookPivotOnFoot;
-
     }
 }

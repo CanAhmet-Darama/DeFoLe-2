@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
             case "Level 1":
                 mainState = PlayerState.onFoot;
                 mainCam = Camera.main.transform;
-                mainCam.GetComponent<CameraScript>().AdjustCameraPivot();
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar = mainCharIsThis;
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();
                 break;
@@ -47,16 +47,40 @@ public class GameManager : MonoBehaviour
         if(mainState == 0)
         {
             mainState = PlayerState.onFoot;
+            if (Input.GetMouseButton(1))
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
+            }
+            else
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
+            }
         }
         else
         {
             mainState = PlayerState.inMainCar;
+            if (Input.GetMouseButton(1))
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.inMainCar, CamState.pivot);
+            }
+            else
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.inMainCar, CamState.follow);
+            }
         }
-        mainCam.GetComponent<CameraScript>().AdjustCameraPivot();
     }
     public static void ChangeState(PlayerState state)
     {
         mainState = state;
+        if (Input.GetMouseButton(1))
+        {
+            mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(state, CamState.pivot);
+        }
+        else
+        {
+            mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(state, CamState.follow);
+        }
+
     }
 }
 public enum PlayerState { inMainCar, onFoot }

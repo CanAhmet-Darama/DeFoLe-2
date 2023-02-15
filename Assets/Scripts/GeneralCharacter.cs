@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -26,22 +27,18 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStateSecDir animStateSecDir;
 
     [Header("Some Stuff")]
-
+    public bool isGrounded;
 
     [Header("Not to meddle with")]
     #region Some Variables
     public bool charMoving;
     Vector3 refVelo = Vector3.zero;
-    //float floRefVelo = 0;
     protected Vector3 targetRotation;
     protected Direction dirToMove;
     protected Vector3 direction = Vector3.zero;
 
     protected bool canJump;
-    public bool hasJumped;
-    public bool isFalling;
-    public bool isGrounded;
-    //protected bool previousFrameGrounded;
+    public bool isJumping;
 
     public float blendAnimX;
     public float blendAnimY;
@@ -65,7 +62,7 @@ public class GeneralCharacter : MonoBehaviour
     IEnumerator WaitForJump(float durat)
     {
         canJump = false;
-        hasJumped = true;
+        isJumping = true;
         yield return new WaitForSeconds(durat);
         Debug.Log("Thrust started");
         rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
@@ -111,7 +108,6 @@ public class GeneralCharacter : MonoBehaviour
     protected void GeneralCharStart()
     {
         canJump = true;
-        isGrounded = true;
         rb = GetComponent<Rigidbody>();
     }
     protected void GeneralCharUpdate()
@@ -138,56 +134,30 @@ public class GeneralCharacter : MonoBehaviour
 
     }
 
-    protected bool GroundedChecker()
-    {
-        string[] tags = { "Ground", "Vehicle" };
+    /*protected void DetectSlope()
+    { 
+        float castPosY = ( - GetComponent<CapsuleCollider>().height / 2) + 0.1f;
+        Vector3 castPos = new Vector3(transform.position.x, transform.position.y - castPosY, transform.position.z);
+        float castDistance = 0.5f;
+        float castRadius = 0.3f;
+        RaycastHit hitFront, hitBack, hitLeft, hitRight;
+        Physics.Raycast(castPos + transform.forward * castRadius, Vector3.down, out hitFront,castDistance);
+        Physics.Raycast(castPos + transform.right * castRadius, Vector3.down, out hitRight, castDistance);
+        Physics.Raycast(castPos - transform.forward * castRadius, Vector3.down, out hitBack, castDistance);
+        Physics.Raycast(castPos - transform.right * castRadius, Vector3.down, out hitLeft, castDistance);
 
-        return true;
+        Debug.DrawLine(castPos + transform.forward * castRadius, hitFront.distance* Vector3.down, Color.magenta);
+        Debug.DrawRay(castPos + transform.right * castRadius, hitRight.distance * Vector3.down, Color.magenta);
+        Debug.DrawRay(castPos - transform.forward * castRadius, hitBack.distance * Vector3.down, Color.magenta);
+        Debug.DrawRay(castPos - transform.right * castRadius, hitLeft.distance * Vector3.down, Color.magenta);
 
+        Debug.Log(hitFront.normal);
+        Debug.Log(hitBack.normal);
+        Debug.Log(hitLeft.normal);
+        Debug.Log(hitRight.normal);
 
+    }*/
 
-        //Ray ray = new Ray(transform.position + new Vector3(0,-1.2f,0), Vector3.down);
-        //Vector3 extents = new Vector3(0.15f,0.05f,0.15f);
-        //LayerMask mask = 0;
-        //float castDistance = 0.65f;
-        //RaycastHit hitInfo;
-        //bool isHit = Physics.BoxCast(ray.origin,extents,ray.direction, out hitInfo,transform.rotation, castDistance, ~mask);
-        //#region DrawRays
-        //Debug.DrawRay(ray.origin + new Vector3(extents.x,0,extents.z), Vector3.down * castDistance, Color.green);
-        //Debug.DrawRay(ray.origin + new Vector3(-extents.x, 0, extents.z), Vector3.down * castDistance, Color.green);
-        //Debug.DrawRay(ray.origin + new Vector3(-extents.x, 0, -extents.z), Vector3.down * castDistance, Color.green);
-        //Debug.DrawRay(ray.origin + new Vector3(extents.x, 0, -extents.z), Vector3.down * castDistance, Color.green);
-        //#endregion
-
-
-        //if (isHit)
-        //{
-        //    for (byte i = (byte)tags.Length; i > 0; i--)
-        //    {
-        //        if (hitInfo.collider.tag == tags[i - 1])
-        //        {
-        //            if (!previousFrameGrounded)
-        //            {
-        //                animator.SetBool("isJumping",true);
-        //                animator.SetBool("isFalling", true);
-        //                animator.SetBool("isGrounded", false);
-        //            }
-        //            else
-        //            {
-        //                animator.SetBool("isJumping", false);
-        //                animator.SetBool("isFalling", false);
-        //                animator.SetBool("isGrounded", true);
-        //            }
-        //            previousFrameGrounded = isHit;
-        //            Debug.Log("GROUNDED");
-        //            return true;
-        //        }
-        //    }
-
-        //}
-        //Debug.Log("AIRED");
-        //return false;
-    }
 }
 public enum AnimStateSpeed { idle, walk, run }
 public enum AnimStatePriDir { front, back, none }

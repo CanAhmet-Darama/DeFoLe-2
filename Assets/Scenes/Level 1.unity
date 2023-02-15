@@ -892,7 +892,7 @@ GameObject:
   m_Component:
   - component: {fileID: 855615516}
   m_Layer: 0
-  m_Name: Camera Look Pivot
+  m_Name: Camera Look Pivot Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

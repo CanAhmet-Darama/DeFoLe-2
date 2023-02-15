@@ -35,9 +35,9 @@ public class AnimatingClass : MonoBehaviour
         character.animator.SetFloat("blendVeloX", character.blendAnimX);
         character.animator.SetFloat("blendVeloY", character.blendAnimY);
 
+        character.animator.SetBool("isJumping", character.isJumping);
         character.animator.SetBool("isGrounded", character.isGrounded);
-        character.animator.SetBool("hasJumped", character.hasJumped);
-        character.animator.SetBool("isFalling", character.isFalling);
+
     }
     static float SnapOrLerpVaule(float whatTo, float whereTo, float lerpSpeed)
     {
@@ -54,6 +54,7 @@ public class AnimatingClass : MonoBehaviour
     {
         if (isRunning)
         {
+            /* setting values for blend tree in animator for walk run idle */
             switch (character.animStatePriDir)
             {
                 case AnimStatePriDir.front:

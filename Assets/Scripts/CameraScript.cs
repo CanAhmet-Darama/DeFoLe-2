@@ -60,6 +60,8 @@ public class CameraScript : MonoBehaviour
     }
     IEnumerator ReadyToCamFollow(Transform pivot, float durat)
     {
+        /* Waiting for durat. Unparenting cam. Making pivot rotation and mouse inputs zero. Lets
+        the cam follow the car*/
         yield return new WaitForSeconds(durat);
         if (!Input.GetKey(KeyCode.Mouse1))
         {
@@ -75,7 +77,9 @@ public class CameraScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            AdjustCameraPivot();
+            /* Set cam's parent to free look pivot. If there was a coroutine for making it follow
+            the object without free look, stop it */
+            AdjustCameraPivotOrFollow(PlayerState.inMainCar, CamState.pivot);
             if (holdNumeratorCar != null)
             {
                 StopCoroutine(holdNumeratorCar);
@@ -83,23 +87,23 @@ public class CameraScript : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Mouse1))
         {
+            /* Set timer to make the cam follow the car */
             camCanFollow = false;
             holdNumeratorCar = StartCoroutine(ReadyToCamFollow(freeLookPivotCar, camFollowCooldown));
         }
 
         if (Input.GetKey(KeyCode.Mouse1))
         {
+            /* Add the mouse position to mouse input values and set the free look pivots rotation
+             to it with that */
             mouseX += Input.GetAxis("Mouse X") * GameManager.mouseSensitivity;
             mouseY += Input.GetAxis("Mouse Y") * GameManager.mouseSensitivity;
             freeLookPivotCar.localRotation = Quaternion.Euler(Mathf.Clamp(-mouseY, -15, 45), mouseX, 0);
         }
         else if (camCanFollow)
         {
-            if ((mainCarTransform.position - camCarPointTransform.position).magnitude < (transform.position - mainCarTransform.position).magnitude)
-            {
-                transform.position = Vector3.SmoothDamp(transform.position, camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized, ref velocity, smoothTimeCar);
-                transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
-            }
+            transform.position = Vector3.SmoothDamp(transform.position, camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized, ref velocity, smoothTimeCar);
+            transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
 
             if(transform.position.y < mainCarTransform.position.y - 1)
             {
@@ -107,7 +111,7 @@ public class CameraScript : MonoBehaviour
             }
 
         }
-        camCarPoint2Transform.position = Vector3.Lerp(camCarPoint2Transform.position, mainCarTransform.position + new Vector3(0, 4.5f, 0), smoothTimeCar * 2);
+        camCarPoint2Transform.position = Vector3.Lerp(camCarPoint2Transform.position, mainCarTransform.position + new Vector3(0, 4.75f, 0), smoothTimeCar * 2);
     }
     void CamFollowMainCharacter()
     {
@@ -123,11 +127,11 @@ public class CameraScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            AdjustCameraPivot(CamState.pivot);
+            AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
         }
         else if (Input.GetKeyUp(KeyCode.Mouse1))
         {
-            AdjustCameraPivot(CamState.follow);
+            AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
         }
 
         if (Input.GetKey(KeyCode.Mouse1))
@@ -142,38 +146,92 @@ public class CameraScript : MonoBehaviour
             UncontrolledCameraFollowChar();
         }
     }
-    public void AdjustCameraPivot()
+    //public void AdjustCameraPivot()
+    //{
+    //    if (GameManager.mainState == PlayerState.onFoot)
+    //    {
+    //        AdjustCameraPivotChar(CamState.follow);
+    //    }
+    //    else if (GameManager.mainState == PlayerState.inMainCar)
+    //    {
+    //         freeLookPivotCar.eulerAngles = transform.eulerAngles;
+    //         transform.SetParent(freeLookPivotCar);
+    //         transform.localEulerAngles = new Vector3(0, 0, 0);
+    //         transform.localPosition = freeOffsetCar;
+    //    }
+    //}
+    //public void AdjustCameraPivotChar(CamState stateCam)
+    //{
+    //    switch (stateCam)
+    //    {
+    //        case CamState.pivot:
+    //            transform.SetParent(freeLookPivotOnFoot);
+    //            transform.localPosition = offsetCharPivot;
+    //            transform.eulerAngles = Vector3.zero;
+    //            freeLookPivotOnFoot.eulerAngles = transform.eulerAngles;
+    //            break;
+    //        case CamState.follow:
+    //            camPointOnFoot.eulerAngles = transform.eulerAngles;
+    //            transform.SetParent(camPointOnFoot);
+    //            transform.localPosition = offsetCharFollow;
+    //            break;
+    //    }
+    //}
+    //public void AdjustCameraPivotCar(CamState stateCam)
+    //{
+    //    switch (stateCam)
+    //    {
+    //        case CamState.pivot:
+    //            transform.SetParent(freeLookPivotCar);
+    //            transform.localPosition = freeOffsetCar;
+    //            freeLookPivotCar.eulerAngles = transform.eulerAngles;
+    //            transform.localEulerAngles = Vector3.zero;
+    //            break;
+    //        case CamState.follow:
+    //            transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
+    //            transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
+    //            break;
+    //    }
+    //}
+
+    public void AdjustCameraPivotOrFollow(PlayerState pState,CamState stateCam)
     {
-        if (GameManager.mainState == PlayerState.onFoot)
-        {
-            AdjustCameraPivot(CamState.follow);
+        if(pState == PlayerState.onFoot){
+            switch (stateCam)
+            {
+                case CamState.pivot:
+                    freeLookPivotOnFoot.eulerAngles = Vector3.zero;
+                    transform.SetParent(freeLookPivotOnFoot);
+                    transform.localPosition = offsetCharPivot;
+                    transform.eulerAngles = Vector3.zero;
+                    //freeLookPivotOnFoot.eulerAngles = transform.eulerAngles;
+                    break;
+                case CamState.follow:
+                    camPointOnFoot.eulerAngles = transform.eulerAngles;
+                    transform.SetParent(camPointOnFoot);
+                    transform.localPosition = offsetCharFollow;
+                    transform.localEulerAngles = Vector3.zero;
+                    break;
+            }
         }
-        else if (GameManager.mainState == PlayerState.inMainCar)
+        else if(pState == PlayerState.inMainCar)
         {
-             freeLookPivotCar.eulerAngles = transform.eulerAngles;
-             transform.SetParent(freeLookPivotCar);
-             transform.localEulerAngles = new Vector3(0, 0, 0);
-             transform.localPosition = freeOffsetCar;
+            switch (stateCam)
+            {
+                case CamState.pivot:
+                    transform.SetParent(freeLookPivotCar);
+                    transform.localPosition = freeOffsetCar;
+                    freeLookPivotCar.eulerAngles = transform.eulerAngles;
+                    transform.localEulerAngles = Vector3.zero;
+                    break;
+                case CamState.follow:
+                    transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
+                    transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
+                    break;
+            }
         }
     }
-    public void AdjustCameraPivot(CamState stateCam)
-    {
-        //mouseX = 0; mouseY = 0;
-        switch (stateCam)
-        {
-            case CamState.pivot:
-                transform.SetParent(freeLookPivotOnFoot);
-                transform.localPosition = offsetCharPivot;
-                freeLookPivotOnFoot.eulerAngles = transform.eulerAngles;
-                transform.localEulerAngles = Vector3.zero;
-                break;
-            case CamState.follow:
-                camPointOnFoot.eulerAngles = transform.eulerAngles;
-                transform.SetParent(camPointOnFoot);
-                transform.localPosition = offsetCharFollow;
-                break;
-        }
-    }
+
 
 
     public void DetectMouseMotion()
