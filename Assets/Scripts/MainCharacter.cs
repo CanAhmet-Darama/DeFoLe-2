@@ -182,32 +182,6 @@ public class MainCharacter : GeneralCharacter
                         case Direction.baRight:
                             targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.rotation.eulerAngles.y + 135, transform.eulerAngles.z);
                             break;
-                            #region cases 2
-                            //case Direction.forward:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, (GameManager.mainCam.eulerAngles.y), transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.back:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y + 360, transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.left:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y - 90, transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.right:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y + 90, transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.foLeft:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y - 45, transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.foRight:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y + 45, transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.baLeft:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y - 135, transform.eulerAngles.z);
-                            //    break;
-                            //case Direction.baRight:
-                            //    targetRotation = new Vector3(transform.eulerAngles.x, GameManager.mainCam.eulerAngles.y + 135, transform.eulerAngles.z);
-                            //    break;
-                            #endregion
                     }
                     if (targetRotation.y != transform.eulerAngles.y)
                     {
@@ -237,7 +211,6 @@ public class MainCharacter : GeneralCharacter
             }
             if(canJump && Input.GetKey(KeyCode.Space))
             {
-                Debug.Log("Jump pressed");
                 Jump(0.1f);
             }
         }

@@ -64,13 +64,11 @@ public class GeneralCharacter : MonoBehaviour
         canJump = false;
         isJumping = true;
         yield return new WaitForSeconds(durat);
-        Debug.Log("Thrust started");
         rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
     }
     IEnumerator JumpCooldown()
     {
         yield return new WaitForSeconds(jumpCooldown);
-        Debug.Log("Can jump now");
         canJump = true;
     }
     #endregion
