@@ -13,7 +13,7 @@ public class StairCheckScript : MonoBehaviour
     float stairMaxHeight = 0.6f;
     float castCurrentHeight;
     float iterateIncrease = 0.05f;
-    float stairJumpForce = 3;
+    [SerializeField]float stairJumpForce;
     LayerMask lMask = ~128;
 
     RaycastHit hitInfo;
@@ -125,7 +125,7 @@ public class StairCheckScript : MonoBehaviour
 
     public Vector3 RotateVecAroundVec(Vector3 vecToRotate, Vector3 vecToAxis , float angle)
     {
-        Debug.DrawRay(transform.position + new Vector3(0,0.3f,0), Quaternion.AngleAxis(angle, vecToAxis) * vecToRotate, Color.blue);
+        Debug.DrawRay(transform.position + new Vector3(0,0.3f,0), Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate, Color.blue);
         return Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate;
     }
 }

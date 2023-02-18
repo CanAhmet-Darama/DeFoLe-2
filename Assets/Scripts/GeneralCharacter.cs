@@ -49,7 +49,7 @@ public class GeneralCharacter : MonoBehaviour
 
     public void MoveChar(Vector3 direction, float speed)
     {
-        if(stairSlopeChecker.onSlopeMoving){
+        if(stairSlopeChecker.onSlopeMoving && !isJumping){
             rb.velocity = new Vector3(direction.normalized.x*speed,direction.normalized.y*speed,direction.normalized.z*speed);
         }
         else
