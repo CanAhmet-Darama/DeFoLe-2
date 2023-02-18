@@ -49,13 +49,14 @@ public class GeneralCharacter : MonoBehaviour
 
     public void MoveChar(Vector3 direction, float speed)
     {
-        rb.velocity = new Vector3(direction.normalized.x*speed,rb.velocity.y,direction.normalized.z*speed);
+        if(stairSlopeChecker.onSlopeMoving){
+            rb.velocity = new Vector3(direction.normalized.x*speed,direction.normalized.y*speed,direction.normalized.z*speed);
+        }
+        else
+        {
+            rb.velocity = new Vector3(direction.normalized.x * speed, rb.velocity.y, direction.normalized.z * speed);
+        }
     }
-    public void MoveChar(Vector3 direction, float speed, float yValue)
-    {
-        rb.velocity = new Vector3(direction.normalized.x * speed, yValue, direction.normalized.z * speed);
-    }
-
     public void AccelerateChar(Vector3 direction, float acc)
     {
         rb.AddForce(direction.normalized * acc, ForceMode.Impulse);
@@ -86,18 +87,25 @@ public class GeneralCharacter : MonoBehaviour
     {
         if (stairSlopeChecker.onSlopeMoving)
         {
-            if (rb.velocity.magnitude > walkSpeed)
-            {
-                MoveChar(direction, walkSpeed);
-            }
-            else
-            {
-                AccelerateChar(direction, walkAcceleration);
-            }
+            direction = stairSlopeChecker.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
+        }
+
+        if (rb.velocity.magnitude > walkSpeed)
+        {
+            MoveChar(direction, walkSpeed);
+        }
+        else
+        {
+            AccelerateChar(direction, walkAcceleration);
         }
     }
     public void AccAndRun(Vector3 direction)
     {
+        if (stairSlopeChecker.onSlopeMoving)
+        {
+            direction = stairSlopeChecker.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
+        }
+
         if (rb.velocity.magnitude > runSpeed)
         {
             MoveChar(direction, runSpeed);

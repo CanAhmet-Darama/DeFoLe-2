@@ -26,8 +26,8 @@ public class StairCheckScript : MonoBehaviour
     float maxSlopeAngle = 55;
     float slopeForceMultiplier = 0.99f;
     public bool onSlopeMoving;
-    float normalAngle;
-    Vector3 crossProduct;
+    public float normalAngle;
+    public Vector3 crossProduct;
 
     RaycastHit hitInfo2;
 
@@ -125,7 +125,7 @@ public class StairCheckScript : MonoBehaviour
 
     public Vector3 RotateVecAroundVec(Vector3 vecToRotate, Vector3 vecToAxis , float angle)
     {
-        Debug.DrawRay(transform.position, Quaternion.AngleAxis(angle, vecToAxis) * vecToRotate, Color.blue);
-        return Quaternion.AngleAxis(angle, vecToAxis) * vecToRotate;
+        Debug.DrawRay(transform.position + new Vector3(0,0.3f,0), Quaternion.AngleAxis(angle, vecToAxis) * vecToRotate, Color.blue);
+        return Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate;
     }
 }
