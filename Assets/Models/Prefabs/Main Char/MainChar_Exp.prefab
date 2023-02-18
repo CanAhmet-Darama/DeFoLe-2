@@ -304,11 +304,12 @@ MonoBehaviour:
   health: 0
   rb: {fileID: 0}
   animator: {fileID: 4150487459040742667}
-  groundCheckScr: {fileID: 0}
   animStateSpeed: 0
   animStatePriDir: 2
   animStateSecDir: 2
   isGrounded: 0
+  stairSlopeChecker: {fileID: 0}
+  stairSlopeCheckerGO_: {fileID: 9090398627708968972}
   charMoving: 0
   isJumping: 0
   blendAnimX: 0
@@ -555,7 +556,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9090398627708968972}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.46, z: 0}
+  m_LocalPosition: {x: 0, y: -1.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -575,6 +576,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1643108193539418682}
+  mainChar: {fileID: 1643108193539418684}
+  onSlopeMoving: 0
 --- !u!1001 &6034824584212049582
 PrefabInstance:
   m_ObjectHideFlags: 0

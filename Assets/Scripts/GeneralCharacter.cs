@@ -21,13 +21,15 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
-    public GroundCheckScript groundCheckScr;
+    //public GroundCheckScript groundCheckScr;
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
 
     [Header("Some Stuff")]
     public bool isGrounded;
+    [HideInInspector]public StairCheckScript stairSlopeChecker;
+    [SerializeField] GameObject stairSlopeCheckerGO_;
 
     [Header("Not to meddle with")]
     #region Some Variables
@@ -49,6 +51,11 @@ public class GeneralCharacter : MonoBehaviour
     {
         rb.velocity = new Vector3(direction.normalized.x*speed,rb.velocity.y,direction.normalized.z*speed);
     }
+    public void MoveChar(Vector3 direction, float speed, float yValue)
+    {
+        rb.velocity = new Vector3(direction.normalized.x * speed, yValue, direction.normalized.z * speed);
+    }
+
     public void AccelerateChar(Vector3 direction, float acc)
     {
         rb.AddForce(direction.normalized * acc, ForceMode.Impulse);
@@ -65,6 +72,8 @@ public class GeneralCharacter : MonoBehaviour
         isJumping = true;
         yield return new WaitForSeconds(durat);
         rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.1f);
+        isGrounded = false;
     }
     IEnumerator JumpCooldown()
     {
@@ -75,13 +84,16 @@ public class GeneralCharacter : MonoBehaviour
 
     public void AccAndWalk(Vector3 direction)
     {
-        if (rb.velocity.magnitude > walkSpeed)
+        if (stairSlopeChecker.onSlopeMoving)
         {
-            MoveChar(direction, walkSpeed);
-        }
-        else
-        {
-            AccelerateChar(direction, walkAcceleration);
+            if (rb.velocity.magnitude > walkSpeed)
+            {
+                MoveChar(direction, walkSpeed);
+            }
+            else
+            {
+                AccelerateChar(direction, walkAcceleration);
+            }
         }
     }
     public void AccAndRun(Vector3 direction)
@@ -107,6 +119,7 @@ public class GeneralCharacter : MonoBehaviour
     {
         canJump = true;
         rb = GetComponent<Rigidbody>();
+        stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
     }
     protected void GeneralCharUpdate()
     {
