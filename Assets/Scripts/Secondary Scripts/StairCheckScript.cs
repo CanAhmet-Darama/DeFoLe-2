@@ -32,11 +32,6 @@ public class StairCheckScript : MonoBehaviour
     RaycastHit hitInfo2;
 
     #endregion
-
-
-    void Start()
-    {
-    }
     void FixedUpdate()
     {
         CheckStair();
@@ -49,6 +44,7 @@ public class StairCheckScript : MonoBehaviour
         Vector3 rayDir = new Vector3(rb.velocity.x, 0, rb.velocity.z).normalized;
         if(rb.velocity.magnitude < 0.01f)
         {
+            /* If velocity is too low, then launch rays into the following directions */
             switch(mainChar.animStatePriDir)
             {
                 case AnimStatePriDir.front:
@@ -80,6 +76,9 @@ public class StairCheckScript : MonoBehaviour
         
         do
         {
+            /* Iteratively, launch a ray one by one. If it hits a surface in every launch until the
+               stairMaxHeight, do nothing. If it gets NOT hit, thenincrease the y position of mainChar
+               by the height amount of stair by multiplying it with castCurrenHeight */
             ray = new Ray(transform.position + new Vector3(0,castCurrentHeight,0), rayDir);
             isHit = Physics.Raycast(ray, out hitInfo, castDistance, lMask, QueryTriggerInteraction.Ignore);
             Debug.DrawRay(transform.position + new Vector3(0, castCurrentHeight, 0), rayDir * castDistance, Color.cyan);
@@ -98,6 +97,12 @@ public class StairCheckScript : MonoBehaviour
     }
     public void CheckSlope()
     {
+        /* Launch a ray to downwards. If it is hit, calculate the normal angle to find slope. Find 
+           the cross product to get a tangent line for the sruface. If normal angle is "5 < x < maxSlopeAngle"
+           check speed anim state. If player is waiting idle, apply an opposite gravity to prevent sliding.
+           And lerp the velocity to zero, or with zero gravity it fill float. If it is not waiting idle
+           then set the onSlopeMoving true. If it is true, MoveChar and AccelerateChar will behave accordingly
+           in the GeneralCharacter script */
         ray2 = new Ray(transform.position, Vector3.down);
         if (Physics.Raycast(ray2, out hitInfo2, castDistance2, lMask, QueryTriggerInteraction.Ignore)){
 
