@@ -224,6 +224,10 @@ public class MainCharacter : GeneralCharacter
                     {
                         rb.AddForce((Physics.gravity * rb.mass));
                     }
+                    else
+                    {
+                        rb.AddForce((Physics.gravity * rb.mass * 0.5f));
+                    }
                 }
                 else
                 {
