@@ -19,7 +19,119 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'AR_Aiming' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Spine_2' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'AR_Firing' has
+      import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'Spine_2' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'AR_Holding_1' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'AR_Holding_2' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'AR_Reloading' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Machete Aiming' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Machete Hitting' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Run Left Front' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Run Right Front' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Running' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Shotgun_Aiming' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Shotgun_Firing' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Shotgun_Holding_1' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Shotgun_Holding_2' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'SR_Aiming' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'SR_Firing' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'SR_Holding_1' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'SR_Holding_2' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'SR_Reloading' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|AR_Firing' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|AR_Holding_1' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|AR_Holding_2' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|AR_Reloading' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Machete Aiming' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Machete Hitting' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Run Left Front' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Run Right Front' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Running' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Shotgun_Aiming' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Shotgun_Firing' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|Shotgun_Holding_1' has import animation warnings that might lower
+      retargeting quality:\nNote: Activate translation DOF on avatar to improve retargeting
+      quality.\n\t'Spine_2' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\nClip 'Skeleton|Shotgun_Holding_2' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Spine_2' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'Skeleton|SR_Aiming'
+      has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|SR_Firing' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|SR_Holding_1' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|SR_Holding_2' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Skeleton|SR_Reloading' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Spine_2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -2219,11 +2331,11 @@ ModelImporter:
       position: {x: -0.0022206828, y: 0.0015559864, z: -9.406358e-10}
       rotation: {x: -0.50000036, y: 0.49999988, z: 0.49999976, w: 0.50000006}
       scale: {x: 1.0000005, y: 1, z: 1.0000007}
-    armTwist: 0
+    armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
-    legTwist: 0.016
-    armStretch: 0.214
+    legTwist: 0.5
+    armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
