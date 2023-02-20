@@ -21,7 +21,7 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
-    public GroundCheckScript groundCheckScr;
+    //public GroundCheckScript groundCheckScr;
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;

@@ -7,22 +7,12 @@ public class GroundCheckScript : MonoBehaviour
 {
     GeneralCharacter Char;
     Coroutine groundedCounting;
-    public bool touchingGround;
-    Rigidbody rb;
 
     void Start()
     {
         Char = transform.parent.GetComponent<GeneralCharacter>();
-        rb = Char.GetComponent<Rigidbody>();
+        //Char.groundCheckScr = GetComponent<GroundCheckScript>();
     }
-    void Update()
-    {
-        if (!Char.isJumping && !touchingGround && rb.velocity.y > 0)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * 0.9f, rb.velocity.z);
-        }
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Ground" || other.tag == "Vehicle")
@@ -40,7 +30,6 @@ public class GroundCheckScript : MonoBehaviour
         if (other.tag == "Ground" || other.tag == "Vehicle")
         {
             Char.isGrounded = true;
-            touchingGround = true;
         }
     }
     void OnTriggerExit(Collider other)
@@ -48,16 +37,12 @@ public class GroundCheckScript : MonoBehaviour
         if (other.tag == "Ground" || other.tag == "Vehicle")
         {
             groundedCounting = StartCoroutine(CountForNotGrounded());
-            touchingGround = false;
         }
     }
     IEnumerator CountForNotGrounded()
     {
         yield return new WaitForSeconds(0.5f);
-        if(!touchingGround)
-        {
-            Char.isGrounded = false;
-        }
+        Char.isGrounded = false;
     }
 
 }
