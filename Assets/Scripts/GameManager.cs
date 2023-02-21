@@ -18,15 +18,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform mainCharIsThis;
 
 
-    void Start()
+    void Awake()
     {
         switch (SceneManager.GetActiveScene().name)
         {
             case "Level 1":
                 mainState = PlayerState.onFoot;
                 mainCam = Camera.main.transform;
-                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar = mainCharIsThis;
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();
                 break;
         }

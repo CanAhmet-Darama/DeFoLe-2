@@ -17,6 +17,10 @@ public class GeneralCharacter : MonoBehaviour
     public float jumpCooldown;
     public byte health;
     public Rigidbody rb;
+
+    [Header("For Weapon")]
+    public GeneralWeapon currentWeapon;
+    public bool[] hasWeapons = new bool[6];
    
 
     [Header("Animation")]

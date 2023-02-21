@@ -9,7 +9,7 @@ public class StairCheckScript : MonoBehaviour
     [SerializeField] MainCharacter mainChar;
     #region Stair
     Ray ray;
-    float castDistance = 0.225f;
+    float castDistance = 0.25f;
     float stairMaxHeight = 0.6f;
     float castCurrentHeight;
     float iterateIncrease = 0.05f;
