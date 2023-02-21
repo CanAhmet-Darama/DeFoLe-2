@@ -82,5 +82,31 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    #region General Functions
+    public static float LerpOrSnap(float valueToChange, float targetValue, float lerpRate)
+    {
+        if (Mathf.Abs(targetValue - valueToChange) < 0.01)
+        {
+            return targetValue;
+        }
+        else
+        {
+            return Mathf.Lerp(valueToChange, targetValue, lerpRate);
+        }
+    }
+    public static Vector3 LerpOrSnap(Vector3 valueToChange, Vector3 targetValue, float lerpRate)
+    {
+        if ((targetValue - valueToChange).magnitude < 0.01)
+        {
+            return targetValue;
+        }
+        else
+        {
+            return Vector3.Lerp(valueToChange, targetValue, lerpRate);
+        }
+    }
+
+    #endregion
 }
 public enum PlayerState { inMainCar, onFoot }
