@@ -7,8 +7,8 @@ public class AimManager : MonoBehaviour
 {
     CameraScript mainCam;
     MainCharacter mainChar;
-    Animator animator;
-    [SerializeField]Transform aimTarget;
+    [SerializeField] Animator animator;
+    [SerializeField] Transform aimTarget;
     [SerializeField] MultiAimConstraint multiAimCoRHand;
     [SerializeField] MultiAimConstraint multiAimCoBody;
     [SerializeField] TwoBoneIKConstraint leftHCo;
@@ -23,12 +23,13 @@ public class AimManager : MonoBehaviour
     bool quitAimingCompletely = false;
     Coroutine willQuitAimingCompletely;
 
+    float lerpOrSnapSpeed = 0.025f;
+
 
     public void Start()
     {
         mainCam = GameManager.mainCam.GetComponent<CameraScript>();
         mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
-        animator = mainChar.GetComponent<Animator>();
     }
 
     void Update()
@@ -50,6 +51,7 @@ public class AimManager : MonoBehaviour
                 StopCoroutine(willQuitAimingCompletely);
             }
             quitAimingCompletely = false;
+            animator.SetBool("isAiming", true);
         }
         if (Input.GetMouseButton(1))
         {
@@ -66,9 +68,9 @@ public class AimManager : MonoBehaviour
             }
             #endregion
 
-            multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0.7f, 0.025f);
-            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, 0.025f);
-            leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 1, 0.025f);
+            multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0.7f, lerpOrSnapSpeed);
+            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+            leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 1, lerpOrSnapSpeed);
         }
         else
         {
@@ -76,27 +78,40 @@ public class AimManager : MonoBehaviour
             {
                 if(willQuitAimingCompletely != null)
                 {
-                    if (willQuitAimingCompletely != null)
-                    {
-                        StopCoroutine(willQuitAimingCompletely);
-                    }
+                    StopCoroutine(willQuitAimingCompletely);
                     quitAimingCompletely = true;
+                    animator.SetBool("isAiming", false);
                 }
             }
         }
 
-        if(quitAimingCompletely)
+        if (Input.GetMouseButtonDown(0) && mainChar.canShoot)
         {
-            multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0, 0.025f);
-            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, 0.025f);
-            leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 0, 0.025f);
+            animator.SetTrigger("fire");
+        }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            animator.SetTrigger("reload");
+        }
+
+        if (quitAimingCompletely)
+        {
+            multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0, lerpOrSnapSpeed);
+            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
+            leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 0, lerpOrSnapSpeed);
 
         }
+
+    }
+    void UpperBodyAnimator()
+    {
+
     }
 
     IEnumerator WaitToQuitAimingCompletely(float durat)
     {
         yield return new WaitForSeconds(durat);
         quitAimingCompletely = true;
+        animator.SetBool("isAiming", false);
     }
 }

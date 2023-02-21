@@ -21,6 +21,7 @@ public class GeneralCharacter : MonoBehaviour
     [Header("For Weapon")]
     public GeneralWeapon currentWeapon;
     public bool[] hasWeapons = new bool[6];
+    public bool canShoot;
    
 
     [Header("Animation")]
@@ -29,6 +30,7 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
+    public bool isReloading;
 
     [Header("Some Stuff")]
     public bool isGrounded;
