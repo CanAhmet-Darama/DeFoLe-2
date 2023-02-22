@@ -88,6 +88,7 @@ public class AimManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && mainChar.canShoot)
         {
             animator.SetTrigger("fire");
+            mainChar.currentWeapon.GetComponent<GeneralWeapon>().Fire();
         }
         if(Input.GetKeyDown(KeyCode.R))
         {
