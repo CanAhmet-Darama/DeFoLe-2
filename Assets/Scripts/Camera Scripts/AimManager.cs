@@ -21,6 +21,7 @@ public class AimManager : MonoBehaviour
     RaycastHit hitInfo;
 
     bool quitAimingCompletely = false;
+    bool isReloading;
     Coroutine willQuitAimingCompletely;
 
     float lerpOrSnapSpeed = 0.025f;
@@ -69,8 +70,16 @@ public class AimManager : MonoBehaviour
             #endregion
 
             multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0.7f, lerpOrSnapSpeed);
-            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
-            leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 1, lerpOrSnapSpeed);
+            if (!isReloading) { 
+                leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 1, lerpOrSnapSpeed);
+                multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+            }
+            else
+            {
+                leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 0, lerpOrSnapSpeed);
+                multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
+            }
+
         }
         else
         {
@@ -87,12 +96,13 @@ public class AimManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && mainChar.canShoot)
         {
+            animator.ResetTrigger("fire");
             animator.SetTrigger("fire");
-            mainChar.currentWeapon.GetComponent<GeneralWeapon>().Fire();
         }
         if(Input.GetKeyDown(KeyCode.R))
         {
             animator.SetTrigger("reload");
+            StartCoroutine(ReloadConstraintWeightLower(mainChar.currentWeapon.GetComponent<GeneralWeapon>().reloadTime));
         }
 
         if (quitAimingCompletely)
@@ -104,6 +114,9 @@ public class AimManager : MonoBehaviour
         }
 
     }
+
+
+
     void UpperBodyAnimator()
     {
 
@@ -114,5 +127,11 @@ public class AimManager : MonoBehaviour
         yield return new WaitForSeconds(durat);
         quitAimingCompletely = true;
         animator.SetBool("isAiming", false);
+    }
+    IEnumerator ReloadConstraintWeightLower(float durat)
+    {
+        isReloading = true;
+        yield return new WaitForSeconds(durat);
+        isReloading = false;
     }
 }

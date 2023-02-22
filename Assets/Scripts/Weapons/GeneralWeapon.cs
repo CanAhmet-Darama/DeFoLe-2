@@ -31,7 +31,7 @@ public class GeneralWeapon : MonoBehaviour
     {
         if(weaponType == WeaponType.AR_1 || weaponType == WeaponType.TR_1)
         {
-            bulletPool = new GameObject[10];
+            bulletPool = new GameObject[15];
         }
         else
         {
@@ -44,7 +44,7 @@ public class GeneralWeapon : MonoBehaviour
             bulletPool[i - 1].SetActive(false);
             bulletPool[i - 1].GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
         }
-        gunAudioSource.volume = 0.5f;
+        gunAudioSource.volume = 0.05f;
     }
 
     public void Reload()
@@ -54,13 +54,18 @@ public class GeneralWeapon : MonoBehaviour
     public void Fire()
     {
         GameObject bulletToShoot = GetAmmo();
+        GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
+        bulletToShoot.GetComponent<TrailRenderer>().enabled = false;
         bulletToShoot.transform.parent = bulletPoolHolder.transform;
         bulletToShoot.transform.localPosition = bulletLaunchOffset;
-        bulletToShoot.GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
+        gBullet.itsHolder = bulletPoolHolder;
+        gBullet.duratPassed = 0;
         bulletToShoot.transform.parent = null;
+        bulletToShoot.GetComponent<TrailRenderer>().enabled = true;
         bulletToShoot.SetActive(true);
+
         bulletToShoot.GetComponent<Rigidbody>().velocity = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed * transform.forward;
-        gunAudioSource.clip = firingSound;
+        if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
         gunAudioSource.Play();
     }
     public GameObject GetAmmo()
@@ -69,7 +74,7 @@ public class GeneralWeapon : MonoBehaviour
         {
             if (!bulletPool[i - 1].activeInHierarchy)
             {
-                //bulletPool[i - 1].GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
+                bulletPool[i - 1].SetActive(false);
                 return bulletPool[i - 1];
             }
         }
@@ -81,8 +86,8 @@ public class GeneralWeapon : MonoBehaviour
                 oldestBullet = (bulletPool[i - 1]);
             }
         }
-        //oldestBullet.GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
+        oldestBullet.SetActive(false);
         return oldestBullet;
     }
-    public enum WeaponType { AR_1, TR_1, SR_1, Shotgun, Pistol}
 }
+    public enum WeaponType { AR_1, TR_1, SR_1, Shotgun, Pistol}

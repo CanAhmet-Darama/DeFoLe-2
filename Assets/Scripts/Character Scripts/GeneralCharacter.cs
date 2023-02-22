@@ -146,42 +146,12 @@ public class GeneralCharacter : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
     }
-    protected void GeneralCharOnCollisionEnter()
+    protected IEnumerator CanShootAgain()
     {
-
+        canShoot = false;
+        yield return new WaitForSeconds(currentWeapon.GetComponent<GeneralWeapon>().firingTime);
+        canShoot = true;
     }
-    protected void OnTriggerEnterGC(Collider other)
-    {
-
-    }
-    protected void OnTriggerExitGC(Collider other)
-    {
-
-    }
-
-    /*protected void DetectSlope()
-    { 
-        float castPosY = ( - GetComponent<CapsuleCollider>().height / 2) + 0.1f;
-        Vector3 castPos = new Vector3(transform.position.x, transform.position.y - castPosY, transform.position.z);
-        float castDistance = 0.5f;
-        float castRadius = 0.3f;
-        RaycastHit hitFront, hitBack, hitLeft, hitRight;
-        Physics.Raycast(castPos + transform.forward * castRadius, Vector3.down, out hitFront,castDistance);
-        Physics.Raycast(castPos + transform.right * castRadius, Vector3.down, out hitRight, castDistance);
-        Physics.Raycast(castPos - transform.forward * castRadius, Vector3.down, out hitBack, castDistance);
-        Physics.Raycast(castPos - transform.right * castRadius, Vector3.down, out hitLeft, castDistance);
-
-        Debug.DrawLine(castPos + transform.forward * castRadius, hitFront.distance* Vector3.down, Color.magenta);
-        Debug.DrawRay(castPos + transform.right * castRadius, hitRight.distance * Vector3.down, Color.magenta);
-        Debug.DrawRay(castPos - transform.forward * castRadius, hitBack.distance * Vector3.down, Color.magenta);
-        Debug.DrawRay(castPos - transform.right * castRadius, hitLeft.distance * Vector3.down, Color.magenta);
-
-        Debug.Log(hitFront.normal);
-        Debug.Log(hitBack.normal);
-        Debug.Log(hitLeft.normal);
-        Debug.Log(hitRight.normal);
-
-    }*/
 
 }
 public enum AnimStateSpeed { idle, walk, run }

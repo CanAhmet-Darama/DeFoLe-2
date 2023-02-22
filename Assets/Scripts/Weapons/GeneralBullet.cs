@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GeneralBullet : MonoBehaviour
 {
-    float maxLifespan = 4;
+    float maxLifespan = 3;
     public float duratPassed;
     Coroutine deactivateCor;
     public float bulletSpeed = 500;
@@ -14,7 +14,10 @@ public class GeneralBullet : MonoBehaviour
 
     void OnEnable()
     {
-        duratPassed = 0;
+        if(deactivateCor != null)
+        {
+        StopCoroutine(deactivateCor);
+        }
     }
     void OnDisable()
     {
@@ -27,14 +30,9 @@ public class GeneralBullet : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-    void OnCollisionEnter()
+    void OnCollisionEnter(Collision collision)
     {
         gameObject.SetActive(false);
     }
 
-    //    IEnumerator DeactivateBullet(float durat)
-    //    {
-    //        yield return new WaitForSeconds(durat);
-    //        gameObject.SetActive(false);
-    //    }
 }

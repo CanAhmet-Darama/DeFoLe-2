@@ -146,11 +146,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 0
   range: 0
-  firingTime: 0
-  reloadTime: 0
+  firingTime: 0.2
+  reloadTime: 2
   inaccuracyDegree: 0
   maxAmmo: 30
   currentAmmo: 0
+  weaponType: 0
   bullet: {fileID: 5235666667577190266, guid: feb44d6ff70e49f4c98e77f65a6cf047, type: 3}
   bulletPool: []
   bulletPoolHolder: {fileID: 3082118429612300233}
@@ -159,7 +160,7 @@ MonoBehaviour:
   gunAudioSource: {fileID: 216908855763557982}
   reloadSound: {fileID: 0}
   leftHandPos: {x: 0, y: 0, z: 0}
-  bulletLaunchOffset: {x: 0, y: 0, z: 0.5}
+  bulletLaunchOffset: {x: 0, y: 0, z: 0.1}
 --- !u!1 &3082118429612300233
 GameObject:
   m_ObjectHideFlags: 0

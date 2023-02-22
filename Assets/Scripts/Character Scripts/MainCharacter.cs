@@ -240,6 +240,11 @@ public class MainCharacter : GeneralCharacter
             }
         }
 
+        if (Input.GetMouseButton(0) && canShoot)
+        {
+            currentWeapon.GetComponent<GeneralWeapon>().Fire();
+            StartCoroutine(CanShootAgain());
+        }
     }
 
     public void RegulateMainChar()
