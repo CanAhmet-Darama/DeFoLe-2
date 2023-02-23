@@ -21,6 +21,10 @@ public class GeneralBullet : MonoBehaviour
     }
     void OnDisable()
     {
+        if(itsHolder!= null)
+        {
+            itsHolder.GetComponentInParent<GeneralWeapon>().DisableAndParentBullet(transform, itsHolder.transform);
+        }
     }
     void Update()
     {

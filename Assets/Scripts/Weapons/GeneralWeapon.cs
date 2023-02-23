@@ -54,14 +54,13 @@ public class GeneralWeapon : MonoBehaviour
     public void Fire()
     {
         GameObject bulletToShoot = GetAmmo();
+        StartCoroutine(AFrameThenTrail(bulletToShoot));
         GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
-        bulletToShoot.GetComponent<TrailRenderer>().enabled = false;
         bulletToShoot.transform.parent = bulletPoolHolder.transform;
         bulletToShoot.transform.localPosition = bulletLaunchOffset;
         gBullet.itsHolder = bulletPoolHolder;
         gBullet.duratPassed = 0;
         bulletToShoot.transform.parent = null;
-        bulletToShoot.GetComponent<TrailRenderer>().enabled = true;
         bulletToShoot.SetActive(true);
 
         bulletToShoot.GetComponent<Rigidbody>().velocity = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed * transform.forward;
@@ -88,6 +87,21 @@ public class GeneralWeapon : MonoBehaviour
         }
         oldestBullet.SetActive(false);
         return oldestBullet;
+    }
+    public void DisableAndParentBullet(Transform bullet, Transform parent)
+    {
+        StartCoroutine(AFrameThenParent(bullet, parent));
+    }
+    IEnumerator AFrameThenParent(Transform bullet, Transform parent)
+    {
+        yield return null;
+        bullet.parent = parent;
+        bullet.GetComponent<TrailRenderer>().enabled = false;
+    }
+    IEnumerator AFrameThenTrail(GameObject bullet)
+    {
+        yield return null;
+        bullet.GetComponent<TrailRenderer>().enabled = true;
     }
 }
     public enum WeaponType { AR_1, TR_1, SR_1, Shotgun, Pistol}

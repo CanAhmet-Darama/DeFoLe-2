@@ -160,7 +160,7 @@ MonoBehaviour:
   gunAudioSource: {fileID: 216908855763557982}
   reloadSound: {fileID: 0}
   leftHandPos: {x: 0, y: 0, z: 0}
-  bulletLaunchOffset: {x: 0, y: 0, z: 0.1}
+  bulletLaunchOffset: {x: 0, y: 0, z: 0.5}
 --- !u!1 &3082118429612300233
 GameObject:
   m_ObjectHideFlags: 0
