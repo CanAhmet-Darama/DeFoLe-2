@@ -20,9 +20,13 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("For Weapon")]
     public GeneralWeapon currentWeapon;
-    public bool[] hasWeapons = new bool[6];
+    public bool[] hasWeapons = new bool[5];
+    public GameObject[] weapons = new GameObject[5];
+    public short[] ammoCounts= new short[5];
     public bool canShoot;
-   
+    public bool canReload;
+    public bool isReloading;
+
 
     [Header("Animation")]
     public Animator animator;
@@ -30,7 +34,8 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
-    public bool isReloading;
+    public GameObject rightHBone;
+    public GameObject leftHBone;
 
     [Header("Some Stuff")]
     public bool isGrounded;
@@ -67,27 +72,12 @@ public class GeneralCharacter : MonoBehaviour
     {
         rb.AddForce(direction.normalized * acc, ForceMode.Impulse);
     }
-    public void Jump(float waitDurat)
+    public void RotateChar(Vector3 target, float smoothTime)
     {
-        StartCoroutine(WaitForJump(waitDurat));
-        StartCoroutine(JumpCooldown());
+        Quaternion targetQua = new Quaternion(0,0,0,0);
+        targetQua = Quaternion.Euler(transform.eulerAngles.x, target.y, transform.eulerAngles.z);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
     }
-    #region Jump IEnumerators
-    IEnumerator WaitForJump(float durat)
-    {
-        canJump = false;
-        isJumping = true;
-        yield return new WaitForSeconds(durat);
-        rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
-        yield return new WaitForSeconds(0.1f);
-        isGrounded = false;
-    }
-    IEnumerator JumpCooldown()
-    {
-        yield return new WaitForSeconds(jumpCooldown);
-        canJump = true;
-    }
-    #endregion
 
     public void AccAndWalk(Vector3 direction)
     {
@@ -121,12 +111,60 @@ public class GeneralCharacter : MonoBehaviour
             AccelerateChar(direction, runAcceleration);
         }
     }
-    public void RotateChar(Vector3 target, float smoothTime)
+    public void Jump(float waitDurat)
     {
-        Quaternion targetQua = new Quaternion(0,0,0,0);
-        targetQua = Quaternion.Euler(transform.eulerAngles.x, target.y, transform.eulerAngles.z);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
+        StartCoroutine(WaitForJump(waitDurat));
+        StartCoroutine(JumpCooldown());
     }
+    #region Jump IEnumerators
+    IEnumerator WaitForJump(float durat)
+    {
+        canJump = false;
+        isJumping = true;
+        yield return new WaitForSeconds(durat);
+        rb.AddForce(transform.up*jumpForce, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.1f);
+        isGrounded = false;
+    }
+    IEnumerator JumpCooldown()
+    {
+        yield return new WaitForSeconds(jumpCooldown);
+        canJump = true;
+    }
+    #endregion
+
+    void CreateWeapons()
+    {
+        for(int i = weapons.Length - 1; i >= 0; i--)
+        {
+            if(GetComponent<MainCharacter>() != null)
+            {
+                weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
+                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                weapons[i].SetActive(false);
+            }
+            else if (hasWeapons[i - 1])
+            {
+                weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
+                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                weapons[i].SetActive(false);
+            }
+            weapons[i].transform.localScale *= 0.01f;
+            weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+            weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
+        }
+    }
+    public void ChangeWeapon(GeneralWeapon newWeapon)
+    {
+        if(currentWeapon != null)
+        {
+            currentWeapon.gameObject.SetActive(false);
+        }
+        currentWeapon = newWeapon;
+        currentWeapon.gameObject.SetActive(true);
+        //currentWeapon.transform.localPosition = currentWeapon.rightHandPosOffset;
+    }
+
     protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
     
     protected void GeneralCharStart()
@@ -134,6 +172,7 @@ public class GeneralCharacter : MonoBehaviour
         canJump = true;
         rb = GetComponent<Rigidbody>();
         stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
+        CreateWeapons();
     }
     protected void GeneralCharUpdate()
     {
@@ -146,6 +185,7 @@ public class GeneralCharacter : MonoBehaviour
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
     }
+
     protected IEnumerator CanShootAgain()
     {
         canShoot = false;

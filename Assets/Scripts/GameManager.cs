@@ -14,12 +14,15 @@ public class GameManager : MonoBehaviour
     [Header("Instances")]
     public static Transform mainCam;
     public static Transform mainChar;
+    public static GameObject[] weaponPrefabs = new GameObject[6];
+    [SerializeField] GameObject[] weaponPrefabsAreThese;
     [SerializeField] Transform mainCamIsThis;
     [SerializeField] Transform mainCharIsThis;
 
 
     void Awake()
     {
+        weaponPrefabs = weaponPrefabsAreThese;
         switch (SceneManager.GetActiveScene().name)
         {
             case "Level 1":

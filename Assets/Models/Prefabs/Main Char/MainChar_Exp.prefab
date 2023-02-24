@@ -287,11 +287,23 @@ MonoBehaviour:
   rb: {fileID: 0}
   currentWeapon: {fileID: 0}
   hasWeapons: 000000000000
+  weapons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  ammoCounts: 00000000000000000000
+  canShoot: 0
+  canReload: 0
+  isReloading: 0
   animator: {fileID: 4150487459040742667}
   groundCheckScr: {fileID: 0}
   animStateSpeed: 0
   animStatePriDir: 2
   animStateSecDir: 2
+  rightHBone: {fileID: 7969905952760430236}
+  leftHBone: {fileID: 175486645345308264}
   isGrounded: 0
   stairSlopeChecker: {fileID: 0}
   stairSlopeCheckerGO_: {fileID: 9090398627708968972}
@@ -744,6 +756,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf3eca1f515ecce4697a495bfe210d0b, type: 3}
+--- !u!1 &175486645345308264 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5886051678211350726, guid: bf3eca1f515ecce4697a495bfe210d0b, type: 3}
+  m_PrefabInstance: {fileID: 6034824584212049582}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &619826182463722756 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2640780238740751446, guid: bf3eca1f515ecce4697a495bfe210d0b, type: 3}
@@ -931,6 +948,11 @@ Transform:
 --- !u!4 &7626843860336177867 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4186094656610901093, guid: bf3eca1f515ecce4697a495bfe210d0b, type: 3}
+  m_PrefabInstance: {fileID: 6034824584212049582}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7969905952760430236 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4421070012132790322, guid: bf3eca1f515ecce4697a495bfe210d0b, type: 3}
   m_PrefabInstance: {fileID: 6034824584212049582}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8027566645491265136 stripped

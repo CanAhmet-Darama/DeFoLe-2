@@ -21,7 +21,7 @@ public class AimManager : MonoBehaviour
     RaycastHit hitInfo;
 
     bool quitAimingCompletely = false;
-    bool isReloading;
+    public bool isReloading;
     Coroutine willQuitAimingCompletely;
 
     float lerpOrSnapSpeed = 0.025f;
@@ -116,11 +116,6 @@ public class AimManager : MonoBehaviour
     }
 
 
-
-    void UpperBodyAnimator()
-    {
-
-    }
 
     IEnumerator WaitToQuitAimingCompletely(float durat)
     {

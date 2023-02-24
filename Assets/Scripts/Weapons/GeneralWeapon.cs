@@ -25,6 +25,8 @@ public class GeneralWeapon : MonoBehaviour
     [Header("For Animation etc")]
     public Vector3 leftHandPos;
     public Vector3 bulletLaunchOffset;
+    public Vector3 rightHandPosOffset;
+    public Vector3 rightHandRotOffset;
 
 
     protected void Start()
@@ -92,6 +94,7 @@ public class GeneralWeapon : MonoBehaviour
     {
         StartCoroutine(AFrameThenParent(bullet, parent));
     }
+
     IEnumerator AFrameThenParent(Transform bullet, Transform parent)
     {
         yield return null;
@@ -104,4 +107,4 @@ public class GeneralWeapon : MonoBehaviour
         bullet.GetComponent<TrailRenderer>().enabled = true;
     }
 }
-    public enum WeaponType { AR_1, TR_1, SR_1, Shotgun, Pistol}
+    public enum WeaponType { AR_1, TR_1, Pistol, Shotgun, SR_1}

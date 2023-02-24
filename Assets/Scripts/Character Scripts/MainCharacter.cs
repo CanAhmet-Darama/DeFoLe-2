@@ -11,12 +11,14 @@ public class MainCharacter : GeneralCharacter
     void Start()
     {
         GeneralCharStart();
+        ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
     }
     void Update()
     {
         GeneralCharUpdate();
+        ControlWeaponry();
     }
 
     void FixedUpdate()
@@ -240,11 +242,29 @@ public class MainCharacter : GeneralCharacter
             }
         }
 
+    }
+    void ControlWeaponry()
+    {
         if (Input.GetMouseButton(0) && canShoot)
         {
             currentWeapon.GetComponent<GeneralWeapon>().Fire();
             StartCoroutine(CanShootAgain());
         }
+
+        if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0)
+        {
+
+        }
+
+
+    }
+    IEnumerator ReloadTimer()
+    {
+        canReload = false;
+        canShoot = false;
+        yield return new WaitForSeconds(currentWeapon.reloadTime);
+        canReload = true;
+        canShoot = true;
     }
 
     public void RegulateMainChar()
