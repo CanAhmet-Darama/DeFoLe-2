@@ -47,7 +47,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 20495af13c5848142a3cebd0a5adade2, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.35
   m_Pitch: 1
   Loop: 0
@@ -162,6 +162,7 @@ MonoBehaviour:
   leftHandPos: {x: 0, y: 0, z: 0}
   bulletLaunchOffset: {x: 0, y: 0, z: 0.6}
   rightHandPosOffset: {x: 0, y: 0, z: 0}
+  rightHandRotOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &2034338735417979580
 GameObject:
   m_ObjectHideFlags: 0

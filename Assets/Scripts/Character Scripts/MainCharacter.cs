@@ -11,7 +11,7 @@ public class MainCharacter : GeneralCharacter
     void Start()
     {
         GeneralCharStart();
-        ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
+        ChangeWeapon(weapons[4].GetComponent<GeneralWeapon>());
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
     }

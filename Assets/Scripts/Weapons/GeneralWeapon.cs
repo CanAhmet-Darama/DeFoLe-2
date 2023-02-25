@@ -27,6 +27,12 @@ public class GeneralWeapon : MonoBehaviour
     public Vector3 bulletLaunchOffset;
     public Vector3 rightHandPosOffset;
     public Vector3 rightHandRotOffset;
+    public Animation idleAnim;
+    public Animation semiIdleAnim;
+    public Animation aimAnim;
+    public Animation fireAnim;
+    public Animation reloadAnim;
+
 
 
     protected void Start()

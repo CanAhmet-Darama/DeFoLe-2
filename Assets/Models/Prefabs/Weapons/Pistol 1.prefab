@@ -66,6 +66,7 @@ MonoBehaviour:
   leftHandPos: {x: 0, y: 0, z: 0}
   bulletLaunchOffset: {x: 0, y: 0, z: 0}
   rightHandPosOffset: {x: 0, y: 0, z: 0}
+  rightHandRotOffset: {x: 0, y: 0, z: 0}
 --- !u!33 &2460898500904140309
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -128,7 +129,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
