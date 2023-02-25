@@ -1480,6 +1480,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3820391527344796335, guid: 7ecc1df06d83da742ac56422451c6bde, type: 3}
   m_PrefabInstance: {fileID: 1323829310}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &821805182 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8774215480870896389, guid: 0e1461d13773ae3469981fd489211ca0, type: 3}
+  m_PrefabInstance: {fileID: 1155065837}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &855615515
 GameObject:
   m_ObjectHideFlags: 0
@@ -1511,11 +1516,6 @@ Transform:
   m_Father: {fileID: 1405969965}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &895604690 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4150487459040742667, guid: 0e1461d13773ae3469981fd489211ca0, type: 3}
-  m_PrefabInstance: {fileID: 1155065837}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &918011312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,7 +1719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6527a08e3433720489d3fef10d4f1de6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 895604690}
+  animator: {fileID: 821805182}
   aimTarget: {fileID: 2062882449}
   multiAimCoRHand: {fileID: 485339953}
   multiAimCoBody: {fileID: 1857106823}
