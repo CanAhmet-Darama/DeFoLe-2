@@ -11,7 +11,7 @@ public class MainCharacter : GeneralCharacter
     void Start()
     {
         GeneralCharStart();
-        ChangeWeapon(weapons[4].GetComponent<GeneralWeapon>());
+        ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
     }
@@ -248,7 +248,6 @@ public class MainCharacter : GeneralCharacter
         if (Input.GetMouseButton(0) && canShoot)
         {
             currentWeapon.GetComponent<GeneralWeapon>().Fire();
-            StartCoroutine(CanShootAgain());
         }
 
         if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0)
@@ -256,6 +255,30 @@ public class MainCharacter : GeneralCharacter
 
         }
 
+        if (!isReloading)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                ChangeWeapon(weapons[1].GetComponent<GeneralWeapon>());
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                ChangeWeapon(weapons[2].GetComponent<GeneralWeapon>());
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                ChangeWeapon(weapons[3].GetComponent<GeneralWeapon>());
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                ChangeWeapon(weapons[4].GetComponent<GeneralWeapon>());
+            }
+
+        }
 
     }
     IEnumerator ReloadTimer()

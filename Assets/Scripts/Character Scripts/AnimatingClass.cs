@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class AnimatingClass : MonoBehaviour
 {
-    MainCharacter character;
+    GeneralCharacter character;
     [SerializeField] float blendLerpSpeed;
     float targetBlendX;
     float targetBlendY;
     void Start()
     {
-        character = transform.parent.GetComponent<MainCharacter>();
+        character = transform.parent.GetComponent<GeneralCharacter>();
         character.animStateSpeed = AnimStateSpeed.idle;
         character.animStatePriDir = AnimStatePriDir.none;
         character.animStateSecDir = AnimStateSecDir.none;
@@ -30,8 +30,9 @@ public class AnimatingClass : MonoBehaviour
                 targetBlendY = 0;
                 break;
         }
-        character.blendAnimX = SnapOrLerpVaule(character.blendAnimX, targetBlendX, blendLerpSpeed);
-        character.blendAnimY = SnapOrLerpVaule(character.blendAnimY, targetBlendY, blendLerpSpeed);
+        character.blendAnimX = GameManager.LerpOrSnap(character.blendAnimX, targetBlendX, blendLerpSpeed);
+        character.blendAnimY = GameManager.LerpOrSnap(character.blendAnimY, targetBlendY, blendLerpSpeed);
+
         character.animator.SetFloat("blendVeloX", character.blendAnimX);
         character.animator.SetFloat("blendVeloY", character.blendAnimY);
 
@@ -39,17 +40,17 @@ public class AnimatingClass : MonoBehaviour
         character.animator.SetBool("isGrounded", character.isGrounded);
 
     }
-    static float SnapOrLerpVaule(float whatTo, float whereTo, float lerpSpeed)
-    {
-        if(Mathf.Abs(whatTo - whereTo) > 0.01f)
-        {
-            return Mathf.Lerp(whatTo, whereTo, lerpSpeed);
-        }
-        else
-        {
-            return whereTo;
-        }
-    }
+    //static float SnapOrLerpVaule(float whatTo, float whereTo, float lerpSpeed)
+    //{
+    //    if(Mathf.Abs(whatTo - whereTo) > 0.01f)
+    //    {
+    //        return Mathf.Lerp(whatTo, whereTo, lerpSpeed);
+    //    }
+    //    else
+    //    {
+    //        return whereTo;
+    //    }
+    //}
     void ManageAnimatorParameters(bool isRunning)
     {
         if (isRunning)

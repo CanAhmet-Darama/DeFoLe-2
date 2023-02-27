@@ -36,6 +36,8 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStateSecDir animStateSecDir;
     public GameObject rightHBone;
     public GameObject leftHBone;
+    [SerializeField]
+    AnimatorOverrideController[] animOverriders;
 
     [Header("Some Stuff")]
     public bool isGrounded;
@@ -152,6 +154,7 @@ public class GeneralCharacter : MonoBehaviour
             weapons[i].transform.localScale *= 0.01f;
             weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
             weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
+            weapons[i].GetComponent<GeneralWeapon>().owner = this;
         }
     }
     public void ChangeWeapon(GeneralWeapon newWeapon)
@@ -162,7 +165,16 @@ public class GeneralCharacter : MonoBehaviour
         }
         currentWeapon = newWeapon;
         currentWeapon.gameObject.SetActive(true);
+        AnimationOverride(animOverriders[currentWeapon.animOverriderIndex]);
+        if(currentWeapon.currentAmmo > 0)
+        {
+            canShoot = true;
+        }
         //currentWeapon.transform.localPosition = currentWeapon.rightHandPosOffset;
+    }
+    public void AnimationOverride(AnimatorOverrideController overrider)
+    {
+        animator.runtimeAnimatorController = overrider;
     }
 
     protected enum Direction { forward, back, left, right, foLeft, baLeft, foRight, baRight, none }
@@ -186,10 +198,10 @@ public class GeneralCharacter : MonoBehaviour
         }
     }
 
-    protected IEnumerator CanShootAgain()
+    public IEnumerator CanShootAgain(float durat)
     {
         canShoot = false;
-        yield return new WaitForSeconds(currentWeapon.GetComponent<GeneralWeapon>().firingTime);
+        yield return new WaitForSeconds(durat);
         canShoot = true;
     }
 

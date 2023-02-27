@@ -5,6 +5,7 @@ using UnityEngine;
 public class GeneralWeapon : MonoBehaviour
 {
     [Header("General")]
+    public GeneralCharacter owner;
     public float damage;
     public float range;
     public float firingTime;
@@ -27,11 +28,12 @@ public class GeneralWeapon : MonoBehaviour
     public Vector3 bulletLaunchOffset;
     public Vector3 rightHandPosOffset;
     public Vector3 rightHandRotOffset;
-    public Animation idleAnim;
-    public Animation semiIdleAnim;
-    public Animation aimAnim;
-    public Animation fireAnim;
-    public Animation reloadAnim;
+    public AnimationClip idleAnim;
+    public AnimationClip semiIdleAnim;
+    public AnimationClip aimAnim;
+    public AnimationClip fireAnim;
+    public AnimationClip reloadAnim;
+    public byte animOverriderIndex;
 
 
 
@@ -39,41 +41,61 @@ public class GeneralWeapon : MonoBehaviour
     {
         if(weaponType == WeaponType.AR_1 || weaponType == WeaponType.TR_1)
         {
-            bulletPool = new GameObject[15];
+            bulletPool = new GameObject[16];
+        }
+        else if(weaponType == WeaponType.Shotgun)
+        {
+            bulletPool = new GameObject[24];
         }
         else
         {
-            bulletPool = new GameObject[6];
+            bulletPool = new GameObject[5];
         }
+
         for(int i = bulletPool.Length; i > 0; i--)
         {
             bulletPool[i - 1] = Instantiate(bullet, Vector3.zero, transform.rotation, bulletPoolHolder.transform);
             bulletPool[i - 1].transform.localPosition = Vector3.zero;
             bulletPool[i - 1].SetActive(false);
             bulletPool[i - 1].GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
+            bulletPool[i - 1].GetComponent<GeneralBullet>().itsOwnerWeapon = this;
+
         }
         gunAudioSource.volume = 0.05f;
+        currentAmmo = maxAmmo;
     }
 
     public void Reload()
     {
-
+        owner.StartCoroutine("CanShootAgain", reloadTime);
     }
     public void Fire()
     {
-        GameObject bulletToShoot = GetAmmo();
-        StartCoroutine(AFrameThenTrail(bulletToShoot));
-        GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
-        bulletToShoot.transform.parent = bulletPoolHolder.transform;
-        bulletToShoot.transform.localPosition = bulletLaunchOffset;
-        gBullet.itsHolder = bulletPoolHolder;
-        gBullet.duratPassed = 0;
-        bulletToShoot.transform.parent = null;
-        bulletToShoot.SetActive(true);
+        byte bulletPerShot = 1;
+        if (weaponType == WeaponType.Shotgun) bulletPerShot = 12;
 
-        bulletToShoot.GetComponent<Rigidbody>().velocity = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed * transform.forward;
+        for (byte i = bulletPerShot; i >0; i--)
+        {
+            GameObject bulletToShoot = GetAmmo();
+            StartCoroutine(AFrameThenTrail(bulletToShoot));
+            GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
+            bulletToShoot.transform.parent = bulletPoolHolder.transform;
+            bulletToShoot.transform.localPosition = bulletLaunchOffset;
+            gBullet.itsHolder = bulletPoolHolder;
+            gBullet.duratPassed = 0;
+            bulletToShoot.transform.parent = null;
+            bulletToShoot.SetActive(true);
+
+            float inaccX = Random.Range(-inaccuracyDegree/10,inaccuracyDegree/10);
+            float inaccY = Random.Range(-inaccuracyDegree / 10, inaccuracyDegree / 10);
+            bulletToShoot.GetComponent<Rigidbody>().velocity = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed * transform.forward;
+            bulletToShoot.GetComponent<Rigidbody>().velocity += new Vector3(inaccX, inaccY, 0);
+        }
+        
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
         gunAudioSource.Play();
+        owner.StartCoroutine("CanShootAgain", firingTime);
+
     }
     public GameObject GetAmmo()
     {
@@ -112,5 +134,6 @@ public class GeneralWeapon : MonoBehaviour
         yield return null;
         bullet.GetComponent<TrailRenderer>().enabled = true;
     }
+
 }
     public enum WeaponType { AR_1, TR_1, Pistol, Shotgun, SR_1}

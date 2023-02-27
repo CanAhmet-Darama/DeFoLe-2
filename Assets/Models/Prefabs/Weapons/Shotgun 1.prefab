@@ -196,25 +196,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4732cd64a27266d4e99800142d828b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   damage: 0
   range: 0
-  firingTime: 0
-  reloadTime: 0
-  inaccuracyDegree: 0
+  firingTime: 0.3
+  reloadTime: 2.5
+  inaccuracyDegree: 10
   maxAmmo: 2
   currentAmmo: 0
   weaponType: 3
-  bullet: {fileID: 0}
+  bullet: {fileID: 5235666667577190266, guid: 482cde454424be645a1ebe785a7191b6, type: 3}
   bulletPool: []
   bulletPoolHolder: {fileID: 9024047173276187031}
   muzzleFlash: {fileID: 0}
-  firingSound: {fileID: 0}
+  firingSound: {fileID: 8300000, guid: a7dc6cb6a14ded4429b14a2c795f46c1, type: 3}
   gunAudioSource: {fileID: 3828759886042159648}
   reloadSound: {fileID: 0}
   leftHandPos: {x: 0, y: 0, z: 0}
-  bulletLaunchOffset: {x: 0, y: 0, z: 0}
-  rightHandPosOffset: {x: 0, y: 0, z: 0}
-  rightHandRotOffset: {x: 0, y: 0, z: 0}
+  bulletLaunchOffset: {x: 0, y: 0, z: 0.6}
+  rightHandPosOffset: {x: -0.00493, y: 0.014, z: 0.00202}
+  rightHandRotOffset: {x: 265.056, y: 100.882, z: 1.119003}
+  idleAnim: {fileID: 1676322942688352440, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  semiIdleAnim: {fileID: -5889408640710203117, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  aimAnim: {fileID: -4831725983752742028, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  fireAnim: {fileID: 900824029299417639, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  reloadAnim: {fileID: 3819623203462042450, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  animOverriderIndex: 2
 --- !u!82 &3828759886042159648
 AudioSource:
   m_ObjectHideFlags: 0

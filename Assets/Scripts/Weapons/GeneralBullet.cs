@@ -11,6 +11,11 @@ public class GeneralBullet : MonoBehaviour
     Coroutine deactivateCor;
     public float bulletSpeed = 500;
     public GameObject itsHolder;
+    public GeneralWeapon itsOwnerWeapon;
+
+    void Start()
+    {
+    }
 
     void OnEnable()
     {
@@ -23,7 +28,10 @@ public class GeneralBullet : MonoBehaviour
     {
         if(itsHolder!= null)
         {
-            itsHolder.GetComponentInParent<GeneralWeapon>().DisableAndParentBullet(transform, itsHolder.transform);
+            if(itsOwnerWeapon.gameObject.activeInHierarchy)
+            {
+                itsOwnerWeapon.DisableAndParentBullet(transform, itsHolder.transform);
+            }
         }
     }
     void Update()
@@ -36,7 +44,9 @@ public class GeneralBullet : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        gameObject.SetActive(false);
+        if(gameObject != null) {
+            gameObject.SetActive(false);
+        }
     }
 
 }
