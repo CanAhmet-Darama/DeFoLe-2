@@ -72,21 +72,23 @@ public class GeneralWeapon : MonoBehaviour
     public void Fire()
     {
         byte bulletPerShot = 1;
-        if (weaponType == WeaponType.Shotgun) bulletPerShot = 12;
+        if (weaponType == WeaponType.Shotgun) { bulletPerShot = 12; }
 
         for (byte i = bulletPerShot; i >0; i--)
         {
             GameObject bulletToShoot = GetAmmo();
             StartCoroutine(AFrameThenTrail(bulletToShoot));
+
             GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
             bulletToShoot.transform.parent = bulletPoolHolder.transform;
             bulletToShoot.transform.localPosition = bulletLaunchOffset;
             gBullet.itsHolder = bulletPoolHolder;
             gBullet.duratPassed = 0;
-            bulletToShoot.transform.parent = null;
+            gBullet.firedPos = bulletToShoot.transform.position;
             bulletToShoot.SetActive(true);
+            bulletToShoot.transform.SetParent(null);
 
-            float inaccX = Random.Range(-inaccuracyDegree/10,inaccuracyDegree/10);
+            float inaccX = Random.Range(-inaccuracyDegree / 10, inaccuracyDegree / 10);
             float inaccY = Random.Range(-inaccuracyDegree / 10, inaccuracyDegree / 10);
             bulletToShoot.GetComponent<Rigidbody>().velocity = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed * transform.forward;
             bulletToShoot.GetComponent<Rigidbody>().velocity += new Vector3(inaccX, inaccY, 0);
@@ -94,6 +96,7 @@ public class GeneralWeapon : MonoBehaviour
         
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
         gunAudioSource.Play();
+        muzzleFlash.Play();
         owner.StartCoroutine("CanShootAgain", firingTime);
 
     }
@@ -125,15 +128,15 @@ public class GeneralWeapon : MonoBehaviour
 
     IEnumerator AFrameThenParent(Transform bullet, Transform parent)
     {
+        bullet.GetComponent<TrailRenderer>().enabled = false;
         yield return null;
         bullet.parent = parent;
-        bullet.GetComponent<TrailRenderer>().enabled = false;
     }
     IEnumerator AFrameThenTrail(GameObject bullet)
     {
+        bullet.GetComponent<TrailRenderer>().enabled = false;
         yield return null;
         bullet.GetComponent<TrailRenderer>().enabled = true;
     }
-
 }
     public enum WeaponType { AR_1, TR_1, Pistol, Shotgun, SR_1}

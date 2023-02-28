@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2854387188385965417}
   m_Layer: 0
   m_Name: Standard Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,6 +171,7 @@ MonoBehaviour:
   duratPassed: 0
   bulletSpeed: 200
   itsHolder: {fileID: 0}
+  itsOwnerWeapon: {fileID: 0}
 --- !u!54 &2854387188385965417
 Rigidbody:
   m_ObjectHideFlags: 0

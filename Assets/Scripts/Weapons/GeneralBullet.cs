@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class GeneralBullet : MonoBehaviour
 {
-    float maxLifespan = 3;
+    float maxRange;
+    [HideInInspector]public Vector3 firedPos;
     public float duratPassed;
     Coroutine deactivateCor;
     public float bulletSpeed = 500;
@@ -15,6 +16,7 @@ public class GeneralBullet : MonoBehaviour
 
     void Start()
     {
+        maxRange = itsOwnerWeapon.range;
     }
 
     void OnEnable()
@@ -26,26 +28,28 @@ public class GeneralBullet : MonoBehaviour
     }
     void OnDisable()
     {
-        if(itsHolder!= null)
+    }
+    void Update()
+    {
+        duratPassed += Time.deltaTime;
+        if((transform.position - firedPos).magnitude > maxRange)
         {
-            if(itsOwnerWeapon.gameObject.activeInHierarchy)
+            gameObject.SetActive(false);
+            if (itsOwnerWeapon.gameObject.activeInHierarchy)
             {
                 itsOwnerWeapon.DisableAndParentBullet(transform, itsHolder.transform);
             }
         }
     }
-    void Update()
-    {
-        duratPassed += Time.deltaTime;
-        if(duratPassed > maxLifespan)
-        {
-            gameObject.SetActive(false);
-        }
-    }
     void OnCollisionEnter(Collision collision)
     {
-        if(gameObject != null) {
+        if(collision.gameObject.tag != "Bullet")
+        {
             gameObject.SetActive(false);
+            if (itsOwnerWeapon.gameObject.activeInHierarchy)
+            {
+                itsOwnerWeapon.DisableAndParentBullet(transform, itsHolder.transform);
+            }
         }
     }
 

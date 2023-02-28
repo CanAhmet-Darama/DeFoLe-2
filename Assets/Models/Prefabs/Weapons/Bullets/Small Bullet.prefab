@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2854387188385965417}
   m_Layer: 0
   m_Name: Small Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ TrailRenderer:
       serializedVersion: 2
       key0: {r: 1, g: 0.6380021, b: 0, a: 1}
       key1: {r: 1, g: 0.94960225, b: 0, a: 0.49019608}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key2: {r: 0, g: 0, b: 0, a: 0.19607843}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -124,8 +124,8 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 31033
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
@@ -133,7 +133,7 @@ TrailRenderer:
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -171,6 +171,7 @@ MonoBehaviour:
   duratPassed: 0
   bulletSpeed: 200
   itsHolder: {fileID: 0}
+  itsOwnerWeapon: {fileID: 0}
 --- !u!54 &2854387188385965417
 Rigidbody:
   m_ObjectHideFlags: 0
