@@ -204,6 +204,19 @@ public class GeneralCharacter : MonoBehaviour
         yield return new WaitForSeconds(durat);
         canShoot = true;
     }
+    public void ParentAndResetBullet(Transform bullet, Transform parent)
+    {
+        StartCoroutine(AFrameThenParentAgain(bullet,parent));
+    }
+    IEnumerator AFrameThenParentAgain(Transform bullet, Transform parent)
+    {
+        bullet.GetComponent<TrailRenderer>().enabled = false;
+        bullet.gameObject.SetActive(false);
+        yield return null;
+        bullet.parent = parent;
+        bullet.localPosition = currentWeapon.bulletLaunchOffset;
+    }
+
 
 }
 public enum AnimStateSpeed { idle, walk, run }

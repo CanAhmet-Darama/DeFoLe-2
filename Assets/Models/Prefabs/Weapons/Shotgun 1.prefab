@@ -202,7 +202,7 @@ MonoBehaviour:
   range: 75
   firingTime: 0.3
   reloadTime: 2.5
-  inaccuracyDegree: 50
+  inaccuracyDegree: 5
   maxAmmo: 2
   currentAmmo: 0
   weaponType: 3

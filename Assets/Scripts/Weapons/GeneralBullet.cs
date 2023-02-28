@@ -9,7 +9,6 @@ public class GeneralBullet : MonoBehaviour
     float maxRange;
     [HideInInspector]public Vector3 firedPos;
     public float duratPassed;
-    Coroutine deactivateCor;
     public float bulletSpeed = 500;
     public GameObject itsHolder;
     public GeneralWeapon itsOwnerWeapon;
@@ -21,10 +20,6 @@ public class GeneralBullet : MonoBehaviour
 
     void OnEnable()
     {
-        if(deactivateCor != null)
-        {
-        StopCoroutine(deactivateCor);
-        }
     }
     void OnDisable()
     {
@@ -34,22 +29,14 @@ public class GeneralBullet : MonoBehaviour
         duratPassed += Time.deltaTime;
         if((transform.position - firedPos).magnitude > maxRange)
         {
-            gameObject.SetActive(false);
-            if (itsOwnerWeapon.gameObject.activeInHierarchy)
-            {
-                itsOwnerWeapon.DisableAndParentBullet(transform, itsHolder.transform);
-            }
+            itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform);
         }
     }
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag != "Bullet")
         {
-            gameObject.SetActive(false);
-            if (itsOwnerWeapon.gameObject.activeInHierarchy)
-            {
-                itsOwnerWeapon.DisableAndParentBullet(transform, itsHolder.transform);
-            }
+            itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform);
         }
     }
 

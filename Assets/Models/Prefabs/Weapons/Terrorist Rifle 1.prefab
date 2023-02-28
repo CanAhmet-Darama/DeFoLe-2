@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2750696383736221612}
-  - component: {fileID: 7012486212096079380}
   - component: {fileID: -1374471811974678420}
+  - component: {fileID: 7012486212096079380}
   m_Layer: 0
   m_Name: Terrorist Rifle 1
   m_TagString: Untagged
@@ -37,44 +37,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7012486212096079380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3271794095344637206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4732cd64a27266d4e99800142d828b0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  owner: {fileID: 0}
-  damage: 0
-  range: 300
-  firingTime: 0.25
-  reloadTime: 2
-  inaccuracyDegree: 1.5
-  maxAmmo: 30
-  currentAmmo: 0
-  weaponType: 1
-  bullet: {fileID: 5235666667577190266, guid: feb44d6ff70e49f4c98e77f65a6cf047, type: 3}
-  bulletPool: []
-  bulletPoolHolder: {fileID: 7060446869197929548}
-  muzzleFlash: {fileID: 3831265193571124935}
-  firingSound: {fileID: 8300000, guid: 16f3310fe609ef44ba9a3f0c290a6dc1, type: 3}
-  gunAudioSource: {fileID: -1374471811974678420}
-  reloadSound: {fileID: 0}
-  leftHandPos: {x: 0, y: 0, z: 0}
-  bulletLaunchOffset: {x: 0, y: 0, z: 0}
-  rightHandPosOffset: {x: -0.00356, y: 0.01228, z: 0.00299}
-  rightHandRotOffset: {x: -87.627, y: 133.69, z: -48.478}
-  idleAnim: {fileID: -4181030968829392850, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
-  semiIdleAnim: {fileID: 7269235367239171983, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
-  aimAnim: {fileID: -5593137317598179894, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
-  fireAnim: {fileID: 2947369523488400695, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
-  reloadAnim: {fileID: -6201038398962140913, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
-  animOverriderIndex: 0
 --- !u!82 &-1374471811974678420
 AudioSource:
   m_ObjectHideFlags: 0
@@ -171,6 +133,44 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7012486212096079380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3271794095344637206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4732cd64a27266d4e99800142d828b0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}
+  damage: 0
+  range: 500
+  firingTime: 0.25
+  reloadTime: 2
+  inaccuracyDegree: 1.5
+  maxAmmo: 30
+  currentAmmo: 0
+  weaponType: 1
+  bullet: {fileID: 5235666667577190266, guid: feb44d6ff70e49f4c98e77f65a6cf047, type: 3}
+  bulletPool: []
+  bulletPoolHolder: {fileID: 7060446869197929548}
+  muzzleFlash: {fileID: 3831265193571124935}
+  firingSound: {fileID: 8300000, guid: 16f3310fe609ef44ba9a3f0c290a6dc1, type: 3}
+  gunAudioSource: {fileID: -1374471811974678420}
+  reloadSound: {fileID: 0}
+  leftHandPos: {x: 0, y: 0, z: 0}
+  bulletLaunchOffset: {x: 0, y: 0, z: 0.5}
+  rightHandPosOffset: {x: -0.00356, y: 0.01228, z: 0.00299}
+  rightHandRotOffset: {x: -87.627, y: 133.69, z: -48.478}
+  idleAnim: {fileID: -4181030968829392850, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  semiIdleAnim: {fileID: 7269235367239171983, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  aimAnim: {fileID: -5593137317598179894, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  fireAnim: {fileID: 2947369523488400695, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  reloadAnim: {fileID: -6201038398962140913, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  animOverriderIndex: 0
 --- !u!1 &5771008734487350889
 GameObject:
   m_ObjectHideFlags: 0
