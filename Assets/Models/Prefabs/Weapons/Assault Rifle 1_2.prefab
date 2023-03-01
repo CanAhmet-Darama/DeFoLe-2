@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   damage: 0
-  range: 500
+  range: 250
   firingTime: 0.2
   reloadTime: 2
   inaccuracyDegree: 1
@@ -156,6 +156,7 @@ MonoBehaviour:
   weaponType: 0
   bullet: {fileID: 5235666667577190266, guid: feb44d6ff70e49f4c98e77f65a6cf047, type: 3}
   bulletPool: []
+  bulletScripts: []
   bulletPoolHolder: {fileID: 3082118429612300233}
   muzzleFlash: {fileID: 5018446551271753501}
   firingSound: {fileID: 8300000, guid: fcdbbe4f9cf1cc64a8c95f1fd34acf54, type: 3}

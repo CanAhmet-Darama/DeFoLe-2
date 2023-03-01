@@ -138,7 +138,7 @@ public class CameraScript : MonoBehaviour
         {
             mouseX += Input.GetAxis("Mouse X") * GameManager.mouseSensitivity;
             mouseY -= Input.GetAxis("Mouse Y") * GameManager.mouseSensitivity;
-            mouseY = Mathf.Clamp(mouseY, -30, 50);
+            mouseY = Mathf.Clamp(mouseY, -40, 60);
             freeLookPivotOnFoot.rotation = Quaternion.Euler(mouseY, mouseX, 0);
         }
         else
