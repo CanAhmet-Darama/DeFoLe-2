@@ -142,20 +142,18 @@ public class GeneralCharacter : MonoBehaviour
             if(GetComponent<MainCharacter>() != null)
             {
                 weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
-                //weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
                 weapons[i].SetActive(false);
             }
             else if (hasWeapons[i - 1])
             {
                 weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
-                //weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
                 weapons[i].SetActive(false);
             }
             weapons[i].transform.localScale *= 0.01f;
             weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
-            weapons[i].transform.eulerAngles = rightHBone.transform.eulerAngles;
-            weapons[i].transform.localEulerAngles += new Vector3(-90,90,0);
-            //weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
+            weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
             weapons[i].GetComponent<GeneralWeapon>().owner = this;
         }
     }
@@ -206,13 +204,13 @@ public class GeneralCharacter : MonoBehaviour
         yield return new WaitForSeconds(durat);
         canShoot = true;
     }
-    public void ParentAndResetBullet(Transform bullet, Transform parent)
+    public void ParentAndResetBullet(Transform bullet, Transform parent, GeneralBullet bScript)
     {
-        StartCoroutine(AFrameThenParentAgain(bullet,parent));
+        StartCoroutine(AFrameThenParentAgain(bullet,parent, bScript));
     }
-    IEnumerator AFrameThenParentAgain(Transform bullet, Transform parent)
+    IEnumerator AFrameThenParentAgain(Transform bullet, Transform parent, GeneralBullet bScript)
     {
-        bullet.GetComponent<TrailRenderer>().enabled = false;
+        bScript.lineRenderer.enabled = false;
         bullet.gameObject.SetActive(false);
         yield return null;
         bullet.parent = parent;

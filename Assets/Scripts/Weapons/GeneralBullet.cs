@@ -12,35 +12,44 @@ public class GeneralBullet : MonoBehaviour
     public float bulletSpeed = 500;
     public GameObject itsHolder;
     public GeneralWeapon itsOwnerWeapon;
-    public TrailRenderer trailRenderer;
+<<<<<<< HEAD
+    public LineRenderer lineRenderer;
+    public byte index;
+=======
+>>>>>>> parent of ef6e371 (Commit 17_3)
 
     void Start()
     {
         maxRange = itsOwnerWeapon.range;
-        trailRenderer = GetComponent<TrailRenderer>();
+<<<<<<< HEAD
+        lineRenderer = GetComponent<LineRenderer>();
+=======
+>>>>>>> parent of ef6e371 (Commit 17_3)
     }
 
     void OnEnable()
     {
-        //if(itsOwnerWeapon != null) itsOwnerWeapon.AFrameThenTrailFunc(gameObject);
     }
     void OnDisable()
     {
-        trailRenderer.enabled = false;
+<<<<<<< HEAD
+        lineRenderer.enabled = false;
+=======
+>>>>>>> parent of ef6e371 (Commit 17_3)
     }
     void Update()
     {
         duratPassed += Time.deltaTime;
         if((transform.position - firedPos).magnitude > maxRange)
         {
-            itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform);
+            itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
         }
     }
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag != "Bullet")
         {
-            itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform);
+            itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
         }
     }
 
