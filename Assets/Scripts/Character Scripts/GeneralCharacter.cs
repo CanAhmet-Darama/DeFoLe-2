@@ -142,18 +142,20 @@ public class GeneralCharacter : MonoBehaviour
             if(GetComponent<MainCharacter>() != null)
             {
                 weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
-                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                //weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
                 weapons[i].SetActive(false);
             }
             else if (hasWeapons[i - 1])
             {
                 weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
-                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                //weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
                 weapons[i].SetActive(false);
             }
             weapons[i].transform.localScale *= 0.01f;
             weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
-            weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
+            weapons[i].transform.eulerAngles = rightHBone.transform.eulerAngles;
+            weapons[i].transform.localEulerAngles += new Vector3(-90,90,0);
+            //weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
             weapons[i].GetComponent<GeneralWeapon>().owner = this;
         }
     }

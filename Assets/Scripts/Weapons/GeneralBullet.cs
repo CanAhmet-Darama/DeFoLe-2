@@ -12,17 +12,21 @@ public class GeneralBullet : MonoBehaviour
     public float bulletSpeed = 500;
     public GameObject itsHolder;
     public GeneralWeapon itsOwnerWeapon;
+    public TrailRenderer trailRenderer;
 
     void Start()
     {
         maxRange = itsOwnerWeapon.range;
+        trailRenderer = GetComponent<TrailRenderer>();
     }
 
     void OnEnable()
     {
+        //if(itsOwnerWeapon != null) itsOwnerWeapon.AFrameThenTrailFunc(gameObject);
     }
     void OnDisable()
     {
+        trailRenderer.enabled = false;
     }
     void Update()
     {

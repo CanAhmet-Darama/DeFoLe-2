@@ -17,7 +17,10 @@ public class GeneralWeapon : MonoBehaviour
     [Space(2)]
     public GameObject bullet;
     public GameObject[] bulletPool;
+    public GeneralBullet[] bulletScripts;
+    public TrailRenderer[] trailRenderers;
     public GameObject bulletPoolHolder;
+    [Space(1)]
     public ParticleSystem muzzleFlash;
     public AudioClip firingSound;
     public AudioSource gunAudioSource;
@@ -51,14 +54,18 @@ public class GeneralWeapon : MonoBehaviour
         {
             bulletPool = new GameObject[5];
         }
+        trailRenderers =  new TrailRenderer[bulletPool.Length];
+        bulletScripts = new GeneralBullet[bulletPool.Length];
 
         for(int i = bulletPool.Length; i > 0; i--)
         {
             bulletPool[i - 1] = Instantiate(bullet, Vector3.zero, transform.rotation, bulletPoolHolder.transform);
             bulletPool[i - 1].transform.localPosition = Vector3.zero;
+            bulletScripts[i - 1] = bulletPool[i - 1].GetComponent<GeneralBullet>();
+            trailRenderers[i - 1] = bulletPool[i - 1].GetComponent<TrailRenderer>();
+            bulletScripts[i - 1].itsHolder = bulletPoolHolder;
+            bulletScripts[i - 1].itsOwnerWeapon = this;
             bulletPool[i - 1].SetActive(false);
-            bulletPool[i - 1].GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
-            bulletPool[i - 1].GetComponent<GeneralBullet>().itsOwnerWeapon = this;
 
         }
         gunAudioSource.volume = 0.05f;
@@ -78,6 +85,9 @@ public class GeneralWeapon : MonoBehaviour
         {
             GameObject bulletToShoot = GetAmmo();
 
+            bulletToShoot.GetComponent<TrailRenderer>().enabled = false;
+            bulletToShoot.SetActive(false);
+
             bulletToShoot.transform.parent = bulletPoolHolder.transform;
             bulletToShoot.transform.localPosition = bulletLaunchOffset;
             bulletToShoot.transform.SetParent(null);
@@ -93,7 +103,7 @@ public class GeneralWeapon : MonoBehaviour
             float launchSpeed = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed;
             bulletToShoot.GetComponent<Rigidbody>().velocity = launchSpeed * transform.forward;
             bulletToShoot.GetComponent<Rigidbody>().velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
-            StartCoroutine(AFrameThenTrail(bulletToShoot));
+            AFrameThenTrailFunc(bulletToShoot);
         }
 
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
@@ -119,14 +129,17 @@ public class GeneralWeapon : MonoBehaviour
                 oldestBullet = (bulletPool[i - 1]);
             }
         }
-        oldestBullet.GetComponent<TrailRenderer>().enabled = false;
-        oldestBullet.SetActive(false);
+        //oldestBullet.GetComponent<TrailRenderer>().enabled = false;
+        //oldestBullet.SetActive(false);
         return oldestBullet;
     }
 
+    public void AFrameThenTrailFunc(GameObject bullet)
+    {
+        StartCoroutine(AFrameThenTrail(bullet));
+    }
     IEnumerator AFrameThenTrail(GameObject bullet)
     {
-        yield return null;
         yield return null;
         bullet.GetComponent<TrailRenderer>().enabled = true;
     }

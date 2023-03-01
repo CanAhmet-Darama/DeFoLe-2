@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
   damage: 0
-  range: 500
+  range: 200
   firingTime: 0.2
   reloadTime: 2
   inaccuracyDegree: 1
