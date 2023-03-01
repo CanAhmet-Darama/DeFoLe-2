@@ -12,30 +12,25 @@ public class GeneralBullet : MonoBehaviour
     public float bulletSpeed = 500;
     public GameObject itsHolder;
     public GeneralWeapon itsOwnerWeapon;
-<<<<<<< HEAD
-    public LineRenderer lineRenderer;
+
+    public TrailRenderer trailRenderer;
     public byte index;
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
+
 
     void Start()
     {
         maxRange = itsOwnerWeapon.range;
-<<<<<<< HEAD
-        lineRenderer = GetComponent<LineRenderer>();
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
     }
 
     void OnEnable()
     {
+        if(trailRenderer != null)trailRenderer.Clear();
     }
     void OnDisable()
     {
-<<<<<<< HEAD
-        lineRenderer.enabled = false;
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
+
+        trailRenderer.enabled = false;
+
     }
     void Update()
     {

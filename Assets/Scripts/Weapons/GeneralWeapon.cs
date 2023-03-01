@@ -17,11 +17,7 @@ public class GeneralWeapon : MonoBehaviour
     [Space(2)]
     public GameObject bullet;
     public GameObject[] bulletPool;
-<<<<<<< HEAD
     public GeneralBullet[] bulletScripts;
-    public LineRenderer[] lineRenderers;
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
     public GameObject bulletPoolHolder;
     public ParticleSystem muzzleFlash;
     public AudioClip firingSound;
@@ -56,26 +52,22 @@ public class GeneralWeapon : MonoBehaviour
         {
             bulletPool = new GameObject[5];
         }
-<<<<<<< HEAD
-        lineRenderers =  new LineRenderer[bulletPool.Length];
         bulletScripts = new GeneralBullet[bulletPool.Length];
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
+
 
         for(int i = bulletPool.Length; i > 0; i--)
         {
             bulletPool[i - 1] = Instantiate(bullet, Vector3.zero, transform.rotation, bulletPoolHolder.transform);
             bulletPool[i - 1].transform.localPosition = Vector3.zero;
-<<<<<<< HEAD
+
 
             bulletScripts[i - 1] = bulletPool[i - 1].GetComponent<GeneralBullet>();
-            lineRenderers[i - 1] = bulletPool[i - 1].GetComponent<LineRenderer>();
+
 
             bulletScripts[i - 1].index = (byte)(i - 1);
             bulletScripts[i - 1].itsHolder = bulletPoolHolder;
             bulletScripts[i - 1].itsOwnerWeapon = this;
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
+
             bulletPool[i - 1].SetActive(false);
             bulletPool[i - 1].GetComponent<GeneralBullet>().itsHolder = bulletPoolHolder;
             bulletPool[i - 1].GetComponent<GeneralBullet>().itsOwnerWeapon = this;
@@ -98,12 +90,10 @@ public class GeneralWeapon : MonoBehaviour
         {
             GameObject bulletToShoot = GetAmmo();
 
-<<<<<<< HEAD
-            bulletToShoot.GetComponent<LineRenderer>().enabled = false;
+            bulletToShoot.GetComponent<TrailRenderer>().enabled = false;
             bulletToShoot.SetActive(false);
 
-=======
->>>>>>> parent of ef6e371 (Commit 17_3)
+
             bulletToShoot.transform.parent = bulletPoolHolder.transform;
             bulletToShoot.transform.localPosition = bulletLaunchOffset;
             bulletToShoot.transform.SetParent(null);
@@ -153,12 +143,8 @@ public class GeneralWeapon : MonoBehaviour
     IEnumerator AFrameThenTrail(GameObject bullet)
     {
         yield return null;
-<<<<<<< HEAD
-        bullet.GetComponent<LineRenderer>().enabled = true;
-=======
-        yield return null;
         bullet.GetComponent<TrailRenderer>().enabled = true;
->>>>>>> parent of ef6e371 (Commit 17_3)
+
     }
 }
     public enum WeaponType { AR_1, TR_1, Pistol, Shotgun, SR_1}
