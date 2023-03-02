@@ -111,7 +111,7 @@ public class ImpactMarkManager : MonoBehaviour
     {
         for (short i = (short)(bulletImpacts.Length - 1); i >= 0; i--)
         {
-            if (!bulletImpacts[i].gameObject.activeInHierarchy)
+            if (!bulletImpacts[i].isPlaying)
             {
                 return bulletImpacts[i];
             }
