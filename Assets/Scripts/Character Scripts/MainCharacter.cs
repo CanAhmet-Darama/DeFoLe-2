@@ -83,20 +83,36 @@ public class MainCharacter : GeneralCharacter
 
                 }
 
-                if ((direction != Vector3.zero) && Input.GetKey(KeyCode.LeftShift))
+                if (isCrouching)
                 {
-                    AccAndRun(direction);
-                    playerAnimating.SetAnimStateSpeed(AnimStateSpeed.run);
-                }
-                else if (direction != Vector3.zero)
-                {
-                    AccAndWalk(direction);
-                    playerAnimating.SetAnimStateSpeed(AnimStateSpeed.walk);
-
+                    if (direction != Vector3.zero)
+                    {
+                        AccAndWalk(direction, walkSpeed / 2);
+                        playerAnimating.SetAnimStateSpeed(AnimStateSpeed.walk);
+                    }
+                    else
+                    {
+                        playerAnimating.SetAnimStateSpeed(AnimStateSpeed.idle);
+                    }
                 }
                 else
                 {
-                    playerAnimating.SetAnimStateSpeed(AnimStateSpeed.idle);
+                    if ((direction != Vector3.zero) && Input.GetKey(KeyCode.LeftShift))
+                    {
+                        AccAndRun(direction);
+                        playerAnimating.SetAnimStateSpeed(AnimStateSpeed.run);
+                    }
+                    else if (direction != Vector3.zero)
+                    {
+                        AccAndWalk(direction);
+                        playerAnimating.SetAnimStateSpeed(AnimStateSpeed.walk);
+
+                    }
+                    else
+                    {
+                        playerAnimating.SetAnimStateSpeed(AnimStateSpeed.idle);
+                    }
+
                 }
 
                 targetRotation = new Vector3(transform.eulerAngles.x,camFreeLookPivot.eulerAngles.y, transform.eulerAngles.z);
@@ -187,18 +203,26 @@ public class MainCharacter : GeneralCharacter
                     }
                     if (targetRotation.y != transform.eulerAngles.y)
                     {
-                        RotateChar(targetRotation, 0.20f);
+                        RotateChar(targetRotation, 0.2f);
                     }
 
-                    if (Input.GetKey(KeyCode.LeftShift))
+                    if (isCrouching)
                     {
-                        AccAndRun(transform.forward);
-                        playerAnimating.SetAnimStates(AnimStateSpeed.run,AnimStatePriDir.front,AnimStateSecDir.none);
+                        AccAndWalk(transform.forward, walkSpeed / 2);
+                        playerAnimating.SetAnimStates(AnimStateSpeed.walk, AnimStatePriDir.front, AnimStateSecDir.none);
                     }
                     else
                     {
-                        AccAndWalk(transform.forward);
-                        playerAnimating.SetAnimStates(AnimStateSpeed.walk, AnimStatePriDir.front, AnimStateSecDir.none);
+                        if (Input.GetKey(KeyCode.LeftShift))
+                        {
+                            AccAndRun(transform.forward);
+                            playerAnimating.SetAnimStates(AnimStateSpeed.run, AnimStatePriDir.front, AnimStateSecDir.none);
+                        }
+                        else
+                        {
+                            AccAndWalk(transform.forward);
+                            playerAnimating.SetAnimStates(AnimStateSpeed.walk, AnimStatePriDir.front, AnimStateSecDir.none);
+                        }
                     }
                 }
                 else
@@ -211,9 +235,13 @@ public class MainCharacter : GeneralCharacter
             {
                 rb.angularVelocity = Vector3.zero;
             }
-            if(canJump && Input.GetKey(KeyCode.Space))
+            if(canJump && !isCrouching &&Input.GetKey(KeyCode.Space))
             {
                 Jump(0.1f);
+            }
+            if (Input.GetKey(KeyCode.C) && canCrouch)
+            {
+                CrouchOrStand();
             }
         }
         else

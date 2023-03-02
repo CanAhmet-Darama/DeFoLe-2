@@ -30,7 +30,7 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
-    public GroundCheckScript groundCheckScr;
+    //public GroundCheckScript groundCheckScr;
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
@@ -41,6 +41,7 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Some Stuff")]
     public bool isGrounded;
+    public bool isCrouching;
     [HideInInspector]public StairCheckScript stairSlopeChecker;
     [SerializeField] GameObject stairSlopeCheckerGO_;
 
@@ -57,6 +58,9 @@ public class GeneralCharacter : MonoBehaviour
 
     public float blendAnimX;
     public float blendAnimY;
+
+    Coroutine crouchLerper;
+    protected bool canCrouch = true;
 
     #endregion
 
@@ -97,6 +101,23 @@ public class GeneralCharacter : MonoBehaviour
             AccelerateChar(direction, walkAcceleration);
         }
     }
+    public void AccAndWalk(Vector3 direction, float speed)
+    {
+        if (stairSlopeChecker.onSlopeMoving)
+        {
+            direction = stairSlopeChecker.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
+        }
+
+        if (rb.velocity.magnitude > speed)
+        {
+            MoveChar(direction, speed);
+        }
+        else
+        {
+            AccelerateChar(direction, walkAcceleration);
+        }
+    }
+
     public void AccAndRun(Vector3 direction)
     {
         if (stairSlopeChecker.onSlopeMoving)
@@ -134,6 +155,34 @@ public class GeneralCharacter : MonoBehaviour
         canJump = true;
     }
     #endregion
+
+    public void CrouchOrStand()
+    {
+        if (crouchLerper != null) StopCoroutine(crouchLerper);
+        crouchLerper = StartCoroutine(CrouchAnimLerp());
+        isCrouching = !isCrouching;
+    }
+    IEnumerator CrouchAnimLerp()
+    {
+        float targetWeight;
+        if(isCrouching)
+        {
+            targetWeight = 0;
+        }
+        else
+        {
+            targetWeight = 1;
+        }
+        canCrouch = false;
+
+        while (Mathf.Abs(animator.GetLayerWeight(1) - targetWeight) >= 0.01f)
+        {
+            animator.SetLayerWeight(1,Mathf.Lerp(animator.GetLayerWeight(1),targetWeight,0.05f));
+            yield return null;
+        }
+        animator.SetLayerWeight(1, targetWeight);
+        canCrouch = true;
+    }
 
     void CreateWeapons()
     {

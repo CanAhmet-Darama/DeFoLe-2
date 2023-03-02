@@ -2678,6 +2678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bMP_isThis: {fileID: 9067478615917430284, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
+  bImpact_isThis: {fileID: 7949658255879583935, guid: 1239e367588ef5944935b312c33e40b7, type: 3}
 --- !u!114 &1857106823 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4319248965234732837, guid: 0e1461d13773ae3469981fd489211ca0, type: 3}

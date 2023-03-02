@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ImpactMarkManager : MonoBehaviour
 {
+    [Header("Bullet Marks")]
     public static GameObject bulletMarkPrefab;
     [SerializeField] GameObject bMP_isThis;
     float markLife = 10;
@@ -16,6 +17,15 @@ public class ImpactMarkManager : MonoBehaviour
     public static short lastCalledIndex;
     static ImpactMarkManager impactManagerIns;
 
+    [Header("Bullet Impacts")]
+    public static ParticleSystem bulletImpactPrefab;
+    [SerializeField] ParticleSystem bImpact_isThis;
+    public static ParticleSystem[] bulletImpacts;
+    public static short impactsCount = 20;
+
+
+
+
     void Start()
     {
         impactManagerIns= GetComponent<ImpactMarkManager>();
@@ -23,7 +33,11 @@ public class ImpactMarkManager : MonoBehaviour
         bulletMarks = new GameObject[bulletMarksCount];
         cyclesStates = new bool[bulletMarksCount];
         lastCalledIndex = 0;
+
+        bulletImpacts = new ParticleSystem[impactsCount];
+        bulletImpactPrefab = bImpact_isThis;
         InstantiateBulletMarks();
+        InstantiateBulletImpacts();
     }
 
     void Update()
@@ -38,6 +52,11 @@ public class ImpactMarkManager : MonoBehaviour
         mark.transform.forward = rot;
         mark.SetActive(true);
         impactManagerIns.DeleteBulletMark(mark, lastCalledIndex);
+
+        ParticleSystem impact = GetImpactReady();
+        impact.transform.position = pos;
+        impact.transform.forward = rot;
+        impact.Play();
     }
     void InstantiateBulletMarks()
     {
@@ -48,6 +67,15 @@ public class ImpactMarkManager : MonoBehaviour
             bMark.SetActive(false);
         }
     }
+    void InstantiateBulletImpacts()
+    {
+        for (short i = (short)(impactsCount - 1); i >= 0; i--)
+        {
+            ParticleSystem bImpact = Instantiate(bulletImpactPrefab, transform);
+            bulletImpacts[i] = bImpact;
+        }
+    }
+
     static GameObject GetMarkReady()
     {
         for(short i = (short)(bulletMarks.Length - 1); i >= 0; i--) {
@@ -79,5 +107,16 @@ public class ImpactMarkManager : MonoBehaviour
         {
             mark.SetActive(false);
         }
+    }
+    static ParticleSystem GetImpactReady()
+    {
+        for (short i = (short)(bulletImpacts.Length - 1); i >= 0; i--)
+        {
+            if (!bulletImpacts[i].gameObject.activeInHierarchy)
+            {
+                return bulletImpacts[i];
+            }
+        }
+        return bulletImpacts[bulletImpacts.Length - 1];
     }
 }
