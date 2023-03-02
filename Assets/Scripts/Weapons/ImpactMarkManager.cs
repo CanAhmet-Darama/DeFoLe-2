@@ -48,7 +48,6 @@ public class ImpactMarkManager : MonoBehaviour
     {
         GameObject mark = GetMarkReady();
         mark.transform.position = pos;
-        Debug.Log(rot);
         mark.transform.forward = rot;
         mark.SetActive(true);
         impactManagerIns.DeleteBulletMark(mark, lastCalledIndex);
