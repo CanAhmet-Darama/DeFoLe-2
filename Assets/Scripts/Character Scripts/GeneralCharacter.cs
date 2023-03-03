@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using static UnityEngine.ParticleSystem;
 
 public class GeneralCharacter : MonoBehaviour
@@ -36,12 +37,17 @@ public class GeneralCharacter : MonoBehaviour
     public AnimStateSecDir animStateSecDir;
     public GameObject rightHBone;
     public GameObject leftHBone;
+    public MultiAimConstraint rightHandConstraint;
+    public MultiAimConstraint leftHandConstraint;
+    public TwoBoneIKConstraint rightHandTBIK;
+    public TwoBoneIKConstraint leftHandTBIK;
     [SerializeField]
     AnimatorOverrideController[] animOverriders;
 
     [Header("Some Stuff")]
     public bool isGrounded;
     public bool isCrouching;
+    CapsuleCollider mainColl;
     [HideInInspector]public StairCheckScript stairSlopeChecker;
     [SerializeField] GameObject stairSlopeCheckerGO_;
 
@@ -62,6 +68,7 @@ public class GeneralCharacter : MonoBehaviour
     Coroutine crouchLerper;
     protected bool canCrouch = true;
 
+    bool weaponHolderHandIsRight;
     #endregion
 
     public void MoveChar(Vector3 direction, float speed)
@@ -168,10 +175,15 @@ public class GeneralCharacter : MonoBehaviour
         if(isCrouching)
         {
             targetWeight = 0;
+            mainColl.height = 2.3f;
+            mainColl.center = new Vector3(mainColl.center.x, -0.33f , mainColl.center.z);
         }
         else
         {
             targetWeight = 1;
+            mainColl.height = 1.9f;
+            mainColl.center = new Vector3(mainColl.center.x, -0.55f, mainColl.center.z);
+
         }
         canCrouch = false;
 
@@ -191,6 +203,9 @@ public class GeneralCharacter : MonoBehaviour
             if(GetComponent<MainCharacter>() != null)
             {
                 weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
+                if (weapons[i].GetComponent<GeneralWeapon>().weaponType == WeaponType.SR_1)
+                { weapons[i].transform.parent = leftHBone.transform; }
+
                 weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
                 weapons[i].SetActive(false);
             }
@@ -220,7 +235,12 @@ public class GeneralCharacter : MonoBehaviour
         {
             canShoot = true;
         }
-        //currentWeapon.transform.localPosition = currentWeapon.rightHandPosOffset;
+        if(newWeapon.weaponType == WeaponType.SR_1)
+        {
+            
+        }
+
+
     }
     public void AnimationOverride(AnimatorOverrideController overrider)
     {
@@ -235,6 +255,7 @@ public class GeneralCharacter : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
         CreateWeapons();
+        mainColl = GetComponent<CapsuleCollider>();
     }
     protected void GeneralCharUpdate()
     {

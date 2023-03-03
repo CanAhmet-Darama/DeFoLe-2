@@ -109,6 +109,8 @@ public class GeneralWeapon : MonoBehaviour
             float launchSpeed = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed;
             bulletToShoot.GetComponent<Rigidbody>().velocity = launchSpeed * transform.forward;
             bulletToShoot.GetComponent<Rigidbody>().velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
+            owner.animator.ResetTrigger("fire");
+            owner.animator.SetTrigger("fire");
             StartCoroutine(AFrameThenTrail(bulletToShoot));
         }
 

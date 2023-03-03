@@ -163,7 +163,7 @@ MonoBehaviour:
   gunAudioSource: {fileID: -1374471811974678420}
   reloadSound: {fileID: 0}
   leftHandPos: {x: 0, y: 0, z: 0}
-  bulletLaunchOffset: {x: 0, y: 0, z: 0.5}
+  bulletLaunchOffset: {x: 0, y: 0.1, z: 2}
   rightHandPosOffset: {x: -0.00356, y: 0.01228, z: 0.00299}
   rightHandRotOffset: {x: -87.627, y: 133.69, z: -48.478}
   idleAnim: {fileID: -4181030968829392850, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}

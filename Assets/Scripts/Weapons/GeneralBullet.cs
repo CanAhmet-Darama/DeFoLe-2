@@ -46,6 +46,7 @@ public class GeneralBullet : MonoBehaviour
         {
             ContactPoint collidePoint = collision.GetContact(0);
             itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
+            if((transform.position - firedPos).magnitude < 100)
             ImpactMarkManager.CallMark(collidePoint.point + collidePoint.normal.normalized*0.01f, collidePoint.normal);
         }
     }
