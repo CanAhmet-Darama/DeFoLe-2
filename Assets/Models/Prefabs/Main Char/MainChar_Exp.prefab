@@ -279,8 +279,8 @@ MonoBehaviour:
     m_Root: {fileID: 8958023875457715823}
     m_Mid: {fileID: 3999738927986455562}
     m_Tip: {fileID: 3567450624348816048}
-    m_Target: {fileID: 6179833699367826911}
-    m_Hint: {fileID: 5184436369270961156}
+    m_Target: {fileID: 971220283}
+    m_Hint: {fileID: 3182833}
     m_TargetPositionWeight: 1
     m_TargetRotationWeight: 1
     m_HintWeight: 1
@@ -439,7 +439,10 @@ MonoBehaviour:
   animStateSecDir: 2
   rightHBone: {fileID: 3926157238013961446}
   leftHBone: {fileID: 6523811662972654610}
-  holderHandConstraint: {fileID: 0}
+  rightHandConstraint: {fileID: 913683341}
+  leftHandConstraint: {fileID: 4286369763275710384}
+  rightHandTBIK: {fileID: 1859773317}
+  leftHandTBIK: {fileID: 2130464707804454431}
   animOverriders:
   - {fileID: 22100000, guid: 72b5af81e55c1c04480f9aabeeaee464, type: 2}
   - {fileID: 22100000, guid: f3e3d268218547d4fba41ce23107c9a4, type: 2}

@@ -273,7 +273,7 @@ public class MainCharacter : GeneralCharacter
     }
     void ControlWeaponry()
     {
-        if (Input.GetMouseButton(0) && canShoot)
+        if (Input.GetMouseButton(0) && canShoot && Input.GetMouseButton(1))
         {
             currentWeapon.GetComponent<GeneralWeapon>().Fire();
         }

@@ -10,8 +10,10 @@ public class AimManager : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] Transform aimTarget;
     [SerializeField] MultiAimConstraint multiAimCoRHand;
+    [SerializeField] MultiAimConstraint multiAimCoLHand;
     [SerializeField] MultiAimConstraint multiAimCoBody;
-    [SerializeField] TwoBoneIKConstraint leftHCo;
+    [SerializeField] TwoBoneIKConstraint rightHCoTBIK;
+    [SerializeField] TwoBoneIKConstraint leftHCoTBIK;
 
 
 
@@ -70,14 +72,34 @@ public class AimManager : MonoBehaviour
             #endregion
 
             multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0.7f, lerpOrSnapSpeed);
-            if (!isReloading) { 
-                leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 1, lerpOrSnapSpeed);
-                multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+            if (!isReloading) {
+                if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                {
+                    multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+                    leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 1, lerpOrSnapSpeed);
+                }
+                else
+                {
+                    multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
+                    rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);
+                }
+
             }
             else
             {
-                leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 0, lerpOrSnapSpeed);
-                multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
+                if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                {
+                    multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+                    leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
+                }
+                else
+                {
+                    multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
+                    rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 0, lerpOrSnapSpeed);
+                }
+
+                //leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
+                //multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
             }
 
         }
@@ -94,11 +116,6 @@ public class AimManager : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && mainChar.canShoot)
-        {
-            animator.ResetTrigger("fire");
-            animator.SetTrigger("fire");
-        }
         if(Input.GetKeyDown(KeyCode.R))
         {
             animator.SetTrigger("reload");
@@ -108,9 +125,16 @@ public class AimManager : MonoBehaviour
         if (quitAimingCompletely)
         {
             multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0, lerpOrSnapSpeed);
-            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
-            leftHCo.weight = GameManager.LerpOrSnap(leftHCo.weight, 0, lerpOrSnapSpeed);
-
+            if(mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+            {
+                multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
+                leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
+            }
+            else
+            {
+                multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 0, lerpOrSnapSpeed);
+                rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 0, lerpOrSnapSpeed);
+            }
         }
 
     }

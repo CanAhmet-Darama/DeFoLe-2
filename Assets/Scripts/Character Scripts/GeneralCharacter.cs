@@ -31,7 +31,6 @@ public class GeneralCharacter : MonoBehaviour
 
     [Header("Animation")]
     public Animator animator;
-    //public GroundCheckScript groundCheckScr;
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
@@ -217,8 +216,15 @@ public class GeneralCharacter : MonoBehaviour
             }
             weapons[i].transform.localScale *= 0.01f;
             weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
-            weapons[i].transform.localEulerAngles += new Vector3(-90,90,0);
-            //weapons[i].transform.localEulerAngles = weapons[i].GetComponent<GeneralWeapon>().rightHandRotOffset;
+            //weapons[i].transform.localEulerAngles += new Vector3(-90,90,0);
+            if(weapons[i].GetComponent<GeneralWeapon>().weaponType != WeaponType.SR_1)
+            {
+                weapons[i].transform.localEulerAngles += new Vector3(-90, 90, 0);
+            }
+            else
+            {
+                weapons[i].transform.localEulerAngles = new Vector3(-90, 0, 90);
+            }
             weapons[i].GetComponent<GeneralWeapon>().owner = this;
         }
     }
@@ -237,7 +243,18 @@ public class GeneralCharacter : MonoBehaviour
         }
         if(newWeapon.weaponType == WeaponType.SR_1)
         {
-            
+            rightHandConstraint.weight = 0;
+            rightHandTBIK.weight = 1;
+            leftHandConstraint.weight = 1;
+            leftHandTBIK.weight = 0;
+        }
+        else
+        {
+            rightHandConstraint.weight = 1;
+            rightHandTBIK.weight = 0;
+            leftHandConstraint.weight = 0;
+            leftHandTBIK.weight = 1;
+
         }
 
 
