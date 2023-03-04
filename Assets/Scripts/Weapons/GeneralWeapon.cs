@@ -80,6 +80,8 @@ public class GeneralWeapon : MonoBehaviour
     public void Reload()
     {
         owner.StartCoroutine("CanShootAgain", reloadTime);
+        owner.animator.ResetTrigger("reload");
+        owner.animator.SetTrigger("reload");
     }
     public void Fire()
     {
@@ -109,16 +111,19 @@ public class GeneralWeapon : MonoBehaviour
             float launchSpeed = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed;
             bulletToShoot.GetComponent<Rigidbody>().velocity = launchSpeed * transform.forward;
             bulletToShoot.GetComponent<Rigidbody>().velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
-            owner.animator.ResetTrigger("fire");
-            owner.animator.SetTrigger("fire");
             StartCoroutine(AFrameThenTrail(bulletToShoot));
+        }
+        owner.animator.ResetTrigger("fire");
+        owner.animator.SetTrigger("fire");
+        if(weaponType == WeaponType.SR_1)
+        {
+            StartCoroutine(DisableSecondHandTBIK(firingTime));
         }
 
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
         gunAudioSource.Play();
         muzzleFlash.Play();
         owner.StartCoroutine("CanShootAgain", firingTime);
-
     }
     public GameObject GetAmmo()
     {
@@ -147,6 +152,13 @@ public class GeneralWeapon : MonoBehaviour
         yield return null;
         bullet.GetComponent<TrailRenderer>().enabled = true;
 
+    }
+    IEnumerator DisableSecondHandTBIK(float durat)
+    {
+        yield return new WaitForSeconds(durat/5);
+        owner.rightHandTBIK.weight = 0;
+        yield return new WaitForSeconds(durat*4/5);
+        owner.rightHandTBIK.weight = 1;
     }
 }
     public enum WeaponType { AR_1, TR_1, Pistol, Shotgun, SR_1}

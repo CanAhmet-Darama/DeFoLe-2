@@ -118,7 +118,6 @@ public class AimManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.R))
         {
-            animator.SetTrigger("reload");
             StartCoroutine(ReloadConstraintWeightLower(mainChar.currentWeapon.GetComponent<GeneralWeapon>().reloadTime));
         }
 
@@ -128,12 +127,12 @@ public class AimManager : MonoBehaviour
             if(mainChar.currentWeapon.weaponType != WeaponType.SR_1)
             {
                 multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
-                leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
+                //leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
             }
             else
             {
                 multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 0, lerpOrSnapSpeed);
-                rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 0, lerpOrSnapSpeed);
+                //rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 0, lerpOrSnapSpeed);
             }
         }
 

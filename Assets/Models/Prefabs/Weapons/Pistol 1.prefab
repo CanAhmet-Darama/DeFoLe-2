@@ -65,7 +65,7 @@ MonoBehaviour:
   firingSound: {fileID: 8300000, guid: 3854235752c23444689bf97882f45007, type: 3}
   gunAudioSource: {fileID: 1357527824877083090}
   reloadSound: {fileID: 0}
-  leftHandPos: {x: 0, y: 0, z: 0}
+  leftHandPos: {x: 0, y: 0.00055, z: 0.00174}
   bulletLaunchOffset: {x: 0, y: 1, z: -0.3}
   rightHandPosOffset: {x: -0.00352, y: 0.01, z: 0.00156}
   rightHandRotOffset: {x: -90, y: -92.077, z: 180.986}

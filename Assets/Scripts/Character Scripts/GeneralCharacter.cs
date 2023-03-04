@@ -40,6 +40,8 @@ public class GeneralCharacter : MonoBehaviour
     public MultiAimConstraint leftHandConstraint;
     public TwoBoneIKConstraint rightHandTBIK;
     public TwoBoneIKConstraint leftHandTBIK;
+    public GameObject leftHTarget;
+    public GameObject rightHTarget;
     [SerializeField]
     AnimatorOverrideController[] animOverriders;
 
@@ -67,7 +69,8 @@ public class GeneralCharacter : MonoBehaviour
     Coroutine crouchLerper;
     protected bool canCrouch = true;
 
-    bool weaponHolderHandIsRight;
+    public bool isShooting;
+
     #endregion
 
     public void MoveChar(Vector3 direction, float speed)
@@ -247,6 +250,7 @@ public class GeneralCharacter : MonoBehaviour
             rightHandTBIK.weight = 1;
             leftHandConstraint.weight = 1;
             leftHandTBIK.weight = 0;
+            rightHTarget.transform.localPosition = newWeapon.leftHandPos;
         }
         else
         {
@@ -254,7 +258,7 @@ public class GeneralCharacter : MonoBehaviour
             rightHandTBIK.weight = 0;
             leftHandConstraint.weight = 0;
             leftHandTBIK.weight = 1;
-
+            leftHTarget.transform.localPosition = newWeapon.leftHandPos;
         }
 
 
@@ -289,8 +293,10 @@ public class GeneralCharacter : MonoBehaviour
     public IEnumerator CanShootAgain(float durat)
     {
         canShoot = false;
+        isShooting = true;
         yield return new WaitForSeconds(durat);
         canShoot = true;
+        isShooting = false;
     }
     public void ParentAndResetBullet(Transform bullet, Transform parent, GeneralBullet bScript)
     {

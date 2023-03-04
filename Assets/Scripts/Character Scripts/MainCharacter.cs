@@ -283,7 +283,7 @@ public class MainCharacter : GeneralCharacter
 
         }
 
-        if (!isReloading)
+        if (!isReloading && !isShooting)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
