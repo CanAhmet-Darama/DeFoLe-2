@@ -155,10 +155,18 @@ public class GeneralWeapon : MonoBehaviour
     }
     IEnumerator DisableSecondHandTBIK(float durat)
     {
-        yield return new WaitForSeconds(durat/5);
-        owner.rightHandTBIK.weight = 0;
-        yield return new WaitForSeconds(durat*4/5);
-        owner.rightHandTBIK.weight = 1;
+        if(weaponType == WeaponType.SR_1)
+        {
+            owner.rightHandTBIK.weight = 0;
+            yield return new WaitForSeconds(durat);
+            owner.rightHandTBIK.weight = 1;
+        }
+        else if(weaponType == WeaponType.Shotgun)
+        {
+            owner.leftHandTBIK.weight = 0;
+            yield return new WaitForSeconds(durat);
+            owner.leftHandTBIK.weight = 1;
+        }
     }
 }
     public enum WeaponType { AR_1, TR_1, Pistol, Shotgun, SR_1}

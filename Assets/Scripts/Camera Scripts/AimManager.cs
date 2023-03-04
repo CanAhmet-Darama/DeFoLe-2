@@ -81,7 +81,8 @@ public class AimManager : MonoBehaviour
                 else
                 {
                     multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
-                    rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);
+                    if (!mainChar.isShooting) {
+                        rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);}
                 }
 
             }
@@ -116,7 +117,7 @@ public class AimManager : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.R) && mainChar.canReload)
         {
             StartCoroutine(ReloadConstraintWeightLower(mainChar.currentWeapon.GetComponent<GeneralWeapon>().reloadTime));
         }

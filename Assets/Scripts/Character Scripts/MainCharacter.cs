@@ -280,7 +280,7 @@ public class MainCharacter : GeneralCharacter
 
         if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0)
         {
-
+            animator.SetTrigger("reload");
         }
 
         if (!isReloading && !isShooting)
