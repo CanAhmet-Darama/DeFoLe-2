@@ -172,6 +172,7 @@ MonoBehaviour:
   fireAnim: {fileID: 4586681145629631753, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   reloadAnim: {fileID: -2336597958212458626, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   animOverriderIndex: 3
+  subAnimator: {fileID: 4845926822839587}
 --- !u!1 &2034338735417979580
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,6 +182,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8394141879119547472}
+  - component: {fileID: 4845926822839587}
   m_Layer: 0
   m_Name: Bolt armature
   m_TagString: Untagged
@@ -204,6 +206,26 @@ Transform:
   m_Father: {fileID: 4453329431976664615}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &4845926822839587
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034338735417979580}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d5cfa8c69b43fec4791b6ecedec63943, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &3084860141343235994
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +417,6 @@ GameObject:
   - component: {fileID: 4453329431976664615}
   - component: {fileID: 2599331117357812707}
   - component: {fileID: 3712762990219532677}
-  - component: {fileID: 4961838671976677250}
   m_Layer: 0
   m_Name: Sniper Rifle
   m_TagString: Untagged
@@ -472,26 +493,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &4961838671976677250
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6175845085695797875}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b6caf4ed5dbff404abb9f8866911ef58, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &7344003400911689455
 PrefabInstance:
   m_ObjectHideFlags: 0

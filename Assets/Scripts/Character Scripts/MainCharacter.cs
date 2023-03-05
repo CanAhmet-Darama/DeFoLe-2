@@ -14,6 +14,7 @@ public class MainCharacter : GeneralCharacter
         ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
+        canReload = true;
     }
     void Update()
     {
@@ -278,9 +279,9 @@ public class MainCharacter : GeneralCharacter
             currentWeapon.GetComponent<GeneralWeapon>().Fire();
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0)
+        if (Input.GetKeyDown(KeyCode.R) && canReload /*&& ammoCounts[(int)currentWeapon.weaponType] > 0*/)
         {
-            animator.SetTrigger("reload");
+            currentWeapon.Reload();
         }
 
         if (!isReloading && !isShooting)
@@ -308,14 +309,6 @@ public class MainCharacter : GeneralCharacter
 
         }
 
-    }
-    IEnumerator ReloadTimer()
-    {
-        canReload = false;
-        canShoot = false;
-        yield return new WaitForSeconds(currentWeapon.reloadTime);
-        canReload = true;
-        canShoot = true;
     }
 
     public void RegulateMainChar()

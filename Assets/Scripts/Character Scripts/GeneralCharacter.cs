@@ -293,10 +293,21 @@ public class GeneralCharacter : MonoBehaviour
     public IEnumerator CanShootAgain(float durat)
     {
         canShoot = false;
-        isShooting = true;
         yield return new WaitForSeconds(durat);
         canShoot = true;
+    }
+    public IEnumerator CanReloadAgain(float durat)
+    {
+        canReload = false;
+        yield return new WaitForSeconds(durat);
+        canReload = true;
+    }
+    public IEnumerator IsInFiring(float durat)
+    {
+        isShooting = true;
+        yield return new WaitForSeconds(durat);
         isShooting = false;
+
     }
     public void ParentAndResetBullet(Transform bullet, Transform parent, GeneralBullet bScript)
     {

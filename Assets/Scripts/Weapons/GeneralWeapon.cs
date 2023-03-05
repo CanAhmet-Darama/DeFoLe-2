@@ -35,6 +35,7 @@ public class GeneralWeapon : MonoBehaviour
     public AnimationClip fireAnim;
     public AnimationClip reloadAnim;
     public byte animOverriderIndex;
+    [SerializeField] Animator subAnimator;
 
 
 
@@ -80,8 +81,13 @@ public class GeneralWeapon : MonoBehaviour
     public void Reload()
     {
         owner.StartCoroutine("CanShootAgain", reloadTime);
-        owner.animator.ResetTrigger("reload");
+        owner.StartCoroutine("CanReloadAgain", reloadTime);
         owner.animator.SetTrigger("reload");
+        StartCoroutine(DisableSecondHandTBIK(reloadTime));
+        if(weaponType == WeaponType.SR_1 || weaponType == WeaponType.Shotgun)
+        {
+            WeapSubAnimer.WeapunSubAnimReload(subAnimator);
+        }
     }
     public void Fire()
     {
@@ -113,7 +119,7 @@ public class GeneralWeapon : MonoBehaviour
             bulletToShoot.GetComponent<Rigidbody>().velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
             StartCoroutine(AFrameThenTrail(bulletToShoot));
         }
-        owner.animator.ResetTrigger("fire");
+        //owner.animator.ResetTrigger("fire");
         owner.animator.SetTrigger("fire");
         if(weaponType == WeaponType.SR_1)
         {
@@ -124,6 +130,7 @@ public class GeneralWeapon : MonoBehaviour
         gunAudioSource.Play();
         muzzleFlash.Play();
         owner.StartCoroutine("CanShootAgain", firingTime);
+        owner.StartCoroutine("IsInFiring", firingTime);
     }
     public GameObject GetAmmo()
     {
@@ -161,7 +168,7 @@ public class GeneralWeapon : MonoBehaviour
             yield return new WaitForSeconds(durat);
             owner.rightHandTBIK.weight = 1;
         }
-        else if(weaponType == WeaponType.Shotgun)
+        else// if(weaponType == WeaponType.Shotgun)
         {
             owner.leftHandTBIK.weight = 0;
             yield return new WaitForSeconds(durat);
