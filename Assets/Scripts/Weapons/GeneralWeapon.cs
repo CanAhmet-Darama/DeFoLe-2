@@ -26,6 +26,7 @@ public class GeneralWeapon : MonoBehaviour
 
     [Header("For Animation etc")]
     public Vector3 leftHandPos;
+    public Vector3 leftHandRot;
     public Vector3 bulletLaunchOffset;
     public Vector3 rightHandPosOffset;
     public Vector3 rightHandRotOffset;

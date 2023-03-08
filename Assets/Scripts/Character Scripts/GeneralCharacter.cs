@@ -246,19 +246,21 @@ public class GeneralCharacter : MonoBehaviour
         }
         if(newWeapon.weaponType == WeaponType.SR_1)
         {
-            rightHandConstraint.weight = 0;
-            rightHandTBIK.weight = 1;
-            leftHandConstraint.weight = 1;
-            leftHandTBIK.weight = 0;
+            //rightHandConstraint.weight = 0;
+            //rightHandTBIK.weight = 1;
+            //leftHandConstraint.weight = 1;
+            //leftHandTBIK.weight = 0;
             rightHTarget.transform.localPosition = newWeapon.leftHandPos;
+            rightHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
         }
         else
         {
-            rightHandConstraint.weight = 1;
-            rightHandTBIK.weight = 0;
-            leftHandConstraint.weight = 0;
-            leftHandTBIK.weight = 1;
+            //rightHandConstraint.weight = 1;
+            //rightHandTBIK.weight = 0;
+            //leftHandConstraint.weight = 0;
+            //leftHandTBIK.weight = 1;
             leftHTarget.transform.localPosition = newWeapon.leftHandPos;
+            leftHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
         }
 
 

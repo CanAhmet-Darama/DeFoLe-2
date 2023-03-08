@@ -22,7 +22,7 @@ public class AimManager : MonoBehaviour
     float aimCastDistance = 500;
     RaycastHit hitInfo;
 
-    bool quitAimingCompletely = false;
+    bool quitAimingCompletely;
     public bool isReloading;
     Coroutine willQuitAimingCompletely;
 
@@ -33,6 +33,7 @@ public class AimManager : MonoBehaviour
     {
         mainCam = GameManager.mainCam.GetComponent<CameraScript>();
         mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
+        quitAimingCompletely = true;
     }
 
     void Update()

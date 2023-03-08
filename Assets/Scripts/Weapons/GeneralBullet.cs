@@ -42,13 +42,34 @@ public class GeneralBullet : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag != "Bullet")
+        if (collision.gameObject.tag != "Bullet")
         {
-            ContactPoint collidePoint = collision.GetContact(0);
+            if ((transform.position - firedPos).magnitude < 50)
+            {
+                ContactPoint contact = collision.contacts[0];
+                ImpactMarkManager.CallMark(contact.point + contact.normal.normalized * 0.02f, contact.normal);
+                Debug.DrawRay(firedPos, contact.point - firedPos, Color.cyan);
+                Debug.Log(Vector3.Angle(contact.normal, firedPos - contact.point));
+            }
             itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
-            if((transform.position - firedPos).magnitude < 100)
-            ImpactMarkManager.CallMark(collidePoint.point + collidePoint.normal.normalized*0.01f, collidePoint.normal);
         }
     }
+
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    if(collision.gameObject.tag != "Bullet")
+    //    {
+    //        if((transform.position - firedPos).magnitude < 50)
+    //        {
+    //            int layerM = ~(1 << 7);
+    //            Ray ray = new Ray(firedPos,(transform.position - firedPos).normalized);
+    //            Physics.Raycast(ray, out RaycastHit hitInfo,50, layerM, QueryTriggerInteraction.Ignore);
+    //            ImpactMarkManager.CallMark(hitInfo.point + hitInfo.normal.normalized*0.02f, hitInfo.normal);
+    //            Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance,Color.cyan);
+    //        }
+    //        itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
+
+    //    }
+    //}
 
 }
