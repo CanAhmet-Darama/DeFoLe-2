@@ -47,9 +47,11 @@ public class GeneralBullet : MonoBehaviour
             if ((transform.position - firedPos).magnitude < 50)
             {
                 ContactPoint contact = collision.contacts[0];
-                ImpactMarkManager.CallMark(contact.point + contact.normal.normalized * 0.02f, contact.normal);
-                Debug.DrawRay(firedPos, contact.point - firedPos, Color.cyan);
-                Debug.Log(Vector3.Angle(contact.normal, firedPos - contact.point));
+                ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal);
+                Debug.DrawLine(firedPos, contact.point, Color.cyan);
+                //Debug.Log(Vector3.Angle(contact.normal, firedPos - contact.point));
+                if((transform.position - contact.point).magnitude > 0.01f)
+                Debug.Log("IMPACT ON WRONG POS");
             }
             itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
         }

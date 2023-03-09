@@ -48,13 +48,13 @@ public class ImpactMarkManager : MonoBehaviour
     {
         GameObject mark = GetMarkReady();
         mark.transform.position = pos;
-        mark.transform.forward = rot;
+        mark.transform.rotation = Quaternion.LookRotation(rot);
         mark.SetActive(true);
         impactManagerIns.DeleteBulletMark(mark, lastCalledIndex);
 
         ParticleSystem impact = GetImpactReady();
         impact.transform.position = pos;
-        impact.transform.forward = rot;
+        impact.transform.rotation = Quaternion.LookRotation(rot);
         impact.Play();
     }
     void InstantiateBulletMarks()

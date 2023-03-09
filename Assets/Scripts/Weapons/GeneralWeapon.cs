@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GeneralWeapon : MonoBehaviour
 {
+    #region Variables
     [Header("General")]
     public GeneralCharacter owner;
     public float damage;
@@ -38,9 +39,10 @@ public class GeneralWeapon : MonoBehaviour
     public byte animOverriderIndex;
     [SerializeField] Animator subAnimator;
 
+    #endregion
 
 
-    protected void Start()
+    void Start()
     {
         if(weaponType == WeaponType.AR_1 || weaponType == WeaponType.TR_1)
         {
@@ -77,8 +79,12 @@ public class GeneralWeapon : MonoBehaviour
         }
         gunAudioSource.volume = 0.05f;
         currentAmmo = maxAmmo;
-    }
 
+    }
+    void Update()
+    {
+        
+    }
     public void Reload()
     {
         owner.StartCoroutine("CanShootAgain", reloadTime);
