@@ -18,6 +18,10 @@ public class UI_Manager : MonoBehaviour
 
     void Update()
     {
+        PlayerTexts();
+    }
+    void PlayerTexts()
+    {
         curAmmoText.text = Convert.ToString(mainChar.currentWeapon.currentAmmo);
         totalAmmoText.text = Convert.ToString(mainChar.ammoCounts[(int)mainChar.currentWeapon.weaponType]);
     }

@@ -15,6 +15,10 @@ public class MainCharacter : GeneralCharacter
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
         canReload = true;
+        for (short i = (short)(GameManager.weaponPrefabs.Length - 2); i >= 0; i--)
+        {
+            ammoCounts[i] = (short)(5 * GameManager.weaponPrefabs[i].GetComponent<GeneralWeapon>().maxAmmo);
+        }
     }
     void Update()
     {
@@ -274,6 +278,16 @@ public class MainCharacter : GeneralCharacter
     }
     void ControlWeaponry()
     {
+        if(currentWeapon.currentAmmo == 0)
+        {
+            canShoot = false;
+            if (ammoCounts[(int)currentWeapon.weaponType] > 0)
+            {
+                currentWeapon.Reload();
+            }
+        }
+
+
         if (Input.GetMouseButton(0) && canShoot && Input.GetMouseButton(1))
         {
             currentWeapon.GetComponent<GeneralWeapon>().Fire();

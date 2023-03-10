@@ -95,6 +95,16 @@ public class GeneralWeapon : MonoBehaviour
         {
             WeapSubAnimer.WeapunSubAnimReload(subAnimator);
         }
+
+        if (owner.ammoCounts[(int)weaponType] >= maxAmmo) {
+            currentAmmo += maxAmmo;
+            owner.ammoCounts[(int)weaponType] -= maxAmmo;
+        }
+        else
+        {
+            currentAmmo += (byte)owner.ammoCounts[(int)weaponType];
+            owner.ammoCounts[(int)weaponType] = 0;
+        }
     }
     public void Fire()
     {
@@ -138,6 +148,7 @@ public class GeneralWeapon : MonoBehaviour
         muzzleFlash.Play();
         owner.StartCoroutine("CanShootAgain", firingTime);
         owner.StartCoroutine("IsInFiring", firingTime);
+        currentAmmo--;
     }
     public GameObject GetAmmo()
     {

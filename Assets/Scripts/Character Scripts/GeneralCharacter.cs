@@ -304,6 +304,7 @@ public class GeneralCharacter : MonoBehaviour
         yield return new WaitForSeconds(durat);
         canReload = true;
     }
+
     public IEnumerator IsInFiring(float durat)
     {
         isShooting = true;
