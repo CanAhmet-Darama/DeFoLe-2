@@ -90,20 +90,12 @@ public class GeneralWeapon : MonoBehaviour
         owner.StartCoroutine("CanShootAgain", reloadTime);
         owner.StartCoroutine("CanReloadAgain", reloadTime);
         owner.animator.SetTrigger("reload");
+        owner.isReloading = true;
         StartCoroutine(DisableSecondHandTBIK(reloadTime));
+        StartCoroutine(IncreaseBulletWithReload());
         if(weaponType == WeaponType.SR_1 || weaponType == WeaponType.Shotgun)
         {
             WeapSubAnimer.WeapunSubAnimReload(subAnimator);
-        }
-
-        if (owner.ammoCounts[(int)weaponType] >= maxAmmo) {
-            currentAmmo += maxAmmo;
-            owner.ammoCounts[(int)weaponType] -= maxAmmo;
-        }
-        else
-        {
-            currentAmmo += (byte)owner.ammoCounts[(int)weaponType];
-            owner.ammoCounts[(int)weaponType] = 0;
         }
     }
     public void Fire()
@@ -191,6 +183,24 @@ public class GeneralWeapon : MonoBehaviour
             owner.leftHandTBIK.weight = 0;
             yield return new WaitForSeconds(durat);
             owner.leftHandTBIK.weight = 1;
+        }
+    }
+    IEnumerator IncreaseBulletWithReload()
+    {
+        if (weaponType == WeaponType.SR_1 || weaponType == WeaponType.Shotgun)
+        {
+            WeapSubAnimer.ResetTriggerReload(subAnimator);
+        }
+        yield return new WaitForSeconds(reloadTime);
+        if (owner.ammoCounts[(int)weaponType] >= (maxAmmo - currentAmmo))
+        {
+            owner.ammoCounts[(int)weaponType] -= (short)(maxAmmo - currentAmmo);
+            currentAmmo = maxAmmo;
+        }
+        else
+        {
+            owner.ammoCounts[(int)weaponType] = 0;
+            currentAmmo += (byte)owner.ammoCounts[(int)weaponType];
         }
     }
 }

@@ -303,6 +303,7 @@ public class GeneralCharacter : MonoBehaviour
         canReload = false;
         yield return new WaitForSeconds(durat);
         canReload = true;
+        isReloading = false;
     }
 
     public IEnumerator IsInFiring(float durat)

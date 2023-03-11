@@ -14,5 +14,9 @@ public class WeapSubAnimer : MonoBehaviour
         animator.SetTrigger("firing");
 
     }
+    public static void ResetTriggerReload(Animator animator)
+    {
+        animator.ResetTrigger("reloading");
+    }
 
 }

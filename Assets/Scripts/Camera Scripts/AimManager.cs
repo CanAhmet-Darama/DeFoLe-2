@@ -93,17 +93,13 @@ public class AimManager : MonoBehaviour
                 {
                     multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
                     leftHCoTBIK.weight = 0;
-                    //leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
                 }
                 else
                 {
                     multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
                     rightHCoTBIK.weight = 0;
-                    //rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 0, lerpOrSnapSpeed);
                 }
 
-                //leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
-                //multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
             }
 
         }
@@ -120,10 +116,6 @@ public class AimManager : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.R) && mainChar.canReload)
-        {
-            //StartCoroutine(ReloadConstraintWeightLower(mainChar.currentWeapon.GetComponent<GeneralWeapon>().reloadTime));
-        }
 
         if (quitAimingCompletely)
         {
@@ -131,12 +123,10 @@ public class AimManager : MonoBehaviour
             if(mainChar.currentWeapon.weaponType != WeaponType.SR_1)
             {
                 multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
-                //leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 0, lerpOrSnapSpeed);
             }
             else
             {
                 multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 0, lerpOrSnapSpeed);
-                //rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 0, lerpOrSnapSpeed);
             }
         }
 
@@ -150,10 +140,4 @@ public class AimManager : MonoBehaviour
         quitAimingCompletely = true;
         animator.SetBool("isAiming", false);
     }
-    //IEnumerator ReloadConstraintWeightLower(float durat)
-    //{
-    //    isReloading = true;
-    //    yield return new WaitForSeconds(durat);
-    //    isReloading = false;
-    //}
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2706693898588620785}
+  - component: {fileID: 6440629747097337221}
   m_Layer: 0
   m_Name: Bone
   m_TagString: Untagged
@@ -23,14 +24,34 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 846888003321820999}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5054918651928458641}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!95 &6440629747097337221
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846888003321820999}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 659f8b43ecf71834ea7cad6278118f67, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &2060228522481370091
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,10 +236,10 @@ MonoBehaviour:
   firingSound: {fileID: 8300000, guid: a7dc6cb6a14ded4429b14a2c795f46c1, type: 3}
   gunAudioSource: {fileID: 3828759886042159648}
   reloadSound: {fileID: 0}
-  leftHandPos: {x: -0.00392, y: 0.02002, z: 0.00594}
+  leftHandPos: {x: -0.00049, y: 0.01996, z: 0.00647}
   leftHandRot: {x: -82.75, y: 0.363, z: -0.071}
   bulletLaunchOffset: {x: 0, y: 0.1, z: 2}
-  rightHandPosOffset: {x: -0.00493, y: 0.014, z: 0.00202}
+  rightHandPosOffset: {x: -0.002, y: 0.014, z: 0.0024}
   rightHandRotOffset: {x: 265.056, y: 100.882, z: 1.119003}
   idleAnim: {fileID: 1676322942688352440, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   semiIdleAnim: {fileID: -5889408640710203117, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
@@ -226,7 +247,7 @@ MonoBehaviour:
   fireAnim: {fileID: 900824029299417639, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   reloadAnim: {fileID: 3819623203462042450, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   animOverriderIndex: 2
-  subAnimator: {fileID: 0}
+  subAnimator: {fileID: 6440629747097337221}
 --- !u!82 &3828759886042159648
 AudioSource:
   m_ObjectHideFlags: 0
