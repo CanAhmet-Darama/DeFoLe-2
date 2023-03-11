@@ -281,19 +281,19 @@ public class MainCharacter : GeneralCharacter
         if(currentWeapon.currentAmmo == 0)
         {
             canShoot = false;
-            if (ammoCounts[(int)currentWeapon.weaponType] > 0)
+            if (ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
             {
                 currentWeapon.Reload();
             }
         }
 
 
-        if (Input.GetMouseButton(0) && canShoot && Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0) && canShoot && !isReloading && Input.GetMouseButton(1))
         {
-            currentWeapon.GetComponent<GeneralWeapon>().Fire();
+            currentWeapon.Fire();
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && canReload /*&& ammoCounts[(int)currentWeapon.weaponType] > 0*/)
+        if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
         {
             currentWeapon.Reload();
         }

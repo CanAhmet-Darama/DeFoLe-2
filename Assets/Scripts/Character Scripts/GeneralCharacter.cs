@@ -265,6 +265,11 @@ public class GeneralCharacter : MonoBehaviour
 
 
     }
+    public void GetMeleeWeapon()
+    {
+        currentWeapon.gameObject.SetActive(false);
+
+    }
     public void AnimationOverride(AnimatorOverrideController overrider)
     {
         animator.runtimeAnimatorController = overrider;

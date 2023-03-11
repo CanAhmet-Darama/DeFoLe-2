@@ -128,11 +128,11 @@ public class GeneralWeapon : MonoBehaviour
             bulletToShoot.GetComponent<Rigidbody>().velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
             StartCoroutine(AFrameThenTrail(bulletToShoot));
         }
-        //owner.animator.ResetTrigger("fire");
         owner.animator.SetTrigger("fire");
         if(weaponType == WeaponType.SR_1)
         {
             StartCoroutine(DisableSecondHandTBIK(firingTime));
+            WeapSubAnimer.WeaponSubAnimFire(subAnimator);
         }
 
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;

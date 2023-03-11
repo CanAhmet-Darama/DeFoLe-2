@@ -23,6 +23,28 @@ public class ImpactMarkManager : MonoBehaviour
     public static ParticleSystem[] bulletImpacts;
     public static short impactsCount = 20;
 
+    [Header("Sound stuff")]
+    public static AudioSource audioSource;
+    public static AudioClip generalImpactSound;
+    public static AudioClip dirtImpactSound;
+    public static AudioClip[] concreteImpactSounds;
+    public static AudioClip[] metalImpactSounds;
+    public static AudioClip glassImpactSound;
+    public static AudioClip woodImpactSound;
+    public static AudioClip fleshImpactSound;
+    public static AudioClip bulletWhoosh;
+    public AudioSource _audioSource;
+    public AudioClip _generalImpactSound;
+    public AudioClip _dirtImpactSound;
+    public AudioClip[] _concreteImpactSounds;
+    public AudioClip[] _metalImpactSounds;
+    public AudioClip _glassImpactSound;
+    public AudioClip _woodImpactSound;
+    public AudioClip _fleshImpactSound;
+    public AudioClip _bulletWhoosh;
+
+
+
 
 
 
@@ -38,13 +60,14 @@ public class ImpactMarkManager : MonoBehaviour
         bulletImpactPrefab = bImpact_isThis;
         InstantiateBulletMarks();
         InstantiateBulletImpacts();
+        SoundsManagerStart();
     }
 
     void Update()
     {
         
     }
-    public static void CallMark(Vector3 pos, Vector3 rot)
+    public static void CallMark(Vector3 pos, Vector3 rot, EnvObjType objType)
     {
         GameObject mark = GetMarkReady();
         mark.transform.position = pos;
@@ -56,6 +79,8 @@ public class ImpactMarkManager : MonoBehaviour
         impact.transform.position = pos;
         impact.transform.rotation = Quaternion.LookRotation(rot);
         impact.Play();
+
+        MakeImpactSound(pos, objType);
     }
     void InstantiateBulletMarks()
     {
@@ -117,5 +142,47 @@ public class ImpactMarkManager : MonoBehaviour
             }
         }
         return bulletImpacts[bulletImpacts.Length - 1];
+    }
+
+    static void MakeImpactSound(Vector3 pos, EnvObjType objType)
+    {
+        AudioClip impactSound;
+        int randNum;
+        switch (objType)
+        {
+            case EnvObjType.metal: randNum = Random.Range(0,2);
+                impactSound = metalImpactSounds[randNum];
+                break;
+            case EnvObjType.concrete: randNum = Random.Range(0, 2);
+                impactSound = concreteImpactSounds[randNum];
+                break;
+            case EnvObjType.wood:
+                impactSound = woodImpactSound;
+                break;
+            case EnvObjType.dirt:
+                impactSound = dirtImpactSound;
+                break;
+            default:
+                impactSound = generalImpactSound;
+                break;
+        }
+        audioSource.transform.position = pos;
+        audioSource.PlayOneShot(impactSound);
+    }
+    static void MakeImpactParticle(Vector3 pos, Vector3 rot, EnvObjType objType)
+    {
+
+    }
+    void SoundsManagerStart()
+    {
+        audioSource = _audioSource;
+        generalImpactSound = _generalImpactSound;
+        dirtImpactSound = _dirtImpactSound;
+        concreteImpactSounds = _concreteImpactSounds;
+        metalImpactSounds = _metalImpactSounds;
+        glassImpactSound = _glassImpactSound;
+        woodImpactSound = _woodImpactSound;
+        fleshImpactSound = fleshImpactSound;
+        bulletWhoosh = _bulletWhoosh;
     }
 }

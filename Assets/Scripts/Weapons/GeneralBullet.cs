@@ -47,11 +47,22 @@ public class GeneralBullet : MonoBehaviour
             if ((transform.position - firedPos).magnitude < 50)
             {
                 ContactPoint contact = collision.contacts[0];
-                ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal);
+                if (collision.gameObject.GetComponent<EnvObject>() != null)
+                {
+                    ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                        collision.gameObject.GetComponent<EnvObject>().objectType);
+                }
+                else if(collision.collider.GetType() is WheelCollider)
+                {
+                    ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                        EnvObjType.general);
+                }
+                else if (collision.collider.tag == "Vehicle")
+                {
+                    ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                        EnvObjType.metal);
+                }
                 Debug.DrawLine(firedPos, contact.point, Color.cyan);
-                //Debug.Log(Vector3.Angle(contact.normal, firedPos - contact.point));
-                if((transform.position - contact.point).magnitude > 0.01f)
-                Debug.Log("IMPACT ON WRONG POS");
             }
             itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
         }
