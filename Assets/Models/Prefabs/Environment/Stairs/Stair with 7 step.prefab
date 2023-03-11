@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 3372620457900765546}
   - component: {fileID: 6081793703860251817}
   - component: {fileID: 9047875420569277781}
+  - component: {fileID: 7912068570471648623}
   m_Layer: 0
   m_Name: Compond Collider
   m_TagString: Ground
@@ -157,6 +158,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 0.12, z: 1.08}
   m_Center: {x: 0, y: 0.48, z: 0.48}
+--- !u!114 &7912068570471648623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2647299986749800052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 4
+  destroyable: 0
+  healthOfObject: 0
 --- !u!1 &4489826555387455509
 GameObject:
   m_ObjectHideFlags: 0

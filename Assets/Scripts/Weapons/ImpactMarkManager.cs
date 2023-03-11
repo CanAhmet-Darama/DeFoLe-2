@@ -18,10 +18,19 @@ public class ImpactMarkManager : MonoBehaviour
     static ImpactMarkManager impactManagerIns;
 
     [Header("Bullet Impacts")]
-    public static ParticleSystem bulletImpactPrefab;
-    [SerializeField] ParticleSystem bImpact_isThis;
-    public static ParticleSystem[] bulletImpacts;
-    public static short impactsCount = 20;
+    public static ParticleSystem generalBulletImpactPrefab;
+    public static ParticleSystem metalBulletImpactPrefab;
+    public static ParticleSystem woodBulletImpactPrefab;
+    public static ParticleSystem dirtBulletImpactPrefab;
+    public static ParticleSystem bloodBulletImpactPrefab;
+    public static ParticleSystem[] impactPrefabs;
+    [SerializeField] ParticleSystem _generalBulletImpact;
+    [SerializeField] ParticleSystem _metalBulletImpact;
+    [SerializeField] ParticleSystem _woodBulletImpact;
+    [SerializeField] ParticleSystem _dirtBulletImpact;
+    [SerializeField] ParticleSystem _bloodBulletImpact;
+    public static ParticleSystem[][] bulletImpacts;
+    public static short impactsCount = 10;
 
     [Header("Sound stuff")]
     public static AudioSource audioSource;
@@ -33,6 +42,7 @@ public class ImpactMarkManager : MonoBehaviour
     public static AudioClip woodImpactSound;
     public static AudioClip fleshImpactSound;
     public static AudioClip bulletWhoosh;
+    #region Holder Sounds
     public AudioSource _audioSource;
     public AudioClip _generalImpactSound;
     public AudioClip _dirtImpactSound;
@@ -42,6 +52,7 @@ public class ImpactMarkManager : MonoBehaviour
     public AudioClip _woodImpactSound;
     public AudioClip _fleshImpactSound;
     public AudioClip _bulletWhoosh;
+    #endregion
 
 
 
@@ -50,17 +61,17 @@ public class ImpactMarkManager : MonoBehaviour
 
     void Start()
     {
-        impactManagerIns= GetComponent<ImpactMarkManager>();
+        impactManagerIns= this;
         bulletMarkPrefab = bMP_isThis;
         bulletMarks = new GameObject[bulletMarksCount];
         cyclesStates = new bool[bulletMarksCount];
         lastCalledIndex = 0;
 
-        bulletImpacts = new ParticleSystem[impactsCount];
-        bulletImpactPrefab = bImpact_isThis;
+        SoundsManagerStart();
+        ParticlesManagerStart();
         InstantiateBulletMarks();
         InstantiateBulletImpacts();
-        SoundsManagerStart();
+
     }
 
     void Update()
@@ -75,10 +86,7 @@ public class ImpactMarkManager : MonoBehaviour
         mark.SetActive(true);
         impactManagerIns.DeleteBulletMark(mark, lastCalledIndex);
 
-        ParticleSystem impact = GetImpactReady();
-        impact.transform.position = pos;
-        impact.transform.rotation = Quaternion.LookRotation(rot);
-        impact.Play();
+        MakeImpactParticle(pos, rot, objType);
 
         MakeImpactSound(pos, objType);
     }
@@ -93,10 +101,19 @@ public class ImpactMarkManager : MonoBehaviour
     }
     void InstantiateBulletImpacts()
     {
-        for (short i = (short)(impactsCount - 1); i >= 0; i--)
+        bulletImpacts = new ParticleSystem[impactPrefabs.Length][];
+        for (int i = impactPrefabs.Length - 1; i >= 0; i--)
         {
-            ParticleSystem bImpact = Instantiate(bulletImpactPrefab, transform);
-            bulletImpacts[i] = bImpact;
+            bulletImpacts[i] = new ParticleSystem[impactsCount];
+        }
+
+        for (int j = impactPrefabs.Length - 1; j >= 0; j--)
+        {
+            for (short i = (short)(impactsCount - 1); i >= 0; i--)
+            {
+                bulletImpacts[j][i] = Instantiate(impactPrefabs[j], transform).GetComponent<ParticleSystem>();
+            }
+
         }
     }
 
@@ -132,16 +149,27 @@ public class ImpactMarkManager : MonoBehaviour
             mark.SetActive(false);
         }
     }
-    static ParticleSystem GetImpactReady()
+    static ParticleSystem GetImpactReady(ParticleSystem[] bulletImpactsArray)
     {
-        for (short i = (short)(bulletImpacts.Length - 1); i >= 0; i--)
+        for (short i = (short)(bulletImpactsArray.Length - 1); i >= 0; i--)
         {
-            if (!bulletImpacts[i].isPlaying)
+            if (!bulletImpactsArray[i].isPlaying)
             {
-                return bulletImpacts[i];
+                return bulletImpactsArray[i];
             }
         }
-        return bulletImpacts[bulletImpacts.Length - 1];
+        return bulletImpactsArray[0];
+    }
+    static ParticleSystem GetBloodImpactReady()
+    {
+        for (short i = (short)(bulletImpacts[4].Length - 1); i >= 0; i--)
+        {
+            if (!bulletImpacts[4][i].isPlaying)
+            {
+                return bulletImpacts[4][i];
+            }
+        }
+        return bulletImpacts[4][0];
     }
 
     static void MakeImpactSound(Vector3 pos, EnvObjType objType)
@@ -171,7 +199,35 @@ public class ImpactMarkManager : MonoBehaviour
     }
     static void MakeImpactParticle(Vector3 pos, Vector3 rot, EnvObjType objType)
     {
+        ParticleSystem impact;
+        switch (objType)
+        {
+            case EnvObjType.metal: 
+                impact = GetImpactReady(bulletImpacts[1]);
+                break;
+            case EnvObjType.dirt:
+                impact = GetImpactReady(bulletImpacts[3]);
+                break;
+            case EnvObjType.wood:
+                impact = GetImpactReady(bulletImpacts[2]);
+                break;
+            default:
+                impact = GetImpactReady(bulletImpacts[0]);
+                break;
 
+        }
+        impact.transform.position = pos;
+        impact.transform.rotation = Quaternion.LookRotation(rot);
+        impact.Play();
+    }
+    public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot)
+    {
+        ParticleSystem impact = GetBloodImpactReady();
+        impact.transform.position = pos;
+        impact.transform.rotation = Quaternion.LookRotation(rot);
+        impact.Play();
+        audioSource.transform.position = pos;
+        audioSource.PlayOneShot(fleshImpactSound);
     }
     void SoundsManagerStart()
     {
@@ -182,7 +238,17 @@ public class ImpactMarkManager : MonoBehaviour
         metalImpactSounds = _metalImpactSounds;
         glassImpactSound = _glassImpactSound;
         woodImpactSound = _woodImpactSound;
-        fleshImpactSound = fleshImpactSound;
+        fleshImpactSound = _fleshImpactSound;
         bulletWhoosh = _bulletWhoosh;
     }
+    void ParticlesManagerStart()
+    {
+        generalBulletImpactPrefab = _generalBulletImpact;
+        metalBulletImpactPrefab = _metalBulletImpact;
+        woodBulletImpactPrefab = _woodBulletImpact;
+        dirtBulletImpactPrefab = _dirtBulletImpact;
+        bloodBulletImpactPrefab = _bloodBulletImpact;
+        impactPrefabs = new ParticleSystem[] { generalBulletImpactPrefab, metalBulletImpactPrefab, woodBulletImpactPrefab, dirtBulletImpactPrefab, bloodBulletImpactPrefab };
+    }
+
 }

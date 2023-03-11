@@ -52,7 +52,7 @@ public class GeneralBullet : MonoBehaviour
                     ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
                         collision.gameObject.GetComponent<EnvObject>().objectType);
                 }
-                else if(collision.collider.GetType() is WheelCollider)
+                else if(collision.collider.GetType() == typeof(WheelCollider))
                 {
                     ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
                         EnvObjType.general);
@@ -61,6 +61,10 @@ public class GeneralBullet : MonoBehaviour
                 {
                     ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
                         EnvObjType.metal);
+                }
+                else if (collision.collider.tag == "Player" || collision.collider.tag == "Enemy")
+                {
+                    ImpactMarkManager.MakeBloodImpactAndSound(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal);
                 }
                 Debug.DrawLine(firedPos, contact.point, Color.cyan);
             }
