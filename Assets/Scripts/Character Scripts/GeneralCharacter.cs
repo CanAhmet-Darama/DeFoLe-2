@@ -242,20 +242,21 @@ public class GeneralCharacter : MonoBehaviour
         mainMelee.transform.localEulerAngles = mainMelee.rightHandRot;
         mainMelee.gameObject.SetActive(false);
         mainMelee.transform.localScale *= 0.1f;
+        mainMelee.owner = this;
         #endregion
     }
     public void ChangeWeapon(GeneralWeapon newWeapon)
     {
+        if(weaponState != WeaponState.ranged)
+        {
+            GetMeleeWeaponOrHandsFree(WeaponState.ranged);
+        }
+
         if(currentWeapon != newWeapon)
         {
-            if(weaponState != WeaponState.ranged)
-            {
-                GetMeleeWeaponOrHandsFree(true);
-            }
-            else if(currentWeapon != null)
-            {
-                currentWeapon.gameObject.SetActive(false);
-            }
+            if(currentWeapon != null)
+            currentWeapon.gameObject.SetActive(false);
+
 
             currentWeapon = newWeapon;
             currentWeapon.gameObject.SetActive(true);
@@ -277,32 +278,32 @@ public class GeneralCharacter : MonoBehaviour
             }
         }
     }
-    public void GetMeleeWeaponOrHandsFree(bool getMelee)
+    public void GetMeleeWeaponOrHandsFree(WeaponState stateX)
     {
-        if (getMelee)
+        switch (stateX)
         {
-            if(!mainMelee.gameObject.activeInHierarchy)
-            {
+            case WeaponState.melee:
                 currentWeapon.gameObject.SetActive(false);
                 mainMelee.gameObject.SetActive(true);
                 weaponState = WeaponState.melee;
                 AnimationOverride(mainMelee.overrideController);
-            }
-            else
-            {
+                animator.SetLayerWeight(2, 1);
+                break;
+            case WeaponState.ranged:
                 currentWeapon.gameObject.SetActive(true);
                 mainMelee.gameObject.SetActive(false);
                 weaponState = WeaponState.ranged;
-            }
-            AimManager.ResetWeights(this);
+                AimManager.ResetWeights(this);
+                animator.SetLayerWeight(2, 1);
+                break;
+            case WeaponState.handsFree:
+                currentWeapon.gameObject.SetActive(false);
+                mainMelee.gameObject.SetActive(false);
+                weaponState = WeaponState.handsFree;
+                AimManager.ResetWeights(this);
+                animator.SetLayerWeight(2, 0);
+                break;
         }
-        else
-        {
-            currentWeapon.gameObject.SetActive(false);
-            mainMelee.gameObject.SetActive(false);
-            weaponState = WeaponState.handsFree;
-        }
-
     }
     public void AnimationOverride(AnimatorOverrideController overrider)
     {

@@ -6,23 +6,24 @@ public class MeleeWeapon : MonoBehaviour
 {
     [Header("General")]
     public float damage;
+    public float swingCooldown;
+    public GeneralCharacter owner;
+    public bool canSwing = true;
 
     [Header("For Animation etc...")]
-    public float hitDuration;
     public Vector3 rightHandPos;
     public Vector3 rightHandRot;
     public AnimatorOverrideController overrideController;
 
-
-
-
-    void Start()
+    public void Swing()
     {
-        
+        owner.animator.SetTrigger("fire");
+        StartCoroutine(WaitToHitAgain());
     }
-
-    void Update()
+    IEnumerator WaitToHitAgain()
     {
-        
+        canSwing = false;
+        yield return new WaitForSeconds(swingCooldown);
+        canSwing = true;
     }
 }

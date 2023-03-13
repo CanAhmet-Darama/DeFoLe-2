@@ -299,9 +299,14 @@ public class MainCharacter : GeneralCharacter
                 currentWeapon.Reload();
             }
         }
+        else if(weaponState == WeaponState.melee) {
+            if(Input.GetMouseButton(0) && mainMelee.canSwing)
+            {
+                mainMelee.Swing();
+            }
+        }
 
-
-        if (!isReloading && !isShooting)
+        if (!isReloading && !isShooting && mainMelee.canSwing)
         {
             SwitchingBetweenWeapons();
         }
@@ -337,11 +342,11 @@ public class MainCharacter : GeneralCharacter
 
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
-            GetMeleeWeaponOrHandsFree(true);
+            GetMeleeWeaponOrHandsFree(WeaponState.melee);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            GetMeleeWeaponOrHandsFree(false);
+            GetMeleeWeaponOrHandsFree(WeaponState.handsFree);
         }
 
     }

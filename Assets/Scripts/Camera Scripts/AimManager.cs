@@ -55,7 +55,7 @@ public class AimManager : MonoBehaviour
         if(mainChar.weaponState == GeneralCharacter.WeaponState.ranged)
         {
             isReloading = mainChar.isReloading;
-            RightClickedOrNotManage(1,1,0.7f);
+            RightClickedOrNotManage(0.7f);
 
             if (quitAimingCompletely)
             {
@@ -71,14 +71,17 @@ public class AimManager : MonoBehaviour
             }
 
         }
-        else if (mainChar.weaponState == GeneralCharacter.WeaponState.melee)
+        else// if (mainChar.weaponState != GeneralCharacter.WeaponState.ranged)
         {
-            multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0.8f, lerpOrSnapSpeed);
-
+            RightClickedOrNotManage(0.8f);
+            if (quitAimingCompletely)
+            {
+                multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0, lerpOrSnapSpeed);
+            }
         }
 
     }
-    void RightClickedOrNotManage(float rightCoTar, float leftCoTar, float bodyTar)
+    void RightClickedOrNotManage(float bodyTar)
     {
             if (Input.GetMouseButtonUp(1))
             {
@@ -109,33 +112,36 @@ public class AimManager : MonoBehaviour
                 #endregion
 
                 multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, bodyTar, lerpOrSnapSpeed);
-                if (!isReloading) {
-                    if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
-                    {
-                        multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
-                        leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 1, lerpOrSnapSpeed);
-                    }
-                    else
-                    {
-                        multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
-                        if (!mainChar.isShooting) {
-                            rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);}
-                    }
-
-                }
-                else
+                if(mainChar.weaponState == GeneralCharacter.WeaponState.ranged)
                 {
-                    if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
-                    {
-                        multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
-                        leftHCoTBIK.weight = 0;
+                    if (!isReloading) {
+                        if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                        {
+                            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+                            leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 1, lerpOrSnapSpeed);
+                        }
+                        else
+                        {
+                            multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
+                            if (!mainChar.isShooting) {
+                                rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);}
+                        }
+
                     }
                     else
                     {
-                        multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
-                        rightHCoTBIK.weight = 0;
-                    }
+                        if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                        {
+                            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+                            leftHCoTBIK.weight = 0;
+                        }
+                        else
+                        {
+                            multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
+                            rightHCoTBIK.weight = 0;
+                        }
 
+                    }
                 }
 
             }

@@ -47,9 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  hitDuration: 0
-  rightHandPos: {x: 0, y: 0, z: 0}
-  rightHandRot: {x: 0, y: 0, z: 0}
+  swingCooldown: 0.8
+  owner: {fileID: 0}
+  canSwing: 1
+  rightHandPos: {x: 0.00003, y: 0.00279, z: 0.00142}
+  rightHandRot: {x: -98.713, y: 110.523, z: -3.388}
   overrideController: {fileID: 22100000, guid: 4449f4e43d426674a8940c8389700d27, type: 2}
 --- !u!65 &5418318840478128906
 BoxCollider:
@@ -59,7 +61,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490591043449762804}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.01, y: 0.22, z: 0.035}
