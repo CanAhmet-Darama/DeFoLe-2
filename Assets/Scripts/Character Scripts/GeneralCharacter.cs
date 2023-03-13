@@ -24,26 +24,32 @@ public class GeneralCharacter : MonoBehaviour
     public bool[] hasWeapons = new bool[5];
     public GameObject[] weapons = new GameObject[5];
     public short[] ammoCounts= new short[5];
+    public MeleeWeapon mainMelee;
     public bool canShoot;
     public bool canReload;
     public bool isReloading;
+    public WeaponState weaponState;
+    public enum WeaponState { ranged, melee, handsFree}
 
-
+    #region Animation
     [Header("Animation")]
     public Animator animator;
     public AnimStateSpeed animStateSpeed;
     public AnimStatePriDir animStatePriDir;
     public AnimStateSecDir animStateSecDir;
+    public GameObject aimTarget;
     public GameObject rightHBone;
     public GameObject leftHBone;
     public MultiAimConstraint rightHandConstraint;
     public MultiAimConstraint leftHandConstraint;
+    public MultiAimConstraint multiAimCoBody;
     public TwoBoneIKConstraint rightHandTBIK;
     public TwoBoneIKConstraint leftHandTBIK;
     public GameObject leftHTarget;
     public GameObject rightHTarget;
     [SerializeField]
     AnimatorOverrideController[] animOverriders;
+    #endregion
 
     [Header("Some Stuff")]
     public bool isGrounded;
@@ -230,44 +236,72 @@ public class GeneralCharacter : MonoBehaviour
             }
             weapons[i].GetComponent<GeneralWeapon>().owner = this;
         }
+        #region Melee Create
+        mainMelee = Instantiate(GameManager.weaponPrefabs[5], rightHBone.transform).GetComponent<MeleeWeapon>();
+        mainMelee.transform.localPosition = mainMelee.rightHandPos;
+        mainMelee.transform.localEulerAngles = mainMelee.rightHandRot;
+        mainMelee.gameObject.SetActive(false);
+        mainMelee.transform.localScale *= 0.1f;
+        #endregion
     }
     public void ChangeWeapon(GeneralWeapon newWeapon)
     {
-        if(currentWeapon != null)
+        if(currentWeapon != newWeapon)
         {
-            currentWeapon.gameObject.SetActive(false);
+            if(weaponState != WeaponState.ranged)
+            {
+                GetMeleeWeaponOrHandsFree(true);
+            }
+            else if(currentWeapon != null)
+            {
+                currentWeapon.gameObject.SetActive(false);
+            }
+
+            currentWeapon = newWeapon;
+            currentWeapon.gameObject.SetActive(true);
+            AnimationOverride(animOverriders[currentWeapon.animOverriderIndex]);
+            if(currentWeapon.currentAmmo > 0)
+            {
+                canShoot = true;
+            }
+
+            if(newWeapon.weaponType == WeaponType.SR_1)
+            {
+                rightHTarget.transform.localPosition = newWeapon.leftHandPos;
+                rightHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
+            }
+            else
+            {
+                leftHTarget.transform.localPosition = newWeapon.leftHandPos;
+                leftHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
+            }
         }
-        currentWeapon = newWeapon;
-        currentWeapon.gameObject.SetActive(true);
-        AnimationOverride(animOverriders[currentWeapon.animOverriderIndex]);
-        if(currentWeapon.currentAmmo > 0)
+    }
+    public void GetMeleeWeaponOrHandsFree(bool getMelee)
+    {
+        if (getMelee)
         {
-            canShoot = true;
-        }
-        if(newWeapon.weaponType == WeaponType.SR_1)
-        {
-            //rightHandConstraint.weight = 0;
-            //rightHandTBIK.weight = 1;
-            //leftHandConstraint.weight = 1;
-            //leftHandTBIK.weight = 0;
-            rightHTarget.transform.localPosition = newWeapon.leftHandPos;
-            rightHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
+            if(!mainMelee.gameObject.activeInHierarchy)
+            {
+                currentWeapon.gameObject.SetActive(false);
+                mainMelee.gameObject.SetActive(true);
+                weaponState = WeaponState.melee;
+                AnimationOverride(mainMelee.overrideController);
+            }
+            else
+            {
+                currentWeapon.gameObject.SetActive(true);
+                mainMelee.gameObject.SetActive(false);
+                weaponState = WeaponState.ranged;
+            }
+            AimManager.ResetWeights(this);
         }
         else
         {
-            //rightHandConstraint.weight = 1;
-            //rightHandTBIK.weight = 0;
-            //leftHandConstraint.weight = 0;
-            //leftHandTBIK.weight = 1;
-            leftHTarget.transform.localPosition = newWeapon.leftHandPos;
-            leftHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
+            currentWeapon.gameObject.SetActive(false);
+            mainMelee.gameObject.SetActive(false);
+            weaponState = WeaponState.handsFree;
         }
-
-
-    }
-    public void GetMeleeWeapon()
-    {
-        currentWeapon.gameObject.SetActive(false);
 
     }
     public void AnimationOverride(AnimatorOverrideController overrider)
@@ -283,6 +317,7 @@ public class GeneralCharacter : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
         CreateWeapons();
+        weaponState = WeaponState.ranged;
         mainColl = GetComponent<CapsuleCollider>();
     }
     protected void GeneralCharUpdate()

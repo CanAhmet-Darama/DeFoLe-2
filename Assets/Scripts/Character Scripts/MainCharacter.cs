@@ -278,49 +278,32 @@ public class MainCharacter : GeneralCharacter
     }
     void ControlWeaponry()
     {
-        if(currentWeapon.currentAmmo == 0)
+
+        if(weaponState == WeaponState.ranged)
         {
-            canShoot = false;
-            if (ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
+            if(currentWeapon.currentAmmo == 0)
+            {
+                canShoot = false;
+                if (ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
+                {
+                    currentWeapon.Reload();
+                }
+            }
+            if (Input.GetMouseButton(0) && canShoot && !isReloading && Input.GetMouseButton(1))
+            {
+                currentWeapon.Fire();
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
             {
                 currentWeapon.Reload();
             }
         }
 
 
-        if (Input.GetMouseButton(0) && canShoot && !isReloading && Input.GetMouseButton(1))
-        {
-            currentWeapon.Fire();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
-        {
-            currentWeapon.Reload();
-        }
-
         if (!isReloading && !isShooting)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                ChangeWeapon(weapons[1].GetComponent<GeneralWeapon>());
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                ChangeWeapon(weapons[2].GetComponent<GeneralWeapon>());
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                ChangeWeapon(weapons[3].GetComponent<GeneralWeapon>());
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                ChangeWeapon(weapons[4].GetComponent<GeneralWeapon>());
-            }
-
+            SwitchingBetweenWeapons();
         }
 
     }
@@ -328,5 +311,38 @@ public class MainCharacter : GeneralCharacter
     public void RegulateMainChar()
     {
         camFreeLookPivot = GameManager.mainCam.GetComponent<CameraScript>().freeLookPivotOnFoot;
+    }
+    void SwitchingBetweenWeapons()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ChangeWeapon(weapons[1].GetComponent<GeneralWeapon>());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeWeapon(weapons[2].GetComponent<GeneralWeapon>());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ChangeWeapon(weapons[3].GetComponent<GeneralWeapon>());
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            ChangeWeapon(weapons[4].GetComponent<GeneralWeapon>());
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            GetMeleeWeaponOrHandsFree(true);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            GetMeleeWeaponOrHandsFree(false);
+        }
+
     }
 }

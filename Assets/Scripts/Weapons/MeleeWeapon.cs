@@ -11,6 +11,7 @@ public class MeleeWeapon : MonoBehaviour
     public float hitDuration;
     public Vector3 rightHandPos;
     public Vector3 rightHandRot;
+    public AnimatorOverrideController overrideController;
 
 
 

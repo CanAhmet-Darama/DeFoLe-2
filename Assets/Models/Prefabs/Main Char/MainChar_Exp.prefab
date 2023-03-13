@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3182832}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0022, y: -0.0071, z: -0.0487}
+  m_LocalPosition: {x: 0.0385, y: -0.0099, z: -0.0098}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -433,6 +433,7 @@ MonoBehaviour:
   canShoot: 1
   canReload: 0
   isReloading: 0
+  onRangedWeapon: 0
   animator: {fileID: 8774215480870896389}
   animStateSpeed: 0
   animStatePriDir: 2
@@ -458,6 +459,7 @@ MonoBehaviour:
   isJumping: 0
   blendAnimX: 0
   blendAnimY: 0
+  isShooting: 0
   camFreeLookPivot: {fileID: 1230112494}
   meshAndArmature: {fileID: 913370396216349503}
 --- !u!1 &1754110545473961771
@@ -850,7 +852,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5161669201635398974}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0016, y: 0.0148, z: 0.0284}
+  m_LocalPosition: {x: 0.0123, y: 0.0148, z: 0.0284}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1203,14 +1205,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7176550493986937795}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3567450624348816048}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7225702484419070680
 GameObject:
   m_ObjectHideFlags: 0

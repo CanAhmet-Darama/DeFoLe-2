@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1926603034480769616}
   - component: {fileID: -6335782725905857283}
+  - component: {fileID: 5418318840478128906}
   m_Layer: 0
   m_Name: Machete
   m_TagString: Untagged
@@ -45,6 +46,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65762fe7919951e418653171da2bfd55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
+  hitDuration: 0
+  rightHandPos: {x: 0, y: 0, z: 0}
+  rightHandRot: {x: 0, y: 0, z: 0}
+  overrideController: {fileID: 22100000, guid: 4449f4e43d426674a8940c8389700d27, type: 2}
+--- !u!65 &5418318840478128906
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1490591043449762804}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.01, y: 0.22, z: 0.035}
+  m_Center: {x: 0, y: 0.15, z: 0}
 --- !u!1001 &8485797722206503463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,15 +77,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.9999999
+      value: 0.48000002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
       propertyPath: m_LocalScale.y
-      value: 5
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
       propertyPath: m_LocalScale.z
-      value: 5
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
       propertyPath: m_LocalPosition.x
