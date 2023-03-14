@@ -29,7 +29,7 @@ public class ImpactMarkManager : MonoBehaviour
     [SerializeField] ParticleSystem _woodBulletImpact;
     [SerializeField] ParticleSystem _dirtBulletImpact;
     [SerializeField] ParticleSystem _bloodBulletImpact;
-    public static ParticleSystem[][] bulletImpacts;
+    public static ParticleSystem[,] bulletImpacts;
     public static short impactsCount = 10;
 
     [Header("Sound stuff")]
@@ -54,6 +54,10 @@ public class ImpactMarkManager : MonoBehaviour
     public AudioClip _bulletWhoosh;
     #endregion
 
+    [Header("Melee Impact")]
+    public static GameObject[,] bladeMarks;
+    [SerializeField] GameObject[] bladeMarkPrefabs;
+
 
 
 
@@ -71,13 +75,9 @@ public class ImpactMarkManager : MonoBehaviour
         ParticlesManagerStart();
         InstantiateBulletMarks();
         InstantiateBulletImpacts();
-
+        InstantiateBladeImpacts();
     }
 
-    void Update()
-    {
-        
-    }
     public static void CallMark(Vector3 pos, Vector3 rot, EnvObjType objType)
     {
         GameObject mark = GetMarkReady();
@@ -90,6 +90,27 @@ public class ImpactMarkManager : MonoBehaviour
 
         MakeImpactSound(pos, objType);
     }
+    public static void CallBladeMark(Vector3 pos, Vector3 rot, EnvObjType objType)
+    {
+        GameObject bladeM;
+        switch(objType)
+        {
+            case EnvObjType.wood: bladeM = GetBladeMarkReady(2);
+                break;
+            case EnvObjType.dirt: bladeM = GetBladeMarkReady(1);
+                break;
+            default:
+                bladeM = GetBladeMarkReady(0);
+                break;
+        }
+        bladeM.transform.position = pos;
+        bladeM.transform.eulerAngles = rot;
+        bladeM.SetActive(true);
+
+        MakeImpactParticle(pos, rot + new Vector3(0,60,0), objType);
+        MakeImpactSound(pos, objType);
+
+    }
     void InstantiateBulletMarks()
     {
         for (short i = (short)(bulletMarksCount - 1); i >= 0; i--)
@@ -101,19 +122,28 @@ public class ImpactMarkManager : MonoBehaviour
     }
     void InstantiateBulletImpacts()
     {
-        bulletImpacts = new ParticleSystem[impactPrefabs.Length][];
-        for (int i = impactPrefabs.Length - 1; i >= 0; i--)
-        {
-            bulletImpacts[i] = new ParticleSystem[impactsCount];
-        }
+        bulletImpacts = new ParticleSystem[impactPrefabs.Length, impactsCount];
 
         for (int j = impactPrefabs.Length - 1; j >= 0; j--)
         {
             for (short i = (short)(impactsCount - 1); i >= 0; i--)
             {
-                bulletImpacts[j][i] = Instantiate(impactPrefabs[j], transform).GetComponent<ParticleSystem>();
+                bulletImpacts[j,i] = Instantiate(impactPrefabs[j], transform).GetComponent<ParticleSystem>();
             }
 
+        }
+    }
+    void InstantiateBladeImpacts()
+    {
+        bladeMarks = new GameObject[bladeMarkPrefabs.Length, impactsCount];
+        for (short i = (short)(bladeMarks.GetLength(0) - 1); i >= 0; i--)
+        {
+            for (short j = (short)(bladeMarks.GetLength(1) - 1); j >= 0; j--)
+            {
+                bladeMarks[i, j] = Instantiate(bladeMarkPrefabs[i], transform);
+                bladeMarks[i, j].SetActive(false);
+
+            }
         }
     }
 
@@ -139,6 +169,19 @@ public class ImpactMarkManager : MonoBehaviour
         firstOrSecondCycle = !firstOrSecondCycle;
         return GetMarkReady();
     }
+    static GameObject GetBladeMarkReady(int index)
+    {
+        for (short i = (short)(bladeMarks.GetLength(1) - 1); i >= 0; i--)
+        {
+            if (!bladeMarks[index, i].activeSelf)
+            {
+                return bladeMarks[index, i];
+            }
+        }
+        return bladeMarks[index, 0];
+    }
+
+
     IEnumerator DeleteBulletMark(GameObject mark, short index)
     {
         bool previousValue = cyclesStates[index];
@@ -149,27 +192,27 @@ public class ImpactMarkManager : MonoBehaviour
             mark.SetActive(false);
         }
     }
-    static ParticleSystem GetImpactReady(ParticleSystem[] bulletImpactsArray)
+    static ParticleSystem GetImpactReady(ParticleSystem[,] bulletImpactsArray, int index)
     {
-        for (short i = (short)(bulletImpactsArray.Length - 1); i >= 0; i--)
+        for (short i = (short)(bulletImpactsArray.GetLength(1) - 1); i >= 0; i--)
         {
-            if (!bulletImpactsArray[i].isPlaying)
+            if (!bulletImpactsArray[index, i].isPlaying)
             {
-                return bulletImpactsArray[i];
+                return bulletImpactsArray[index, i];
             }
         }
-        return bulletImpactsArray[0];
+        return bulletImpactsArray[index, 0];
     }
     static ParticleSystem GetBloodImpactReady()
     {
-        for (short i = (short)(bulletImpacts[4].Length - 1); i >= 0; i--)
+        for (short i = (short)(bulletImpacts.GetLength(0) - 1); i >= 0; i--)
         {
-            if (!bulletImpacts[4][i].isPlaying)
+            if (!bulletImpacts[4,i].isPlaying)
             {
-                return bulletImpacts[4][i];
+                return bulletImpacts[4, i];
             }
         }
-        return bulletImpacts[4][0];
+        return bulletImpacts[4,0];
     }
 
     static void MakeImpactSound(Vector3 pos, EnvObjType objType)
@@ -203,16 +246,16 @@ public class ImpactMarkManager : MonoBehaviour
         switch (objType)
         {
             case EnvObjType.metal: 
-                impact = GetImpactReady(bulletImpacts[1]);
+                impact = GetImpactReady(bulletImpacts,1);
                 break;
             case EnvObjType.dirt:
-                impact = GetImpactReady(bulletImpacts[3]);
+                impact = GetImpactReady(bulletImpacts,3);
                 break;
             case EnvObjType.wood:
-                impact = GetImpactReady(bulletImpacts[2]);
+                impact = GetImpactReady(bulletImpacts, 2);
                 break;
             default:
-                impact = GetImpactReady(bulletImpacts[0]);
+                impact = GetImpactReady(bulletImpacts, 0);
                 break;
 
         }

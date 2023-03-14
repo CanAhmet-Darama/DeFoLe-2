@@ -288,6 +288,7 @@ public class GeneralCharacter : MonoBehaviour
                 weaponState = WeaponState.melee;
                 AnimationOverride(mainMelee.overrideController);
                 animator.SetLayerWeight(2, 1);
+                mainMelee.audioSource.PlayOneShot(mainMelee.sheathSound);
                 break;
             case WeaponState.ranged:
                 currentWeapon.gameObject.SetActive(true);

@@ -3649,6 +3649,10 @@ MonoBehaviour:
   _woodImpactSound: {fileID: 8300000, guid: 6a235a0109ff4f345bcc590fc13e2d1d, type: 3}
   _fleshImpactSound: {fileID: 8300000, guid: 2eed45ff03f91044a8845e5badbf965a, type: 3}
   _bulletWhoosh: {fileID: 8300000, guid: a29b1379e9e157b47b05e744c9607885, type: 3}
+  bladeMarkPrefabs:
+  - {fileID: 643752314011622991, guid: 8cd6ee04729877449bf8e440fc881730, type: 3}
+  - {fileID: 643752314011622991, guid: 345adc04dc01504408665d0df0966e8a, type: 3}
+  - {fileID: 643752314011622991, guid: e17d89e03a5fb864eb75dfed27b05d18, type: 3}
 --- !u!1001 &1826019369
 PrefabInstance:
   m_ObjectHideFlags: 0
