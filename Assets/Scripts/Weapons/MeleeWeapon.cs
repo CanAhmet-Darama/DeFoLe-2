@@ -34,12 +34,14 @@ public class MeleeWeapon : MonoBehaviour
     IEnumerator WaitToHitAgain()
     {
         canSwing = false;
-        isSwinging = true;
         yield return new WaitForSeconds(swingCooldown/3);
+        isSwinging = true;
         audioSource.Play();
-        yield return new WaitForSeconds(swingCooldown*2/3);
-        canSwing = true;
+        yield return new WaitForSeconds(swingCooldown/3);
         isSwinging= false;
+        yield return new WaitForSeconds(swingCooldown/3);
+        yield return null;
+        canSwing = true;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -48,11 +50,11 @@ public class MeleeWeapon : MonoBehaviour
             Vector3 contactPoint = other.ClosestPoint(transform.position);
             if (other.CompareTag("Ground"))
             {
-                ImpactMarkManager.CallBladeMark(contactPoint, contactPoint - transform.position, other.GetComponent<EnvObject>().objectType);
+                ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
             }
             else if(other.CompareTag("Player") || other.CompareTag("Enemy"))
             {
-
+                ImpactMarkManager.MakeBloodImpactAndSound(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized , false);
             }
 
         }

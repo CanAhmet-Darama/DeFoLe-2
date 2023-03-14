@@ -64,7 +64,7 @@ public class GeneralBullet : MonoBehaviour
                 }
                 else if (collision.collider.tag == "Player" || collision.collider.tag == "Enemy")
                 {
-                    ImpactMarkManager.MakeBloodImpactAndSound(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal);
+                    ImpactMarkManager.MakeBloodImpactAndSound(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal, true);
                 }
                 Debug.DrawLine(firedPos, contact.point, Color.cyan);
             }

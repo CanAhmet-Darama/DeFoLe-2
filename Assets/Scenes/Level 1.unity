@@ -1293,7 +1293,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: -98.713, y: 110.523, z: -3.3880005}
 --- !u!1001 &594829815
 PrefabInstance:
@@ -3648,6 +3648,7 @@ MonoBehaviour:
   _glassImpactSound: {fileID: 8300000, guid: 7a4d1d23bd983a64f9f012b965218b2a, type: 3}
   _woodImpactSound: {fileID: 8300000, guid: 6a235a0109ff4f345bcc590fc13e2d1d, type: 3}
   _fleshImpactSound: {fileID: 8300000, guid: 2eed45ff03f91044a8845e5badbf965a, type: 3}
+  _fleshBladeImpactSound: {fileID: 8300000, guid: 81671dd439c916f439bcebc3ef13865f, type: 3}
   _bulletWhoosh: {fileID: 8300000, guid: a29b1379e9e157b47b05e744c9607885, type: 3}
   bladeMarkPrefabs:
   - {fileID: 643752314011622991, guid: 8cd6ee04729877449bf8e440fc881730, type: 3}
@@ -4006,7 +4007,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 49d4a1168340d634f8f0f247aaaca5ee, type: 2}
+  - {fileID: 2100000, guid: d70db44910b87c34394a72b9332c4b46, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4805,60 +4806,3 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 86301750389021902, guid: f9dc21b248d351a4ba5264e10a7e1410, type: 3}
   m_PrefabInstance: {fileID: 5062277245026657845}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &9067478614467161515
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -12.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.792
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -33.174
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430274, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9067478615917430284, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}
-      propertyPath: m_Name
-      value: Bullet_Hole
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2f9a1f6f0e8e5724db248723a6898d72, type: 3}

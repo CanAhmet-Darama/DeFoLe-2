@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ImpactMarkManager : MonoBehaviour
 {
     [Header("Bullet Marks")]
     public static GameObject bulletMarkPrefab;
     [SerializeField] GameObject bMP_isThis;
-    float markLife = 10;
+    float markLife = 60;
 
     public static GameObject[] bulletMarks;
     public static bool firstOrSecondCycle = false;
     public static bool[] cyclesStates;
+    public static bool cycleForBlade;
+    public static bool[] cycleArrayForBlade;
     public static short bulletMarksCount = 75;
     public static short lastCalledIndex;
     static ImpactMarkManager impactManagerIns;
@@ -41,6 +44,7 @@ public class ImpactMarkManager : MonoBehaviour
     public static AudioClip glassImpactSound;
     public static AudioClip woodImpactSound;
     public static AudioClip fleshImpactSound;
+    public static AudioClip fleshBladeImpactSound;
     public static AudioClip bulletWhoosh;
     #region Holder Sounds
     public AudioSource _audioSource;
@@ -51,12 +55,14 @@ public class ImpactMarkManager : MonoBehaviour
     public AudioClip _glassImpactSound;
     public AudioClip _woodImpactSound;
     public AudioClip _fleshImpactSound;
+    public AudioClip _fleshBladeImpactSound;
     public AudioClip _bulletWhoosh;
     #endregion
 
     [Header("Melee Impact")]
     public static GameObject[,] bladeMarks;
     [SerializeField] GameObject[] bladeMarkPrefabs;
+    static short lastCalledBladeIndex;
 
 
 
@@ -69,6 +75,8 @@ public class ImpactMarkManager : MonoBehaviour
         bulletMarkPrefab = bMP_isThis;
         bulletMarks = new GameObject[bulletMarksCount];
         cyclesStates = new bool[bulletMarksCount];
+        cycleForBlade = false;
+        cycleArrayForBlade = new bool[bladeMarkPrefabs.Length * impactsCount];
         lastCalledIndex = 0;
 
         SoundsManagerStart();
@@ -84,7 +92,7 @@ public class ImpactMarkManager : MonoBehaviour
         mark.transform.position = pos;
         mark.transform.rotation = Quaternion.LookRotation(rot);
         mark.SetActive(true);
-        impactManagerIns.DeleteBulletMark(mark, lastCalledIndex);
+        impactManagerIns.StartCoroutine(impactManagerIns.DeleteBulletMark(mark, lastCalledIndex));
 
         MakeImpactParticle(pos, rot, objType);
 
@@ -104,10 +112,11 @@ public class ImpactMarkManager : MonoBehaviour
                 break;
         }
         bladeM.transform.position = pos;
-        bladeM.transform.eulerAngles = rot;
+        bladeM.transform.forward = rot;
         bladeM.SetActive(true);
+        impactManagerIns.StartCoroutine(impactManagerIns.DeleteBladeMark(bladeM, lastCalledBladeIndex));
 
-        MakeImpactParticle(pos, rot + new Vector3(0,60,0), objType);
+        MakeImpactParticle(pos, rot + new Vector3(0,0,180), objType);
         MakeImpactSound(pos, objType);
 
     }
@@ -173,12 +182,23 @@ public class ImpactMarkManager : MonoBehaviour
     {
         for (short i = (short)(bladeMarks.GetLength(1) - 1); i >= 0; i--)
         {
-            if (!bladeMarks[index, i].activeSelf)
+            if (!bladeMarks[index, i].activeInHierarchy)
             {
+                cycleArrayForBlade[i] = !cycleArrayForBlade[i];
                 return bladeMarks[index, i];
             }
         }
-        return bladeMarks[index, 0];
+        for (short i = (short)(bladeMarks.GetLength(1) - 1); i >= 0; i--)
+        {
+            if (cycleArrayForBlade[i] == cycleForBlade)
+            {
+                cycleArrayForBlade[i] = !cycleArrayForBlade[i];
+                lastCalledBladeIndex = i;
+                return bladeMarks[index, i];
+            }
+        }
+        cycleForBlade = !cycleForBlade;
+        return GetBladeMarkReady(index);
     }
 
 
@@ -188,6 +208,16 @@ public class ImpactMarkManager : MonoBehaviour
         yield return new WaitForSeconds(markLife);
 
         if(previousValue == cyclesStates[index])
+        {
+            mark.SetActive(false);
+        }
+    }
+    IEnumerator DeleteBladeMark(GameObject mark, short index)
+    {
+        bool previousValue = cycleArrayForBlade[index];
+        yield return new WaitForSeconds(markLife);
+
+        if (previousValue == cycleArrayForBlade[index])
         {
             mark.SetActive(false);
         }
@@ -263,15 +293,29 @@ public class ImpactMarkManager : MonoBehaviour
         impact.transform.rotation = Quaternion.LookRotation(rot);
         impact.Play();
     }
-    public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot)
+
+    public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot, bool byBullet)
     {
         ParticleSystem impact = GetBloodImpactReady();
         impact.transform.position = pos;
         impact.transform.rotation = Quaternion.LookRotation(rot);
-        impact.Play();
         audioSource.transform.position = pos;
-        audioSource.PlayOneShot(fleshImpactSound);
+        if (byBullet)
+        {
+            audioSource.PlayOneShot(fleshImpactSound);
+        }
+        else
+        {
+            audioSource.PlayOneShot(fleshBladeImpactSound);
+            impact.transform.localEulerAngles += new Vector3(0,-90,0);
+        }
+        impact.Play();
     }
+    public static void BladeImpactForFlesh(Vector3 pos, Vector3 rot)
+    {
+
+    }
+
     void SoundsManagerStart()
     {
         audioSource = _audioSource;
@@ -282,6 +326,7 @@ public class ImpactMarkManager : MonoBehaviour
         glassImpactSound = _glassImpactSound;
         woodImpactSound = _woodImpactSound;
         fleshImpactSound = _fleshImpactSound;
+        fleshBladeImpactSound = _fleshBladeImpactSound;
         bulletWhoosh = _bulletWhoosh;
     }
     void ParticlesManagerStart()
