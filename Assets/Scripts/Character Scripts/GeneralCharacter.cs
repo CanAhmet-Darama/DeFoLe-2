@@ -54,7 +54,7 @@ public class GeneralCharacter : MonoBehaviour
     [Header("Some Stuff")]
     public bool isGrounded;
     public bool isCrouching;
-    CapsuleCollider mainColl;
+    [SerializeField]CapsuleCollider mainColl;
     [HideInInspector]public StairCheckScript stairSlopeChecker;
     [SerializeField] GameObject stairSlopeCheckerGO_;
 
@@ -316,11 +316,9 @@ public class GeneralCharacter : MonoBehaviour
     protected void GeneralCharStart()
     {
         canJump = true;
-        rb = GetComponent<Rigidbody>();
         stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
         CreateWeapons();
         weaponState = WeaponState.ranged;
-        mainColl = GetComponent<CapsuleCollider>();
     }
     protected void GeneralCharUpdate()
     {

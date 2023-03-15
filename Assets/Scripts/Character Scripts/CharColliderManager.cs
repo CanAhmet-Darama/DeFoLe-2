@@ -64,8 +64,8 @@ public class CharColliderManager : MonoBehaviour
                 holders[i].transform.Rotate(new Vector3(-90, 0, 0), Space.Self);
                 //holders[i].transform.position -= holders[i].transform.forward * 0.05f;
 
-                if(holders[i] == _helmet) holders[i].transform.position -= holders[i].transform.forward * 0.11f;
-                else if(holders[i] == _helmet) holders[i].transform.position -= holders[i].transform.forward * 0.05f;
+                if(holders[i] == _head) holders[i].transform.position -= holders[i].transform.forward * 0.06f;
+                else if(holders[i] == _helmet) holders[i].transform.position -= holders[i].transform.forward * 0.12f;
                 else if(holders[i] == _upperBody) holders[i].transform.position += holders[i].transform.forward * 0.1f;
             }
         }

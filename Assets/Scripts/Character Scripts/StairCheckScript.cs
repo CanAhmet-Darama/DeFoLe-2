@@ -6,7 +6,7 @@ using UnityEngine;
 public class StairCheckScript : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
-    [SerializeField] MainCharacter mainChar;
+    [SerializeField] GeneralCharacter character;
     #region Stair
     Ray ray;
     float castDistance = 0.25f;
@@ -45,28 +45,28 @@ public class StairCheckScript : MonoBehaviour
         if(rb.velocity.magnitude < 0.01f)
         {
             /* If velocity is too low, then launch rays into the following directions */
-            switch(mainChar.animStatePriDir)
+            switch(character.animStatePriDir)
             {
                 case AnimStatePriDir.front:
-                    switch (mainChar.animStateSecDir)
+                    switch (character.animStateSecDir)
                     {
-                        case AnimStateSecDir.none: rayDir = mainChar.transform.forward; break;
-                        case AnimStateSecDir.left: rayDir = (mainChar.transform.forward - mainChar.transform.right).normalized; break;
-                        case AnimStateSecDir.right: rayDir = (mainChar.transform.forward + mainChar.transform.right).normalized; break;
+                        case AnimStateSecDir.none: rayDir = character.transform.forward; break;
+                        case AnimStateSecDir.left: rayDir = (character.transform.forward - character.transform.right).normalized; break;
+                        case AnimStateSecDir.right: rayDir = (character.transform.forward + character.transform.right).normalized; break;
                     } break;
                 case AnimStatePriDir.back:
-                    switch (mainChar.animStateSecDir)
+                    switch (character.animStateSecDir)
                     {
-                        case AnimStateSecDir.none: rayDir = -mainChar.transform.forward; break;
-                        case AnimStateSecDir.left: rayDir = (-mainChar.transform.forward - mainChar.transform.right).normalized; break;
-                        case AnimStateSecDir.right: rayDir = (-mainChar.transform.forward + mainChar.transform.right).normalized; break;
+                        case AnimStateSecDir.none: rayDir = -character.transform.forward; break;
+                        case AnimStateSecDir.left: rayDir = (-character.transform.forward - character.transform.right).normalized; break;
+                        case AnimStateSecDir.right: rayDir = (-character.transform.forward + character.transform.right).normalized; break;
                     }
                     break;
                 case AnimStatePriDir.none:
-                    switch (mainChar.animStateSecDir)
+                    switch (character.animStateSecDir)
                     {
-                        case AnimStateSecDir.left: rayDir = -mainChar.transform.right; break;
-                        case AnimStateSecDir.right: rayDir = mainChar.transform.right; break;
+                        case AnimStateSecDir.left: rayDir = -character.transform.right; break;
+                        case AnimStateSecDir.right: rayDir = character.transform.right; break;
                     }
                     break;
             }
@@ -77,7 +77,7 @@ public class StairCheckScript : MonoBehaviour
         do
         {
             /* Iteratively, launch a ray one by one. If it hits a surface in every launch until the
-               stairMaxHeight, do nothing. If it gets NOT hit, thenincrease the y position of mainChar
+               stairMaxHeight, do nothing. If it gets NOT hit, thenincrease the y position of character
                by the height amount of stair by multiplying it with castCurrenHeight */
             ray = new Ray(transform.position + new Vector3(0,castCurrentHeight,0), rayDir);
             isHit = Physics.Raycast(ray, out hitInfo, castDistance, lMask, QueryTriggerInteraction.Ignore);
@@ -85,9 +85,9 @@ public class StairCheckScript : MonoBehaviour
 
             if (!isHit)
             {
-                if(mainChar.animStateSpeed != AnimStateSpeed.idle){
-                    mainChar.transform.position = Vector3.Lerp(mainChar.transform.position,
-                                                  mainChar.transform.position + new Vector3(0, castCurrentHeight, 0), 0.1f * stairJumpForce);
+                if(character.animStateSpeed != AnimStateSpeed.idle){
+                    character.transform.position = Vector3.Lerp(character.transform.position,
+                                                  character.transform.position + new Vector3(0, castCurrentHeight, 0), 0.1f * stairJumpForce);
                 }
                 break;
             }
@@ -113,7 +113,7 @@ public class StairCheckScript : MonoBehaviour
 
             if (normalAngle < maxSlopeAngle && normalAngle > 5)
             {
-                if (mainChar.animStateSpeed == AnimStateSpeed.idle)
+                if (character.animStateSpeed == AnimStateSpeed.idle)
                 {
                     rb.AddForce(Physics.gravity * rb.mass * -slopeForceMultiplier);
                     rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, 0.1f);

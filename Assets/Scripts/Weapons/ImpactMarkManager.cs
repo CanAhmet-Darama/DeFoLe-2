@@ -120,6 +120,7 @@ public class ImpactMarkManager : MonoBehaviour
         MakeImpactSound(pos, objType);
 
     }
+
     void InstantiateBulletMarks()
     {
         for (short i = (short)(bulletMarksCount - 1); i >= 0; i--)
@@ -222,6 +223,7 @@ public class ImpactMarkManager : MonoBehaviour
             mark.SetActive(false);
         }
     }
+
     static ParticleSystem GetImpactReady(ParticleSystem[,] bulletImpactsArray, int index)
     {
         for (short i = (short)(bulletImpactsArray.GetLength(1) - 1); i >= 0; i--)
@@ -245,7 +247,7 @@ public class ImpactMarkManager : MonoBehaviour
         return bulletImpacts[4,0];
     }
 
-    static void MakeImpactSound(Vector3 pos, EnvObjType objType)
+    public static void MakeImpactSound(Vector3 pos, EnvObjType objType)
     {
         AudioClip impactSound;
         int randNum;
@@ -270,7 +272,7 @@ public class ImpactMarkManager : MonoBehaviour
         audioSource.transform.position = pos;
         audioSource.PlayOneShot(impactSound);
     }
-    static void MakeImpactParticle(Vector3 pos, Vector3 rot, EnvObjType objType)
+    public static void MakeImpactParticle(Vector3 pos, Vector3 rot, EnvObjType objType)
     {
         ParticleSystem impact;
         switch (objType)
@@ -292,6 +294,22 @@ public class ImpactMarkManager : MonoBehaviour
         impact.transform.position = pos;
         impact.transform.rotation = Quaternion.LookRotation(rot);
         impact.Play();
+    }
+
+    public static void MakeBulletImpactWithoutMark(Vector3 pos, Vector3 rot, EnvObjType objType)
+    {
+        MakeImpactParticle(pos, rot, objType);
+        MakeImpactParticle(pos, rot, objType);
+
+        //ParticleSystem impact = GetImpactReady(bulletImpacts, 1);
+        //impact.transform.position = pos;
+        //impact.transform.rotation = Quaternion.LookRotation(rot);
+        //impact.Play();
+
+        //int randNum = Random.Range(0, 2);
+        //AudioClip impactSound = metalImpactSounds[randNum];
+        //audioSource.transform.position = pos;
+        //audioSource.PlayOneShot(impactSound);
     }
 
     public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot, bool byBullet)

@@ -59,12 +59,16 @@ public class GeneralBullet : MonoBehaviour
                 }
                 else if (collision.collider.tag == "Vehicle")
                 {
-                    ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                    ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
                         EnvObjType.metal);
                 }
                 else if (collision.collider.tag == "Player" || collision.collider.tag == "Enemy")
                 {
-                    ImpactMarkManager.MakeBloodImpactAndSound(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal, true);
+                    if (collision.collider.gameObject.name == "Helmet Holder")
+                        ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal, EnvObjType.metal);
+                    else
+                        ImpactMarkManager.MakeBloodImpactAndSound(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal, true);
+
                 }
                 Debug.DrawLine(firedPos, contact.point, Color.cyan);
             }
