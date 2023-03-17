@@ -54,7 +54,10 @@ public class MeleeWeapon : MonoBehaviour
             }
             else if(other.CompareTag("Player") || other.CompareTag("Enemy"))
             {
-                ImpactMarkManager.MakeBloodImpactAndSound(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized , false);
+                if (other.gameObject.name == "Helmet Holder")
+                    ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized + new Vector3(0,90,0), EnvObjType.metal);
+                else
+                    ImpactMarkManager.MakeBloodImpactAndSound(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized , false);
             }
 
         }

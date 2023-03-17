@@ -298,19 +298,11 @@ public class ImpactMarkManager : MonoBehaviour
 
     public static void MakeBulletImpactWithoutMark(Vector3 pos, Vector3 rot, EnvObjType objType)
     {
+        MakeImpactSound(pos, objType);
         MakeImpactParticle(pos, rot, objType);
-        MakeImpactParticle(pos, rot, objType);
-
-        //ParticleSystem impact = GetImpactReady(bulletImpacts, 1);
-        //impact.transform.position = pos;
-        //impact.transform.rotation = Quaternion.LookRotation(rot);
-        //impact.Play();
-
-        //int randNum = Random.Range(0, 2);
-        //AudioClip impactSound = metalImpactSounds[randNum];
-        //audioSource.transform.position = pos;
-        //audioSource.PlayOneShot(impactSound);
     }
+
+
 
     public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot, bool byBullet)
     {
