@@ -14,10 +14,12 @@ public class GameManager : MonoBehaviour
     [Header("Instances")]
     public static Transform mainCam;
     public static Transform mainChar;
+    public static Terrain mainTerrain;
     public static GameObject[] weaponPrefabs = new GameObject[6];
     [SerializeField] GameObject[] weaponPrefabsAreThese;
     [SerializeField] Transform mainCamIsThis;
     [SerializeField] Transform mainCharIsThis;
+    [SerializeField] Terrain mainTerrainIsThis;
 
 
     void Awake()
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
                 mainState = PlayerState.onFoot;
                 mainCam = Camera.main.transform;
                 mainChar = mainCharIsThis;
+                mainTerrain = mainTerrainIsThis;
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();
                 break;

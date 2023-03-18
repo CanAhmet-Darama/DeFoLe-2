@@ -49,8 +49,45 @@ public class GeneralBullet : MonoBehaviour
                 ContactPoint contact = collision.contacts[0];
                 if (collision.gameObject.GetComponent<EnvObject>() != null)
                 {
+                    /*if (collision.gameObject == GameManager.mainTerrain.gameObject)
+                    {
+                        Terrain terrain = GameManager.mainTerrain;
+
+                        Vector3 terrainLocalPos = terrain.transform.InverseTransformPoint(transform.position);
+                        float terrainHeight = terrain.SampleHeight(terrainLocalPos);
+                        Vector3 closestPoint = terrain.transform.TransformPoint(new Vector3(terrainLocalPos.x, terrainHeight, terrainLocalPos.z));
+
+                        int x = Mathf.RoundToInt(closestPoint.x / terrain.terrainData.size.x * terrain.terrainData.alphamapWidth);
+                        int y = Mathf.RoundToInt(closestPoint.z / terrain.terrainData.size.z * terrain.terrainData.alphamapHeight);
+
+                        if (x < 0 || x >= terrain.terrainData.alphamapWidth || y < 0 || y >= terrain.terrainData.alphamapHeight)
+                        {
+                            Debug.Log("Invalid position: " + closestPoint);
+                        }
+                        else
+                        {
+                            float[,,] alphamaps = terrain.terrainData.GetAlphamaps(x, y, 1, 1);
+
+                            float maxAlpha = 0f;
+                            int maxIndex = 0;
+                            for (int i = alphamaps.GetLength(2) - 1; i >= 0; i--)
+                            {
+                                if (alphamaps[0, 0, i] > maxAlpha)
+                                {
+                                    maxAlpha = alphamaps[0, 0, i];
+                                    maxIndex = i;
+                                }
+                            }
+
+                            string textureName = terrain.terrainData.terrainLayers[maxIndex].diffuseTexture.name;
+                            Debug.Log("Texture at closest point: " + textureName);
+
+                        }
+
+                    }*/
+
                     ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
-                        collision.gameObject.GetComponent<EnvObject>().objectType);
+                            collision.gameObject.GetComponent<EnvObject>().objectType);
                 }
                 else if(collision.collider.GetType() == typeof(WheelCollider))
                 {
