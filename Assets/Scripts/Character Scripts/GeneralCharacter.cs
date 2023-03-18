@@ -355,7 +355,17 @@ public class GeneralCharacter : MonoBehaviour
     }
     public void ParentAndResetBullet(Transform bullet, Transform parent, GeneralBullet bScript)
     {
-        StartCoroutine(AFrameThenParentAgain(bullet,parent, bScript));
+        if (this.isActiveAndEnabled)
+        {
+            StartCoroutine(AFrameThenParentAgain(bullet,parent, bScript));
+        }
+        else
+        {
+            bScript.trailRenderer.enabled = false;
+            bullet.gameObject.SetActive(false);
+            bullet.parent = parent;
+            bullet.localPosition = currentWeapon.bulletLaunchOffset;
+        }
     }
     IEnumerator AFrameThenParentAgain(Transform bullet, Transform parent, GeneralBullet bScript)
     {

@@ -42,11 +42,7 @@ public class MainCar : GeneralVehicle
         }
         else
         {
-            for (int i = axles.Length; i > 0; i--)
-            {
-                axles[i - 1].leftCol.motorTorque = 0;
-                axles[i - 1].rightCol.motorTorque = 0;
-            }
+            ResetMotorTorque();
         }
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -71,13 +67,7 @@ public class MainCar : GeneralVehicle
 
         if (Input.GetKey(KeyCode.Space))
         {
-            for (int i = axles.Length; i > 0; i--)
-            {
-                axles[i - 1].leftCol.brakeTorque = brakePower;
-                axles[i - 1].rightCol.brakeTorque = brakePower;
-                axles[i - 1].leftCol.motorTorque = 0;
-                axles[i - 1].rightCol.motorTorque = 0;
-            }
+            Brake();
         }
         else
         {

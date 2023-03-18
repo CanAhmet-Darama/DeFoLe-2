@@ -49,6 +49,24 @@ public class GeneralVehicle : MonoBehaviour
         wheelMesh.rotation = rotation;
     }
 
+    public void Brake()
+    {
+        for (int i = axles.Length; i > 0; i--)
+        {
+            axles[i - 1].leftCol.brakeTorque = brakePower;
+            axles[i - 1].rightCol.brakeTorque = brakePower;
+            axles[i - 1].leftCol.motorTorque = 0;
+            axles[i - 1].rightCol.motorTorque = 0;
+        }
+    }
+    public void ResetMotorTorque()
+    {
+        for (int i = axles.Length; i > 0; i--)
+        {
+            axles[i - 1].leftCol.motorTorque = 0;
+            axles[i - 1].rightCol.motorTorque = 0;
+        }
+    }
 }
 
 

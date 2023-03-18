@@ -81,22 +81,25 @@ public class GameManager : MonoBehaviour
     public static void ChangeState(PlayerState state)
     {
         mainState = state;
-        if (Input.GetMouseButton(1))
-        {
-            mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(state, CamState.pivot);
-        }
-        else
-        {
-            mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(state, CamState.follow);
-        }
 
         if(state == PlayerState.onFoot)
         {
+            mainChar.position = mainCar.position - mainCar.right * 3 + new Vector3(0,2,0);
             mainChar.gameObject.SetActive(true);
-            mainChar.position = mainCar.position - mainCar.right * 3 + new Vector3(0,1,0);
             uiManager.crosshair.gameObject.SetActive(true);
             uiManager.curAmmoText.gameObject.SetActive(true);
             uiManager.totalAmmoText.gameObject.SetActive(true);
+
+            mainCar.GetComponent<MainCar>().ResetMotorTorque();
+
+            if (Input.GetMouseButton(1))
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
+            }
+            else
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
+            }
 
             MainCharacter charComp=mainChar.GetComponent<MainCharacter>();
             charComp.canShoot = true;
@@ -109,6 +112,15 @@ public class GameManager : MonoBehaviour
             uiManager.curAmmoText.gameObject.SetActive(false);
             uiManager.totalAmmoText.gameObject.SetActive(false);
             uiManager.crosshair.gameObject.SetActive(false);
+
+            if (Input.GetMouseButton(1))
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.inMainCar, CamState.pivot);
+            }
+            else
+            {
+                mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.inMainCar, CamState.follow);
+            }
         }
 
     }

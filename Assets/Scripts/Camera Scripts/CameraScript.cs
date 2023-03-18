@@ -151,6 +151,7 @@ public class CameraScript : MonoBehaviour
     public void AdjustCameraPivotOrFollow(PlayerState pState,CamState stateCam)
     {
         if(pState == PlayerState.onFoot){
+
             switch (stateCam)
             {
                 case CamState.pivot:
@@ -158,7 +159,6 @@ public class CameraScript : MonoBehaviour
                     transform.SetParent(freeLookPivotOnFoot);
                     transform.localPosition = offsetCharPivot;
                     transform.eulerAngles = Vector3.zero;
-                    //freeLookPivotOnFoot.eulerAngles = transform.eulerAngles;
                     break;
                 case CamState.follow:
                     camPointOnFoot.eulerAngles = transform.eulerAngles;
@@ -166,6 +166,11 @@ public class CameraScript : MonoBehaviour
                     transform.localPosition = offsetCharFollow;
                     transform.localEulerAngles = Vector3.zero;
                     break;
+            }
+            if (holdNumeratorCar != null)
+            {
+                StopCoroutine(holdNumeratorCar);
+                camCanFollow = true;
             }
         }
         else if(pState == PlayerState.inMainCar)
