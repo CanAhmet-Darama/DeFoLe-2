@@ -100,6 +100,11 @@ public class MainCar : GeneralVehicle
                 axles[i - 1].rightCol.motorTorque = 0;
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.F) && vehicleRb.velocity.sqrMagnitude < 100)
+        {
+            GameManager.ChangeState(PlayerState.onFoot);
+        }
     }
 
 }

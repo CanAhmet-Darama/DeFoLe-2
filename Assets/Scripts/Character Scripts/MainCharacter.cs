@@ -8,6 +8,10 @@ public class MainCharacter : GeneralCharacter
     [SerializeField] Transform meshAndArmature;
     AnimatingClass playerAnimating;
 
+    #region Some Stuff
+    Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
+    #endregion
+
     void Start()
     {
         GeneralCharStart();
@@ -24,6 +28,7 @@ public class MainCharacter : GeneralCharacter
     {
         GeneralCharUpdate();
         ControlWeaponry();
+        SetUIStuff();
     }
 
     void FixedUpdate()
@@ -312,7 +317,36 @@ public class MainCharacter : GeneralCharacter
         }
 
     }
+    void SetUIStuff()
+    {
+        int defaultLayerMask = 1 << 0;
+        if (Physics.Raycast(GameManager.mainCam.GetComponent<Camera>().ScreenToWorldPoint(middleScreen), GameManager.mainCam.forward, out RaycastHit hitInfo, 10, defaultLayerMask))
+        {
+            Debug.DrawLine(middleScreen,hitInfo.point);
+            Debug.Log(hitInfo.collider.gameObject);
+            if (GameManager.SqrDistance(hitInfo.point, transform.position) < 9 && hitInfo.collider.CompareTag("Vehicle"))
+            {
+                if (UI_Manager.isLookingInteractable == false)
+                {
+                    GameManager.uiManager.interactionText.gameObject.SetActive(true);
+                }
+                UI_Manager.isLookingInteractable= true;
+                UI_Manager.interactionType = UI_Manager.InteractableForUI.mainCar;
+                if(Input.GetKeyDown(KeyCode.F)) {
+                    GameManager.ChangeState(PlayerState.inMainCar);
+                }
+            }
+            else
+            {
+                if (UI_Manager.isLookingInteractable == true)
+                {
+                    GameManager.uiManager.interactionText.gameObject.SetActive(false);
+                }
+                UI_Manager.isLookingInteractable = false;
+            }
+        }
 
+    }
     public void RegulateMainChar()
     {
         camFreeLookPivot = GameManager.mainCam.GetComponent<CameraScript>().freeLookPivotOnFoot;

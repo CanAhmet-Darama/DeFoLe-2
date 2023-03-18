@@ -13,13 +13,17 @@ public class GameManager : MonoBehaviour
 
     [Header("Instances")]
     public static Transform mainCam;
+    public static Transform mainCar;
     public static Transform mainChar;
     public static Terrain mainTerrain;
+    public static UI_Manager uiManager;
     public static GameObject[] weaponPrefabs = new GameObject[6];
     [SerializeField] GameObject[] weaponPrefabsAreThese;
     [SerializeField] Transform mainCamIsThis;
     [SerializeField] Transform mainCharIsThis;
+    [SerializeField] Transform mainCarIsThis;
     [SerializeField] Terrain mainTerrainIsThis;
+    [SerializeField] UI_Manager userInterfaceManagerIsThis;
 
 
     void Awake()
@@ -32,6 +36,8 @@ public class GameManager : MonoBehaviour
                 mainCam = Camera.main.transform;
                 mainChar = mainCharIsThis;
                 mainTerrain = mainTerrainIsThis;
+                mainCar = mainCarIsThis;
+                uiManager = userInterfaceManagerIsThis;
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();
                 break;
@@ -42,10 +48,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            ChangeState();
-        }
+
     }
 
     public static void ChangeState()
@@ -87,6 +90,27 @@ public class GameManager : MonoBehaviour
             mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(state, CamState.follow);
         }
 
+        if(state == PlayerState.onFoot)
+        {
+            mainChar.gameObject.SetActive(true);
+            mainChar.position = mainCar.position - mainCar.right * 3 + new Vector3(0,1,0);
+            uiManager.crosshair.gameObject.SetActive(true);
+            uiManager.curAmmoText.gameObject.SetActive(true);
+            uiManager.totalAmmoText.gameObject.SetActive(true);
+
+            MainCharacter charComp=mainChar.GetComponent<MainCharacter>();
+            charComp.canShoot = true;
+            charComp.canReload = true;
+        }
+        else if(state == PlayerState.inMainCar)
+        {
+            mainChar.gameObject.SetActive(false);
+            uiManager.interactionText.gameObject.SetActive(false);
+            uiManager.curAmmoText.gameObject.SetActive(false);
+            uiManager.totalAmmoText.gameObject.SetActive(false);
+            uiManager.crosshair.gameObject.SetActive(false);
+        }
+
     }
 
     #region General Functions
@@ -112,7 +136,10 @@ public class GameManager : MonoBehaviour
             return Vector3.Lerp(valueToChange, targetValue, lerpRate);
         }
     }
-
+    public static float SqrDistance(Vector3 a, Vector3 b)
+    {
+        return ((a.x - b.x)* (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+    }
     #endregion
 }
 public enum PlayerState { inMainCar, onFoot }

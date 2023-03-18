@@ -47,6 +47,7 @@ public class AimManager : MonoBehaviour
 
     void Update()
     {
+        if(GameManager.mainState == PlayerState.onFoot)
         AimTargetPositioner();
     }
 
