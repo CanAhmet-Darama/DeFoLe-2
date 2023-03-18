@@ -154,4 +154,4 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 }
-public enum PlayerState { inMainCar, onFoot }
+public enum PlayerState { inMainCar, onFoot, observing }

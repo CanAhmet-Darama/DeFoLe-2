@@ -21,8 +21,6 @@ public class AnimatingClass : MonoBehaviour
     {
         switch (character.animStateSpeed)
         {
-            //case AnimStateSpeed.walk: ManageAnims(false); break;
-            //case AnimStateSpeed.run: ManageAnims(true); break;
             case AnimStateSpeed.walk: ManageAnimatorParameters(false); break;
             case AnimStateSpeed.run: ManageAnimatorParameters(true); break;
             default:

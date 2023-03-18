@@ -133,7 +133,7 @@ public class MainCharacter : GeneralCharacter
                 }
                 else
                 {
-                transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetRotation, 0.35f);
+                    transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetRotation, 0.35f);
                 }
 
 
@@ -323,7 +323,7 @@ public class MainCharacter : GeneralCharacter
         if (Physics.Raycast(GameManager.mainCam.GetComponent<Camera>().ScreenToWorldPoint(middleScreen), GameManager.mainCam.forward, out RaycastHit hitInfo, 10, defaultLayerMask))
         {
             Debug.DrawLine(middleScreen,hitInfo.point);
-            Debug.Log(hitInfo.collider.gameObject);
+            //Debug.Log(hitInfo.collider.gameObject);
             if (GameManager.SqrDistance(hitInfo.point, transform.position) < 9 && hitInfo.collider.CompareTag("Vehicle"))
             {
                 if (UI_Manager.isLookingInteractable == false)
@@ -347,6 +347,7 @@ public class MainCharacter : GeneralCharacter
         }
 
     }
+
     public void RegulateMainChar()
     {
         camFreeLookPivot = GameManager.mainCam.GetComponent<CameraScript>().freeLookPivotOnFoot;
