@@ -7,6 +7,10 @@ public class EnemyScript : GeneralCharacter
 {
     [Header("Enemy AI")]
     public NavMeshAgent navAgent;
+    public EnemyAIState enemyState;
+
+    [Header("Using Weapons")]
+    public float enemyInaccuracy;
 
     void Start()
     {
@@ -49,4 +53,9 @@ public class EnemyScript : GeneralCharacter
 
         }
     }
+    void EnemyStateManager()
+    {
+
+    }
+    public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching}
 }
