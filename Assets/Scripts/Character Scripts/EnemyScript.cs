@@ -11,12 +11,11 @@ public class EnemyScript : GeneralCharacter
     void Start()
     {
         NavAgentSetter();
-        Invoke("NavTarget", 5);
     }
 
     void Update()
     {
-        
+        AnimStateManage();
     }
 
     void NavAgentSetter()
@@ -30,9 +29,24 @@ public class EnemyScript : GeneralCharacter
     }
     void AnimStateManage()
     {
-        if (transform.InverseTransformVector(navAgent.velocity).z > 0)
+        float forwardSpeed = transform.InverseTransformVector(navAgent.velocity).z;
+        if (forwardSpeed > 0.03f)
         {
-            animStateSpeed = AnimStateSpeed.walk;
+            if(forwardSpeed < (runSpeed + walkSpeed) / 2)
+            {
+                animStateSpeed = AnimStateSpeed.walk;
+            }
+            else
+            {
+                animStateSpeed = AnimStateSpeed.run;
+            }
+                animStatePriDir = AnimStatePriDir.front;
+
+        }
+        else
+        {
+            animStateSpeed = AnimStateSpeed.idle;
+
         }
     }
 }

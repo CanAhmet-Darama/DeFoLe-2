@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7146570588385691977}
   - component: {fileID: 6252802607939262137}
+  - component: {fileID: 1050305898240239956}
   m_Layer: 0
   m_Name: Sandbags Collider
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7146570588385691977
 Transform:
@@ -46,6 +47,21 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8520490199877651923, guid: e54f7350ea75cbc468a4f5fa6315a39b, type: 3}
+--- !u!114 &1050305898240239956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799630103219109203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 1
+  destroyable: 0
+  healthOfObject: 0
 --- !u!1 &3276083501715581847
 GameObject:
   m_ObjectHideFlags: 0
@@ -55,13 +71,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5377163336285627021}
-  - component: {fileID: 2126251533163096547}
   m_Layer: 0
   m_Name: Sandbags
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5377163336285627021
 Transform:
@@ -80,21 +95,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2126251533163096547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3276083501715581847}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectType: 1
-  destroyable: 0
-  healthOfObject: 0
 --- !u!1001 &4777360249103604320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,6 +165,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 75886a0aa02be274fb679f3847d86c68, type: 3}
       propertyPath: m_Name
       value: Sandbag Block
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 75886a0aa02be274fb679f3847d86c68, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75886a0aa02be274fb679f3847d86c68, type: 3}

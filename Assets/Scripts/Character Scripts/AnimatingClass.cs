@@ -34,6 +34,12 @@ public class AnimatingClass : MonoBehaviour
         character.animator.SetFloat("blendVeloX", character.blendAnimX);
         character.animator.SetFloat("blendVeloY", character.blendAnimY);
 
+        //if(transform.parent.name == "Enemy 1")
+        //{
+        //    Debug.Log(character.animator.GetFloat("blendVeloX"));
+        //    Debug.Log(character.animStateSpeed);
+        //}
+
         character.animator.SetBool("isJumping", character.isJumping);
         character.animator.SetBool("isGrounded", character.isGrounded);
 
