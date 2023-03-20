@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 5188753059118141891}
   m_Layer: 7
   m_Name: Enemy 1
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -366,10 +366,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.17871992
-  m_Height: 2.1
+  m_Radius: 0.24
+  m_Height: 2.2
   m_Direction: 1
-  m_Center: {x: 0, y: -0.33, z: 0}
+  m_Center: {x: 0, y: -0.265, z: 0}
 --- !u!114 &779311080259487559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,6 +430,11 @@ MonoBehaviour:
   blendAnimY: 0
   isShooting: 0
   navAgent: {fileID: 5188753059118141891}
+  enemyState: 0
+  visibleAngleX: 0
+  visibleAngleY: 0
+  visibleRange: 0
+  enemyInaccuracy: 0
 --- !u!195 &5188753059118141891
 NavMeshAgent:
   m_ObjectHideFlags: 0

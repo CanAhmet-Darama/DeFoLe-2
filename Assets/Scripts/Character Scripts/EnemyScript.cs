@@ -8,6 +8,9 @@ public class EnemyScript : GeneralCharacter
     [Header("Enemy AI")]
     public NavMeshAgent navAgent;
     public EnemyAIState enemyState;
+    public float visibleAngleX;
+    public float visibleAngleY;
+    public float visibleRange;
 
     [Header("Using Weapons")]
     public float enemyInaccuracy;

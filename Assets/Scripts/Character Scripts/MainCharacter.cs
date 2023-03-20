@@ -320,9 +320,9 @@ public class MainCharacter : GeneralCharacter
     void SetUIStuff()
     {
         int defaultLayerMask = 1 << 0;
-        if (Physics.Raycast(GameManager.mainCam.GetComponent<Camera>().ScreenToWorldPoint(middleScreen), GameManager.mainCam.forward, out RaycastHit hitInfo, 10, defaultLayerMask))
+        if (Physics.Raycast(GameManager.mainCam.GetComponent<Camera>().ViewportPointToRay(middleScreen), out RaycastHit hitInfo, 5, defaultLayerMask))
         {
-            Debug.DrawLine(middleScreen,hitInfo.point);
+            Debug.DrawLine(GameManager.mainCam.position,hitInfo.point);
             //Debug.Log(hitInfo.collider.gameObject);
             if (GameManager.SqrDistance(hitInfo.point, transform.position) < 9 && hitInfo.collider.CompareTag("Vehicle"))
             {

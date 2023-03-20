@@ -380,6 +380,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2276955709936621972, guid: 9cc0651838fd3f54899fee20a6672b13, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026259447586824383, guid: 9cc0651838fd3f54899fee20a6672b13, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8725071921559822061, guid: 9cc0651838fd3f54899fee20a6672b13, type: 3}
       propertyPath: m_Name
       value: 3 Floored Building Concrete
@@ -600,6 +608,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1124101131}
     m_Modifications:
+    - target: {fileID: -663469254286277728, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3276083501715581847, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
       propertyPath: m_Name
       value: Sandbags (3)
@@ -832,6 +844,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1124101131}
     m_Modifications:
+    - target: {fileID: -663469254286277728, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3276083501715581847, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
       propertyPath: m_Name
       value: Sandbags (1)
@@ -1547,7 +1563,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 5
+  m_Intensity: 4
   m_Range: 40
   m_SpotAngle: 65
   m_InnerSpotAngle: 1
@@ -1784,6 +1800,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3074145330302167237, guid: 8867411ff78d7fa4db5d517221b1d51b, type: 3}
   m_PrefabInstance: {fileID: 594829815}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &598447711
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 598447712}
+  m_Layer: 0
+  m_Name: Camp 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &598447712
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598447711}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868184189}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &618495328
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2393,6 +2440,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1124101131}
     m_Modifications:
+    - target: {fileID: -663469254286277728, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3276083501715581847, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
       propertyPath: m_Name
       value: Sandbags (4)
@@ -2502,6 +2553,10 @@ PrefabInstance:
     - target: {fileID: 1643108193539418687, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
       propertyPath: m_Name
       value: Enemy 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1643108193539418687, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
@@ -2725,6 +2780,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1124101131}
     m_Modifications:
+    - target: {fileID: -663469254286277728, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3276083501715581847, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
       propertyPath: m_Name
       value: Sandbags (2)
@@ -3168,8 +3227,8 @@ Transform:
   m_GameObject: {fileID: 930924604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.54, y: 0.67, z: -9.73}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 0.4, y: 0.6, z: 0.4}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 13
@@ -4025,6 +4084,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ecc1df06d83da742ac56422451c6bde, type: 3}
+--- !u!1 &1329141525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1329141526}
+  m_Layer: 0
+  m_Name: Camp 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1329141526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329141525}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868184189}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1331719198
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4543,6 +4633,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1124101131}
     m_Modifications:
+    - target: {fileID: -663469254286277728, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
+      propertyPath: campNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3276083501715581847, guid: b974c50b103c4bb4e89408f280bf9611, type: 3}
       propertyPath: m_Name
       value: Sandbags
@@ -4874,6 +4968,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6939153179821818502, guid: 077af490ae404e549b70b72de18d3cd0, type: 3}
   m_PrefabInstance: {fileID: 1748598601}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1765870491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1765870492}
+  m_Layer: 0
+  m_Name: Camp 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1765870492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765870491}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1868184189}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1791649394
 GameObject:
   m_ObjectHideFlags: 0
@@ -5057,6 +5182,10 @@ MonoBehaviour:
   mainCarIsThis: {fileID: 1405969965}
   mainTerrainIsThis: {fileID: 1528070758}
   userInterfaceManagerIsThis: {fileID: 1261780556}
+  enemyCampsAreThese:
+  - {fileID: 1765870491}
+  - {fileID: 598447711}
+  - {fileID: 1329141525}
 --- !u!4 &1868184189
 Transform:
   m_ObjectHideFlags: 0
@@ -5068,7 +5197,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1765870492}
+  - {fileID: 598447712}
+  - {fileID: 1329141526}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5134,6 +5266,89 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3074145330302167237, guid: 8867411ff78d7fa4db5d517221b1d51b, type: 3}
   m_PrefabInstance: {fileID: 1882502314}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1931835320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1931835321}
+  - component: {fileID: 1931835323}
+  - component: {fileID: 1931835322}
+  m_Layer: 0
+  m_Name: Sphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1931835321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931835320}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2062882449}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1931835322
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931835320}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 4445a50e772ffb34b9c7fa54af3031bd, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1931835323
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931835320}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &1936711510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5366,9 +5581,10 @@ Transform:
   m_GameObject: {fileID: 2062882448}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 15}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 1931835321}
   m_Father: {fileID: 963194228}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5686,7 +5902,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.972956, g: 0.7971698, b: 1, a: 1}
-  m_Intensity: 5
+  m_Intensity: 4
   m_Range: 40
   m_SpotAngle: 40
   m_InnerSpotAngle: 1

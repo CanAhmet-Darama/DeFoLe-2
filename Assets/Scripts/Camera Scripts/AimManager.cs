@@ -6,6 +6,7 @@ using UnityEngine.Animations.Rigging;
 public class AimManager : MonoBehaviour
 {
     CameraScript mainCam;
+    Camera mainCamera;
     MainCharacter mainChar;
     Animator animator;
     Transform aimTarget;
@@ -32,6 +33,7 @@ public class AimManager : MonoBehaviour
     public void Start()
     {
         mainCam = GameManager.mainCam.GetComponent<CameraScript>();
+        mainCamera = GameManager.mainCam.GetComponent<Camera>();
         mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
         quitAimingCompletely = true;
         #region Assign Constraints
@@ -100,8 +102,11 @@ public class AimManager : MonoBehaviour
             if (Input.GetMouseButton(1))
             {
                 #region Raycasting for aiming
-                Ray ray = mainCam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
                 targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~0, QueryTriggerInteraction.Ignore);
+
+                Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
+
                 if (targetHit && hitInfo.distance > 3)
                 {
                     aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.03f);

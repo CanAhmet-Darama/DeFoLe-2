@@ -18,13 +18,18 @@ public class GameManager : MonoBehaviour
     public static Terrain mainTerrain;
     public static UI_Manager uiManager;
     public static GameObject[] weaponPrefabs = new GameObject[6];
+    public static GameObject[] enemyCamps;
     [SerializeField] GameObject[] weaponPrefabsAreThese;
     [SerializeField] Transform mainCamIsThis;
     [SerializeField] Transform mainCharIsThis;
     [SerializeField] Transform mainCarIsThis;
     [SerializeField] Terrain mainTerrainIsThis;
     [SerializeField] UI_Manager userInterfaceManagerIsThis;
+    [SerializeField] GameObject[] enemyCampsAreThese;
 
+
+    [Header("General Numbers")]
+    [HideInInspector] public static byte numberOfCamps;
 
     void Awake()
     {
@@ -40,6 +45,10 @@ public class GameManager : MonoBehaviour
                 uiManager = userInterfaceManagerIsThis;
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();
+
+                numberOfCamps = 3;
+                enemyCamps = new GameObject[numberOfCamps];
+                enemyCamps = enemyCampsAreThese;
                 break;
         }
 
@@ -50,7 +59,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Debug.Log(CoverObjectsManager.coverPointsOfWorld.Length);
+            int totalCoverPoints = 0;
+            for(int i = CoverObjectsManager.coverPointsOfWorld.Length - 1; i >= 0; i--)
+            {
+                if(CoverObjectsManager.coverPointsOfWorld[i] != null)
+                totalCoverPoints += CoverObjectsManager.coverPointsOfWorld[i].Length;
+            }
+            Debug.Log(totalCoverPoints);
         }
     }
 
