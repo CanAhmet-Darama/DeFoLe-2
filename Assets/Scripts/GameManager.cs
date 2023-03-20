@@ -48,7 +48,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Debug.Log(CoverObjectsManager.coverPointsOfWorld.Length);
+        }
     }
 
     public static void ChangeState()
