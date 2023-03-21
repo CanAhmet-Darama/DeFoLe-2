@@ -418,7 +418,11 @@ MonoBehaviour:
   leftHandTBIK: {fileID: 2130464707804454431}
   leftHTarget: {fileID: 7176550493986937795}
   rightHTarget: {fileID: 971220282}
-  animOverriders: []
+  animOverriders:
+  - {fileID: 22100000, guid: 72b5af81e55c1c04480f9aabeeaee464, type: 2}
+  - {fileID: 22100000, guid: f3e3d268218547d4fba41ce23107c9a4, type: 2}
+  - {fileID: 22100000, guid: a86e97e245e8dc74f9f09c67f66b7ae1, type: 2}
+  - {fileID: 22100000, guid: 71fc50187a65860468b1b7c9bd6938d5, type: 2}
   isGrounded: 0
   isCrouching: 0
   mainColl: {fileID: 7514421668650504797}

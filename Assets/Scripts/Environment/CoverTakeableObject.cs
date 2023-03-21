@@ -25,6 +25,7 @@ public class CoverTakeableObject : MonoBehaviour
         {
             coverPoints[i].relativePos = coverPositions[i];
             coverPoints[i].owner = transform;
+            coverPoints[i].worldPos = transform.TransformPoint(coverPoints[i].relativePos);
         }
     }
 
@@ -52,6 +53,7 @@ public struct CoverPoint
 {
     public Transform owner;
     public Vector3 relativePos;
+    public Vector3 worldPos;
     public float visibleAngle;
     public bool crouchOrPeek;
     public bool isCoveredAlready;

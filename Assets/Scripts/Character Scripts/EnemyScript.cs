@@ -17,12 +17,20 @@ public class EnemyScript : GeneralCharacter
 
     void Start()
     {
+        GeneralCharStart();
         NavAgentSetter();
+        ChangeWeapon(weapons[1].GetComponent<GeneralWeapon>());
     }
 
     void Update()
     {
+        GeneralCharUpdate();
         AnimStateManage();
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1,currentWeapon.range,
+                                    transform.position, GameManager.mainChar.position).worldPos);
+        }
     }
 
     void NavAgentSetter()

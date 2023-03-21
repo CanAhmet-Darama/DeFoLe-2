@@ -44,7 +44,7 @@ public class GeneralBullet : MonoBehaviour
     {
         if (collision.gameObject.tag != "Bullet")
         {
-            if ((transform.position - firedPos).magnitude < 50)
+            if ((transform.position - firedPos).sqrMagnitude < 50 || (transform.position - GameManager.mainCam.position).sqrMagnitude < 2500)
             {
                 ContactPoint contact = collision.contacts[0];
                 if (collision.gameObject.GetComponent<EnvObject>() != null)

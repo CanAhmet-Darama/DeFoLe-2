@@ -65,42 +65,37 @@ public class CoverObjectsManager : MonoBehaviour
         short coverIndex;
         while (true)
         {
-            /* I subtract 2 from the length of array so the enemy won't pick a point which is too
-               to plater */
-            coverIndex = (short)Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length - 2);
+            /* I subtract 2 from the length of array and increase the coverIndex 
+               so the enemy won't pick a point which is too close to player */
+            coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length - 2) + 2);
             Transform ownerTransform = coverObjectsOfWorld[campNumber - 1][coverIndex].transform;
-            Vector3 posOfCoverOnWorld = ownerTransform.TransformPoint(coverPointsOfWorld[campNumber - 1][coverIndex].relativePos) + ownerTransform.position;
-            if (!coverPointsOfWorld[campNumber][coverIndex].isCoveredAlready)
+
+            CoverPoint[] cPointsOfObj = coverObjectsOfWorld[campNumber - 1][coverIndex].coverPoints;
+            CoverPoint holderCoverObj;
+            bool hasSwapped = true;
+            while (hasSwapped)
             {
-                if ((posOfCoverOnWorld - enemyPos).sqrMagnitude < weaponRange * weaponRange / 4)
+                hasSwapped = false;
+                for (short index = 0, limit = (short)(cPointsOfObj.Length - 1); index < limit; index++)
                 {
-                    //if ()
-                    //{
-
-                    //}
-                }
-
-            }
-
-        }
-        /*while (true)
-        {
-            coverIndex = (short)Random.Range(0, coverPointsOfWorld[campNumber].Length);
-            Transform ownerTransform = coverPointsOfWorld[campNumber][coverIndex].owner;
-            Vector3 posOfCoverOnWorld = ownerTransform.TransformPoint(coverPointsOfWorld[campNumber][coverIndex].relativePos) + ownerTransform.position;
-            if (!coverPointsOfWorld[campNumber][coverIndex].isCoveredAlready)
-            {
-                if((posOfCoverOnWorld - enemyPos).sqrMagnitude < weaponRange*weaponRange/4)
-                {
-                    if ()
+                    if ((cPointsOfObj[index].worldPos - enemyPos).sqrMagnitude >
+                        (cPointsOfObj[index + 1].worldPos - enemyPos).sqrMagnitude)
                     {
-
+                        holderCoverObj = cPointsOfObj[index];
+                        cPointsOfObj[index] = cPointsOfObj[index + 1];
+                        cPointsOfObj[index + 1] = holderCoverObj;
+                        hasSwapped = true;
                     }
                 }
-
             }
-
-        }*/
+            for(short i = (short)(cPointsOfObj.Length - 1); i >= 0; i--)
+            {
+                if (cPointsOfObj[i].isCoveredAlready!)
+                {
+                    return cPointsOfObj[i];
+                }
+            }
+        }
     }
     public IEnumerator SortCoverObjectsByDistanceCoroutine(byte campNumber, Vector3 posToTakeDistance)
     {
