@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
 
     [Header("General Numbers")]
-    [HideInInspector] public static byte numberOfCamps;
+    [HideInInspector] public static byte numberOfCamps = 3;
 
     void Awake()
     {
@@ -59,13 +59,22 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
+            int totalCoverObj = 0;
+            for (int i = CoverObjectsManager.coverObjectsOfWorld.Length - 1; i >= 0; i--)
+            {
+                if (CoverObjectsManager.coverObjectsOfWorld[i] != null)
+                    totalCoverObj += CoverObjectsManager.coverObjectsOfWorld[i].Length;
+            }
+            Debug.Log("Cover Objects : " + totalCoverObj);
+
+
             int totalCoverPoints = 0;
             for(int i = CoverObjectsManager.coverPointsOfWorld.Length - 1; i >= 0; i--)
             {
                 if(CoverObjectsManager.coverPointsOfWorld[i] != null)
                 totalCoverPoints += CoverObjectsManager.coverPointsOfWorld[i].Length;
             }
-            Debug.Log(totalCoverPoints);
+            Debug.Log("Cover Points : " + totalCoverPoints);
         }
     }
 
