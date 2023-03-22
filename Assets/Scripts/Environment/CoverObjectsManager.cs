@@ -60,43 +60,32 @@ public class CoverObjectsManager : MonoBehaviour
         coverObjectsOfWorld[campNumber - 1][holderArray.Length] = coverObj;
     }
 
-    public static CoverPoint GetCoverPoint(byte campNumber, float weaponRange, Vector3 ownPos, Vector3 enemyPos)
+    public static CoverPoint GetCoverPoint(byte campNumber, Vector3 enemyPos)
     {
         short coverIndex;
         while (true)
         {
-            /* I subtract 2 from the length of array and increase the coverIndex 
-               so the enemy won't pick a point which is too close to player */
-            coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length - 2) + 2);
-            Transform ownerTransform = coverObjectsOfWorld[campNumber - 1][coverIndex].transform;
+            /* I don't let it to take a random object which is too close or far from enemy */
+            coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
+            
+            CoverPoint[] cPointsOfObj;
 
-            CoverPoint[] cPointsOfObj = coverObjectsOfWorld[campNumber - 1][coverIndex].coverPoints;
-            CoverPoint holderCoverObj;
-            bool hasSwapped = true;
-            while (hasSwapped)
+            for(short i = coverIndex; i >= 0; i--)
             {
-                hasSwapped = false;
-                for (short index = 0, limit = (short)(cPointsOfObj.Length - 1); index < limit; index++)
+                cPointsOfObj = coverObjectsOfWorld[campNumber - 1][i].coverPoints;
+
+                for(short j = (short)(cPointsOfObj.Length - 1); j >= 0; j--)
                 {
-                    if ((cPointsOfObj[index].worldPos - enemyPos).sqrMagnitude >
-                        (cPointsOfObj[index + 1].worldPos - enemyPos).sqrMagnitude)
+                    if (!cPointsOfObj[j].isCoveredAlready)
                     {
-                        holderCoverObj = cPointsOfObj[index];
-                        cPointsOfObj[index] = cPointsOfObj[index + 1];
-                        cPointsOfObj[index + 1] = holderCoverObj;
-                        hasSwapped = true;
+                        return cPointsOfObj[j];
                     }
                 }
-            }
-            for(short i = (short)(cPointsOfObj.Length - 1); i >= 0; i--)
-            {
-                if (cPointsOfObj[i].isCoveredAlready!)
-                {
-                    return cPointsOfObj[i];
-                }
+
             }
         }
     }
+    
     public IEnumerator SortCoverObjectsByDistanceCoroutine(byte campNumber, Vector3 posToTakeDistance)
     {
         yield return null;

@@ -24,6 +24,7 @@ public class GeneralCharacter : MonoBehaviour
     public GeneralWeapon currentWeapon;
     public bool[] hasWeapons = new bool[5];
     public GameObject[] weapons = new GameObject[5];
+    public GeneralWeapon[] weaponScripts = new GeneralWeapon[5];
     public short[] ammoCounts= new short[5];
     public MeleeWeapon mainMelee;
     public bool canShoot;
@@ -207,15 +208,14 @@ public class GeneralCharacter : MonoBehaviour
 
     void CreateWeapons()
     {
-        byte magazineCount = 5;
-        //weapons = new GameObject[5];
+        byte magazineCount = 10;
         for (int i = weapons.Length - 1; i >= 0; i--)
         {
             if(!isEnemy || hasWeapons[i])
             {
                 weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
-                GeneralWeapon weaponScript = weapons[i].GetComponent<GeneralWeapon>();
-                if (weaponScript.weaponType == WeaponType.SR_1)
+                weaponScripts[i] = weapons[i].GetComponent<GeneralWeapon>();
+                if (weaponScripts[i].weaponType == WeaponType.SR_1)
                 { weapons[i].transform.parent = leftHBone.transform; }
 
                 weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
@@ -223,7 +223,7 @@ public class GeneralCharacter : MonoBehaviour
 
                 weapons[i].transform.localScale *= 0.01f;
                 weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
-                if(weaponScript.weaponType != WeaponType.SR_1)
+                if(weaponScripts[i].weaponType != WeaponType.SR_1)
                 {
                     weapons[i].transform.localEulerAngles += new Vector3(-90, 90, 0);
                 }
@@ -231,17 +231,11 @@ public class GeneralCharacter : MonoBehaviour
                 {
                     weapons[i].transform.localEulerAngles = new Vector3(-90, 0, 90);
                 }
-                weaponScript.owner = this;
-                Debug.Log(gameObject.name + " has created : " + weapons[i].name);
+                weaponScripts[i].owner = this;
+                //Debug.Log(gameObject.name + " has created : " + weapons[i].name);
                 ammoCounts[i] = (short)(magazineCount * GameManager.weaponPrefabs[i].GetComponent<GeneralWeapon>().maxAmmo);
-                weaponScript.currentAmmo = (byte)(ammoCounts[i] / magazineCount);
+                weaponScripts[i].currentAmmo = (byte)(ammoCounts[i] / magazineCount);
             }
-            //else if (hasWeapons[i])
-            //{
-            //    weapons[i] = Instantiate(GameManager.weaponPrefabs[i], rightHBone.transform);
-            //    weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
-            //    weapons[i].SetActive(false);
-            //}
         }
         #region Melee Create
         mainMelee = Instantiate(GameManager.weaponPrefabs[5], rightHBone.transform).GetComponent<MeleeWeapon>();
@@ -259,14 +253,9 @@ public class GeneralCharacter : MonoBehaviour
             GetMeleeWeaponOrHandsFree(WeaponState.ranged);
         }
 
-        if (currentWeapon != null) {
-            
-            if (currentWeapon != newWeapon)
-            {
-                currentWeapon.gameObject.SetActive(false);
-
-            }
-         }
+        if (currentWeapon != null && currentWeapon != newWeapon) {        
+            currentWeapon.gameObject.SetActive(false);
+        }
         currentWeapon = newWeapon;
         currentWeapon.gameObject.SetActive(true);
         AnimationOverride(animOverriders[currentWeapon.animOverriderIndex]);

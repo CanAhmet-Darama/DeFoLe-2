@@ -28,8 +28,22 @@ public class EnemyScript : GeneralCharacter
         AnimStateManage();
         if (Input.GetKeyDown(KeyCode.G))
         {
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1,currentWeapon.range,
-                                    transform.position, GameManager.mainChar.position).worldPos);
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1, GameManager.mainChar.position).worldPos);
+        }
+        if(navAgent.destination != null)
+        {
+            Vector3 offset = new Vector3(0,1.5f,0);
+            Debug.DrawRay(navAgent.destination + offset,
+                (new Vector3(0.6f, 0, 0)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                 (new Vector3(-0.6f, 0, 0)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                 (new Vector3(0, 0, 0.6f)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                 (new Vector3(0, 0, -0.6f)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                (new Vector3(0, -1, 0)), Color.green);
+
         }
     }
 

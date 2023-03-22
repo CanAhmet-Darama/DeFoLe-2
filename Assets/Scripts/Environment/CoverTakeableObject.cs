@@ -17,6 +17,10 @@ public class CoverTakeableObject : MonoBehaviour
     void Update()
     {
         DrawRaysForCoverPositions();
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SortPointsByDistance(GameManager.mainChar.position);
+        }
     }
     void SetCoverPointPositions()
     {
@@ -26,6 +30,7 @@ public class CoverTakeableObject : MonoBehaviour
             coverPoints[i].relativePos = coverPositions[i];
             coverPoints[i].owner = transform;
             coverPoints[i].worldPos = transform.TransformPoint(coverPoints[i].relativePos);
+            coverPoints[i].isCoveredAlready = false;
         }
     }
 
@@ -46,6 +51,26 @@ public class CoverTakeableObject : MonoBehaviour
                 (new Vector3(0, 0.5f, 0)), Color.yellow);
         }
 
+    }
+    void SortPointsByDistance(Vector3 referencePos)
+    {
+        bool hasSwapped = true;
+        CoverPoint holderCoverObj;
+        while (hasSwapped)
+        {
+            hasSwapped = false;
+            for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
+            {
+                if ((coverPoints[index].worldPos - referencePos).sqrMagnitude >
+                    (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                {
+                    holderCoverObj = coverPoints[index];
+                    coverPoints[index] = coverPoints[index + 1];
+                    coverPoints[index + 1] = holderCoverObj;
+                    hasSwapped = true;
+                }
+            }
+        }
     }
 }
 

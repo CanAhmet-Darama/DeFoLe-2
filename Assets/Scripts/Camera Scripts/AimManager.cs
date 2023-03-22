@@ -103,7 +103,7 @@ public class AimManager : MonoBehaviour
             {
                 #region Raycasting for aiming
                 Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-                targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~0, QueryTriggerInteraction.Ignore);
+                targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);
 
                 Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
 

@@ -19,10 +19,6 @@ public class MainCharacter : GeneralCharacter
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
         canReload = true;
-        //for (short i = (short)(GameManager.weaponPrefabs.Length - 2); i >= 0; i--)
-        //{
-        //    ammoCounts[i] = (short)(5 * GameManager.weaponPrefabs[i].GetComponent<GeneralWeapon>().maxAmmo);
-        //}
     }
     void Update()
     {
