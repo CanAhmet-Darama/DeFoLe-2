@@ -137,4 +137,8 @@ public class StairCheckScript : MonoBehaviour
     {
         return Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate;
     }
+    public static Vector3 RotateVecAroundVec(Vector3 vecToRotate, Vector3 vecToAxis, float angle, Vector3 vecToAxis2, float angle2)
+    {
+        return Quaternion.AngleAxis(- angle2, vecToAxis2)*(Quaternion.AngleAxis(-angle, vecToAxis)) * vecToRotate;
+    }
 }

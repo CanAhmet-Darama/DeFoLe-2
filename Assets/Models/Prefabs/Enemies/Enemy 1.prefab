@@ -443,9 +443,9 @@ MonoBehaviour:
   navAgent: {fileID: 5188753059118141891}
   enemyState: 0
   enemyEyes: {fileID: 3767183553229146655}
-  visibleAngleX: 0
-  visibleAngleY: 0
-  visibleRange: 0
+  visibleAngleX: 55
+  visibleAngleY: 40
+  visibleRange: 100
   targetPlayer: {fileID: 0}
   canSeeTarget: 0
   hasPermanentPlace: 0
