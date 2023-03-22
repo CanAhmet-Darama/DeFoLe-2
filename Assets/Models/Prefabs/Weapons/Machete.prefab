@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -6335782725905857283}
   - component: {fileID: 5418318840478128906}
   - component: {fileID: 1772829376415041122}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Machete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,6 +51,7 @@ MonoBehaviour:
   swingCooldown: 0.8
   owner: {fileID: 0}
   canSwing: 1
+  isSwinging: 0
   rightHandPos: {x: 0.00003, y: 0.00279, z: 0.00142}
   rightHandRot: {x: -98.713, y: 110.523, z: -3.388}
   overrideController: {fileID: 22100000, guid: 4449f4e43d426674a8940c8389700d27, type: 2}
@@ -236,6 +237,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
       propertyPath: m_Name
       value: Machete 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}

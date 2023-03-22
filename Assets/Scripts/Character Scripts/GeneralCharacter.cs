@@ -106,7 +106,7 @@ public class GeneralCharacter : MonoBehaviour
     {
         if (stairSlopeChecker.onSlopeMoving)
         {
-            direction = stairSlopeChecker.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
+            direction = StairCheckScript.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
         }
 
         if (rb.velocity.magnitude > walkSpeed)
@@ -122,7 +122,7 @@ public class GeneralCharacter : MonoBehaviour
     {
         if (stairSlopeChecker.onSlopeMoving)
         {
-            direction = stairSlopeChecker.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
+            direction = StairCheckScript.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
         }
 
         if (rb.velocity.magnitude > speed)
@@ -139,7 +139,7 @@ public class GeneralCharacter : MonoBehaviour
     {
         if (stairSlopeChecker.onSlopeMoving)
         {
-            direction = stairSlopeChecker.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
+            direction = StairCheckScript.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
         }
 
         if (rb.velocity.magnitude > runSpeed)

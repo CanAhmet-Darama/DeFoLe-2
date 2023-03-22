@@ -128,9 +128,13 @@ public class StairCheckScript : MonoBehaviour
 
     }
 
-    public Vector3 RotateVecAroundVec(Vector3 vecToRotate, Vector3 vecToAxis , float angle)
+    public static Vector3 RotateVecAroundVec(Transform tform,Vector3 vecToRotate, Vector3 vecToAxis , float angle)
     {
-        Debug.DrawRay(transform.position + new Vector3(0,0.3f,0), Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate, Color.blue);
+        Debug.DrawRay(tform.position + new Vector3(0,0.3f,0), Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate, Color.blue);
+        return Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate;
+    }
+    public static Vector3 RotateVecAroundVec(Vector3 vecToRotate, Vector3 vecToAxis, float angle)
+    {
         return Quaternion.AngleAxis(-angle, vecToAxis) * vecToRotate;
     }
 }
