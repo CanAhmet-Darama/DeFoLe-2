@@ -382,10 +382,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0278e32e989de4f8db98f0650bf3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 4
-  walkAcceleration: 25
-  runSpeed: 8
-  runAcceleration: 50
+  walkSpeed: 3.5
+  walkAcceleration: 15
+  runSpeed: 7
+  runAcceleration: 30
   jumpForce: 0
   jumpCooldown: 0
   health: 0
@@ -445,7 +445,7 @@ MonoBehaviour:
   enemyEyes: {fileID: 3767183553229146655}
   visibleAngleX: 55
   visibleAngleY: 40
-  visibleRange: 100
+  visibleRange: 20
   targetPlayer: {fileID: 0}
   canSeeTarget: 0
   sqrDistFromPlayer: 0
@@ -454,9 +454,8 @@ MonoBehaviour:
   patrolPoints: []
   lastPatrolIndex: 0
   patrolWaitDuration: 0
+  noticeDuration: 4
   alertedCoverCheckCooldown: 0
-  noticeDuration: 0
-  lastSeenPos: {x: 0, y: 0, z: 0}
   searchDuration: 0
   enemyInaccuracy: 0
   handShakeRate: 0

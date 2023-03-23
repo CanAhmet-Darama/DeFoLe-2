@@ -47,7 +47,18 @@ public class MeleeWeapon : MonoBehaviour
     {
         if (isSwinging)
         {
-            Vector3 contactPoint = other.ClosestPoint(transform.position);
+            Vector3 contactPoint;
+            if (other.GetType() == typeof(MeshCollider))
+            {
+                Ray ray = new Ray(transform.position, GameManager.mainCam.forward);
+                other.Raycast(ray, out RaycastHit hitInfo, 1);
+                contactPoint = hitInfo.point;
+            }
+            else
+            {
+                contactPoint = other.ClosestPoint(transform.position);
+            }
+
             if (other.CompareTag("Ground"))
             {
                 ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);

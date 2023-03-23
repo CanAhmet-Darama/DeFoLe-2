@@ -15,19 +15,29 @@ public class EnemyScript : GeneralCharacter
     public Transform targetPlayer;
     public bool canSeeTarget;
     public float sqrDistFromPlayer;
-
-    [Header("Enemy AI States")]
     bool enteredNewState;
+    Transform mainChar;
+
+    [Header("Patrol")]
     public bool hasPermanentPlace;
     public CoverTakeableObject permanentCoverObject;
     public Vector3[] patrolPoints;
     public byte lastPatrolIndex;
-    public float patrolWaitDuration;
+    [SerializeField] float patrolWaitDuration;
     Coroutine patrolWaitCoroutine;
-    public float alertedCoverCheckCooldown;
-    public float noticeDuration;
-    public Vector3 lastSeenPos;
-    public float searchDuration;
+
+    [Header("SemiDetected")]
+    [SerializeField] float noticeDuration;
+    float noticeCountdown;
+    bool noticingComplete;
+
+
+    [Header("Alerted")]
+    [SerializeField] float alertedCoverCheckCooldown;
+
+    [Header("Searching")]
+    Vector3 lastSeenPos;
+    [SerializeField]float searchDuration;
 
 
     [Header("Using Weapons")]
@@ -46,10 +56,10 @@ public class EnemyScript : GeneralCharacter
     void Update()
     {
         GeneralCharUpdate();
-        sqrDistFromPlayer = (GameManager.mainChar.position - enemyEyes.position).sqrMagnitude;
+        sqrDistFromPlayer = (mainChar.position - enemyEyes.position).sqrMagnitude;
         if (Input.GetKeyDown(KeyCode.G))
         {
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1, GameManager.mainChar.position).worldPos);
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1, mainChar.position).worldPos);
         }
         if(navAgent.destination != null)
         {
@@ -76,6 +86,7 @@ public class EnemyScript : GeneralCharacter
     {
         enteredNewState = true;
         lastPatrolIndex = 0;
+        mainChar = GameManager.mainChar;
         ChangeEnemyAIState(EnemyAIState.Patrol);
     }
     void NavAgentSetter()
@@ -143,9 +154,10 @@ public class EnemyScript : GeneralCharacter
             //Debug.Log("Started Coroutine");
             patrolWaitCoroutine = StartCoroutine(WaitForOtherPatrolPoint());
         }
-        if (canSeeTarget)
+        if(canSeeTarget)
         {
-            if(sqrDistFromPlayer < ((visibleRange * visibleRange) / 4))
+            Debug.Log("Saw target");
+            if (sqrDistFromPlayer < ((visibleRange * visibleRange) / 4))
             {
                 ChangeEnemyAIState(EnemyAIState.Alerted);
             }
@@ -171,7 +183,29 @@ public class EnemyScript : GeneralCharacter
         if (enteredNewState)
         {
             navAgent.isStopped = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             enteredNewState = false;
+            noticingComplete= false;
+            noticeCountdown = 0;
+        }
+        noticeCountdown += Time.deltaTime;
+        if(canSeeTarget)
+        {
+            if(noticeCountdown > noticeDuration)
+            {
+                ChangeEnemyAIState(EnemyAIState.Alerted);
+            }
+            else
+            {
+                Vector3 targetRotation = new Vector3(mainChar.eulerAngles.x, 0, mainChar.eulerAngles.z) 
+                                        - new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
+                RotateChar(targetRotation, 0.2f);
+            }
+        }
+        else if(!canSeeTarget)
+        {
+
         }
 
     }
@@ -180,6 +214,8 @@ public class EnemyScript : GeneralCharacter
         if (enteredNewState)
         {
             navAgent.isStopped = true;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             enteredNewState = false;
         }
 
@@ -203,12 +239,12 @@ public class EnemyScript : GeneralCharacter
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, -visibleAngleX, enemyEyes.right, visibleAngleY) * visibleRange, Color.gray);
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, visibleAngleX, enemyEyes.right, -visibleAngleY) * visibleRange, Color.gray);
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, -visibleAngleX, enemyEyes.right, -visibleAngleY) * visibleRange, Color.gray);
+
         #endregion
         if (sqrDistFromPlayer < visibleRange * visibleRange)
         {
-            bool sawTarget = false;
             #region Calculate Eyesight Angle
-            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformDirection((GameManager.mainChar.position - enemyEyes.position).normalized);
+            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformDirection((mainChar.position - enemyEyes.position).normalized);
             Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z);
             Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
@@ -219,7 +255,7 @@ public class EnemyScript : GeneralCharacter
 
             if (angleX <= visibleAngleX && angleY <= visibleAngleY)
             {
-                Ray rayToPlayer = new Ray(enemyEyes.position, GameManager.mainChar.position - enemyEyes.position);
+                Ray rayToPlayer = new Ray(enemyEyes.position, mainChar.position - enemyEyes.position);
                 if (Physics.Raycast(rayToPlayer, out RaycastHit hitInfo,visibleRange, ~0,QueryTriggerInteraction.Ignore))
                 {
                     if (hitInfo.collider.CompareTag("Player"))
@@ -230,12 +266,6 @@ public class EnemyScript : GeneralCharacter
                     }
                 }
             }
-            if (!sawTarget)
-            {
-                    canSeeTarget = false;
-
-            }
-
         }
     }
 public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching}

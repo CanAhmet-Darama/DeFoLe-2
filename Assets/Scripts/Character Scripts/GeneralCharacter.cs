@@ -97,8 +97,7 @@ public class GeneralCharacter : MonoBehaviour
     }
     public void RotateChar(Vector3 target, float smoothTime)
     {
-        Quaternion targetQua = new Quaternion(0,0,0,0);
-        targetQua = Quaternion.Euler(transform.eulerAngles.x, target.y, transform.eulerAngles.z);
+        Quaternion targetQua = Quaternion.Euler(transform.eulerAngles.x, target.y, transform.eulerAngles.z);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
     }
 
