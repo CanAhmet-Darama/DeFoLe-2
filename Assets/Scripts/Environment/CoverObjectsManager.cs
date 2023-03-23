@@ -66,8 +66,8 @@ public class CoverObjectsManager : MonoBehaviour
         while (true)
         {
             /* I don't let it to take a random object which is too close or far from enemy */
-            //coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
-            coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length - 1));
+            coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
+            //coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length - 1));
 
 
             CoverPoint[] cPointsOfObj;

@@ -17,6 +17,7 @@ public class EnemyScript : GeneralCharacter
     public float sqrDistFromPlayer;
     bool enteredNewState;
     Transform mainChar;
+    [Range(1,3)]public byte campOfEnemy;
 
     [Header("Patrol")]
     public bool hasPermanentPlace;
@@ -29,11 +30,14 @@ public class EnemyScript : GeneralCharacter
     [Header("SemiDetected")]
     [SerializeField] float noticeDuration;
     float noticeCountdown;
-    bool noticingComplete;
+    Coroutine cancelSemiDetectCoroutine;
+    [SerializeField] float suspectedDuration;
+    float realDistFromPlayer;
 
 
     [Header("Alerted")]
     [SerializeField] float alertedCoverCheckCooldown;
+    [SerializeField][Range(0,1)]float alertRangeRate;
 
     [Header("Searching")]
     Vector3 lastSeenPos;
@@ -51,6 +55,7 @@ public class EnemyScript : GeneralCharacter
         NavAgentSetter();
         EnemyStart();
         ChangeWeapon(weapons[1].GetComponent<GeneralWeapon>());
+        EnemyManager.AddEnemyToList(campOfEnemy, this);
     }
 
     void Update()
@@ -59,7 +64,17 @@ public class EnemyScript : GeneralCharacter
         sqrDistFromPlayer = (mainChar.position - enemyEyes.position).sqrMagnitude;
         if (Input.GetKeyDown(KeyCode.G))
         {
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1, mainChar.position).worldPos);
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy, mainChar.position).worldPos);
+        }
+        else if (Input.GetKeyDown(KeyCode.J))
+        {
+            if (navAgent.speed != 0)
+            {
+                navAgent.speed = 0;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+            else navAgent.speed = walkSpeed;
         }
         if(navAgent.destination != null)
         {
@@ -76,6 +91,7 @@ public class EnemyScript : GeneralCharacter
                 (new Vector3(0, -1, 0)), Color.green);
 
         }
+
         CheckEyeSight();
         EnemyStateManager();
         AnimStateManage();
@@ -84,7 +100,6 @@ public class EnemyScript : GeneralCharacter
 
     void EnemyStart()
     {
-        enteredNewState = true;
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
         ChangeEnemyAIState(EnemyAIState.Patrol);
@@ -156,10 +171,10 @@ public class EnemyScript : GeneralCharacter
         }
         if(canSeeTarget)
         {
-            Debug.Log("Saw target");
-            if (sqrDistFromPlayer < ((visibleRange * visibleRange) / 4))
+            if (sqrDistFromPlayer < ((visibleRange * visibleRange) * (alertRangeRate* alertRangeRate)))
             {
                 ChangeEnemyAIState(EnemyAIState.Alerted);
+                return;
             }
             else
             {
@@ -169,8 +184,7 @@ public class EnemyScript : GeneralCharacter
     }
     IEnumerator WaitForOtherPatrolPoint()
     {
-        navAgent.isStopped = true;
-        rb.velocity = Vector3.zero; rb.angularVelocity = Vector3.zero;
+        StopNavMovement();
         yield return new WaitForSeconds(patrolWaitDuration);
         navAgent.isStopped = false;
         lastPatrolIndex = (byte)((lastPatrolIndex + 1) % patrolPoints.Length);
@@ -182,44 +196,79 @@ public class EnemyScript : GeneralCharacter
     {
         if (enteredNewState)
         {
-            navAgent.isStopped = true;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            StopNavMovement();
             enteredNewState = false;
-            noticingComplete= false;
             noticeCountdown = 0;
         }
         noticeCountdown += Time.deltaTime;
         if(canSeeTarget)
         {
-            if(noticeCountdown > noticeDuration)
+            if (cancelSemiDetectCoroutine != null) StopCoroutine(cancelSemiDetectCoroutine);
+            if (sqrDistFromPlayer < ((visibleRange * visibleRange) * (alertRangeRate * alertRangeRate)))
+            {
+                ChangeEnemyAIState(EnemyAIState.Alerted);
+                return;
+            }
+
+            realDistFromPlayer = Mathf.Sqrt(sqrDistFromPlayer);
+            float noticeDuratOnApply = noticeDuration + noticeDuration * 
+                                       ((realDistFromPlayer - (visibleRange* alertRangeRate))/(visibleRange - visibleRange*alertRangeRate));
+            Debug.Log(noticeDuratOnApply);
+            if(noticeCountdown > noticeDuratOnApply)
             {
                 ChangeEnemyAIState(EnemyAIState.Alerted);
             }
             else
             {
-                Vector3 targetRotation = new Vector3(mainChar.eulerAngles.x, 0, mainChar.eulerAngles.z) 
-                                        - new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
-                RotateChar(targetRotation, 0.2f);
+                RotateCharToLookAt(mainChar.position, 0.1f);
             }
         }
         else if(!canSeeTarget)
         {
+            if (cancelSemiDetectCoroutine == null)
+                cancelSemiDetectCoroutine = StartCoroutine(IfCantSeeBackToPatrol());
 
+            if(noticeCountdown > noticeDuration/2)
+            {
+
+            }
         }
 
+    }
+    IEnumerator IfCantSeeBackToPatrol()
+    {
+        yield return new WaitForSeconds(suspectedDuration);
+        ChangeEnemyAIState(EnemyAIState.Patrol);
     }
     void AlertedFunction()
     {
         if (enteredNewState)
         {
-            navAgent.isStopped = true;
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            navAgent.speed = runSpeed;
+            navAgent.acceleration = runAcceleration;
+            StopNavMovement();
+            InvokeRepeating("AlertCoverCheckPeriodically", 0.5f, alertedCoverCheckCooldown);
             enteredNewState = false;
         }
+        if (navAgent.remainingDistance < navAgent.stoppingDistance)
+        {
+            StopNavMovement();
+        }
+        else
+        {
+            navAgent.isStopped = false;
+        }
+        navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy, mainChar.position).worldPos);
 
     }
+    void AlertCoverCheckPeriodically()
+    {
+        if(sqrDistFromPlayer < (visibleRange*visibleRange)/4)
+        {
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy, mainChar.position).worldPos);
+        }
+    }
+
     void SearchingFunction()
     {
 
@@ -268,5 +317,11 @@ public class EnemyScript : GeneralCharacter
             }
         }
     }
-public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching}
+    void StopNavMovement()
+    {
+        navAgent.isStopped = true;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+    public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching}
 }

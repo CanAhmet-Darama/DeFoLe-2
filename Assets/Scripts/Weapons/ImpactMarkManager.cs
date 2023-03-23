@@ -37,6 +37,7 @@ public class ImpactMarkManager : MonoBehaviour
 
     [Header("Sound stuff")]
     public static AudioSource audioSource;
+    [Range(0,1)]public float volumeOfAudio;
     public static AudioClip generalImpactSound;
     public static AudioClip dirtImpactSound;
     public static AudioClip[] concreteImpactSounds;
@@ -338,6 +339,8 @@ public class ImpactMarkManager : MonoBehaviour
         fleshImpactSound = _fleshImpactSound;
         fleshBladeImpactSound = _fleshBladeImpactSound;
         bulletWhoosh = _bulletWhoosh;
+
+        audioSource.volume = volumeOfAudio;
     }
     void ParticlesManagerStart()
     {

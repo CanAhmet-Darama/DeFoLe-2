@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.ParticleSystem;
 
 public class GeneralCharacter : MonoBehaviour
@@ -95,11 +96,18 @@ public class GeneralCharacter : MonoBehaviour
     {
         rb.AddForce(direction.normalized * acc, ForceMode.Impulse);
     }
-    public void RotateChar(Vector3 target, float smoothTime)
+    public void RotateChar(Vector3 target, float lerpSpeed)
     {
         Quaternion targetQua = Quaternion.Euler(transform.eulerAngles.x, target.y, transform.eulerAngles.z);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, smoothTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetQua, lerpSpeed);
     }
+    public void RotateCharToLookAt(Vector3 targetPos, float lerpSpeed)
+    {
+        Vector3 targetVec = new Vector3(targetPos.x, 0, targetPos.z) -
+                            new Vector3(transform.position.x, 0, transform.position.z);
+        transform.forward = Vector3.Lerp(transform.forward, targetVec, lerpSpeed);
+    }
+
 
     public void AccAndWalk(Vector3 direction)
     {

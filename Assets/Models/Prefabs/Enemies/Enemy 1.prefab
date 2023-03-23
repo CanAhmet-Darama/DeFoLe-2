@@ -449,13 +449,16 @@ MonoBehaviour:
   targetPlayer: {fileID: 0}
   canSeeTarget: 0
   sqrDistFromPlayer: 0
+  campOfEnemy: 0
   hasPermanentPlace: 0
   permanentCoverObject: {fileID: 0}
   patrolPoints: []
   lastPatrolIndex: 0
   patrolWaitDuration: 0
   noticeDuration: 4
-  alertedCoverCheckCooldown: 0
+  suspectedDuration: 3
+  alertedCoverCheckCooldown: 7
+  alertRangeRate: 0.25
   searchDuration: 0
   enemyInaccuracy: 0
   handShakeRate: 0
