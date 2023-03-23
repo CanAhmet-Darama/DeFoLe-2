@@ -448,12 +448,15 @@ MonoBehaviour:
   visibleRange: 100
   targetPlayer: {fileID: 0}
   canSeeTarget: 0
+  sqrDistFromPlayer: 0
   hasPermanentPlace: 0
   permanentCoverObject: {fileID: 0}
   patrolPoints: []
   lastPatrolIndex: 0
   patrolWaitDuration: 0
   alertedCoverCheckCooldown: 0
+  noticeDuration: 0
+  lastSeenPos: {x: 0, y: 0, z: 0}
   searchDuration: 0
   enemyInaccuracy: 0
   handShakeRate: 0
@@ -728,7 +731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3315857791075808872}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.012, y: 0.0081, z: 0}
+  m_LocalPosition: {x: -0.01567, y: 0.0081, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

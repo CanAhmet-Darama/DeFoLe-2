@@ -14,6 +14,7 @@ public class EnemyScript : GeneralCharacter
     public float visibleRange;
     public Transform targetPlayer;
     public bool canSeeTarget;
+    public float sqrDistFromPlayer;
 
     [Header("Enemy AI States")]
     bool enteredNewState;
@@ -24,6 +25,8 @@ public class EnemyScript : GeneralCharacter
     public float patrolWaitDuration;
     Coroutine patrolWaitCoroutine;
     public float alertedCoverCheckCooldown;
+    public float noticeDuration;
+    public Vector3 lastSeenPos;
     public float searchDuration;
 
 
@@ -43,6 +46,7 @@ public class EnemyScript : GeneralCharacter
     void Update()
     {
         GeneralCharUpdate();
+        sqrDistFromPlayer = (GameManager.mainChar.position - enemyEyes.position).sqrMagnitude;
         if (Input.GetKeyDown(KeyCode.G))
         {
             navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(1, GameManager.mainChar.position).worldPos);
@@ -139,6 +143,17 @@ public class EnemyScript : GeneralCharacter
             //Debug.Log("Started Coroutine");
             patrolWaitCoroutine = StartCoroutine(WaitForOtherPatrolPoint());
         }
+        if (canSeeTarget)
+        {
+            if(sqrDistFromPlayer < ((visibleRange * visibleRange) / 4))
+            {
+                ChangeEnemyAIState(EnemyAIState.Alerted);
+            }
+            else
+            {
+                ChangeEnemyAIState(EnemyAIState.SemiDetected);
+            }
+        }
     }
     IEnumerator WaitForOtherPatrolPoint()
     {
@@ -148,15 +163,25 @@ public class EnemyScript : GeneralCharacter
         navAgent.isStopped = false;
         lastPatrolIndex = (byte)((lastPatrolIndex + 1) % patrolPoints.Length);
         navAgent.SetDestination(patrolPoints[lastPatrolIndex]);
-        Debug.Log(navAgent.destination);
+        //Debug.Log(navAgent.destination);
         patrolWaitCoroutine = null;
     }
     void SemiDetectedFunction()
     {
+        if (enteredNewState)
+        {
+            navAgent.isStopped = true;
+            enteredNewState = false;
+        }
 
     }
     void AlertedFunction()
     {
+        if (enteredNewState)
+        {
+            navAgent.isStopped = true;
+            enteredNewState = false;
+        }
 
     }
     void SearchingFunction()
@@ -168,6 +193,7 @@ public class EnemyScript : GeneralCharacter
     {
         enteredNewState = true;
         enemyState = newState;
+        Debug.Log("Enemy is now : " + newState);
     }
     #endregion
     void CheckEyeSight()
@@ -178,30 +204,31 @@ public class EnemyScript : GeneralCharacter
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, visibleAngleX, enemyEyes.right, -visibleAngleY) * visibleRange, Color.gray);
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, -visibleAngleX, enemyEyes.right, -visibleAngleY) * visibleRange, Color.gray);
         #endregion
-        float sqrDistBetweenPlayerEnemy = (GameManager.mainChar.position - enemyEyes.position).sqrMagnitude;
-        if (sqrDistBetweenPlayerEnemy < visibleRange * visibleRange)
+        if (sqrDistFromPlayer < visibleRange * visibleRange)
         {
-            Ray rayToPlayer = new Ray(enemyEyes.position, GameManager.mainChar.position - enemyEyes.position);
             bool sawTarget = false;
+            #region Calculate Eyesight Angle
+            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformDirection((GameManager.mainChar.position - enemyEyes.position).normalized);
+            Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z);
+            Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
-            if (Physics.Raycast(rayToPlayer, out RaycastHit hitInfo,visibleRange, ~0,QueryTriggerInteraction.Ignore))
+            float angleY = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerY));
+            float angleX = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerX));
+
+            #endregion
+
+            if (angleX <= visibleAngleX && angleY <= visibleAngleY)
             {
+                Ray rayToPlayer = new Ray(enemyEyes.position, GameManager.mainChar.position - enemyEyes.position);
+                if (Physics.Raycast(rayToPlayer, out RaycastHit hitInfo,visibleRange, ~0,QueryTriggerInteraction.Ignore))
+                {
                     if (hitInfo.collider.CompareTag("Player"))
                     {
-                        #region Calculate Eyesight Angle
-                        Vector3 relativeTargetPos = enemyEyes.InverseTransformVector(GameManager.mainChar.position);
-                        float angleY = Mathf.Abs(relativeTargetPos.y - enemyEyes.position.y);
-                        float angleX = Mathf.Abs(relativeTargetPos.x - enemyEyes.position.x);
-                        if(angleX <= visibleAngleX && angleY <= visibleAngleY)
-                        {
-                            targetPlayer = hitInfo.transform;
-                            canSeeTarget = true;
-                        }
-                        #endregion
-
-
-
+                        targetPlayer = hitInfo.transform;
+                        canSeeTarget = true;
+                        Debug.DrawRay(rayToPlayer.origin, rayToPlayer.direction*hitInfo.distance, Color.green);
                     }
+                }
             }
             if (!sawTarget)
             {
