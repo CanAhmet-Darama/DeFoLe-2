@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public static Transform mainChar;
     public static Terrain mainTerrain;
     public static UI_Manager uiManager;
+    public static EnemyManager enemyManager;
     public static GameObject[] weaponPrefabs = new GameObject[6];
     public static GameObject[] enemyCamps;
     [SerializeField] GameObject[] weaponPrefabsAreThese;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform mainCarIsThis;
     [SerializeField] Terrain mainTerrainIsThis;
     [SerializeField] UI_Manager userInterfaceManagerIsThis;
+    [SerializeField] EnemyManager enemyManagerIsThis;
     [SerializeField] GameObject[] enemyCampsAreThese;
 
 
@@ -49,6 +51,8 @@ public class GameManager : MonoBehaviour
                 numberOfCamps = 3;
                 enemyCamps = new GameObject[numberOfCamps];
                 enemyCamps = enemyCampsAreThese;
+                enemyManager = enemyManagerIsThis;
+                enemyManager.EnemyManagerStart();
                 break;
         }
     }

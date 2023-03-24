@@ -392,7 +392,7 @@ MonoBehaviour:
   rb: {fileID: 1643108193539418682}
   isEnemy: 0
   currentWeapon: {fileID: 0}
-  hasWeapons: 0000000000
+  hasWeapons: 0000010000
   weapons:
   - {fileID: 0}
   - {fileID: 0}
@@ -459,7 +459,9 @@ MonoBehaviour:
   suspectedDuration: 3
   alertedCoverCheckCooldown: 7
   alertRangeRate: 0.25
-  searchDuration: 0
+  waitBeforeAlertingAllDuration: 4
+  searchDuration: 30
+  mainWeapon: {fileID: 0}
   enemyInaccuracy: 0
   handShakeRate: 0
   shootingFrequency: 0

@@ -60,7 +60,7 @@ public class CoverObjectsManager : MonoBehaviour
         coverObjectsOfWorld[campNumber - 1][holderArray.Length] = coverObj;
     }
 
-    public static CoverPoint GetCoverPoint(byte campNumber, Vector3 enemyPos)
+    public static CoverPoint GetCoverPoint(byte campNumber)
     {
         short coverIndex;
         while (true)
@@ -69,14 +69,14 @@ public class CoverObjectsManager : MonoBehaviour
             coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
             //coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length - 1));
 
-
+            
             CoverPoint[] cPointsOfObj;
 
             for(short i = coverIndex; i >= 0; i--)
             {
                 cPointsOfObj = coverObjectsOfWorld[campNumber - 1][i].coverPoints;
-
-                for(short j = (short)(cPointsOfObj.Length - 1); j >= 0; j--)
+                coverObjectsOfWorld[campNumber - 1][i].SortPointsByDistance(GameManager.mainChar.position);
+                for (short j = (short)(cPointsOfObj.Length - 1); j >= 0; j--)
                 {
                     if (!cPointsOfObj[j].isCoveredAlready)
                     {

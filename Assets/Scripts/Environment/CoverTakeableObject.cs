@@ -7,6 +7,7 @@ public class CoverTakeableObject : MonoBehaviour
     public CoverPoint[] coverPoints;
     public Vector3[] coverPositions;
     public byte campNumber;
+    public bool furthestIsBetter;
 
     void Start()
     {
@@ -52,22 +53,40 @@ public class CoverTakeableObject : MonoBehaviour
         }
 
     }
-    void SortPointsByDistance(Vector3 referencePos)
+    public void SortPointsByDistance(Vector3 referencePos)
     {
         bool hasSwapped = true;
         CoverPoint holderCoverObj;
         while (hasSwapped)
         {
             hasSwapped = false;
-            for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
+            /* furthestIsBetter helps emnemy to distinguish between sandbags etc. or windows etc. */
+            if (furthestIsBetter)
             {
-                if ((coverPoints[index].worldPos - referencePos).sqrMagnitude >
-                    (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
                 {
-                    holderCoverObj = coverPoints[index];
-                    coverPoints[index] = coverPoints[index + 1];
-                    coverPoints[index + 1] = holderCoverObj;
-                    hasSwapped = true;
+                    if ((coverPoints[index].worldPos - referencePos).sqrMagnitude >
+                        (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                    {
+                        holderCoverObj = coverPoints[index];
+                        coverPoints[index] = coverPoints[index + 1];
+                        coverPoints[index + 1] = holderCoverObj;
+                        hasSwapped = true;
+                    }
+                }
+            }
+            else
+            {
+                for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
+                {
+                    if ((coverPoints[index].worldPos - referencePos).sqrMagnitude <
+                        (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                    {
+                        holderCoverObj = coverPoints[index];
+                        coverPoints[index] = coverPoints[index + 1];
+                        coverPoints[index + 1] = holderCoverObj;
+                        hasSwapped = true;
+                    }
                 }
             }
         }
