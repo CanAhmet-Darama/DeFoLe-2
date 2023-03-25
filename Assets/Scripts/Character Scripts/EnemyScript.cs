@@ -17,6 +17,7 @@ public class EnemyScript : GeneralCharacter
     public float sqrDistFromPlayer;
     bool enteredNewState;
     Transform mainChar;
+    MainCharacter mainCharScript;
     [Range(1,3)]public byte campOfEnemy;
 
     [Header("Patrol")]
@@ -39,6 +40,8 @@ public class EnemyScript : GeneralCharacter
     [SerializeField] float alertedCoverCheckCooldown;
     [SerializeField][Range(0,1)]float alertRangeRate;
     [SerializeField] float waitBeforeAlertingAllDuration;
+    byte shouldFire;
+
 
     [Header("Searching")]
     [SerializeField]float searchDuration;
@@ -104,6 +107,7 @@ public class EnemyScript : GeneralCharacter
     {
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
+        mainCharScript = mainChar.GetComponent<MainCharacter>();
         for (short i = (short)(hasWeapons.Length - 1); i >= 0; i--)
         {
             if (hasWeapons[i] && i != (short)(WeaponType.Pistol))
@@ -279,7 +283,7 @@ public class EnemyScript : GeneralCharacter
     }
     void AlertCoverCheckPeriodically()
     {
-        if(sqrDistFromPlayer < (visibleRange*visibleRange)/4)
+        if(sqrDistFromPlayer > (visibleRange*visibleRange)/4)
         {
             navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy).worldPos);
         }
@@ -288,6 +292,10 @@ public class EnemyScript : GeneralCharacter
     {
         yield return new WaitForSeconds(waitBeforeAlertingAllDuration);
         EnemyManager.AlertWholeCamp(campOfEnemy);
+    }
+    void OnCoverBehaviour()
+    {
+
     }
 
     void SearchingFunction()

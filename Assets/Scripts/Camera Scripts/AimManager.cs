@@ -5,9 +5,9 @@ using UnityEngine.Animations.Rigging;
 
 public class AimManager : MonoBehaviour
 {
-    CameraScript mainCam;
     Camera mainCamera;
-    MainCharacter mainChar;
+
+    GeneralCharacter charToAim;
     Animator animator;
     Transform aimTarget;
     MultiAimConstraint multiAimCoRHand;
@@ -29,41 +29,54 @@ public class AimManager : MonoBehaviour
 
     float lerpOrSnapSpeed = 0.025f;
 
+    bool userIsPlayer;
+
 
     public void Start()
     {
-        mainCam = GameManager.mainCam.GetComponent<CameraScript>();
         mainCamera = GameManager.mainCam.GetComponent<Camera>();
-        mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
+        if(charToAim.GetComponent<MainCharacter>() != null)
+        {
+            charToAim = GameManager.mainChar.GetComponent<MainCharacter>();
+            userIsPlayer = true;
+        }
+        else
+        {
+            charToAim = GetComponentInParent<EnemyScript>();
+            userIsPlayer = false;
+        }
         quitAimingCompletely = true;
+
         #region Assign Constraints
-        animator = mainChar.animator;
-        aimTarget = mainChar.aimTarget.transform;
-        multiAimCoRHand = mainChar.rightHandConstraint;
-        multiAimCoLHand = mainChar.leftHandConstraint;
-        multiAimCoBody = mainChar.multiAimCoBody;
-        rightHCoTBIK = mainChar.rightHandTBIK;
-        leftHCoTBIK = mainChar.leftHandTBIK;
+        animator = charToAim.animator;
+        aimTarget = charToAim.aimTarget.transform;
+        multiAimCoRHand = charToAim.rightHandConstraint;
+        multiAimCoLHand = charToAim.leftHandConstraint;
+        multiAimCoBody = charToAim.multiAimCoBody;
+        rightHCoTBIK = charToAim.rightHandTBIK;
+        leftHCoTBIK = charToAim.leftHandTBIK;
         #endregion
     }
 
     void Update()
     {
-        if(GameManager.mainState == PlayerState.onFoot)
-        AimTargetPositioner();
+        if (userIsPlayer && GameManager.mainState == PlayerState.onFoot)
+        {
+            AimTargetPositioner();
+        }
     }
 
     void AimTargetPositioner()
     {
-        if(mainChar.weaponState == GeneralCharacter.WeaponState.ranged)
+        if(charToAim.weaponState == GeneralCharacter.WeaponState.ranged)
         {
-            isReloading = mainChar.isReloading;
+            isReloading = charToAim.isReloading;
             RightClickedOrNotManage(0.7f);
 
             if (quitAimingCompletely)
             {
                 multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0, lerpOrSnapSpeed);
-                if(mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                if(charToAim.currentWeapon.weaponType != WeaponType.SR_1)
                 {
                     multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
                 }
@@ -74,7 +87,7 @@ public class AimManager : MonoBehaviour
             }
 
         }
-        else// if (mainChar.weaponState != GeneralCharacter.WeaponState.ranged)
+        else// if (charToAim.weaponState != GeneralCharacter.WeaponState.ranged)
         {
             RightClickedOrNotManage(0.8f);
             if (quitAimingCompletely)
@@ -118,10 +131,10 @@ public class AimManager : MonoBehaviour
                 #endregion
 
                 multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, bodyTar, lerpOrSnapSpeed);
-                if(mainChar.weaponState == GeneralCharacter.WeaponState.ranged)
+                if(charToAim.weaponState == GeneralCharacter.WeaponState.ranged)
                 {
                     if (!isReloading) {
-                        if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                        if (charToAim.currentWeapon.weaponType != WeaponType.SR_1)
                         {
                             multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
                             leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 1, lerpOrSnapSpeed);
@@ -129,14 +142,14 @@ public class AimManager : MonoBehaviour
                         else
                         {
                             multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
-                            if (!mainChar.isShooting) {
+                            if (!charToAim.isShooting) {
                                 rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);}
                         }
 
                     }
                     else
                     {
-                        if (mainChar.currentWeapon.weaponType != WeaponType.SR_1)
+                        if (charToAim.currentWeapon.weaponType != WeaponType.SR_1)
                         {
                             multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
                             leftHCoTBIK.weight = 0;
@@ -153,7 +166,7 @@ public class AimManager : MonoBehaviour
             }
             else
             {
-                if (CameraScript.mouseMoved || mainChar.animStateSpeed != AnimStateSpeed.idle)
+                if (CameraScript.mouseMoved || charToAim.animStateSpeed != AnimStateSpeed.idle)
                 {
                     if(willQuitAimingCompletely != null)
                     {
