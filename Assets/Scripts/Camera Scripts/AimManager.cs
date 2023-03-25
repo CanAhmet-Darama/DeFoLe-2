@@ -7,7 +7,9 @@ public class AimManager : MonoBehaviour
 {
     Camera mainCamera;
 
-    GeneralCharacter charToAim;
+    [SerializeField]GeneralCharacter charToAim;
+    MainCharacter mainCharToUse;
+    EnemyScript enemyToUse;
     Animator animator;
     Transform aimTarget;
     MultiAimConstraint multiAimCoRHand;
@@ -29,21 +31,23 @@ public class AimManager : MonoBehaviour
 
     float lerpOrSnapSpeed = 0.025f;
 
-    bool userIsPlayer;
+    [SerializeField]bool userIsPlayer;
+
+    bool aimStart;
+    bool aimContinue;
+    bool aimEnd;
 
 
     public void Start()
     {
         mainCamera = GameManager.mainCam.GetComponent<Camera>();
-        if(charToAim.GetComponent<MainCharacter>() != null)
+        if(!charToAim.isEnemy)
         {
-            charToAim = GameManager.mainChar.GetComponent<MainCharacter>();
-            userIsPlayer = true;
+            mainCharToUse = GameManager.mainChar.GetComponent<MainCharacter>();
         }
         else
         {
-            charToAim = GetComponentInParent<EnemyScript>();
-            userIsPlayer = false;
+            enemyToUse = GetComponentInParent<EnemyScript>();
         }
         quitAimingCompletely = true;
 
@@ -60,8 +64,9 @@ public class AimManager : MonoBehaviour
 
     void Update()
     {
-        if (userIsPlayer && GameManager.mainState == PlayerState.onFoot)
+        if ((userIsPlayer && GameManager.mainState == PlayerState.onFoot) || !userIsPlayer)
         {
+            SetBoolsOfAimer();
             AimTargetPositioner();
         }
     }
@@ -99,11 +104,11 @@ public class AimManager : MonoBehaviour
     }
     void RightClickedOrNotManage(float bodyTar)
     {
-            if (Input.GetMouseButtonUp(1))
+            if (aimEnd)
             {
                 willQuitAimingCompletely = StartCoroutine(WaitToQuitAimingCompletely(1));
             }
-            if (Input.GetMouseButtonDown(1))
+            if (aimStart)
             {
                 if(willQuitAimingCompletely != null)
                 {
@@ -112,10 +117,23 @@ public class AimManager : MonoBehaviour
                 quitAimingCompletely = false;
                 animator.SetBool("isAiming", true);
             }
-            if (Input.GetMouseButton(1))
+            if (aimContinue)
             {
-                #region Raycasting for aiming
-                Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            #region Raycasting for aiming
+                Ray ray;
+                if (userIsPlayer)
+                {
+                    ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+                }
+                else
+                {
+                    float inaccEnemyX = Random.Range(0, enemyToUse.enemyInaccuracy);
+                    float inaccEnemyY = Random.Range(0, enemyToUse.enemyInaccuracy);
+
+                    Vector3 targetPos = GameManager.mainChar.position + inaccEnemyX * GameManager.mainChar.right + inaccEnemyY * GameManager.mainChar.up;
+                    ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
+                }
                 targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);
 
                 Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
@@ -177,6 +195,21 @@ public class AimManager : MonoBehaviour
                 }
             }
 
+    }
+    void SetBoolsOfAimer()
+    {
+        if (userIsPlayer)
+        {
+            aimStart = Input.GetMouseButtonDown(1);
+            aimContinue = Input.GetMouseButton(1);
+            aimEnd = Input.GetMouseButtonUp(1);
+        }
+        else
+        {
+            aimStart = enemyToUse.aimStarted;
+            aimContinue = enemyToUse.isAiming;
+            aimEnd = enemyToUse.aimEnded;
+        }
     }
     public static void ResetWeights(GeneralCharacter character)
     {

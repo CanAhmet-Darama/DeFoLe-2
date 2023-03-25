@@ -40,7 +40,14 @@ public class EnemyScript : GeneralCharacter
     [SerializeField] float alertedCoverCheckCooldown;
     [SerializeField][Range(0,1)]float alertRangeRate;
     [SerializeField] float waitBeforeAlertingAllDuration;
-    byte shouldFire;
+    #region Aiming and Fire
+    bool onCover;
+    bool shouldFire;
+    bool shouldReload;
+    [HideInInspector] public bool isAiming;
+    [HideInInspector] public bool aimStarted;
+    [HideInInspector] public bool aimEnded;
+    #endregion
 
 
     [Header("Searching")]
@@ -270,16 +277,21 @@ public class EnemyScript : GeneralCharacter
         if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
         {
             StopNavMovement();
+            onCover = true;
         }
         else if(navAgent.remainingDistance < navAgent.stoppingDistance && navAgent.isStopped)
         {
             RotateCharToLookAt(mainChar.position, 0.1f);
+            onCover = true;
+
         }
         else
         {
             navAgent.isStopped = false;
+            onCover = false;
         }
-        
+
+        OnCoverBehaviour();
     }
     void AlertCoverCheckPeriodically()
     {
@@ -295,6 +307,27 @@ public class EnemyScript : GeneralCharacter
     }
     void OnCoverBehaviour()
     {
+        Vector2 targetVec = new Vector2(mainChar.position.x, mainChar.position.z) -
+                    new Vector2(transform.position.x, transform.position.z);
+        Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
+        if (Vector2.Angle(enemyForward2, targetVec) < 25)
+        {
+            if (!isAiming) { aimStarted = true; }
+            else { aimStarted = false; }
+            isAiming = true;
+        }
+        else
+        {
+            if (isAiming)
+            {
+                aimEnded = true;
+            }
+            else
+            {
+                aimEnded = false;
+            }
+            isAiming = false;
+        }
 
     }
 
