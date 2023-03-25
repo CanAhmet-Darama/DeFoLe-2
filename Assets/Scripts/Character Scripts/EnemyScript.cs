@@ -47,6 +47,7 @@ public class EnemyScript : GeneralCharacter
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool aimStarted;
     [HideInInspector] public bool aimEnded;
+    float hasAimedDuration;
     #endregion
 
 
@@ -59,7 +60,7 @@ public class EnemyScript : GeneralCharacter
     [HideInInspector]public GeneralWeapon mainWeapon;
     public float enemyInaccuracy;
     public float handShakeRate;
-    public float shootingFrequency;
+    [Range(0,1)]public float shootingFrequency;
 
     void Start()
     {
@@ -270,8 +271,9 @@ public class EnemyScript : GeneralCharacter
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
             StopNavMovement();
-            InvokeRepeating("AlertCoverCheckPeriodically", 0.5f, alertedCoverCheckCooldown);
+            InvokeRepeating("AlertCoverCheckPeriodically", 0.1f, alertedCoverCheckCooldown);
             StartCoroutine(AlertEntireCamp());
+            shouldFire = true;
             enteredNewState = false;
         }
         if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
@@ -312,9 +314,14 @@ public class EnemyScript : GeneralCharacter
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
         if (Vector2.Angle(enemyForward2, targetVec) < 25)
         {
-            if (!isAiming) { aimStarted = true; }
+            if (!isAiming) { aimStarted = true; hasAimedDuration = 0; }
             else { aimStarted = false; }
             isAiming = true;
+            hasAimedDuration += Time.deltaTime;
+            if (shouldFire)
+            {
+                EnemyFire();
+            }
         }
         else
         {
@@ -328,6 +335,22 @@ public class EnemyScript : GeneralCharacter
             }
             isAiming = false;
         }
+
+    }
+    void EnemyFire()
+    {
+        if (canShoot)
+        {
+            currentWeapon.Fire();
+            StartCoroutine(PickRandomFrequencyToFire(shootingFrequency));
+        }
+    }
+    IEnumerator PickRandomFrequencyToFire(float frequencyLimit)
+    {
+        float extraWait = Random.Range(0, frequencyLimit);
+        shouldFire = false;
+        yield return new WaitForSeconds(currentWeapon.firingTime + currentWeapon.firingTime*extraWait);
+        shouldFire = true;
 
     }
 

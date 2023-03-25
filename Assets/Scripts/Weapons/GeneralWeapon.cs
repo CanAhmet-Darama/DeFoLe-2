@@ -87,8 +87,8 @@ public class GeneralWeapon : MonoBehaviour
     }
     public void Reload()
     {
-        owner.StartCoroutine("CanShootAgain", reloadTime);
-        owner.StartCoroutine("CanReloadAgain", reloadTime);
+        owner.StartCoroutine(owner.CanShootAgain(reloadTime));
+        owner.StartCoroutine(owner.CanReloadAgain(reloadTime));
         owner.animator.SetTrigger("reload");
         owner.isReloading = true;
         StartCoroutine(DisableSecondHandTBIK(reloadTime));
@@ -138,8 +138,8 @@ public class GeneralWeapon : MonoBehaviour
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
         gunAudioSource.Play();
         muzzleFlash.Play();
-        owner.StartCoroutine("CanShootAgain", firingTime);
-        owner.StartCoroutine("IsInFiring", firingTime);
+        owner.StartCoroutine(owner.CanShootAgain(firingTime));
+        owner.StartCoroutine(owner.IsInFiring(firingTime));
         currentAmmo--;
     }
     public GameObject GetAmmo()

@@ -132,7 +132,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 7463861691421538594}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -245,9 +245,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 0
   m_Data:
-    m_Root: {fileID: 4360030362680738777}
-    m_Mid: {fileID: 2657698556013139095}
-    m_Tip: {fileID: 8012656750789684978}
+    m_Root: {fileID: 2657698556013139095}
+    m_Mid: {fileID: 8012656750789684978}
+    m_Tip: {fileID: 7579946234821335112}
     m_Target: {fileID: 971220283}
     m_Hint: {fileID: 3182833}
     m_TargetPositionWeight: 1
@@ -466,9 +466,9 @@ MonoBehaviour:
   aimEnded: 0
   searchDuration: 30
   mainWeapon: {fileID: 0}
-  enemyInaccuracy: 0
+  enemyInaccuracy: 2
   handShakeRate: 0
-  shootingFrequency: 0
+  shootingFrequency: 1
 --- !u!195 &5188753059118141891
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -587,7 +587,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 7463861691421538594}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -792,9 +792,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 0
   m_Data:
-    m_Root: {fileID: 7557562937919021916}
-    m_Mid: {fileID: 8823347664558562173}
-    m_Tip: {fileID: 8121943439299072675}
+    m_Root: {fileID: 8823347664558562173}
+    m_Mid: {fileID: 8121943439299072675}
+    m_Tip: {fileID: 8862233887124280719}
     m_Target: {fileID: 6179833699367826911}
     m_Hint: {fileID: 5184436369270961156}
     m_TargetPositionWeight: 1
@@ -852,7 +852,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 7463861691421538594}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -1535,6 +1535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charToAim: {fileID: 779311080259487559}
   isReloading: 0
+  userIsPlayer: 0
 --- !u!1 &9090398627708968972
 GameObject:
   m_ObjectHideFlags: 0

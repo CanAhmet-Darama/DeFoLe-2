@@ -128,8 +128,8 @@ public class AimManager : MonoBehaviour
                 }
                 else
                 {
-                    float inaccEnemyX = Random.Range(0, enemyToUse.enemyInaccuracy);
-                    float inaccEnemyY = Random.Range(0, enemyToUse.enemyInaccuracy);
+                    float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
+                    float inaccEnemyY = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
 
                     Vector3 targetPos = GameManager.mainChar.position + inaccEnemyX * GameManager.mainChar.right + inaccEnemyY * GameManager.mainChar.up;
                     ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
