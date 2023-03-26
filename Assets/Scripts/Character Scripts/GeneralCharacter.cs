@@ -17,7 +17,7 @@ public class GeneralCharacter : MonoBehaviour
     public float runAcceleration;
     public float jumpForce;
     public float jumpCooldown;
-    public byte health;
+    public short health;
     public Rigidbody rb;
     public bool isEnemy;
 
@@ -321,6 +321,7 @@ public class GeneralCharacter : MonoBehaviour
     protected void GeneralCharStart()
     {
         canJump = true;
+        canReload = true;
         stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
         if (GetComponent<MainCharacter>() == null)
         {

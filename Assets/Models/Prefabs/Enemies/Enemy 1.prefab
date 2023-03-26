@@ -461,6 +461,7 @@ MonoBehaviour:
   alertedCoverCheckCooldown: 7
   alertRangeRate: 0.25
   waitBeforeAlertingAllDuration: 4
+  averageCrouchDuration: 3
   isAiming: 0
   aimStarted: 0
   aimEnded: 0

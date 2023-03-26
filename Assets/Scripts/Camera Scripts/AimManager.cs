@@ -41,11 +41,8 @@ public class AimManager : MonoBehaviour
     public void Start()
     {
         mainCamera = GameManager.mainCam.GetComponent<Camera>();
-        if(!charToAim.isEnemy)
-        {
-            mainCharToUse = GameManager.mainChar.GetComponent<MainCharacter>();
-        }
-        else
+        mainCharToUse = GameManager.mainChar.GetComponent<MainCharacter>();
+        if(charToAim.isEnemy)
         {
             enemyToUse = GetComponentInParent<EnemyScript>();
         }
@@ -131,7 +128,7 @@ public class AimManager : MonoBehaviour
                     float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
                     float inaccEnemyY = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
 
-                    Vector3 targetPos = GameManager.mainChar.position + inaccEnemyX * GameManager.mainChar.right + inaccEnemyY * GameManager.mainChar.up;
+                    Vector3 targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * GameManager.mainChar.right + inaccEnemyY * GameManager.mainChar.up;
                     ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
                 }
                 targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);

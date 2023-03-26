@@ -39,6 +39,8 @@ public class GeneralWeapon : MonoBehaviour
     public byte animOverriderIndex;
     [SerializeField] Animator subAnimator;
 
+    [Header("Other Usage")]
+    public byte recommendedShotsBeforeCrouch;
     #endregion
 
 

@@ -40,14 +40,15 @@ public class EnemyScript : GeneralCharacter
     [SerializeField] float alertedCoverCheckCooldown;
     [SerializeField][Range(0,1)]float alertRangeRate;
     [SerializeField] float waitBeforeAlertingAllDuration;
+    Coroutine checkCoverCoroutine;
     #region Aiming and Fire
-    bool onCover;
     bool shouldFire;
-    bool shouldReload;
+    byte numberOfShotsBeforeCrouch;
+    byte shotsSinceLastCrouch;
+    [SerializeField] float averageCrouchDuration;
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool aimStarted;
     [HideInInspector] public bool aimEnded;
-    float hasAimedDuration;
     #endregion
 
 
@@ -123,7 +124,8 @@ public class EnemyScript : GeneralCharacter
                 mainWeapon = weapons[i].GetComponent<GeneralWeapon>();
             }
         }
-
+        numberOfShotsBeforeCrouch = mainWeapon.recommendedShotsBeforeCrouch;
+        shotsSinceLastCrouch = 0;
         ChangeEnemyAIState(EnemyAIState.Patrol);
     }
     void NavAgentSetter()
@@ -271,7 +273,7 @@ public class EnemyScript : GeneralCharacter
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
             StopNavMovement();
-            InvokeRepeating("AlertCoverCheckPeriodically", 0.1f, alertedCoverCheckCooldown);
+            checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
             StartCoroutine(AlertEntireCamp());
             shouldFire = true;
             enteredNewState = false;
@@ -279,27 +281,33 @@ public class EnemyScript : GeneralCharacter
         if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
         {
             StopNavMovement();
-            onCover = true;
         }
         else if(navAgent.remainingDistance < navAgent.stoppingDistance && navAgent.isStopped)
         {
             RotateCharToLookAt(mainChar.position, 0.1f);
-            onCover = true;
-
+            OnCoverBehaviour();
         }
         else
         {
             navAgent.isStopped = false;
-            onCover = false;
         }
 
-        OnCoverBehaviour();
     }
-    void AlertCoverCheckPeriodically()
+    IEnumerator AlertCoverCheckPeriodically(float frequency)
     {
-        if(sqrDistFromPlayer > (visibleRange*visibleRange)/4)
+        if (sqrDistFromPlayer > (visibleRange * visibleRange) / 4)
         {
+            if (isCrouching) CrouchOrStand();
             navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy).worldPos);
+            if(currentWeapon.currentAmmo < currentWeapon.maxAmmo && ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
+            {
+                currentWeapon.Reload();
+            }
+        }
+        yield return new WaitForSeconds(frequency);
+        if(enemyState == EnemyAIState.Alerted)
+        {
+            checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(frequency));
         }
     }
     IEnumerator AlertEntireCamp()
@@ -314,13 +322,16 @@ public class EnemyScript : GeneralCharacter
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
         if (Vector2.Angle(enemyForward2, targetVec) < 25)
         {
-            if (!isAiming) { aimStarted = true; hasAimedDuration = 0; }
+            if (!isAiming) { aimStarted = true;}
             else { aimStarted = false; }
             isAiming = true;
-            hasAimedDuration += Time.deltaTime;
             if (shouldFire)
             {
-                EnemyFire();
+                if (!Physics.Raycast(currentWeapon.transform.position + currentWeapon.transform.TransformVector(currentWeapon.bulletLaunchOffset), 
+                                    currentWeapon.transform.forward, 1))
+                {
+                    EnemyFire();
+                }
             }
         }
         else
@@ -335,13 +346,21 @@ public class EnemyScript : GeneralCharacter
             }
             isAiming = false;
         }
+        
+        if(shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && !isCrouching && canCrouch)
+        {
+            StartCoroutine(WaitOnCrouch());
+        }
+        EnemyReloadCheck();
+
 
     }
     void EnemyFire()
     {
-        if (canShoot)
+        if (canShoot && !isCrouching)
         {
             currentWeapon.Fire();
+            shotsSinceLastCrouch++;
             StartCoroutine(PickRandomFrequencyToFire(shootingFrequency));
         }
     }
@@ -352,6 +371,25 @@ public class EnemyScript : GeneralCharacter
         yield return new WaitForSeconds(currentWeapon.firingTime + currentWeapon.firingTime*extraWait);
         shouldFire = true;
 
+    }
+    void EnemyReloadCheck()
+    {
+        if (currentWeapon.currentAmmo == 0)
+        {
+            canShoot = false;
+            if (ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
+            {
+                currentWeapon.Reload();
+            }
+        }
+
+    }
+    IEnumerator WaitOnCrouch()
+    {
+        CrouchOrStand();
+        yield return new WaitForSeconds(Random.Range(averageCrouchDuration-1,averageCrouchDuration+1));
+        if (isCrouching) CrouchOrStand();
+        shotsSinceLastCrouch = 0;
     }
 
     void SearchingFunction()

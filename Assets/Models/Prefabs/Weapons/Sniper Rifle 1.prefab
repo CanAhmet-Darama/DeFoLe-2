@@ -79,6 +79,7 @@ MonoBehaviour:
   reloadAnim: {fileID: -2336597958212458626, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   animOverriderIndex: 3
   subAnimator: {fileID: 4845926822839587}
+  recommendedShotsBeforeCrouch: 1
 --- !u!82 &301657730965318171
 AudioSource:
   m_ObjectHideFlags: 0
@@ -327,6 +328,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3084860141343235994
 GameObject:
   m_ObjectHideFlags: 0

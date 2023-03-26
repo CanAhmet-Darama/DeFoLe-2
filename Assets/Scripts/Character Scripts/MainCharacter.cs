@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class MainCharacter : GeneralCharacter
 {
+    [Header("Main Char Special")]
     [SerializeField] Transform camFreeLookPivot;
     [SerializeField] Transform meshAndArmature;
+    public Transform centerPointBone;
     AnimatingClass playerAnimating;
 
     #region Some Stuff
@@ -18,7 +20,6 @@ public class MainCharacter : GeneralCharacter
         ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
-        canReload = true;
     }
     void Update()
     {

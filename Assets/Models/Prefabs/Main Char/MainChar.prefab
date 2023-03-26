@@ -421,9 +421,16 @@ MonoBehaviour:
   jumpCooldown: 1.5
   health: 0
   rb: {fileID: 1643108193539418682}
+  isEnemy: 0
   currentWeapon: {fileID: 0}
   hasWeapons: 000000000000
   weapons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  weaponScripts:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -466,6 +473,7 @@ MonoBehaviour:
   isShooting: 0
   camFreeLookPivot: {fileID: 1230112494}
   meshAndArmature: {fileID: 913370396216349503}
+  centerPointBone: {fileID: 5799607903079124862}
 --- !u!1 &1754110545473961771
 GameObject:
   m_ObjectHideFlags: 0
