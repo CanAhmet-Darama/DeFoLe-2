@@ -467,7 +467,7 @@ MonoBehaviour:
   aimEnded: 0
   searchDuration: 30
   mainWeapon: {fileID: 0}
-  enemyInaccuracy: 2
+  enemyInaccuracy: 1
   handShakeRate: 0
   shootingFrequency: 1
 --- !u!195 &5188753059118141891

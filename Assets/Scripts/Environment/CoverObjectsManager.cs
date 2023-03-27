@@ -7,6 +7,7 @@ public class CoverObjectsManager : MonoBehaviour
 
     public static CoverPoint[][] coverPointsOfWorld;
     public static CoverTakeableObject[][] coverObjectsOfWorld;
+    public static float sortByDistanceCooldown = 5;
 
     void Awake()
     {
@@ -15,7 +16,7 @@ public class CoverObjectsManager : MonoBehaviour
     }
     void Start()
     {
-        StartCoroutine(SortCoverObjectsByDistanceCoroutine(1, GameManager.mainChar.position));
+        StartCoroutine(SortCoverObjectsByDistanceCoroutine(GameManager.mainChar.position));
     }
 
     public static void AddCoverPointsToList(byte campNumber, CoverPoint[] cPoints)
@@ -87,11 +88,29 @@ public class CoverObjectsManager : MonoBehaviour
             }
         }
     }
-    
+
     public IEnumerator SortCoverObjectsByDistanceCoroutine(byte campNumber, Vector3 posToTakeDistance)
     {
         yield return null;
-        SortCoverObjectsByDistance(campNumber, posToTakeDistance);
+        for (int i = GameManager.numberOfCamps - 1; i >= 0; i--)
+        {
+            SortCoverObjectsByDistance(campNumber, posToTakeDistance);
+            yield return null;
+        }
+    }
+    public IEnumerator SortCoverObjectsByDistanceCoroutine(Vector3 posToTakeDistance)
+    {
+        yield return null;
+        for(short i = (short)(GameManager.numberOfCamps - 1); i >= 0; i--)
+        {
+            if(EnemyManager.campsAlerted[i])
+            {
+                SortCoverObjectsByDistance((byte)i,posToTakeDistance);
+                yield return null;
+            }
+        }
+        yield return new WaitForSeconds(sortByDistanceCooldown);
+        StartCoroutine(SortCoverObjectsByDistanceCoroutine(GameManager.mainChar.position));
     }
     public static void SortCoverObjectsByDistance(byte campNumber, Vector3 posToTakeDistance)
     {

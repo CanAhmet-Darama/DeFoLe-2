@@ -19,6 +19,7 @@ public class EnemyScript : GeneralCharacter
     Transform mainChar;
     MainCharacter mainCharScript;
     [Range(1,3)]public byte campOfEnemy;
+    public byte enemyNumCode;
 
     [Header("Patrol")]
     public bool hasPermanentPlace;
@@ -54,7 +55,10 @@ public class EnemyScript : GeneralCharacter
 
     [Header("Searching")]
     [SerializeField]float searchDuration;
-    Vector3 lastSeenPos;
+    [SerializeField] float searchRangeHorizontal;
+    [SerializeField] float searchRangeVertical;
+    bool sawTargetOnPreviousFrame;
+    public Vector3 lastSeenPos;
 
 
     [Header("Using Weapons")]
@@ -75,37 +79,7 @@ public class EnemyScript : GeneralCharacter
     void Update()
     {
         GeneralCharUpdate();
-        sqrDistFromPlayer = (mainChar.position - enemyEyes.position).sqrMagnitude;
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy).worldPos);
-        }
-        else if (Input.GetKeyDown(KeyCode.J))
-        {
-            if (navAgent.speed != 0)
-            {
-                navAgent.speed = 0;
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
-            else navAgent.speed = walkSpeed;
-        }
-        if(navAgent.destination != null)
-        {
-            Vector3 offset = new Vector3(0,1.5f,0);
-            Debug.DrawRay(navAgent.destination + offset,
-                (new Vector3(0.6f, 0, 0)), Color.red);
-            Debug.DrawRay(navAgent.destination + offset,
-                    (new Vector3(-0.6f, 0, 0)), Color.red);
-            Debug.DrawRay(navAgent.destination + offset,
-                    (new Vector3(0, 0, 0.6f)), Color.red);
-            Debug.DrawRay(navAgent.destination + offset,
-                    (new Vector3(0, 0, -0.6f)), Color.red);
-            Debug.DrawRay(navAgent.destination + offset,
-                (new Vector3(0, -1, 0)), Color.green);
-
-        }
-
+        GeneralEnemyUpdate();
         CheckEyeSight();
         EnemyStateManager();
         AnimStateManage();
@@ -176,6 +150,26 @@ public class EnemyScript : GeneralCharacter
                 SearchingFunction();
                 break;
         }
+    }
+    void GeneralEnemyUpdate()
+    {
+        sqrDistFromPlayer = (mainChar.position - enemyEyes.position).sqrMagnitude;
+        if(navAgent.destination != null)
+        {
+            Vector3 offset = new Vector3(0,1.5f,0);
+            Debug.DrawRay(navAgent.destination + offset,
+                (new Vector3(0.6f, 0, 0)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                    (new Vector3(-0.6f, 0, 0)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                    (new Vector3(0, 0, 0.6f)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                    (new Vector3(0, 0, -0.6f)), Color.red);
+            Debug.DrawRay(navAgent.destination + offset,
+                (new Vector3(0, -1, 0)), Color.green);
+
+        }
+        EnemyManager.enemiesCanSee[campOfEnemy - 1][enemyNumCode] = canSeeTarget;
     }
 
     #region State Functions
@@ -290,6 +284,10 @@ public class EnemyScript : GeneralCharacter
         else
         {
             navAgent.isStopped = false;
+            if (isAiming)
+            {
+                EnemyFire(false);
+            }
         }
 
     }
@@ -325,12 +323,12 @@ public class EnemyScript : GeneralCharacter
             if (!isAiming) { aimStarted = true;}
             else { aimStarted = false; }
             isAiming = true;
-            if (shouldFire)
+            if (shouldFire && canSeeTarget)
             {
                 if (!Physics.Raycast(currentWeapon.transform.position + currentWeapon.transform.TransformVector(currentWeapon.bulletLaunchOffset), 
                                     currentWeapon.transform.forward, 1))
                 {
-                    EnemyFire();
+                    EnemyFire(true);
                 }
             }
         }
@@ -355,12 +353,12 @@ public class EnemyScript : GeneralCharacter
 
 
     }
-    void EnemyFire()
+    void EnemyFire(bool onCover)
     {
         if (canShoot && !isCrouching)
         {
             currentWeapon.Fire();
-            shotsSinceLastCrouch++;
+            if (onCover) { shotsSinceLastCrouch++; }
             StartCoroutine(PickRandomFrequencyToFire(shootingFrequency));
         }
     }
@@ -394,8 +392,47 @@ public class EnemyScript : GeneralCharacter
 
     void SearchingFunction()
     {
+        if (enteredNewState)
+        {
+            navAgent.speed = runSpeed;
+            navAgent.acceleration = runAcceleration;
+            StopNavMovement();
+            if(checkCoverCoroutine != null)
+            {
+                StopCoroutine(checkCoverCoroutine);
+            }
+
+            enteredNewState = false;
+        }
 
     }
+    void PickPointAroundLastSeenPos()
+    {
+        bool hasNotFoundSuitablePosYet = true;
+        Vector3 basePos = EnemyManager.lastSeenPosOfPlayer[campOfEnemy - 1];
+        Vector3 pointToSearchOn = basePos;
+        while (hasNotFoundSuitablePosYet)
+        {
+            float xPos = Random.Range(-searchRangeHorizontal, searchRangeHorizontal);
+            float zPos = Random.Range(-searchRangeHorizontal, searchRangeHorizontal);
+            float yPos = Random.Range(-searchRangeVertical, searchRangeVertical);
+            pointToSearchOn = basePos+new Vector3(xPos,yPos,zPos);
+            if (IsPointOnNavMesh(pointToSearchOn))
+            {
+                hasNotFoundSuitablePosYet = false;
+            }
+        }
+        navAgent.SetDestination(pointToSearchOn);
+    }
+    public static bool IsPointOnNavMesh(Vector3 point)
+    {
+        if (NavMesh.SamplePosition(point, out NavMeshHit hit, 0.1f, NavMesh.AllAreas))
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     public void ChangeEnemyAIState(EnemyAIState newState)
     {
