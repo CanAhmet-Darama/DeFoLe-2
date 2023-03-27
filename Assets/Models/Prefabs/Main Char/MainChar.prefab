@@ -473,7 +473,11 @@ MonoBehaviour:
   isShooting: 0
   camFreeLookPivot: {fileID: 1230112494}
   meshAndArmature: {fileID: 913370396216349503}
+  closestCamp: 0
+  closeToCampEnough: 0
   centerPointBone: {fileID: 5799607903079124862}
+  headOfChar: {fileID: 4743320325820802173}
+  centerOfChar: {fileID: 3544814617573992625}
 --- !u!1 &1754110545473961771
 GameObject:
   m_ObjectHideFlags: 0

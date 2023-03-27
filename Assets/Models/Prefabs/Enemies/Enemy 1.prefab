@@ -447,7 +447,6 @@ MonoBehaviour:
   visibleAngleX: 55
   visibleAngleY: 40
   visibleRange: 20
-  targetPlayer: {fileID: 0}
   canSeeTarget: 0
   sqrDistFromPlayer: 0
   campOfEnemy: 0
@@ -466,12 +465,12 @@ MonoBehaviour:
   isAiming: 0
   aimStarted: 0
   aimEnded: 0
-  searchDuration: 30
+  searchDuration: 12
   searchRangeHorizontal: 15
   searchRangeVertical: 3
+  lookElsewhereFrequency: 6
   lastSeenPos: {x: 0, y: 0, z: 0}
   enemyInaccuracy: 1
-  handShakeRate: 0
   shootingFrequency: 1
   mainWeapon: {fileID: 0}
 --- !u!195 &5188753059118141891

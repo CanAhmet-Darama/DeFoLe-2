@@ -105,7 +105,7 @@ public class CoverObjectsManager : MonoBehaviour
         {
             if(EnemyManager.campsAlerted[i])
             {
-                SortCoverObjectsByDistance((byte)i,posToTakeDistance);
+                SortCoverObjectsByDistance((byte)(i+1),posToTakeDistance);
                 yield return null;
             }
         }

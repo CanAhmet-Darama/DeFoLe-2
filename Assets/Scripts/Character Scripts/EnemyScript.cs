@@ -12,7 +12,6 @@ public class EnemyScript : GeneralCharacter
     public float visibleAngleX;
     public float visibleAngleY;
     public float visibleRange;
-    public Transform targetPlayer;
     public bool canSeeTarget;
     public float sqrDistFromPlayer;
     bool enteredNewState;
@@ -58,14 +57,13 @@ public class EnemyScript : GeneralCharacter
     [SerializeField] float searchRangeHorizontal;
     [SerializeField] float searchRangeVertical;
     [SerializeField] float lookElsewhereFrequency;
-    bool sawTargetOnPreviousFrame;
+    float timeSinceStartedSearch;
     public Vector3 lastSeenPos;
     Coroutine searchPositioningCoroutine;
 
 
     [Header("Using Weapons")]
     public float enemyInaccuracy;
-    public float handShakeRate;
     [Range(0,1)]public float shootingFrequency;
     [HideInInspector]public GeneralWeapon mainWeapon;
 
@@ -180,6 +178,9 @@ public class EnemyScript : GeneralCharacter
     {
         if (enteredNewState)
         {
+            navAgent.speed = walkSpeed;
+            navAgent.acceleration = walkAcceleration;
+            navAgent.isStopped = false;
             navAgent.SetDestination(patrolPoints[lastPatrolIndex]);
             enteredNewState = false;
         }
@@ -267,9 +268,10 @@ public class EnemyScript : GeneralCharacter
     {
         if (enteredNewState)
         {
+            StopNavMovement();
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
-            StopNavMovement();
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp).worldPos);
             checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
             StartCoroutine(AlertEntireCamp());
             shouldFire = true;
@@ -292,14 +294,13 @@ public class EnemyScript : GeneralCharacter
                 EnemyFire(false);
             }
         }
-
     }
     IEnumerator AlertCoverCheckPeriodically(float frequency)
     {
-        if (sqrDistFromPlayer > (visibleRange * visibleRange) / 4)
+        if (sqrDistFromPlayer > (visibleRange * visibleRange) / 4 && mainCharScript.closeToCampEnough)
         {
             if (isCrouching) CrouchOrStand();
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(campOfEnemy).worldPos);
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp).worldPos);
             if(currentWeapon.currentAmmo < currentWeapon.maxAmmo && ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
             {
                 currentWeapon.Reload();
@@ -397,17 +398,35 @@ public class EnemyScript : GeneralCharacter
     {
         if (enteredNewState)
         {
+            StopNavMovement();
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
-            StopNavMovement();
             if(checkCoverCoroutine != null)
             {
                 StopCoroutine(checkCoverCoroutine);
             }
             searchPositioningCoroutine=StartCoroutine(SearchForPlayerAroundLastSeenPos());
+            timeSinceStartedSearch = 0;
             enteredNewState = false;
         }
+        timeSinceStartedSearch += Time.deltaTime;
 
+        if(timeSinceStartedSearch > searchDuration)
+        {
+            ChangeEnemyAIState(EnemyAIState.Patrol);
+            if(searchPositioningCoroutine != null)
+            {
+                StopCoroutine(searchPositioningCoroutine);
+            }
+        }
+        if(canSeeTarget)
+        {
+            ChangeEnemyAIState(EnemyAIState.Alerted);
+            if (searchPositioningCoroutine != null)
+            {
+                StopCoroutine(searchPositioningCoroutine);
+            }
+        }
     }
     IEnumerator SearchForPlayerAroundLastSeenPos()
     {
@@ -471,16 +490,27 @@ public class EnemyScript : GeneralCharacter
 
             if (angleX <= visibleAngleX && angleY <= visibleAngleY)
             {
-                Ray rayToPlayer = new Ray(enemyEyes.position, mainChar.position - enemyEyes.position);
+                Ray rayToPlayer = new Ray(enemyEyes.position, mainCharScript.headOfChar.position - enemyEyes.position);
                 if (Physics.Raycast(rayToPlayer, out RaycastHit hitInfo,visibleRange, ~0,QueryTriggerInteraction.Ignore))
                 {
                     if (hitInfo.collider.CompareTag("Player"))
                     {
-                        targetPlayer = hitInfo.transform;
                         canSeeTarget = true;
                         Debug.DrawRay(rayToPlayer.origin, rayToPlayer.direction*hitInfo.distance, Color.green);
                     }
+                    else
+                    {
+                        canSeeTarget = false;
+                    }
                 }
+                else
+                {
+                    canSeeTarget = false;
+                }
+            }
+            else
+            {
+                canSeeTarget = false;
             }
         }
     }

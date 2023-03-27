@@ -11,6 +11,7 @@ public class MainCharacter : GeneralCharacter
     public bool closeToCampEnough;
     public Transform centerPointBone;
     AnimatingClass playerAnimating;
+    public Transform headOfChar;
 
     #region Some Stuff
     Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
@@ -20,7 +21,7 @@ public class MainCharacter : GeneralCharacter
     {
         GeneralCharStart();
         ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
-        closestCamp = 0;
+        closestCamp = 1;
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
         InvokeRepeating("CalculateClosestCamp",0,3);
@@ -393,7 +394,7 @@ public class MainCharacter : GeneralCharacter
             float newCampDist =GameManager.SqrDistance(GameManager.enemyCamps[i].transform.position, transform.position);
             if (newCampDist < GameManager.SqrDistance(GameManager.enemyCamps[closestCamp].transform.position, transform.position))
             {
-                closestCamp = (byte)i;
+                closestCamp = (byte)(i+1);
                 if(newCampDist < 150 * 150)
                 {
                     closeToCampEnough= true;

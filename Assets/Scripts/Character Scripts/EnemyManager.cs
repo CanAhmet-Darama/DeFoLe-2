@@ -16,12 +16,14 @@ public class EnemyManager : MonoBehaviour
     {
         enemies = new EnemyScript[GameManager.numberOfCamps][];
         enemyManagerIns = this;
+        StartCoroutine(AreEnemiesSeeingTarget());
     }
 
     void Update()
     {
         
     }
+    // Adds enemy to the given camp list
     public static void AddEnemyToList(byte campNumber, EnemyScript newEnemy)
     {
         if (enemies[campNumber - 1] == null)
@@ -49,17 +51,19 @@ public class EnemyManager : MonoBehaviour
             if(enemies[campNumber - 1][index].enemyState != EnemyScript.EnemyAIState.Alerted)
             enemies[campNumber - 1][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
         }
-        Debug.Log("Camp " + campNumber + " is alerted");
+        campsAlerted[campNumber - 1] = true;
+        Debug.Log("Camp " + (campNumber + 1) + " is alerted");
         enemyManagerIns.StartCoroutine(enemyManagerIns.SortCoversByDistance(campNumber));
     }
     public static void DealertWholeCamp(byte campNumber)
     {
-        for (short index = (short)(enemies[campNumber - 1].Length - 1); index >= 0; index--)
+        for (short index = (short)(enemies[campNumber].Length - 1); index >= 0; index--)
         {
-            if (enemies[campNumber - 1][index].enemyState == EnemyScript.EnemyAIState.Alerted)
-                enemies[campNumber - 1][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Searching);
+            if (enemies[campNumber][index].enemyState == EnemyScript.EnemyAIState.Alerted)
+                enemies[campNumber][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Searching);
         }
-        Debug.Log("Camp " + campNumber + " is not alerted anymore");
+        campsAlerted[campNumber] = false;
+        Debug.Log("Camp " + (campNumber + 1) + " is not alerted anymore");
 
     }
     IEnumerator SortCoversByDistance(byte campNumber)
@@ -74,12 +78,12 @@ public class EnemyManager : MonoBehaviour
 
     public static void CheckAnyoneInCampCanSeeTarget()
     {
-        for (byte campIndex = (byte)(enemies.Length - 1) ; campIndex >= 0 ; campIndex--)
+        for (short campIndex = (short)(enemies.Length - 1) ; campIndex >= 0 ; campIndex--)
         {
             if (campsAlerted[campIndex])
             {
                 bool anyoneSawTarget = false;
-                for (byte enemyIndex = (byte)(enemies[campIndex].Length-1); enemyIndex >= 0; enemyIndex--)
+                for (short enemyIndex = (short)(enemies[campIndex].Length-1); enemyIndex >= 0; enemyIndex--)
                 {
                     if (enemiesCanSee[campIndex][enemyIndex])
                     {
@@ -89,9 +93,15 @@ public class EnemyManager : MonoBehaviour
                 }
                 if(!anyoneSawTarget)
                 {
-                    DealertWholeCamp(campIndex);
+                    DealertWholeCamp((byte)campIndex);
                 }
             }
         }
+    }
+    IEnumerator AreEnemiesSeeingTarget()
+    {
+        CheckAnyoneInCampCanSeeTarget();
+        yield return new WaitForSeconds(2);
+        StartCoroutine(AreEnemiesSeeingTarget());
     }
 }
