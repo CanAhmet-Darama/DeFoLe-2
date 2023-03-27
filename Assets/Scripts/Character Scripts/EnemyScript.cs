@@ -57,15 +57,18 @@ public class EnemyScript : GeneralCharacter
     [SerializeField]float searchDuration;
     [SerializeField] float searchRangeHorizontal;
     [SerializeField] float searchRangeVertical;
+    [SerializeField] float lookElsewhereFrequency;
     bool sawTargetOnPreviousFrame;
     public Vector3 lastSeenPos;
+    Coroutine searchPositioningCoroutine;
 
 
     [Header("Using Weapons")]
-    [HideInInspector]public GeneralWeapon mainWeapon;
     public float enemyInaccuracy;
     public float handShakeRate;
     [Range(0,1)]public float shootingFrequency;
+    [HideInInspector]public GeneralWeapon mainWeapon;
+
 
     void Start()
     {
@@ -401,17 +404,22 @@ public class EnemyScript : GeneralCharacter
             {
                 StopCoroutine(checkCoverCoroutine);
             }
-
+            searchPositioningCoroutine=StartCoroutine(SearchForPlayerAroundLastSeenPos());
             enteredNewState = false;
         }
 
     }
-    void PickPointAroundLastSeenPos()
+    IEnumerator SearchForPlayerAroundLastSeenPos()
     {
-        bool hasNotFoundSuitablePosYet = true;
+        navAgent.SetDestination(PickPointAroundLastSeenPos());
+        yield return new WaitForSeconds(lookElsewhereFrequency + Random.Range(-2f,2f));
+        searchPositioningCoroutine = StartCoroutine(SearchForPlayerAroundLastSeenPos());
+    }
+    Vector3 PickPointAroundLastSeenPos()
+    {
         Vector3 basePos = EnemyManager.lastSeenPosOfPlayer[campOfEnemy - 1];
-        Vector3 pointToSearchOn = basePos;
-        while (hasNotFoundSuitablePosYet)
+        Vector3 pointToSearchOn;
+        while (true)
         {
             float xPos = Random.Range(-searchRangeHorizontal, searchRangeHorizontal);
             float zPos = Random.Range(-searchRangeHorizontal, searchRangeHorizontal);
@@ -419,10 +427,9 @@ public class EnemyScript : GeneralCharacter
             pointToSearchOn = basePos+new Vector3(xPos,yPos,zPos);
             if (IsPointOnNavMesh(pointToSearchOn))
             {
-                hasNotFoundSuitablePosYet = false;
+                return pointToSearchOn;
             }
         }
-        navAgent.SetDestination(pointToSearchOn);
     }
     public static bool IsPointOnNavMesh(Vector3 point)
     {

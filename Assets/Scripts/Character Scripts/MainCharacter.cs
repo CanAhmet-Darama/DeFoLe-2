@@ -7,6 +7,8 @@ public class MainCharacter : GeneralCharacter
     [Header("Main Char Special")]
     [SerializeField] Transform camFreeLookPivot;
     [SerializeField] Transform meshAndArmature;
+    public byte closestCamp;
+    public bool closeToCampEnough;
     public Transform centerPointBone;
     AnimatingClass playerAnimating;
 
@@ -18,8 +20,10 @@ public class MainCharacter : GeneralCharacter
     {
         GeneralCharStart();
         ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
+        closestCamp = 0;
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
+        InvokeRepeating("CalculateClosestCamp",0,3);
     }
     void Update()
     {
@@ -381,5 +385,24 @@ public class MainCharacter : GeneralCharacter
             GetMeleeWeaponOrHandsFree(WeaponState.handsFree);
         }
 
+    }
+    void CalculateClosestCamp()
+    {
+        for(int i = GameManager.enemyCamps.Length - 1; i >= 0; i--)
+        {
+            float newCampDist =GameManager.SqrDistance(GameManager.enemyCamps[i].transform.position, transform.position);
+            if (newCampDist < GameManager.SqrDistance(GameManager.enemyCamps[closestCamp].transform.position, transform.position))
+            {
+                closestCamp = (byte)i;
+                if(newCampDist < 150 * 150)
+                {
+                    closeToCampEnough= true;
+                }
+                else
+                {
+                    closeToCampEnough = false;
+                }
+            }
+        }
     }
 }

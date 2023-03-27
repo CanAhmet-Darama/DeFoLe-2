@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
 
     [Header("General Numbers")]
-    [HideInInspector] public static byte numberOfCamps = 3;
+    [HideInInspector] public static byte numberOfCamps = 4;
 
     void Awake()
     {
@@ -48,8 +48,7 @@ public class GameManager : MonoBehaviour
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
                 mainChar.GetComponent<MainCharacter>().RegulateMainChar();
 
-                numberOfCamps = 3;
-                enemyCamps = new GameObject[numberOfCamps];
+                numberOfCamps = 4;
                 enemyCamps = enemyCampsAreThese;
                 enemyManager = enemyManagerIsThis;
                 enemyManager.EnemyManagerStart();

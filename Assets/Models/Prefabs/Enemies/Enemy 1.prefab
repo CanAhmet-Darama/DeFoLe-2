@@ -451,6 +451,7 @@ MonoBehaviour:
   canSeeTarget: 0
   sqrDistFromPlayer: 0
   campOfEnemy: 0
+  enemyNumCode: 0
   hasPermanentPlace: 0
   permanentCoverObject: {fileID: 0}
   patrolPoints: []
@@ -466,10 +467,13 @@ MonoBehaviour:
   aimStarted: 0
   aimEnded: 0
   searchDuration: 30
-  mainWeapon: {fileID: 0}
+  searchRangeHorizontal: 15
+  searchRangeVertical: 3
+  lastSeenPos: {x: 0, y: 0, z: 0}
   enemyInaccuracy: 1
   handShakeRate: 0
   shootingFrequency: 1
+  mainWeapon: {fileID: 0}
 --- !u!195 &5188753059118141891
 NavMeshAgent:
   m_ObjectHideFlags: 0
