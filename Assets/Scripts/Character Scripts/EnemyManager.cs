@@ -11,6 +11,7 @@ public class EnemyManager : MonoBehaviour
     public static EnemyScript[][] enemies;
     public static float sortCoversCooldown = 6;
     static EnemyManager enemyManagerIns;
+    static Coroutine dealertCampCoroutine;
 
     public void EnemyManagerStart()
     {
@@ -93,10 +94,25 @@ public class EnemyManager : MonoBehaviour
                 }
                 if(!anyoneSawTarget)
                 {
-                    DealertWholeCamp((byte)campIndex);
+                    if(dealertCampCoroutine == null)
+                    {
+                        dealertCampCoroutine = enemyManagerIns.StartCoroutine(enemyManagerIns.DealertingCampCoroutine((byte)campIndex));
+                    }
+                }
+                else
+                {
+                    if(dealertCampCoroutine != null)
+                    {
+                        enemyManagerIns.StopCoroutine(dealertCampCoroutine);
+                    }
                 }
             }
         }
+    }
+    IEnumerator DealertingCampCoroutine(byte campIndex)
+    {
+        yield return new WaitForSeconds(3);
+        DealertWholeCamp(campIndex);
     }
     IEnumerator AreEnemiesSeeingTarget()
     {

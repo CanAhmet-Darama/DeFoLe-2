@@ -466,11 +466,11 @@ MonoBehaviour:
   aimStarted: 0
   aimEnded: 0
   searchDuration: 12
-  searchRangeHorizontal: 15
-  searchRangeVertical: 3
+  searchRangeHorizontal: 12
+  searchRangeVertical: 2
   lookElsewhereFrequency: 6
   lastSeenPos: {x: 0, y: 0, z: 0}
-  enemyInaccuracy: 1
+  enemyInaccuracy: 0.75
   shootingFrequency: 1
   mainWeapon: {fileID: 0}
 --- !u!195 &5188753059118141891

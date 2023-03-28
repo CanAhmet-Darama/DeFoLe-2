@@ -45,6 +45,8 @@ public class EnemyScript : GeneralCharacter
     bool shouldFire;
     byte numberOfShotsBeforeCrouch;
     byte shotsSinceLastCrouch;
+    float angleX;
+    float angleY;
     [SerializeField] float averageCrouchDuration;
     [HideInInspector] public bool isAiming;
     [HideInInspector] public bool aimStarted;
@@ -182,6 +184,7 @@ public class EnemyScript : GeneralCharacter
             navAgent.acceleration = walkAcceleration;
             navAgent.isStopped = false;
             navAgent.SetDestination(patrolPoints[lastPatrolIndex]);
+            isAiming = false;
             enteredNewState = false;
         }
         if(navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped && patrolWaitCoroutine == null)
@@ -289,7 +292,7 @@ public class EnemyScript : GeneralCharacter
         else
         {
             navAgent.isStopped = false;
-            if (isAiming)
+            if (isAiming && (angleX < 10 && angleY < 10))
             {
                 EnemyFire(false);
             }
@@ -306,7 +309,7 @@ public class EnemyScript : GeneralCharacter
                 currentWeapon.Reload();
             }
         }
-        yield return new WaitForSeconds(frequency);
+        yield return new WaitForSeconds(Random.Range(frequency, frequency + 1));
         if(enemyState == EnemyAIState.Alerted)
         {
             checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(frequency));
@@ -322,7 +325,7 @@ public class EnemyScript : GeneralCharacter
         Vector2 targetVec = new Vector2(mainChar.position.x, mainChar.position.z) -
                     new Vector2(transform.position.x, transform.position.z);
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
-        if (Vector2.Angle(enemyForward2, targetVec) < 25)
+        if (Vector2.Angle(enemyForward2, targetVec) < 20)
         {
             if (!isAiming) { aimStarted = true;}
             else { aimStarted = false; }
@@ -398,7 +401,6 @@ public class EnemyScript : GeneralCharacter
     {
         if (enteredNewState)
         {
-            StopNavMovement();
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
             if(checkCoverCoroutine != null)
@@ -438,21 +440,25 @@ public class EnemyScript : GeneralCharacter
     {
         Vector3 basePos = EnemyManager.lastSeenPosOfPlayer[campOfEnemy - 1];
         Vector3 pointToSearchOn;
-        while (true)
+        byte countTimes = 0;
+        while (countTimes < 30)
         {
-            float xPos = Random.Range(-searchRangeHorizontal, searchRangeHorizontal);
-            float zPos = Random.Range(-searchRangeHorizontal, searchRangeHorizontal);
-            float yPos = Random.Range(-searchRangeVertical, searchRangeVertical);
+            float xPos = Random.Range(-searchRangeHorizontal + mainChar.position.x, searchRangeHorizontal + mainChar.position.x);
+            float zPos = Random.Range(-searchRangeHorizontal+ mainChar.position.z, searchRangeHorizontal + mainChar.position.z);
+            float yPos = Random.Range(-searchRangeVertical + mainChar.position.y, searchRangeVertical + mainChar.position.y);
             pointToSearchOn = basePos+new Vector3(xPos,yPos,zPos);
             if (IsPointOnNavMesh(pointToSearchOn))
             {
+                Debug.Log("Point to search is : " + pointToSearchOn);
                 return pointToSearchOn;
             }
+            countTimes++;
         }
+        return basePos;
     }
     public static bool IsPointOnNavMesh(Vector3 point)
     {
-        if (NavMesh.SamplePosition(point, out NavMeshHit hit, 0.1f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(point, out NavMeshHit hit, 0.5f, NavMesh.AllAreas))
         {
             return true;
         }
@@ -483,8 +489,8 @@ public class EnemyScript : GeneralCharacter
             Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z);
             Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
-            float angleY = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerY));
-            float angleX = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerX));
+            angleY = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerY));
+            angleX = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerX));
 
             #endregion
 

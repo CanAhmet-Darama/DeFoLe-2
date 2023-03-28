@@ -126,7 +126,7 @@ public class AimManager : MonoBehaviour
                 else
                 {
                     float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
-                    float inaccEnemyY = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
+                    float inaccEnemyY = Random.Range(-(2*enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
 
                     Vector3 targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * GameManager.mainChar.right + inaccEnemyY * GameManager.mainChar.up;
                     ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
