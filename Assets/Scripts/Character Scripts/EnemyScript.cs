@@ -49,6 +49,7 @@ public class EnemyScript : GeneralCharacter
     float angleY;
     [SerializeField] float averageCrouchDuration;
     [HideInInspector] public bool isAiming;
+    [HideInInspector] public bool previousAiming;
     [HideInInspector] public bool aimStarted;
     [HideInInspector] public bool aimEnded;
     #endregion
@@ -134,6 +135,7 @@ public class EnemyScript : GeneralCharacter
     }
     void EnemyStateManager()
     {
+        SetAimingBools();
         switch (enemyState)
         {
             case EnemyAIState.Patrol:
@@ -223,8 +225,9 @@ public class EnemyScript : GeneralCharacter
         if (enteredNewState)
         {
             StopNavMovement();
-            enteredNewState = false;
+            if (patrolWaitCoroutine != null) StopCoroutine(patrolWaitCoroutine);
             noticeCountdown = 0;
+            enteredNewState = false;
         }
         noticeCountdown += Time.deltaTime;
         if(canSeeTarget)
@@ -271,6 +274,7 @@ public class EnemyScript : GeneralCharacter
     {
         if (enteredNewState)
         {
+            navAgent.ResetPath();
             StopNavMovement();
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
@@ -278,6 +282,7 @@ public class EnemyScript : GeneralCharacter
             checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
             StartCoroutine(AlertEntireCamp());
             shouldFire = true;
+            if (patrolWaitCoroutine != null) StopCoroutine(patrolWaitCoroutine);
             enteredNewState = false;
         }
         if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
@@ -327,8 +332,6 @@ public class EnemyScript : GeneralCharacter
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
         if (Vector2.Angle(enemyForward2, targetVec) < 20)
         {
-            if (!isAiming) { aimStarted = true;}
-            else { aimStarted = false; }
             isAiming = true;
             if (shouldFire && canSeeTarget)
             {
@@ -341,14 +344,6 @@ public class EnemyScript : GeneralCharacter
         }
         else
         {
-            if (isAiming)
-            {
-                aimEnded = true;
-            }
-            else
-            {
-                aimEnded = false;
-            }
             isAiming = false;
         }
         
@@ -409,31 +404,44 @@ public class EnemyScript : GeneralCharacter
             }
             searchPositioningCoroutine=StartCoroutine(SearchForPlayerAroundLastSeenPos());
             timeSinceStartedSearch = 0;
+            isAiming = false;
+
             enteredNewState = false;
         }
         timeSinceStartedSearch += Time.deltaTime;
 
         if(timeSinceStartedSearch > searchDuration)
         {
-            ChangeEnemyAIState(EnemyAIState.Patrol);
             if(searchPositioningCoroutine != null)
             {
                 StopCoroutine(searchPositioningCoroutine);
             }
+            ChangeEnemyAIState(EnemyAIState.Patrol);
+            return;
         }
         if(canSeeTarget)
         {
-            ChangeEnemyAIState(EnemyAIState.Alerted);
             if (searchPositioningCoroutine != null)
             {
                 StopCoroutine(searchPositioningCoroutine);
             }
+            ChangeEnemyAIState(EnemyAIState.Alerted);
         }
     }
     IEnumerator SearchForPlayerAroundLastSeenPos()
     {
         navAgent.SetDestination(PickPointAroundLastSeenPos());
+        while (true)
+        {
+            yield return null;
+            if (navAgent.remainingDistance < navAgent.stoppingDistance)
+            {
+                StopNavMovement();
+                break;
+            }
+        }
         yield return new WaitForSeconds(lookElsewhereFrequency + Random.Range(-2f,2f));
+        navAgent.isStopped = false;
         searchPositioningCoroutine = StartCoroutine(SearchForPlayerAroundLastSeenPos());
     }
     Vector3 PickPointAroundLastSeenPos()
@@ -473,6 +481,25 @@ public class EnemyScript : GeneralCharacter
         Debug.Log("Enemy is now : " + newState);
     }
     #endregion
+    void SetAimingBools()
+    {
+        if((previousAiming && isAiming)||(!previousAiming && !isAiming))
+        {
+            aimStarted = false;
+            aimEnded = false;
+        }
+        else if(!previousAiming && isAiming)
+        {
+            aimStarted = true;
+            aimEnded = false;
+        }
+        else if(previousAiming && !isAiming)
+        {
+            aimStarted = false;
+            aimEnded = true;
+        }
+        previousAiming = isAiming;
+    }
     void CheckEyeSight()
     {
         #region Visiualize EyesightQ
@@ -485,7 +512,7 @@ public class EnemyScript : GeneralCharacter
         if (sqrDistFromPlayer < visibleRange * visibleRange)
         {
             #region Calculate Eyesight Angle
-            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformDirection((mainChar.position - enemyEyes.position).normalized);
+            Vector3 fromEyesToPlayer = (mainCharScript.headOfChar.position - enemyEyes.position).normalized;
             Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z);
             Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
@@ -506,18 +533,26 @@ public class EnemyScript : GeneralCharacter
                     }
                     else
                     {
+                        Debug.Log("canSeeTarget falsed by different collider");
                         canSeeTarget = false;
                     }
                 }
                 else
                 {
+                    Debug.Log("canSeeTarget falsed by not hitting");
                     canSeeTarget = false;
                 }
             }
             else
             {
+                Debug.Log("canSeeTarget falsed by being out of field of view");
                 canSeeTarget = false;
             }
+        }
+        else
+        {
+            Debug.Log("canSeeTarget falsed by distance");
+            canSeeTarget = false;
         }
     }
     void StopNavMovement()

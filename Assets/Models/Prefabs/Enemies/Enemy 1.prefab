@@ -465,7 +465,7 @@ MonoBehaviour:
   isAiming: 0
   aimStarted: 0
   aimEnded: 0
-  searchDuration: 12
+  searchDuration: 16
   searchRangeHorizontal: 12
   searchRangeVertical: 2
   lookElsewhereFrequency: 6

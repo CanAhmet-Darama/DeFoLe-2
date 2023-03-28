@@ -8,6 +8,7 @@ public class CoverTakeableObject : MonoBehaviour
     public Vector3[] coverPositions;
     public byte campNumber;
     public bool furthestIsBetter;
+    public bool crouchOrPeekCover;
 
     void Start()
     {
