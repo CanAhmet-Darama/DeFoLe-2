@@ -419,7 +419,7 @@ MonoBehaviour:
   runAcceleration: 50
   jumpForce: 450
   jumpCooldown: 1.5
-  health: 0
+  health: 300
   rb: {fileID: 1643108193539418682}
   isEnemy: 0
   currentWeapon: {fileID: 0}
@@ -477,7 +477,6 @@ MonoBehaviour:
   closeToCampEnough: 0
   centerPointBone: {fileID: 5799607903079124862}
   headOfChar: {fileID: 4743320325820802173}
-  centerOfChar: {fileID: 3544814617573992625}
 --- !u!1 &1754110545473961771
 GameObject:
   m_ObjectHideFlags: 0

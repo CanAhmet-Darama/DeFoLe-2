@@ -107,6 +107,10 @@ public class EnemyScript : GeneralCharacter
         numberOfShotsBeforeCrouch = mainWeapon.recommendedShotsBeforeCrouch;
         shotsSinceLastCrouch = 0;
         ChangeEnemyAIState(EnemyAIState.Patrol);
+        if (hasPermanentPlace)
+        {
+            StartCoroutine(PermanentPlaceCoverCheck());
+        }
     }
     void NavAgentSetter()
     {
@@ -177,6 +181,15 @@ public class EnemyScript : GeneralCharacter
 
         }
         EnemyManager.enemiesCanSee[campOfEnemy - 1][enemyNumCode] = canSeeTarget;
+    }
+    IEnumerator PermanentPlaceCoverCheck()
+    {
+        yield return new WaitForSeconds(alertedCoverCheckCooldown);
+        if(enemyState == EnemyAIState.Alerted)
+        {
+            permanentCoverObject.SortPointsByDistance(mainChar.position);
+        }
+        StartCoroutine(PermanentPlaceCoverCheck());
     }
 
     #region State Functions
@@ -280,7 +293,14 @@ public class EnemyScript : GeneralCharacter
             StopNavMovement();
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp,this));
+            if (!hasPermanentPlace)
+            {
+                navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp,this));
+            }
+            else
+            {
+                navAgent.SetDestination(permanentCoverObject.coverPoints[0].worldPos);
+            }
             checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
             StartCoroutine(AlertEntireCamp());
             shouldFire = true;
@@ -317,6 +337,11 @@ public class EnemyScript : GeneralCharacter
             {
                 currentWeapon.Reload();
             }
+        }
+        else if (!currentCoverPoint.crouchOrPeek && Mathf.Abs(Vector3.Angle(-currentCoverPoint.coverForwardForPeek, 
+            currentCoverPoint.worldPos - new Vector3(mainChar.position.x, currentCoverPoint.worldPos.y, mainChar.position.z))) > 15)
+        {
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this, true));
         }
         yield return new WaitForSeconds(Random.Range(frequency, frequency + 1));
         if(enemyState == EnemyAIState.Alerted)
@@ -372,7 +397,6 @@ public class EnemyScript : GeneralCharacter
                 peekableCoverCoroutine = StartCoroutine(WaitBehindCover());
             }
         }
-        EnemyReloadCheck();
 
 
     }
@@ -408,6 +432,10 @@ public class EnemyScript : GeneralCharacter
     IEnumerator WaitOnCrouch()
     {
         CrouchOrStand();
+        if (isCrouching)
+        {
+            EnemyReloadCheck();
+        }
         yield return new WaitForSeconds(Random.Range(averageCrouchDuration-1,averageCrouchDuration+1));
         if (isCrouching) CrouchOrStand();
         shotsSinceLastCrouch = 0;
@@ -415,10 +443,11 @@ public class EnemyScript : GeneralCharacter
     IEnumerator WaitBehindCover()
     {
         navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * currentCoverPoint.peekCoverDistanceFromCenter);
+        EnemyReloadCheck();
         yield return new WaitForSeconds(Random.Range(averageCrouchDuration - 1, averageCrouchDuration + 1));
         shotsSinceLastCrouch = 0;
-        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * currentCoverPoint.peekCoverDistanceFromCenter + 
-            StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek* currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
+        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * currentCoverPoint.peekCoverDistanceFromCenter * 0.75f + 
+            StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek* currentCoverPoint.peekCoverDistanceFromCenter * 0.75f, Vector3.up, 90));
         peekableCoverCoroutine = null;
     }
 

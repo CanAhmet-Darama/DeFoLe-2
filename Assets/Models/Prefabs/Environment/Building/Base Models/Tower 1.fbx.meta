@@ -3,7 +3,12 @@ guid: 45290bb20b0a5c44aaed4e42d987f0c5
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Top Tower Material
+    second: {fileID: 2100000, guid: 52155ff3a1b951d4089d1c352e87a371, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

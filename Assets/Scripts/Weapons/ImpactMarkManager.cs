@@ -87,7 +87,7 @@ public class ImpactMarkManager : MonoBehaviour
         InstantiateBladeImpacts();
     }
 
-    public static void CallMark(Vector3 pos, Vector3 rot, EnvObjType objType)
+    public static void CallMark(Vector3 pos, Vector3 rot, EnvObjType objType, float volume = 1)
     {
         GameObject mark = GetMarkReady();
         mark.transform.position = pos;
@@ -97,9 +97,10 @@ public class ImpactMarkManager : MonoBehaviour
 
         MakeImpactParticle(pos, rot, objType);
 
+        if(volume>0)
         MakeImpactSound(pos, objType);
     }
-    public static void CallBladeMark(Vector3 pos, Vector3 rot, EnvObjType objType)
+    public static void CallBladeMark(Vector3 pos, Vector3 rot, EnvObjType objType, float volume = 1)
     {
         GameObject bladeM;
         switch(objType)
@@ -118,7 +119,8 @@ public class ImpactMarkManager : MonoBehaviour
         impactManagerIns.StartCoroutine(impactManagerIns.DeleteBladeMark(bladeM, lastCalledBladeIndex));
 
         MakeImpactParticle(pos, rot + new Vector3(0,0,180), objType);
-        MakeImpactSound(pos, objType);
+        if (volume > 0)
+            MakeImpactSound(pos, objType, volume);
 
     }
 
@@ -248,7 +250,7 @@ public class ImpactMarkManager : MonoBehaviour
         return bulletImpacts[4,0];
     }
 
-    public static void MakeImpactSound(Vector3 pos, EnvObjType objType)
+    public static void MakeImpactSound(Vector3 pos, EnvObjType objType, float volume = 1)
     {
         AudioClip impactSound;
         int randNum;
@@ -271,7 +273,7 @@ public class ImpactMarkManager : MonoBehaviour
                 break;
         }
         audioSource.transform.position = pos;
-        audioSource.PlayOneShot(impactSound);
+        audioSource.PlayOneShot(impactSound, volume);
     }
     public static void MakeImpactParticle(Vector3 pos, Vector3 rot, EnvObjType objType)
     {

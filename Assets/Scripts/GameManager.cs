@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
                 enemyCamps = enemyCampsAreThese;
                 enemyManager = enemyManagerIsThis;
                 enemyManager.EnemyManagerStart();
+
+                TerrainManager.mainTerrain = mainTerrain;
                 break;
         }
     }

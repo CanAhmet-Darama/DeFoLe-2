@@ -10,6 +10,7 @@ public class CoverTakeableObject : MonoBehaviour
     public bool furthestIsBetter;
     public bool crouchOrPeekCover;
     public float peekCoverDistanceFromCenter;
+    public bool forStaticUsage;
 
     void Start()
     {
@@ -20,10 +21,6 @@ public class CoverTakeableObject : MonoBehaviour
     void Update()
     {
         DrawRaysForCoverPositions();
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            SortPointsByDistance(GameManager.mainChar.position);
-        }
     }
     void SetCoverPointPositions()
     {

@@ -61,47 +61,64 @@ public class CoverObjectsManager : MonoBehaviour
         coverObjectsOfWorld[campNumber - 1][holderArray.Length] = coverObj;
     }
 
-    public static Vector3 GetCoverPoint(byte campNumber, EnemyScript enemyScriptIns = null)
+    public static Vector3 GetCoverPoint(byte campNumber, EnemyScript enemyScriptIns = null, bool stayOnSamePeekCover = false)
     {
-        short coverIndex;
-        while (true)
+        if (!stayOnSamePeekCover)
         {
-            /* I don't let it to take a random object which is too close or far from enemy */
-            //coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
-            coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length));
+            short coverIndex;
+            while (true)
+            {
+                /* I don't let it to take a random object which is too close or far from enemy */
+                //coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
+                coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length));
 
             
-            CoverPoint[] cPointsOfObj;
+                CoverPoint[] cPointsOfObj;
 
-            for(short i = coverIndex; i >= 0; i--)
-            {
-                cPointsOfObj = coverObjectsOfWorld[campNumber - 1][i].coverPoints;
-                coverObjectsOfWorld[campNumber - 1][i].SortPointsByDistance(GameManager.mainChar.position);
-                for (short j = (short)(cPointsOfObj.Length - 1); j >= 0; j--)
+                for(short i = coverIndex; i >= 0; i--)
                 {
-                    if (!cPointsOfObj[j].isCoveredAlready)
+                    if(!coverObjectsOfWorld[campNumber - 1][i].forStaticUsage)
                     {
-                        if (cPointsOfObj[j].crouchOrPeek)
+                        cPointsOfObj = coverObjectsOfWorld[campNumber - 1][i].coverPoints;
+                        coverObjectsOfWorld[campNumber - 1][i].SortPointsByDistance(GameManager.mainChar.position);
+                        for (short j = (short)(cPointsOfObj.Length - 1); j >= 0; j--)
                         {
-                            enemyScriptIns.currentCoverPoint = cPointsOfObj[j];
-                            return cPointsOfObj[j].worldPos;
-                        }
-                        else
-                        {
-                            Debug.Log("Picked a cover with peek");
-                            enemyScriptIns.currentCoverPoint = cPointsOfObj[j];
-                            Vector3 yResetPoint = new Vector3(cPointsOfObj[j].worldPos.x, 0, cPointsOfObj[j].worldPos.z);
-                            Vector3 yResetPlayer = new Vector3(GameManager.mainChar.position.x,0, GameManager.mainChar.position.z);
+                            if (!cPointsOfObj[j].isCoveredAlready)
+                            {
+                                if (cPointsOfObj[j].crouchOrPeek)
+                                {
+                                    enemyScriptIns.currentCoverPoint = cPointsOfObj[j];
+                                    return cPointsOfObj[j].worldPos;
+                                }
+                                else
+                                {
+                                    Debug.Log("Picked a cover with peek");
+                                    enemyScriptIns.currentCoverPoint = cPointsOfObj[j];
+                                    Vector3 yResetPoint = new Vector3(cPointsOfObj[j].worldPos.x, 0, cPointsOfObj[j].worldPos.z);
+                                    Vector3 yResetPlayer = new Vector3(GameManager.mainChar.position.x,0, GameManager.mainChar.position.z);
 
-                            enemyScriptIns.currentCoverPoint.coverForwardForPeek = (yResetPoint - yResetPlayer).normalized;
-                            return (cPointsOfObj[j].worldPos+ enemyScriptIns.currentCoverPoint.coverForwardForPeek
-                                * cPointsOfObj[j].peekCoverDistanceFromCenter + StairCheckScript.RotateVecAroundVec(
-                                enemyScriptIns.currentCoverPoint.coverForwardForPeek * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
+                                    enemyScriptIns.currentCoverPoint.coverForwardForPeek = (yResetPoint - yResetPlayer).normalized;
+                                    return (cPointsOfObj[j].worldPos+ enemyScriptIns.currentCoverPoint.coverForwardForPeek
+                                        * cPointsOfObj[j].peekCoverDistanceFromCenter + StairCheckScript.RotateVecAroundVec(
+                                        enemyScriptIns.currentCoverPoint.coverForwardForPeek * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
+                                }
+                            }
                         }
                     }
-                }
 
+                }
             }
+        }
+        else
+        {
+            Vector3 yResetPoint = new Vector3(enemyScriptIns.currentCoverPoint.worldPos.x, 0, enemyScriptIns.currentCoverPoint.worldPos.z);
+            Vector3 yResetPlayer = new Vector3(GameManager.mainChar.position.x, 0, GameManager.mainChar.position.z);
+
+            enemyScriptIns.currentCoverPoint.coverForwardForPeek = (yResetPoint - yResetPlayer).normalized;
+            return (enemyScriptIns.currentCoverPoint.worldPos + enemyScriptIns.currentCoverPoint.coverForwardForPeek
+                * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter + StairCheckScript.RotateVecAroundVec(
+                enemyScriptIns.currentCoverPoint.coverForwardForPeek * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
+
         }
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -47,7 +48,7 @@ public class GeneralBullet : MonoBehaviour
             if ((transform.position - firedPos).sqrMagnitude < 50 || (transform.position - GameManager.mainCam.position).sqrMagnitude < 2500)
             {
                 ContactPoint contact = collision.contacts[0];
-                if (collision.gameObject.GetComponent<EnvObject>() != null)
+                if (collision.gameObject.GetComponent<EnvObject>() != null || collision.collider.GetType() == typeof(TerrainCollider))
                 {
                     /*if (collision.gameObject == GameManager.mainTerrain.gameObject)
                     {
@@ -85,9 +86,61 @@ public class GeneralBullet : MonoBehaviour
                         }
 
                     }*/
+                    if (collision.gameObject == GameManager.mainTerrain.gameObject)
+                    {
+                        TerrainManager.GetTerrainTexture(transform.position);
+                        float[] textureValues = new float[TerrainManager.textureValues.Length];
+                        Array.Copy(TerrainManager.textureValues, textureValues, TerrainManager.textureValues.Length);
+                        for(short textureIndex = (short)(textureValues.Length - 1); textureIndex >= 0; textureIndex--)
+                        {
+                            if (textureValues[textureIndex] > 0)
+                            {
+                                EnvObjType terrainPointType = EnvObjType.general;
+                                switch (textureIndex)
+                                {
+                                    case 0:
+                                        terrainPointType = EnvObjType.dirt;
+                                        break;
+                                    case 1:
+                                        terrainPointType = EnvObjType.dirt;
+                                        break;
+                                    case 2:
+                                        terrainPointType = EnvObjType.concrete;
+                                        break;
+                                }
 
-                    ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
-                            collision.gameObject.GetComponent<EnvObject>().objectType);
+                                ImpactMarkManager.MakeImpactSound(collision.contacts[0].point, terrainPointType, textureValues[textureIndex]);
+                            }
+                        }
+                        EnvObjType terrainPointTypeForMark = EnvObjType.general;
+                        Array.Sort(textureValues);
+                        for (short i = (short)(textureValues.Length - 1); i >= 0;i--)
+                        {
+                            if (TerrainManager.textureValues[i] == textureValues[textureValues.Length-1])
+                            {
+                                switch (i)
+                                {
+                                    case 0:
+                                        terrainPointTypeForMark = EnvObjType.dirt;
+                                        break;
+                                    case 1:
+                                        terrainPointTypeForMark = EnvObjType.dirt;
+                                        break;
+                                    case 2:
+                                        terrainPointTypeForMark = EnvObjType.concrete;
+                                        break;
+                                }
+                                ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                                    terrainPointTypeForMark,0);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                                collision.gameObject.GetComponent<EnvObject>().objectType);
+                    }
                 }
                 else if(collision.collider.GetType() == typeof(WheelCollider))
                 {
