@@ -95,7 +95,8 @@ public class CoverObjectsManager : MonoBehaviour
 
                             enemyScriptIns.currentCoverPoint.coverForwardForPeek = (yResetPoint - yResetPlayer).normalized;
                             return (cPointsOfObj[j].worldPos+ enemyScriptIns.currentCoverPoint.coverForwardForPeek
-                                * cPointsOfObj[j].peekCoverDistanceFromCenter);
+                                * cPointsOfObj[j].peekCoverDistanceFromCenter + StairCheckScript.RotateVecAroundVec(
+                                enemyScriptIns.currentCoverPoint.coverForwardForPeek * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
                         }
                     }
                 }

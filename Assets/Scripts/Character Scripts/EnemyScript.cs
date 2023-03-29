@@ -298,9 +298,11 @@ public class EnemyScript : GeneralCharacter
         }
         else
         {
+            isAiming = false;
             navAgent.isStopped = false;
-            if (isAiming && (angleX < 10 && angleY < 10))
+            if (angleX < 15 && angleY < 15)
             {
+                isAiming = true;
                 EnemyFire(false);
             }
         }
@@ -333,7 +335,7 @@ public class EnemyScript : GeneralCharacter
                     new Vector2(transform.position.x, transform.position.z);
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
 
-        if (Vector2.Angle(enemyForward2, targetVec) < 20)
+        if (Vector2.Angle(enemyForward2, targetVec) < 50)
         {
             isAiming = true;
             if (shouldFire && canSeeTarget)
@@ -354,7 +356,10 @@ public class EnemyScript : GeneralCharacter
 
         if (currentCoverPoint.crouchOrPeek)
         {
-        
+            if(peekableCoverCoroutine != null)
+            {
+                StopCoroutine(peekableCoverCoroutine);
+            }
             if(shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && !isCrouching && canCrouch)
             {
                 StartCoroutine(WaitOnCrouch());
@@ -362,7 +367,7 @@ public class EnemyScript : GeneralCharacter
         }
         else
         {
-            if (shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && !isCrouching && canCrouch)
+            if (shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && peekableCoverCoroutine == null)
             {
                 peekableCoverCoroutine = StartCoroutine(WaitBehindCover());
             }
@@ -409,11 +414,12 @@ public class EnemyScript : GeneralCharacter
     }
     IEnumerator WaitBehindCover()
     {
-        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * 1.5f);
+        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * currentCoverPoint.peekCoverDistanceFromCenter);
         yield return new WaitForSeconds(Random.Range(averageCrouchDuration - 1, averageCrouchDuration + 1));
         shotsSinceLastCrouch = 0;
-        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * 1.5f + StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek*1.5f,Vector3.up, 90));
-
+        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * currentCoverPoint.peekCoverDistanceFromCenter + 
+            StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek* currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
+        peekableCoverCoroutine = null;
     }
 
     void SearchingFunction()
@@ -426,7 +432,11 @@ public class EnemyScript : GeneralCharacter
             {
                 StopCoroutine(checkCoverCoroutine);
             }
-            searchPositioningCoroutine=StartCoroutine(SearchForPlayerAroundLastSeenPos());
+            if (peekableCoverCoroutine != null)
+            {
+                StopCoroutine(peekableCoverCoroutine);
+            }
+            searchPositioningCoroutine = StartCoroutine(SearchForPlayerAroundLastSeenPos());
             timeSinceStartedSearch = 0;
             isAiming = false;
 
@@ -535,13 +545,22 @@ public class EnemyScript : GeneralCharacter
         #endregion
         if (sqrDistFromPlayer < visibleRange * visibleRange)
         {
-            #region Calculate Eyesight Angle
+            /*#region Calculate Eyesight Angle
             Vector3 fromEyesToPlayer = (mainCharScript.headOfChar.position - enemyEyes.position).normalized;
-            Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z);
+            Vector3 fromEyesToPlayerY = (new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z));
             Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
             angleY = Mathf.Abs(Vector3.Angle(enemyEyes.forward, fromEyesToPlayerY));
             angleX = Mathf.Abs(Vector3.Angle(enemyEyes.forward, fromEyesToPlayerX));
+
+            #endregion*/
+            #region Calculate Eyesight Angle
+            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformVector((mainCharScript.headOfChar.position - enemyEyes.position).normalized);
+            Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y, fromEyesToPlayer.z);
+            Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
+
+            angleY = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerY));
+            angleX = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerX));
 
             #endregion
 
