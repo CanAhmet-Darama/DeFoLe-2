@@ -115,6 +115,8 @@ MonoBehaviour:
   - {x: -1, y: 0, z: -0.9}
   campNumber: 0
   furthestIsBetter: 1
+  crouchOrPeekCover: 1
+  peekCoverDistanceFromCenter: 0
 --- !u!1001 &4777360249103604320
 PrefabInstance:
   m_ObjectHideFlags: 0

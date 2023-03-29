@@ -549,6 +549,8 @@ MonoBehaviour:
   - {x: 0.0085, y: 0.0038, z: -0.11}
   campNumber: 1
   furthestIsBetter: 0
+  crouchOrPeekCover: 1
+  peekCoverDistanceFromCenter: 0
 --- !u!1001 &3718161660572624189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -644,6 +646,8 @@ MonoBehaviour:
   - {x: -0.0045, y: 0.00454, z: -0.2154}
   campNumber: 0
   furthestIsBetter: 0
+  crouchOrPeekCover: 1
+  peekCoverDistanceFromCenter: 0
 --- !u!1001 &4745160089947354968
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1063,6 +1067,8 @@ MonoBehaviour:
   - {x: -0.0045, y: -0.0074, z: 0.14}
   campNumber: 0
   furthestIsBetter: 0
+  crouchOrPeekCover: 1
+  peekCoverDistanceFromCenter: 0
 --- !u!4 &7725106024274631455 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f2e1e4b145bc3d04da0dfc1a3d033e4f, type: 3}

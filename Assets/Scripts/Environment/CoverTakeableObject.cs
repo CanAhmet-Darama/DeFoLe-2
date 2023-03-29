@@ -6,9 +6,10 @@ public class CoverTakeableObject : MonoBehaviour
 {
     public CoverPoint[] coverPoints;
     public Vector3[] coverPositions;
-    public byte campNumber;
+    [Range(1,4)]public byte campNumber;
     public bool furthestIsBetter;
     public bool crouchOrPeekCover;
+    public float peekCoverDistanceFromCenter;
 
     void Start()
     {
@@ -33,6 +34,8 @@ public class CoverTakeableObject : MonoBehaviour
             coverPoints[i].owner = transform;
             coverPoints[i].worldPos = transform.TransformPoint(coverPoints[i].relativePos);
             coverPoints[i].isCoveredAlready = false;
+            coverPoints[i].crouchOrPeek = crouchOrPeekCover;
+            coverPoints[i].peekCoverDistanceFromCenter= peekCoverDistanceFromCenter;
         }
     }
 
@@ -56,40 +59,44 @@ public class CoverTakeableObject : MonoBehaviour
     }
     public void SortPointsByDistance(Vector3 referencePos)
     {
-        bool hasSwapped = true;
-        CoverPoint holderCoverObj;
-        while (hasSwapped)
+        if(coverPoints.Length > 1)
         {
-            hasSwapped = false;
-            /* furthestIsBetter helps emnemy to distinguish between sandbags etc. or windows etc. */
-            if (furthestIsBetter)
+            bool hasSwapped = true;
+            CoverPoint holderCoverObj;
+            while (hasSwapped)
             {
-                for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
+                hasSwapped = false;
+                /* furthestIsBetter helps emnemy to distinguish between sandbags etc. or windows etc. */
+                if (furthestIsBetter)
                 {
-                    if ((coverPoints[index].worldPos - referencePos).sqrMagnitude >
-                        (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                    for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
                     {
-                        holderCoverObj = coverPoints[index];
-                        coverPoints[index] = coverPoints[index + 1];
-                        coverPoints[index + 1] = holderCoverObj;
-                        hasSwapped = true;
+                        if ((coverPoints[index].worldPos - referencePos).sqrMagnitude >
+                            (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                        {
+                            holderCoverObj = coverPoints[index];
+                            coverPoints[index] = coverPoints[index + 1];
+                            coverPoints[index + 1] = holderCoverObj;
+                            hasSwapped = true;
+                        }
+                    }
+                }
+                else
+                {
+                    for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
+                    {
+                        if ((coverPoints[index].worldPos - referencePos).sqrMagnitude <
+                            (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
+                        {
+                            holderCoverObj = coverPoints[index];
+                            coverPoints[index] = coverPoints[index + 1];
+                            coverPoints[index + 1] = holderCoverObj;
+                            hasSwapped = true;
+                        }
                     }
                 }
             }
-            else
-            {
-                for (short index = 0, limit = (short)(coverPoints.Length - 1); index < limit; index++)
-                {
-                    if ((coverPoints[index].worldPos - referencePos).sqrMagnitude <
-                        (coverPoints[index + 1].worldPos - referencePos).sqrMagnitude)
-                    {
-                        holderCoverObj = coverPoints[index];
-                        coverPoints[index] = coverPoints[index + 1];
-                        coverPoints[index + 1] = holderCoverObj;
-                        hasSwapped = true;
-                    }
-                }
-            }
+
         }
     }
 }
@@ -100,7 +107,9 @@ public struct CoverPoint
     public Vector3 relativePos;
     public Vector3 worldPos;
     public float visibleAngle;
-    public bool crouchOrPeek;
     public bool isCoveredAlready;
+    public bool crouchOrPeek;
+    public float peekCoverDistanceFromCenter;
+    public Vector3 coverForwardForPeek;
 }
 

@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Small Hut 1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8856551405396515563, guid: 1f429657fa40bf6448bd1a25218348fe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f429657fa40bf6448bd1a25218348fe, type: 3}
 --- !u!4 &10119846 stripped
@@ -523,6 +527,10 @@ PrefabInstance:
     - target: {fileID: 8725071921559822061, guid: 9cc0651838fd3f54899fee20a6672b13, type: 3}
       propertyPath: m_Name
       value: 3 Floored Building Concrete
+      objectReference: {fileID: 0}
+    - target: {fileID: 8725071921559822061, guid: 9cc0651838fd3f54899fee20a6672b13, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9cc0651838fd3f54899fee20a6672b13, type: 3}
@@ -1881,6 +1889,10 @@ PrefabInstance:
     - target: {fileID: 8856551405396515563, guid: 1f429657fa40bf6448bd1a25218348fe, type: 3}
       propertyPath: m_Name
       value: Small Hut 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8856551405396515563, guid: 1f429657fa40bf6448bd1a25218348fe, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f429657fa40bf6448bd1a25218348fe, type: 3}
@@ -3937,7 +3949,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1068135551
 Transform:
   m_ObjectHideFlags: 0
@@ -3975,7 +3987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1124101131
 Transform:
   m_ObjectHideFlags: 0
@@ -4140,13 +4152,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1964107750, guid: ecdcba6335498af44846cca098cdffac, type: 3}
+      propertyPath: crouchOrPeekCover
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1964107750, guid: ecdcba6335498af44846cca098cdffac, type: 3}
+      propertyPath: peekCoverDistanceFromCenter
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2430561863323721878, guid: ecdcba6335498af44846cca098cdffac, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3437231793992338708, guid: ecdcba6335498af44846cca098cdffac, type: 3}
       propertyPath: m_Name
       value: Tree 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3437231793992338708, guid: ecdcba6335498af44846cca098cdffac, type: 3}
-      propertyPath: m_TagString
-      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4400871087287358128, guid: ecdcba6335498af44846cca098cdffac, type: 3}
       propertyPath: m_RootOrder
@@ -6019,26 +6039,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6939153179821818502, guid: 077af490ae404e549b70b72de18d3cd0, type: 3}
   m_PrefabInstance: {fileID: 1936711510}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1964107746 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3437231793992338708, guid: ecdcba6335498af44846cca098cdffac, type: 3}
-  m_PrefabInstance: {fileID: 1207315005}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1964107750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964107746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78f8bdeb29607534996e0f3873798379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coverPositions: []
-  campNumber: 0
-  furthestIsBetter: 0
 --- !u!1 &1986068571
 GameObject:
   m_ObjectHideFlags: 0

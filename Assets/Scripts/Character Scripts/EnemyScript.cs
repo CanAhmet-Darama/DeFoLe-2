@@ -41,6 +41,8 @@ public class EnemyScript : GeneralCharacter
     [SerializeField][Range(0,1)]float alertRangeRate;
     [SerializeField] float waitBeforeAlertingAllDuration;
     Coroutine checkCoverCoroutine;
+    Coroutine peekableCoverCoroutine;
+    public CoverPoint currentCoverPoint;
     #region Aiming and Fire
     bool shouldFire;
     byte numberOfShotsBeforeCrouch;
@@ -278,7 +280,7 @@ public class EnemyScript : GeneralCharacter
             StopNavMovement();
             navAgent.speed = runSpeed;
             navAgent.acceleration = runAcceleration;
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp).worldPos);
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp,this));
             checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
             StartCoroutine(AlertEntireCamp());
             shouldFire = true;
@@ -308,7 +310,7 @@ public class EnemyScript : GeneralCharacter
         if (sqrDistFromPlayer > (visibleRange * visibleRange) / 4 && mainCharScript.closeToCampEnough)
         {
             if (isCrouching) CrouchOrStand();
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp).worldPos);
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this));
             if(currentWeapon.currentAmmo < currentWeapon.maxAmmo && ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
             {
                 currentWeapon.Reload();
@@ -330,6 +332,7 @@ public class EnemyScript : GeneralCharacter
         Vector2 targetVec = new Vector2(mainChar.position.x, mainChar.position.z) -
                     new Vector2(transform.position.x, transform.position.z);
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
+
         if (Vector2.Angle(enemyForward2, targetVec) < 20)
         {
             isAiming = true;
@@ -346,10 +349,23 @@ public class EnemyScript : GeneralCharacter
         {
             isAiming = false;
         }
-        
-        if(shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && !isCrouching && canCrouch)
+
+
+
+        if (currentCoverPoint.crouchOrPeek)
         {
-            StartCoroutine(WaitOnCrouch());
+        
+            if(shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && !isCrouching && canCrouch)
+            {
+                StartCoroutine(WaitOnCrouch());
+            }
+        }
+        else
+        {
+            if (shotsSinceLastCrouch >= numberOfShotsBeforeCrouch && !isCrouching && canCrouch)
+            {
+                peekableCoverCoroutine = StartCoroutine(WaitBehindCover());
+            }
         }
         EnemyReloadCheck();
 
@@ -390,6 +406,14 @@ public class EnemyScript : GeneralCharacter
         yield return new WaitForSeconds(Random.Range(averageCrouchDuration-1,averageCrouchDuration+1));
         if (isCrouching) CrouchOrStand();
         shotsSinceLastCrouch = 0;
+    }
+    IEnumerator WaitBehindCover()
+    {
+        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * 1.5f);
+        yield return new WaitForSeconds(Random.Range(averageCrouchDuration - 1, averageCrouchDuration + 1));
+        shotsSinceLastCrouch = 0;
+        navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * 1.5f + StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek*1.5f,Vector3.up, 90));
+
     }
 
     void SearchingFunction()
@@ -516,8 +540,8 @@ public class EnemyScript : GeneralCharacter
             Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z);
             Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
-            angleY = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerY));
-            angleX = Mathf.Abs(Vector3.Angle(Vector3.forward, fromEyesToPlayerX));
+            angleY = Mathf.Abs(Vector3.Angle(enemyEyes.forward, fromEyesToPlayerY));
+            angleX = Mathf.Abs(Vector3.Angle(enemyEyes.forward, fromEyesToPlayerX));
 
             #endregion
 

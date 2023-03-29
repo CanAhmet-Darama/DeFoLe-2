@@ -53,7 +53,7 @@ public class EnemyManager : MonoBehaviour
             enemies[campNumber - 1][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
         }
         campsAlerted[campNumber - 1] = true;
-        Debug.Log("Camp " + (campNumber + 1) + " is alerted");
+        Debug.Log("Camp " + (campNumber) + " is alerted");
         enemyManagerIns.StartCoroutine(enemyManagerIns.SortCoversByDistance(campNumber));
     }
     public static void DealertWholeCamp(byte campNumber)
