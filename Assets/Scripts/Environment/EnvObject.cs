@@ -15,7 +15,7 @@ public class TerrainManager : MonoBehaviour
     public static Terrain mainTerrain;
     public static int posX;
     public static int posZ;
-    public static float[] textureValues;
+    public static float[] textureValues = new float[3];
 
     public static void GetTerrainTexture(Vector3 referencePos)
     {

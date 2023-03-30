@@ -1,12 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-//using System.Diagnostics;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using static UnityEngine.GraphicsBuffer;
-using static UnityEngine.ParticleSystem;
 
 public class GeneralCharacter : MonoBehaviour
 {
@@ -390,7 +384,30 @@ public class GeneralCharacter : MonoBehaviour
         bullet.localPosition = currentWeapon.bulletLaunchOffset;
     }
 
-
+    public static void GiveDamage(GeneralCharacter harmedChar, short damage)
+    {
+        harmedChar.health -= damage;
+        harmedChar.DeathCheck();
+        Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
+    }
+    public void DeathCheck()
+    {
+        if(health <= 0)
+        {
+            if (isEnemy)
+            {
+                EnemyScript enemyS = GetComponent<EnemyScript>();
+                enemyS.StopAllCoroutines();
+                enemyS.navAgent.enabled = false;
+                enemyS.enabled = false;
+            }
+            else
+            {
+                GetComponent<MainCharacter>().enabled = false;
+            }
+            animator.enabled = false;
+        }
+    }
 }
 public enum AnimStateSpeed { idle, walk, run }
 public enum AnimStatePriDir { front, back, none }

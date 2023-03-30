@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class CharColliderManager : MonoBehaviour
 {
+    [Header("Owner Character and Health Stuff")]
+    public GeneralCharacter ownerCharacter;
+    public static float[] damageMultipliers = { 5, 0.1f, 2, 1, 0.4f, 1.5f, 0.6f };
+
+    #region Objects
     [Header("Holder Objects")]
     public GameObject _head;
     public GameObject _helmet;
@@ -18,7 +23,8 @@ public class CharColliderManager : MonoBehaviour
     public GameObject _rightHip;
     public GameObject _leftLeg;
     public GameObject _rightLeg;
-
+    #endregion
+    #region Bones
     [Header("Bones")]
     public GameObject head;
     public GameObject helmet;
@@ -32,6 +38,7 @@ public class CharColliderManager : MonoBehaviour
     public GameObject rightHip;
     public GameObject leftLeg;
     public GameObject rightLeg;
+    #endregion
 
     [Header("Arrays")]
     GameObject[] holders;
@@ -45,6 +52,37 @@ public class CharColliderManager : MonoBehaviour
         bones = _bones;
     }
 
+    public static byte ReturnBodyPartTypeIndex(GameObject bodyPart, CharColliderManager colManager)
+    {
+        if(bodyPart == colManager._head)
+        {
+            return 0;
+        }
+        else if (bodyPart == colManager._helmet)
+        {
+            return 1;
+        }
+        else if (bodyPart == colManager._upperBody || bodyPart == colManager._lowerBody)
+        {
+            return 2;
+        }
+        else if (bodyPart == colManager._leftShoulder || bodyPart == colManager._rightShoulder)
+        {
+            return 3;
+        }
+        else if (bodyPart == colManager._leftArm || bodyPart == colManager._rightArm)
+        {
+            return 4;
+        }
+        else if (bodyPart == colManager._leftHip || bodyPart == colManager._rightHip)
+        {
+            return 5;
+        }
+        else
+        {
+            return 6;
+        }
+    }
     void Update()
     {
         MatchColliderAndMesh();

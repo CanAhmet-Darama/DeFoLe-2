@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +62,60 @@ public class MeleeWeapon : MonoBehaviour
 
             if (other.CompareTag("Ground"))
             {
-                ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
+                if (other.gameObject == GameManager.mainTerrain.gameObject)
+                {
+                    TerrainManager.GetTerrainTexture(transform.position);
+                    float[] textureValues = new float[TerrainManager.textureValues.Length];
+                    Array.Copy(TerrainManager.textureValues, textureValues, TerrainManager.textureValues.Length);
+                    for (short textureIndex = (short)(textureValues.Length - 1); textureIndex >= 0; textureIndex--)
+                    {
+                        if (textureValues[textureIndex] > 0)
+                        {
+                            EnvObjType terrainPointType = EnvObjType.general;
+                            switch (textureIndex)
+                            {
+                                case 0:
+                                    terrainPointType = EnvObjType.dirt;
+                                    break;
+                                case 1:
+                                    terrainPointType = EnvObjType.dirt;
+                                    break;
+                                case 2:
+                                    terrainPointType = EnvObjType.concrete;
+                                    break;
+                            }
+
+                            ImpactMarkManager.MakeImpactSound(contactPoint, terrainPointType, textureValues[textureIndex]);
+                        }
+                    }
+                    EnvObjType terrainPointTypeForMark = EnvObjType.general;
+                    Array.Sort(textureValues);
+                    for (short i = (short)(textureValues.Length - 1); i >= 0; i--)
+                    {
+                        if (TerrainManager.textureValues[i] == textureValues[textureValues.Length - 1])
+                        {
+                            switch (i)
+                            {
+                                case 0:
+                                    terrainPointTypeForMark = EnvObjType.dirt;
+                                    break;
+                                case 1:
+                                    terrainPointTypeForMark = EnvObjType.dirt;
+                                    break;
+                                case 2:
+                                    terrainPointTypeForMark = EnvObjType.concrete;
+                                    break;
+                            }
+                            ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized * 0.01f, 
+                                (contactPoint - transform.position).normalized, terrainPointTypeForMark, 0);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
+                }
             }
             else if(other.CompareTag("Player") || other.CompareTag("Enemy"))
             {

@@ -47,12 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65762fe7919951e418653171da2bfd55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
+  damage: 75
   swingCooldown: 0.8
   owner: {fileID: 0}
   canSwing: 1
   isSwinging: 0
-  meleeCollider: {fileID: 5418318840478128906}
   rightHandPos: {x: 0.00003, y: 0.00279, z: 0.00142}
   rightHandRot: {x: -98.713, y: 110.523, z: -3.388}
   overrideController: {fileID: 22100000, guid: 4449f4e43d426674a8940c8389700d27, type: 2}

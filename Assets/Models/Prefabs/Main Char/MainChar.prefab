@@ -1127,6 +1127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa37e607bf739a48aef9428cd331a5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownerCharacter: {fileID: 1643108193539418684}
   _head: {fileID: 3054736952154243165}
   _helmet: {fileID: 5808586239758231881}
   _upperBody: {fileID: 7457955553551124557}
