@@ -44,6 +44,7 @@ public class GeneralCharacter : MonoBehaviour
     public TwoBoneIKConstraint leftHandTBIK;
     public GameObject leftHTarget;
     public GameObject rightHTarget;
+    public GameObject skeleton;
     [SerializeField]
     AnimatorOverrideController[] animOverriders;
     #endregion
@@ -51,9 +52,10 @@ public class GeneralCharacter : MonoBehaviour
     [Header("Some Stuff")]
     public bool isGrounded;
     public bool isCrouching;
-    [SerializeField]CapsuleCollider mainColl;
+    public CapsuleCollider mainColl;
     [HideInInspector]public StairCheckScript stairSlopeChecker;
     [SerializeField] GameObject stairSlopeCheckerGO_;
+    [HideInInspector] public CharColliderManager charColManager;
 
     [Header("Not to meddle with")]
     #region Some Variables
@@ -400,6 +402,7 @@ public class GeneralCharacter : MonoBehaviour
                 enemyS.StopAllCoroutines();
                 enemyS.navAgent.enabled = false;
                 enemyS.enabled = false;
+                enemyS.EnableRagdoll();
             }
             else
             {

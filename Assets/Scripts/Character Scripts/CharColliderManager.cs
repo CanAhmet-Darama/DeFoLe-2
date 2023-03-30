@@ -50,6 +50,8 @@ public class CharColliderManager : MonoBehaviour
         holders = _holders;
         GameObject[] _bones = { head, helmet, upperBody, lowerBody, leftShoulder, rightShoulder, leftArm, rightArm, leftHip, rightHip, leftLeg, rightLeg };
         bones = _bones;
+
+        ownerCharacter.charColManager = this;
     }
 
     public static byte ReturnBodyPartTypeIndex(GameObject bodyPart, CharColliderManager colManager)

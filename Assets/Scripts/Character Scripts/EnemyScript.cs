@@ -72,6 +72,10 @@ public class EnemyScript : GeneralCharacter
     [Range(0,1)]public float shootingFrequency;
     [HideInInspector]public GeneralWeapon mainWeapon;
 
+    [Header("Ragdoll")]
+    Collider[] ragdollCols;
+    Rigidbody[] ragdollRbs;
+
 
     void Start()
     {
@@ -94,6 +98,8 @@ public class EnemyScript : GeneralCharacter
 
     void EnemyStart()
     {
+        GetAndDisableRagdollParts();
+
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
         mainCharScript = mainChar.GetComponent<MainCharacter>();
@@ -111,6 +117,7 @@ public class EnemyScript : GeneralCharacter
         {
             StartCoroutine(PermanentPlaceCoverCheck());
         }
+
     }
     void NavAgentSetter()
     {
@@ -465,30 +472,42 @@ public class EnemyScript : GeneralCharacter
             {
                 StopCoroutine(peekableCoverCoroutine);
             }
-            searchPositioningCoroutine = StartCoroutine(SearchForPlayerAroundLastSeenPos());
+            if (!hasPermanentPlace)
+            {
+                searchPositioningCoroutine = StartCoroutine(SearchForPlayerAroundLastSeenPos());
+            }
             timeSinceStartedSearch = 0;
             isAiming = false;
 
             enteredNewState = false;
         }
-        timeSinceStartedSearch += Time.deltaTime;
 
-        if(timeSinceStartedSearch > searchDuration)
+        if (!hasPermanentPlace)
         {
-            if(searchPositioningCoroutine != null)
+            timeSinceStartedSearch += Time.deltaTime;
+
+            if(timeSinceStartedSearch > searchDuration)
             {
-                StopCoroutine(searchPositioningCoroutine);
+                if(searchPositioningCoroutine != null)
+                {
+                    StopCoroutine(searchPositioningCoroutine);
+                }
+                ChangeEnemyAIState(EnemyAIState.Patrol);
+                return;
             }
-            ChangeEnemyAIState(EnemyAIState.Patrol);
-            return;
+            if(canSeeTarget)
+            {
+                if (searchPositioningCoroutine != null)
+                {
+                    StopCoroutine(searchPositioningCoroutine);
+                }
+                ChangeEnemyAIState(EnemyAIState.Alerted);
+            }
+
         }
-        if(canSeeTarget)
+        else
         {
-            if (searchPositioningCoroutine != null)
-            {
-                StopCoroutine(searchPositioningCoroutine);
-            }
-            ChangeEnemyAIState(EnemyAIState.Alerted);
+            RotateCharToLookAt(EnemyManager.lastSeenPosOfPlayer[campOfEnemy - 1], 0.05f);
         }
     }
     IEnumerator SearchForPlayerAroundLastSeenPos()
@@ -634,4 +653,37 @@ public class EnemyScript : GeneralCharacter
         rb.angularVelocity = Vector3.zero;
     }
     public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching}
+
+    void GetAndDisableRagdollParts()
+    {
+        ragdollCols = skeleton.GetComponentsInChildren<Collider>();
+        ragdollRbs = skeleton.GetComponentsInChildren<Rigidbody>();
+        DisableRagdoll();
+    }
+    public void EnableRagdoll()
+    {
+        for (int ragdollIndex = ragdollCols.Length - 1; ragdollIndex >= 0; ragdollIndex--)
+        {
+            ragdollCols[ragdollIndex].enabled = true;
+        }
+        for (int ragdollIndex = ragdollRbs.Length - 1; ragdollIndex >= 0; ragdollIndex--)
+        {
+            ragdollRbs[ragdollIndex].isKinematic = false;
+        }
+        mainColl.enabled = false;
+        rb.isKinematic = true;
+    }
+    public void DisableRagdoll()
+    {
+        for(int ragdollIndex = ragdollCols.Length-1;ragdollIndex>= 0;ragdollIndex--)
+        {
+            ragdollCols[ragdollIndex].enabled = false;
+        }
+        for(int ragdollIndex = ragdollRbs.Length-1;ragdollIndex>= 0;ragdollIndex--)
+        {
+            ragdollRbs[ragdollIndex].isKinematic = true;
+        }
+        mainColl.enabled = true;
+        rb.isKinematic = false;
+    }
 }
