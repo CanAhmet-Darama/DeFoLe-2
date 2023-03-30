@@ -21,6 +21,7 @@ public class GeneralCharacter : MonoBehaviour
     public GameObject[] weapons = new GameObject[5];
     public GeneralWeapon[] weaponScripts = new GeneralWeapon[5];
     public short[] ammoCounts= new short[5];
+    public byte magazineCount;
     public MeleeWeapon mainMelee;
     public bool canShoot;
     public bool canReload;
@@ -211,7 +212,6 @@ public class GeneralCharacter : MonoBehaviour
 
     void CreateWeapons()
     {
-        byte magazineCount = 10;
         for (int i = weapons.Length - 1; i >= 0; i--)
         {
             if(!isEnemy || hasWeapons[i])
@@ -390,6 +390,10 @@ public class GeneralCharacter : MonoBehaviour
     {
         harmedChar.health -= damage;
         harmedChar.DeathCheck();
+        if (harmedChar.isEnemy)
+        {
+            harmedChar.GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+        }
         Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
     }
     public void DeathCheck()
@@ -406,7 +410,12 @@ public class GeneralCharacter : MonoBehaviour
             }
             else
             {
-                GetComponent<MainCharacter>().enabled = false;
+                MainCharacter mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
+                mainChar.stairSlopeChecker.enabled = false;
+                mainChar.StopAllCoroutines();
+                mainChar.enabled = false;
+                rb.velocity = Vector3.zero;
+                GameManager.ChangeState(PlayerState.gameOver);
             }
             animator.enabled = false;
         }

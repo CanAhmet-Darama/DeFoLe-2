@@ -419,7 +419,7 @@ MonoBehaviour:
   runAcceleration: 50
   jumpForce: 450
   jumpCooldown: 1.5
-  health: 300
+  health: 30000
   rb: {fileID: 1643108193539418682}
   isEnemy: 0
   currentWeapon: {fileID: 0}
@@ -437,6 +437,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   ammoCounts: 00000000000000000000
+  magazineCount: 6
   mainMelee: {fileID: 0}
   canShoot: 1
   canReload: 0
@@ -456,6 +457,7 @@ MonoBehaviour:
   leftHandTBIK: {fileID: 2130464707804454431}
   leftHTarget: {fileID: 7176550493986937795}
   rightHTarget: {fileID: 971220282}
+  skeleton: {fileID: 0}
   animOverriders:
   - {fileID: 22100000, guid: 72b5af81e55c1c04480f9aabeeaee464, type: 2}
   - {fileID: 22100000, guid: f3e3d268218547d4fba41ce23107c9a4, type: 2}
@@ -466,6 +468,7 @@ MonoBehaviour:
   mainColl: {fileID: 7514421668650504797}
   stairSlopeChecker: {fileID: 0}
   stairSlopeCheckerGO_: {fileID: 9090398627708968972}
+  charColManager: {fileID: 0}
   charMoving: 0
   isJumping: 0
   blendAnimX: 0
@@ -1128,6 +1131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownerCharacter: {fileID: 1643108193539418684}
+  enemySc: {fileID: 0}
   _head: {fileID: 3054736952154243165}
   _helmet: {fileID: 5808586239758231881}
   _upperBody: {fileID: 7457955553551124557}

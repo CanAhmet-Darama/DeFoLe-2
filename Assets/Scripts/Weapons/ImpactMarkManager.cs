@@ -324,10 +324,7 @@ public class ImpactMarkManager : MonoBehaviour
         }
         impact.Play();
     }
-    public static void BladeImpactForFlesh(Vector3 pos, Vector3 rot)
-    {
 
-    }
 
     void SoundsManagerStart()
     {

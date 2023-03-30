@@ -7,6 +7,7 @@ public class CharColliderManager : MonoBehaviour
 {
     [Header("Owner Character and Health Stuff")]
     public GeneralCharacter ownerCharacter;
+    public EnemyScript enemySc;
     public static float[] damageMultipliers = { 5, 0.1f, 2, 1, 0.4f, 1.5f, 0.6f };
 
     #region Objects
@@ -52,6 +53,10 @@ public class CharColliderManager : MonoBehaviour
         bones = _bones;
 
         ownerCharacter.charColManager = this;
+        if(GetComponent<EnemyScript>() != null)
+        {
+            enemySc = GetComponent<EnemyScript>();
+        }
     }
 
     public static byte ReturnBodyPartTypeIndex(GameObject bodyPart, CharColliderManager colManager)

@@ -110,7 +110,7 @@ public class GeneralBullet : MonoBehaviour
                 }
                 else if(collision.collider.GetType() == typeof(WheelCollider))
                 {
-                    ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                    ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
                         EnvObjType.general);
                 }
                 else if (collision.collider.tag == "Vehicle")

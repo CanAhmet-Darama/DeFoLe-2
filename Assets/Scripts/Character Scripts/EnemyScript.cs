@@ -69,8 +69,10 @@ public class EnemyScript : GeneralCharacter
 
     [Header("Using Weapons")]
     public float enemyInaccuracy;
-    [Range(0,1)]public float shootingFrequency;
-    [HideInInspector]public GeneralWeapon mainWeapon;
+    [Range(0,1)] public float shootingFrequency;
+    [HideInInspector] public GeneralWeapon mainWeapon;
+    [SerializeField] float meleeRange;
+    bool usingRanged;
 
     [Header("Ragdoll")]
     Collider[] ragdollCols;
@@ -110,6 +112,7 @@ public class EnemyScript : GeneralCharacter
                 mainWeapon = weapons[i].GetComponent<GeneralWeapon>();
             }
         }
+        usingRanged = true;
         numberOfShotsBeforeCrouch = mainWeapon.recommendedShotsBeforeCrouch;
         shotsSinceLastCrouch = 0;
         ChangeEnemyAIState(EnemyAIState.Patrol);
@@ -152,20 +155,19 @@ public class EnemyScript : GeneralCharacter
         switch (enemyState)
         {
             case EnemyAIState.Patrol:
-
                 PatrolFunction();
                 break;
             case EnemyAIState.SemiDetected:
-
                 SemiDetectedFunction();
                 break;
             case EnemyAIState.Alerted:
-
                 AlertedFunction();
                 break;
             case EnemyAIState.Searching:
-
                 SearchingFunction();
+                break;
+            case EnemyAIState.GameOver: 
+                GameOverFunction();
                 break;
         }
     }
@@ -188,6 +190,11 @@ public class EnemyScript : GeneralCharacter
 
         }
         EnemyManager.enemiesCanSee[campOfEnemy - 1][enemyNumCode] = canSeeTarget;
+
+        if(GameManager.mainState == PlayerState.gameOver && enemyState != EnemyAIState.GameOver)
+        {
+            ChangeEnemyAIState(EnemyAIState.GameOver);
+        }
     }
     IEnumerator PermanentPlaceCoverCheck()
     {
@@ -294,45 +301,87 @@ public class EnemyScript : GeneralCharacter
 
     void AlertedFunction()
     {
-        if (enteredNewState)
+        if(weaponState == WeaponState.ranged)
         {
-            navAgent.ResetPath();
-            StopNavMovement();
-            navAgent.speed = runSpeed;
-            navAgent.acceleration = runAcceleration;
-            if (!hasPermanentPlace)
+            if (enteredNewState)
             {
-                navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp,this));
+                navAgent.ResetPath();
+                StopNavMovement();
+                navAgent.speed = runSpeed;
+                navAgent.acceleration = runAcceleration;
+                if (!hasPermanentPlace)
+                {
+                    navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp,this));
+                }
+                else
+                {
+                    navAgent.SetDestination(permanentCoverObject.coverPoints[0].worldPos);
+                }
+                checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
+                StartCoroutine(AlertEntireCamp());
+                shouldFire = true;
+                if (patrolWaitCoroutine != null) StopCoroutine(patrolWaitCoroutine);
+                enteredNewState = false;
+            }
+            if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
+            {
+                StopNavMovement();
+            }
+            else if(navAgent.remainingDistance < navAgent.stoppingDistance && navAgent.isStopped)
+            {
+                RotateCharToLookAt(mainChar.position, 0.1f);
+                OnCoverBehaviour();
             }
             else
             {
-                navAgent.SetDestination(permanentCoverObject.coverPoints[0].worldPos);
+                isAiming = false;
+                navAgent.isStopped = false;
+                if (angleX < 15 && angleY < 15)
+                {
+                    isAiming = true;
+                    EnemyFire(false);
+                }
             }
-            checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
-            StartCoroutine(AlertEntireCamp());
-            shouldFire = true;
-            if (patrolWaitCoroutine != null) StopCoroutine(patrolWaitCoroutine);
-            enteredNewState = false;
-        }
-        if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
-        {
-            StopNavMovement();
-        }
-        else if(navAgent.remainingDistance < navAgent.stoppingDistance && navAgent.isStopped)
-        {
-            RotateCharToLookAt(mainChar.position, 0.1f);
-            OnCoverBehaviour();
+            if (currentWeapon.currentAmmo == 0 && weaponState == WeaponState.ranged)
+            {
+                if (ammoCounts[(int)currentWeapon.weaponType] > 0)
+                {
+                    currentWeapon.Reload();
+                }
+                else
+                {
+                    if (currentWeapon == mainWeapon)
+                    {
+                        ChangeWeapon(weaponScripts[2]);
+                    }
+                    else if(currentWeapon.weaponType == WeaponType.Pistol)
+                    {
+                        GetMeleeWeaponOrHandsFree(WeaponState.melee);
+                        if (checkCoverCoroutine != null)
+                        {
+                            StopCoroutine(checkCoverCoroutine);
+                        }
+                        if (isCrouching) CrouchOrStand();
+                        navAgent.stoppingDistance = 0.7f;
+                    }
+                }
+
+            }
+
         }
         else
         {
-            isAiming = false;
-            navAgent.isStopped = false;
-            if (angleX < 15 && angleY < 15)
+            navAgent.SetDestination(mainChar.position);
+            RotateCharToLookAt(mainChar.position, 0.05f);
+            if(sqrDistFromPlayer < meleeRange*meleeRange)
             {
-                isAiming = true;
-                EnemyFire(false);
+                EnemyFire();
             }
         }
+
+
+
+
     }
     IEnumerator AlertCoverCheckPeriodically(float frequency)
     {
@@ -407,13 +456,20 @@ public class EnemyScript : GeneralCharacter
 
 
     }
-    void EnemyFire(bool onCover)
+    void EnemyFire(bool onCover = false)
     {
-        if (canShoot && !isCrouching)
+        if(weaponState == WeaponState.ranged)
         {
-            currentWeapon.Fire();
-            if (onCover) { shotsSinceLastCrouch++; }
-            StartCoroutine(PickRandomFrequencyToFire(shootingFrequency));
+            if (canShoot && !isCrouching && currentWeapon.currentAmmo > 0)
+            {
+                currentWeapon.Fire();
+                if (onCover) { shotsSinceLastCrouch++; }
+                StartCoroutine(PickRandomFrequencyToFire(shootingFrequency));
+            }
+        }
+        else if(weaponState == WeaponState.melee && mainMelee.canSwing)
+        {
+            mainMelee.Swing();
         }
     }
     IEnumerator PickRandomFrequencyToFire(float frequencyLimit)
@@ -555,6 +611,18 @@ public class EnemyScript : GeneralCharacter
         return false;
     }
 
+    void GameOverFunction()
+    {
+        if (enteredNewState)
+        {
+            StopNavMovement();
+            isAiming = false;
+            shouldFire= false;
+
+            enteredNewState = false;
+        }
+    }
+
 
     public void ChangeEnemyAIState(EnemyAIState newState)
     {
@@ -652,7 +720,7 @@ public class EnemyScript : GeneralCharacter
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
-    public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching}
+    public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching, GameOver}
 
     void GetAndDisableRagdollParts()
     {

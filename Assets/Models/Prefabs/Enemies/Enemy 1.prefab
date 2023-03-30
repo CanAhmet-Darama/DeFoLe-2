@@ -407,6 +407,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   ammoCounts: 00000000000000000000
+  magazineCount: 1
   mainMelee: {fileID: 0}
   canShoot: 0
   canReload: 0
@@ -462,7 +463,7 @@ MonoBehaviour:
   suspectedDuration: 3
   alertedCoverCheckCooldown: 7
   alertRangeRate: 0.25
-  waitBeforeAlertingAllDuration: 4
+  waitBeforeAlertingAllDuration: 1.5
   averageCrouchDuration: 3
   isAiming: 0
   previousAiming: 0
@@ -476,6 +477,7 @@ MonoBehaviour:
   enemyInaccuracy: 0.75
   shootingFrequency: 1
   mainWeapon: {fileID: 0}
+  meleeRange: 1
 --- !u!195 &5188753059118141891
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1180,6 +1182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownerCharacter: {fileID: 779311080259487559}
+  enemySc: {fileID: 0}
   _head: {fileID: 3054736952154243165}
   _helmet: {fileID: 5808586239758231881}
   _upperBody: {fileID: 7457955553551124557}

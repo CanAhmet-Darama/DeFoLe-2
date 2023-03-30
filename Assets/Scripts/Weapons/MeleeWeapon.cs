@@ -11,6 +11,7 @@ public class MeleeWeapon : MonoBehaviour
     public GeneralCharacter owner;
     public bool canSwing;
     public bool isSwinging;
+    public BoxCollider meleeCollider;
 
     [Header("For Animation etc...")]
     public Vector3 rightHandPos;
@@ -29,6 +30,7 @@ public class MeleeWeapon : MonoBehaviour
     }
     public void Swing()
     {
+        meleeCollider.enabled = true;
         owner.animator.SetTrigger("fire");
         StartCoroutine(WaitToHitAgain());
     }
@@ -43,6 +45,7 @@ public class MeleeWeapon : MonoBehaviour
         yield return new WaitForSeconds(swingCooldown/3);
         yield return null;
         canSwing = true;
+        meleeCollider.enabled = false;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -117,12 +120,33 @@ public class MeleeWeapon : MonoBehaviour
                     ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
                 }
             }
-            else if(other.CompareTag("Player") || other.CompareTag("Enemy"))
+            else if((other.CompareTag("Player") || other.CompareTag("Enemy")) && other.gameObject != owner.gameObject)
             {
                 if (other.gameObject.name == "Helmet Holder")
                     ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized + new Vector3(0,90,0), EnvObjType.metal);
                 else
-                    ImpactMarkManager.MakeBloodImpactAndSound(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized , false);
+                    ImpactMarkManager.MakeBloodImpactAndSound(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized, false);
+                
+                CharColliderManager usedChar = other.GetComponentInParent<CharColliderManager>();
+                if(usedChar.enemySc != null && usedChar.enemySc.enemyState != EnemyScript.EnemyAIState.Alerted)
+                {
+                    GeneralCharacter.GiveDamage(usedChar.ownerCharacter, usedChar.ownerCharacter.health);
+                }
+                else
+                {
+                    byte bodyPartIndex = CharColliderManager.ReturnBodyPartTypeIndex(other.gameObject, usedChar);
+                    GeneralCharacter.GiveDamage(usedChar.ownerCharacter, (short)(damage * CharColliderManager.damageMultipliers[bodyPartIndex]));
+                }
+            }
+            else if (other.GetType() == typeof(WheelCollider))
+            {
+                ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (contactPoint - transform.position).normalized * 0.01f, (contactPoint - transform.position).normalized,
+                    EnvObjType.general);
+            }
+            else if (other.tag == "Vehicle")
+            {
+                ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (contactPoint - transform.position).normalized * 0.01f, (contactPoint - transform.position).normalized,
+                    EnvObjType.metal);
             }
 
         }
