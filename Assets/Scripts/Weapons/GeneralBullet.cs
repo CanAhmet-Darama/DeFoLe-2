@@ -36,7 +36,7 @@ public class GeneralBullet : MonoBehaviour
     void Update()
     {
         duratPassed += Time.deltaTime;
-        if((transform.position - firedPos).sqrMagnitude > maxRange*maxRange)
+        if((transform.position - firedPos).magnitude > maxRange)
         {
             itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
         }

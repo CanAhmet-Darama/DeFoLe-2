@@ -125,7 +125,7 @@ public class EnemyScript : GeneralCharacter
         {
             StartCoroutine(PermanentPlaceCoverCheck());
         }
-        StartCoroutine(IsCoveredSettingCoroutine());
+
     }
     void NavAgentSetter()
     {
@@ -519,7 +519,8 @@ public class EnemyScript : GeneralCharacter
             StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek* currentCoverPoint.peekCoverDistanceFromCenter * 0.75f, Vector3.up, 90));
         peekableCoverCoroutine = null;
     }
-    IEnumerator IsCoveredSettingCoroutine()
+
+/*    IEnumerator IsCoveredSettingCoroutine()
     {
         yield return null;
         yield return null;
@@ -548,7 +549,7 @@ public class EnemyScript : GeneralCharacter
             previousCPIndexes[i] = currentCPIndexes[i];
 
         }
-    }
+    }*/
 
     void SearchingFunction()
     {
