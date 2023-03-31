@@ -43,6 +43,10 @@ public class EnemyScript : GeneralCharacter
     Coroutine checkCoverCoroutine;
     Coroutine peekableCoverCoroutine;
     public CoverPoint currentCoverPoint;
+
+    // Access to the coverObjectsOfWorld wtih first to indexes and coverPoint of this object with the third index
+    [HideInInspector] public short[] currentCPIndexes = new short[3];
+    short[] previousCPIndexes = new short[3];
     #region Aiming and Fire
     bool shouldFire;
     byte numberOfShotsBeforeCrouch;
@@ -118,7 +122,7 @@ public class EnemyScript : GeneralCharacter
         {
             StartCoroutine(PermanentPlaceCoverCheck());
         }
-
+        StartCoroutine(IsCoveredSettingCoroutine());
     }
     void NavAgentSetter()
     {
@@ -511,6 +515,33 @@ public class EnemyScript : GeneralCharacter
         navAgent.SetDestination(currentCoverPoint.worldPos + currentCoverPoint.coverForwardForPeek * currentCoverPoint.peekCoverDistanceFromCenter * 0.75f + 
             StairCheckScript.RotateVecAroundVec(currentCoverPoint.coverForwardForPeek* currentCoverPoint.peekCoverDistanceFromCenter * 0.75f, Vector3.up, 90));
         peekableCoverCoroutine = null;
+    }
+    IEnumerator IsCoveredSettingCoroutine()
+    {
+        yield return null;
+        yield return null;
+        IsCoveredSetter();
+        yield return new WaitForSeconds(1);
+        StartCoroutine(IsCoveredSettingCoroutine());
+    }
+    void IsCoveredSetter()
+    {
+        if(enemyState == EnemyAIState.Alerted)
+        {
+            if (previousCPIndexes[0] != currentCPIndexes[0] && previousCPIndexes[1] != currentCPIndexes[1] && previousCPIndexes[2] != currentCPIndexes[2])
+            {
+                CoverObjectsManager.unSortedCoverObjectsOfWorld[previousCPIndexes[0]][previousCPIndexes[1]].
+                                    unSortedCoverPoints[previousCPIndexes[2]].isCoveredAlready = false;
+            }
+        }
+        else
+        {
+            CoverObjectsManager.unSortedCoverObjectsOfWorld[previousCPIndexes[0]][previousCPIndexes[1]].
+                                unSortedCoverPoints[previousCPIndexes[2]].isCoveredAlready = false;
+        }
+        previousCPIndexes[0] = currentCPIndexes[0];
+        previousCPIndexes[1] = currentCPIndexes[1];
+        previousCPIndexes[2] = currentCPIndexes[2];
     }
 
     void SearchingFunction()

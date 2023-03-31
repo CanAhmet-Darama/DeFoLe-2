@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,14 @@ using UnityEngine;
 public class CoverTakeableObject : MonoBehaviour
 {
     public CoverPoint[] coverPoints;
+    public CoverPoint[] unSortedCoverPoints;
     public Vector3[] coverPositions;
     [Range(1,4)]public byte campNumber;
     public bool furthestIsBetter;
     public bool crouchOrPeekCover;
     public float peekCoverDistanceFromCenter;
     public bool forStaticUsage;
+    public short unSortedIndex;
 
     void Start()
     {
@@ -25,6 +28,7 @@ public class CoverTakeableObject : MonoBehaviour
     void SetCoverPointPositions()
     {
         coverPoints = new CoverPoint[coverPositions.Length];
+        unSortedCoverPoints = new CoverPoint[coverPoints.Length];
         for(int i = coverPoints.Length - 1; i >= 0; i--)
         {
             coverPoints[i].relativePos = coverPositions[i];
@@ -34,6 +38,7 @@ public class CoverTakeableObject : MonoBehaviour
             coverPoints[i].crouchOrPeek = crouchOrPeekCover;
             coverPoints[i].peekCoverDistanceFromCenter= peekCoverDistanceFromCenter;
         }
+        Array.Copy(coverPoints, unSortedCoverPoints,coverPoints.Length);
     }
 
     void DrawRaysForCoverPositions()
@@ -75,6 +80,7 @@ public class CoverTakeableObject : MonoBehaviour
                             coverPoints[index] = coverPoints[index + 1];
                             coverPoints[index + 1] = holderCoverObj;
                             hasSwapped = true;
+
                         }
                     }
                 }
@@ -93,7 +99,17 @@ public class CoverTakeableObject : MonoBehaviour
                     }
                 }
             }
-
+            for(short index1 = (short)(coverPoints.Length - 1); index1 >= 0; index1--)
+            {
+                for(short index2 = (short)(unSortedCoverPoints.Length - 1); index2 >= 0; index2--)
+                {
+                    if (unSortedCoverPoints[index2].worldPos == coverPoints[index1].worldPos)
+                    {
+                        coverPoints[index1].isCoveredAlready = unSortedCoverPoints[index2].isCoveredAlready;
+                        break;
+                    }
+                }
+            }
         }
     }
 }

@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CoverObjectsManager : MonoBehaviour
 {
-
     public static CoverPoint[][] coverPointsOfWorld;
+    public static CoverTakeableObject[][] unSortedCoverObjectsOfWorld;
     public static CoverTakeableObject[][] coverObjectsOfWorld;
     public static float sortByDistanceCooldown = 5;
 
@@ -13,10 +14,30 @@ public class CoverObjectsManager : MonoBehaviour
     {
         coverPointsOfWorld = new CoverPoint[GameManager.numberOfCamps][];
         coverObjectsOfWorld = new CoverTakeableObject[GameManager.numberOfCamps][];
+        unSortedCoverObjectsOfWorld = new CoverTakeableObject[coverObjectsOfWorld.Length][];
+        StartCoroutine(CopySortedToUnsorted());
     }
     void Start()
     {
-        StartCoroutine(SortCoverObjectsByDistanceCoroutine(GameManager.mainChar.position));
+        StartCoroutine(SortCoverObjectsByDistanceCoroutine(GameManager.mainChar.GetComponent<MainCharacter>().closestCamp, GameManager.mainChar.position));
+    }
+
+    IEnumerator CopySortedToUnsorted()
+    {
+        yield return null;
+        for (int i = unSortedCoverObjectsOfWorld.Length - 1; i >= 0; i--)
+        {
+            unSortedCoverObjectsOfWorld[i] = new CoverTakeableObject[coverObjectsOfWorld[i].Length];
+        }
+        Array.Copy(coverObjectsOfWorld, unSortedCoverObjectsOfWorld, coverObjectsOfWorld.Length);
+
+        for (int i = unSortedCoverObjectsOfWorld.Length - 1; i >= 0; i--)
+        {
+            for (int j = unSortedCoverObjectsOfWorld[i].Length - 1; j >= 0; j--)
+            {
+                coverObjectsOfWorld[i][j].unSortedIndex = (short)j;
+            }
+        }
     }
 
     public static void AddCoverPointsToList(byte campNumber, CoverPoint[] cPoints)
@@ -69,8 +90,8 @@ public class CoverObjectsManager : MonoBehaviour
             while (true)
             {
                 /* I don't let it to take a random object which is too close or far from enemy */
-                //coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
-                coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length));
+                coverIndex = (short)(UnityEngine.Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
+                //coverIndex = (short)(Random.Range(0, coverObjectsOfWorld[campNumber - 1].Length));
 
             
                 CoverPoint[] cPointsOfObj;
@@ -79,12 +100,25 @@ public class CoverObjectsManager : MonoBehaviour
                 {
                     if(!coverObjectsOfWorld[campNumber - 1][i].forStaticUsage)
                     {
-                        cPointsOfObj = coverObjectsOfWorld[campNumber - 1][i].coverPoints;
                         coverObjectsOfWorld[campNumber - 1][i].SortPointsByDistance(GameManager.mainChar.position);
+                        cPointsOfObj = coverObjectsOfWorld[campNumber - 1][i].coverPoints;
                         for (short j = (short)(cPointsOfObj.Length - 1); j >= 0; j--)
                         {
                             if (!cPointsOfObj[j].isCoveredAlready)
                             {
+                                // If it is the same point with the unSorted array, return its unSorted index for isCoveredAlready assignment
+                                short subIndex = 0;
+                                for (short index2 = (short)(coverObjectsOfWorld[campNumber - 1][i].unSortedCoverPoints.Length - 1); index2 >= 0; index2--)
+                                {
+                                    if (coverObjectsOfWorld[campNumber - 1][i].unSortedCoverPoints[index2].worldPos == cPointsOfObj[j].worldPos)
+                                    {
+                                        subIndex = index2;
+                                        break;
+                                    }
+                                }
+                                enemyScriptIns.currentCPIndexes = new short[] { (short)(campNumber - 1), coverObjectsOfWorld[campNumber - 1][i].unSortedIndex, subIndex };
+                                coverObjectsOfWorld[campNumber - 1][i].unSortedCoverPoints[subIndex].isCoveredAlready = true;
+
                                 if (cPointsOfObj[j].crouchOrPeek)
                                 {
                                     enemyScriptIns.currentCoverPoint = cPointsOfObj[j];
@@ -125,11 +159,12 @@ public class CoverObjectsManager : MonoBehaviour
     public IEnumerator SortCoverObjectsByDistanceCoroutine(byte campNumber, Vector3 posToTakeDistance)
     {
         yield return null;
-        for (int i = GameManager.numberOfCamps - 1; i >= 0; i--)
-        {
-            SortCoverObjectsByDistance(campNumber, posToTakeDistance);
-            yield return null;
-        }
+        yield return null;
+        SortCoverObjectsByDistance(campNumber, posToTakeDistance);
+        yield return null;
+        AssignUnsortedCoveredVariables();
+        yield return new WaitForSeconds(sortByDistanceCooldown);
+        StartCoroutine(SortCoverObjectsByDistanceCoroutine(GameManager.mainChar.GetComponent<MainCharacter>().closestCamp, GameManager.mainChar.position));
     }
     public IEnumerator SortCoverObjectsByDistanceCoroutine(Vector3 posToTakeDistance)
     {
@@ -170,5 +205,25 @@ public class CoverObjectsManager : MonoBehaviour
         {
             Debug.Log((arrayToSort[i].name + " : " + (arrayToSort[i].transform.position - posToTakeDistance).magnitude));
         }*/
+    }
+    static void AssignUnsortedCoveredVariables()
+    {
+        MainCharacter mainCharS = GameManager.mainChar.GetComponent<MainCharacter>();
+        for (int j = coverObjectsOfWorld[mainCharS.closestCamp - 1].Length-1;j>=0;j--)
+        {
+            for(int k = coverObjectsOfWorld[mainCharS.closestCamp - 1][j].coverPoints.Length - 1; k >= 0; k--)
+            {
+                for (int m = coverObjectsOfWorld[mainCharS.closestCamp - 1][j].unSortedCoverPoints.Length - 1; k >= 0; k--)
+                {
+                    if (coverObjectsOfWorld[mainCharS.closestCamp - 1][j].coverPoints[k].worldPos ==
+                    unSortedCoverObjectsOfWorld[mainCharS.closestCamp - 1][coverObjectsOfWorld[mainCharS.closestCamp - 1][j].unSortedIndex].coverPoints[m].worldPos)
+                    {
+                        coverObjectsOfWorld[mainCharS.closestCamp - 1][j].coverPoints[k].isCoveredAlready =
+                        unSortedCoverObjectsOfWorld[mainCharS.closestCamp - 1][coverObjectsOfWorld[mainCharS.closestCamp - 1][j].unSortedIndex].coverPoints[m].isCoveredAlready;
+                    }
+                }
+            }
+        }
+
     }
 }
