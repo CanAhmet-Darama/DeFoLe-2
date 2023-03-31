@@ -310,7 +310,6 @@ public class ImpactMarkManager : MonoBehaviour
     public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot, bool byBullet)
     {
         ParticleSystem impact = GetBloodImpactReady();
-        Debug.Log("Hit pos : " + pos);
         impact.transform.position = pos;
         impact.transform.rotation = Quaternion.LookRotation(rot);
         audioSource.transform.position = pos;
@@ -320,11 +319,9 @@ public class ImpactMarkManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Play ONESHOT BLADE !!!");
             audioSource.PlayOneShot(fleshBladeImpactSound);
             impact.transform.localEulerAngles += new Vector3(0,-90,0);
         }
-        Debug.Log("Hit bybullet : " + byBullet);
         impact.Play();
     }
 

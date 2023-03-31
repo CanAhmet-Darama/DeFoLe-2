@@ -20,10 +20,6 @@ public class EnemyManager : MonoBehaviour
         StartCoroutine(AreEnemiesSeeingTarget());
     }
 
-    void Update()
-    {
-        
-    }
     // Adds enemy to the given camp list
     public static void AddEnemyToList(byte campNumber, EnemyScript newEnemy)
     {
@@ -53,7 +49,7 @@ public class EnemyManager : MonoBehaviour
             enemies[campNumber - 1][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
         }
         campsAlerted[campNumber - 1] = true;
-        Debug.Log("Camp " + (campNumber) + " is alerted");
+        //Debug.Log("Camp " + (campNumber) + " is alerted");
         enemyManagerIns.StartCoroutine(enemyManagerIns.SortCoversByDistance(campNumber));
     }
     public static void DealertWholeCamp(byte campNumber)
@@ -64,7 +60,7 @@ public class EnemyManager : MonoBehaviour
                 enemies[campNumber][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Searching);
         }
         campsAlerted[campNumber] = false;
-        Debug.Log("Camp " + (campNumber + 1) + " is not alerted anymore");
+        //Debug.Log("Camp " + (campNumber + 1) + " is not alerted anymore");
 
     }
     IEnumerator SortCoversByDistance(byte campNumber)

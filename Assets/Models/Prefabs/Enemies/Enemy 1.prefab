@@ -449,7 +449,7 @@ MonoBehaviour:
   enemyEyes: {fileID: 3767183553229146655}
   visibleAngleX: 55
   visibleAngleY: 40
-  visibleRange: 20
+  visibleRange: 100
   canSeeTarget: 0
   sqrDistFromPlayer: 0
   campOfEnemy: 0
@@ -461,9 +461,10 @@ MonoBehaviour:
   patrolWaitDuration: 0
   noticeDuration: 4
   suspectedDuration: 3
-  alertedCoverCheckCooldown: 7
+  alertedCoverCheckCooldown: 10
   alertRangeRate: 0.25
   waitBeforeAlertingAllDuration: 1.5
+  currentCPIndexes: 00000000
   averageCrouchDuration: 3
   isAiming: 0
   previousAiming: 0

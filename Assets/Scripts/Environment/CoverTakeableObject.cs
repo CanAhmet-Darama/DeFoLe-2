@@ -37,6 +37,7 @@ public class CoverTakeableObject : MonoBehaviour
             coverPoints[i].isCoveredAlready = false;
             coverPoints[i].crouchOrPeek = crouchOrPeekCover;
             coverPoints[i].peekCoverDistanceFromCenter= peekCoverDistanceFromCenter;
+            coverPoints[i].unSortedIndexOfPoint = (short)i;
         }
         Array.Copy(coverPoints, unSortedCoverPoints,coverPoints.Length);
     }
@@ -101,14 +102,7 @@ public class CoverTakeableObject : MonoBehaviour
             }
             for(short index1 = (short)(coverPoints.Length - 1); index1 >= 0; index1--)
             {
-                for(short index2 = (short)(unSortedCoverPoints.Length - 1); index2 >= 0; index2--)
-                {
-                    if (unSortedCoverPoints[index2].worldPos == coverPoints[index1].worldPos)
-                    {
-                        coverPoints[index1].isCoveredAlready = unSortedCoverPoints[index2].isCoveredAlready;
-                        break;
-                    }
-                }
+                coverPoints[index1].isCoveredAlready = unSortedCoverPoints[coverPoints[index1].unSortedIndexOfPoint].isCoveredAlready;
             }
         }
     }
@@ -124,5 +118,7 @@ public struct CoverPoint
     public bool crouchOrPeek;
     public float peekCoverDistanceFromCenter;
     public Vector3 coverForwardForPeek;
+
+    public short unSortedIndexOfPoint;
 }
 

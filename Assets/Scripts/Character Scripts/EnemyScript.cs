@@ -45,8 +45,8 @@ public class EnemyScript : GeneralCharacter
     public CoverPoint currentCoverPoint;
 
     // Access to the coverObjectsOfWorld wtih first to indexes and coverPoint of this object with the third index
-    [HideInInspector] public short[] currentCPIndexes = new short[3];
-    short[] previousCPIndexes = new short[3];
+    [HideInInspector] public short[] currentCPIndexes;
+    short[] previousCPIndexes = new short[3] { 0,0,0};
     #region Aiming and Fire
     bool shouldFire;
     byte numberOfShotsBeforeCrouch;
@@ -81,6 +81,9 @@ public class EnemyScript : GeneralCharacter
     Collider[] ragdollCols;
     Rigidbody[] ragdollRbs;
 
+    public EnemyScript()
+    {
+    }
 
     void Start()
     {
@@ -98,12 +101,12 @@ public class EnemyScript : GeneralCharacter
         CheckEyeSight();
         EnemyStateManager();
         AnimStateManage();
-
     }
 
     void EnemyStart()
     {
         GetAndDisableRagdollParts();
+        currentCPIndexes = new short[3];
 
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
@@ -539,9 +542,12 @@ public class EnemyScript : GeneralCharacter
             CoverObjectsManager.unSortedCoverObjectsOfWorld[previousCPIndexes[0]][previousCPIndexes[1]].
                                 unSortedCoverPoints[previousCPIndexes[2]].isCoveredAlready = false;
         }
-        previousCPIndexes[0] = currentCPIndexes[0];
-        previousCPIndexes[1] = currentCPIndexes[1];
-        previousCPIndexes[2] = currentCPIndexes[2];
+        for(int i = previousCPIndexes.Length - 1; i >= 0; i--)
+        {
+            if (currentCPIndexes.Length > i)
+            previousCPIndexes[i] = currentCPIndexes[i];
+
+        }
     }
 
     void SearchingFunction()

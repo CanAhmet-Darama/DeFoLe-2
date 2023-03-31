@@ -394,7 +394,7 @@ public class GeneralCharacter : MonoBehaviour
         {
             harmedChar.GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
         }
-        Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
+        //Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
     }
     public void DeathCheck()
     {
