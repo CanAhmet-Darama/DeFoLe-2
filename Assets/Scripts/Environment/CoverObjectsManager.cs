@@ -92,7 +92,7 @@ public class CoverObjectsManager : MonoBehaviour
                                 }
                                 else
                                 {
-                                    Debug.Log("Picked a cover with peek");
+                                    //Debug.Log("Picked a cover with peek");
                                     enemyScriptIns.currentCoverPoint = cPointsOfObj[j];
                                     Vector3 yResetPoint = new Vector3(cPointsOfObj[j].worldPos.x, 0, cPointsOfObj[j].worldPos.z);
                                     Vector3 yResetPlayer = new Vector3(GameManager.mainChar.position.x,0, GameManager.mainChar.position.z);

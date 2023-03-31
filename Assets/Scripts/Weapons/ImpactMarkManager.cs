@@ -84,7 +84,7 @@ public class ImpactMarkManager : MonoBehaviour
         ParticlesManagerStart();
         InstantiateBulletMarks();
         InstantiateBulletImpacts();
-        InstantiateBladeImpacts();
+        InstantiateBladeMarks();
     }
 
     public static void CallMark(Vector3 pos, Vector3 rot, EnvObjType objType, float volume = 1)
@@ -146,7 +146,7 @@ public class ImpactMarkManager : MonoBehaviour
 
         }
     }
-    void InstantiateBladeImpacts()
+    void InstantiateBladeMarks()
     {
         bladeMarks = new GameObject[bladeMarkPrefabs.Length, impactsCount];
         for (short i = (short)(bladeMarks.GetLength(0) - 1); i >= 0; i--)
@@ -310,6 +310,7 @@ public class ImpactMarkManager : MonoBehaviour
     public static void MakeBloodImpactAndSound(Vector3 pos, Vector3 rot, bool byBullet)
     {
         ParticleSystem impact = GetBloodImpactReady();
+        Debug.Log("Hit pos : " + pos);
         impact.transform.position = pos;
         impact.transform.rotation = Quaternion.LookRotation(rot);
         audioSource.transform.position = pos;
@@ -319,9 +320,11 @@ public class ImpactMarkManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("Play ONESHOT BLADE !!!");
             audioSource.PlayOneShot(fleshBladeImpactSound);
             impact.transform.localEulerAngles += new Vector3(0,-90,0);
         }
+        Debug.Log("Hit bybullet : " + byBullet);
         impact.Play();
     }
 

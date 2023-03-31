@@ -72,7 +72,6 @@ public class EnemyScript : GeneralCharacter
     [Range(0,1)] public float shootingFrequency;
     [HideInInspector] public GeneralWeapon mainWeapon;
     [SerializeField] float meleeRange;
-    bool usingRanged;
 
     [Header("Ragdoll")]
     Collider[] ragdollCols;
@@ -112,7 +111,6 @@ public class EnemyScript : GeneralCharacter
                 mainWeapon = weapons[i].GetComponent<GeneralWeapon>();
             }
         }
-        usingRanged = true;
         numberOfShotsBeforeCrouch = mainWeapon.recommendedShotsBeforeCrouch;
         shotsSinceLastCrouch = 0;
         ChangeEnemyAIState(EnemyAIState.Patrol);
@@ -271,7 +269,7 @@ public class EnemyScript : GeneralCharacter
             realDistFromPlayer = Mathf.Sqrt(sqrDistFromPlayer);
             float noticeDuratOnApply = noticeDuration + noticeDuration * 
                                        ((realDistFromPlayer - (visibleRange* alertRangeRate))/(visibleRange - visibleRange*alertRangeRate));
-            Debug.Log(noticeDuratOnApply);
+            //Debug.Log(noticeDuratOnApply);
             if(noticeCountdown > noticeDuratOnApply)
             {
                 ChangeEnemyAIState(EnemyAIState.Alerted);
@@ -357,6 +355,7 @@ public class EnemyScript : GeneralCharacter
                     else if(currentWeapon.weaponType == WeaponType.Pistol)
                     {
                         GetMeleeWeaponOrHandsFree(WeaponState.melee);
+                        if (navAgent.isStopped) navAgent.isStopped = false;
                         if (checkCoverCoroutine != null)
                         {
                             StopCoroutine(checkCoverCoroutine);
@@ -595,7 +594,7 @@ public class EnemyScript : GeneralCharacter
             pointToSearchOn = basePos+new Vector3(xPos,yPos,zPos);
             if (IsPointOnNavMesh(pointToSearchOn))
             {
-                Debug.Log("Point to search is : " + pointToSearchOn);
+                //Debug.Log("Point to search is : " + pointToSearchOn);
                 return pointToSearchOn;
             }
             countTimes++;
@@ -628,7 +627,7 @@ public class EnemyScript : GeneralCharacter
     {
         enteredNewState = true;
         enemyState = newState;
-        Debug.Log("Enemy is now : " + newState);
+        //Debug.Log("Enemy is now : " + newState);
     }
     #endregion
     void SetAimingBools()
@@ -692,25 +691,25 @@ public class EnemyScript : GeneralCharacter
                     }
                     else
                     {
-                        Debug.Log("canSeeTarget falsed by different collider");
+                        //Debug.Log("canSeeTarget falsed by different collider");
                         canSeeTarget = false;
                     }
                 }
                 else
                 {
-                    Debug.Log("canSeeTarget falsed by not hitting");
+                    //Debug.Log("canSeeTarget falsed by not hitting");
                     canSeeTarget = false;
                 }
             }
             else
             {
-                Debug.Log("canSeeTarget falsed by being out of field of view");
+                //Debug.Log("canSeeTarget falsed by being out of field of view");
                 canSeeTarget = false;
             }
         }
         else
         {
-            Debug.Log("canSeeTarget falsed by distance");
+            //Debug.Log("canSeeTarget falsed by distance");
             canSeeTarget = false;
         }
     }
@@ -740,6 +739,7 @@ public class EnemyScript : GeneralCharacter
         }
         mainColl.enabled = false;
         rb.isKinematic = true;
+        navAgent.enabled = false;
     }
     public void DisableRagdoll()
     {
@@ -753,5 +753,6 @@ public class EnemyScript : GeneralCharacter
         }
         mainColl.enabled = true;
         rb.isKinematic = false;
+        navAgent.enabled = true;
     }
 }
