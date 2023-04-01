@@ -18,6 +18,14 @@ public class StairCheckScript : MonoBehaviour
 
     RaycastHit hitInfo;
     bool isHit;
+
+    Ray ray_2;
+    Ray ray_3;
+    RaycastHit hitInfo_2;
+    RaycastHit hitInfo_3;
+    bool isHit2;
+    bool isHit3;
+    float diagonalRayAngle = 40;
     #endregion
 
     #region Slope
@@ -26,8 +34,8 @@ public class StairCheckScript : MonoBehaviour
     float maxSlopeAngle = 55;
     float slopeForceMultiplier = 0.99f;
     public bool onSlopeMoving;
-    public float normalAngle;
-    public Vector3 crossProduct;
+    [HideInInspector]public float normalAngle;
+    [HideInInspector]public Vector3 crossProduct;
 
     RaycastHit hitInfo2;
 
@@ -42,6 +50,8 @@ public class StairCheckScript : MonoBehaviour
     {
         castCurrentHeight= 0;
         Vector3 rayDir = new Vector3(rb.velocity.x, 0, rb.velocity.z).normalized;
+        Vector3 rayDir2 = RotateVecAroundVec(rayDir, Vector3.up, diagonalRayAngle);
+        Vector3 rayDir3 = RotateVecAroundVec(rayDir, Vector3.up, -diagonalRayAngle);
         if(rb.velocity.magnitude < 0.01f)
         {
             /* If velocity is too low, then launch rays into the following directions */
@@ -83,7 +93,15 @@ public class StairCheckScript : MonoBehaviour
             isHit = Physics.Raycast(ray, out hitInfo, castDistance, lMask, QueryTriggerInteraction.Ignore);
             Debug.DrawRay(transform.position + new Vector3(0, castCurrentHeight, 0), rayDir * castDistance, Color.cyan);
 
-            if (!isHit)
+            ray_2 = new Ray(transform.position + new Vector3(0,castCurrentHeight,0), rayDir2);
+            isHit2 = Physics.Raycast(ray_2, out hitInfo_2, castDistance, lMask, QueryTriggerInteraction.Ignore);
+            Debug.DrawRay(transform.position + new Vector3(0, castCurrentHeight, 0), rayDir2 * castDistance, Color.cyan);
+
+            ray_3 = new Ray(transform.position + new Vector3(0,castCurrentHeight,0), rayDir3);
+            isHit3 = Physics.Raycast(ray_3, out hitInfo_3, castDistance, lMask, QueryTriggerInteraction.Ignore);
+            Debug.DrawRay(transform.position + new Vector3(0, castCurrentHeight, 0), rayDir3 * castDistance, Color.cyan);
+
+            if (!isHit && !isHit2 && !isHit3)
             {
                 if(character.animStateSpeed != AnimStateSpeed.idle){
                     character.transform.position = Vector3.Lerp(character.transform.position,

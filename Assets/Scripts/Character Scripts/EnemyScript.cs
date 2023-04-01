@@ -121,6 +121,10 @@ public class EnemyScript : GeneralCharacter
         {
             StartCoroutine(PermanentPlaceCoverCheck());
         }
+        if(mainWeapon.weaponType == WeaponType.SR_1)
+        {
+            visibleRange = visibleRange * 2;
+        }
 
     }
     void NavAgentSetter()
@@ -355,6 +359,10 @@ public class EnemyScript : GeneralCharacter
                 {
                     if (currentWeapon == mainWeapon)
                     {
+                        if(mainWeapon.weaponType == WeaponType.SR_1)
+                        {
+                            visibleRange /= 2;
+                        }
                         ChangeWeapon(weaponScripts[2]);
                     }
                     else if(currentWeapon.weaponType == WeaponType.Pistol)
