@@ -128,7 +128,6 @@ public class MeleeWeapon : MonoBehaviour
             }
             else if((other.CompareTag("Player") || other.CompareTag("Enemy")) && other.gameObject != owner.gameObject)
             {
-                Debug.Log("Hit human");
                 if (other.gameObject.name == "Helmet Holder")
                     ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized + new Vector3(0,90,0), EnvObjType.metal);
                 else

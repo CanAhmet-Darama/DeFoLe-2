@@ -12,6 +12,8 @@ public class CoverTakeableObject : MonoBehaviour
     public float peekCoverDistanceFromCenter;
     public bool forStaticUsage;
 
+    public short coveredObjectIndex;
+
     void Start()
     {
         SetCoverPointPositions();
@@ -33,6 +35,7 @@ public class CoverTakeableObject : MonoBehaviour
             coverPoints[i].isCoveredAlready = false;
             coverPoints[i].crouchOrPeek = crouchOrPeekCover;
             coverPoints[i].peekCoverDistanceFromCenter= peekCoverDistanceFromCenter;
+            coverPoints[i].coveredPointIndex = (short)i;
         }
     }
 
@@ -49,8 +52,16 @@ public class CoverTakeableObject : MonoBehaviour
                 rayRotationY*(new Vector3(0, 0, 0.5f)), Color.magenta);
             Debug.DrawRay(transform.TransformPoint(coverPoints[i].relativePos),
                 rayRotationY*(new Vector3(0, 0, -0.5f)), Color.magenta);
-            Debug.DrawRay(transform.TransformPoint(coverPoints[i].relativePos),
-                (new Vector3(0, 0.5f, 0)), Color.yellow);
+            if (coverPoints[i].isCoveredAlready)
+            {
+                Debug.DrawRay(transform.TransformPoint(coverPoints[i].relativePos),
+                    (new Vector3(0, 1f, 0)), Color.blue);
+            }
+            else
+            {
+                Debug.DrawRay(transform.TransformPoint(coverPoints[i].relativePos),
+                    (new Vector3(0, 0.5f, 0)), Color.yellow);
+            }
         }
 
     }
@@ -107,6 +118,8 @@ public struct CoverPoint
     public bool crouchOrPeek;
     public float peekCoverDistanceFromCenter;
     public Vector3 coverForwardForPeek;
+
+    public short coveredPointIndex;
 
 }
 

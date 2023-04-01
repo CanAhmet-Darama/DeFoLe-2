@@ -17,7 +17,7 @@ public class EnemyScript : GeneralCharacter
     bool enteredNewState;
     Transform mainChar;
     MainCharacter mainCharScript;
-    [Range(1,3)]public byte campOfEnemy;
+    [Range(1, 3)] public byte campOfEnemy;
     public byte enemyNumCode;
 
     [Header("Patrol")]
@@ -38,15 +38,13 @@ public class EnemyScript : GeneralCharacter
 
     [Header("Alerted")]
     [SerializeField] float alertedCoverCheckCooldown;
-    [SerializeField][Range(0,1)]float alertRangeRate;
+    [SerializeField][Range(0, 1)] float alertRangeRate;
     [SerializeField] float waitBeforeAlertingAllDuration;
     Coroutine checkCoverCoroutine;
     Coroutine peekableCoverCoroutine;
     public CoverPoint currentCoverPoint;
-
-    // Access to the coverObjectsOfWorld wtih first to indexes and coverPoint of this object with the third index
-    [HideInInspector] public short[] currentCPIndexes;
-    short[] previousCPIndexes = new short[3] { 0,0,0};
+    public short[] currentCoveredIndexes = new short[3];
+    short[] previousCoverIndexes = new short[3];
     #region Aiming and Fire
     bool shouldFire;
     byte numberOfShotsBeforeCrouch;
@@ -106,8 +104,6 @@ public class EnemyScript : GeneralCharacter
     void EnemyStart()
     {
         GetAndDisableRagdollParts();
-        currentCPIndexes = new short[3];
-
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
         mainCharScript = mainChar.GetComponent<MainCharacter>();
@@ -316,6 +312,7 @@ public class EnemyScript : GeneralCharacter
                 navAgent.acceleration = runAcceleration;
                 if (!hasPermanentPlace)
                 {
+                    StartCoroutine(IsCoveredSettingCoroutine());
                     navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp,this));
                 }
                 else
@@ -346,6 +343,7 @@ public class EnemyScript : GeneralCharacter
                     isAiming = true;
                     EnemyFire(false);
                 }
+                if (isCrouching) CrouchOrStand();
             }
             if (currentWeapon.currentAmmo == 0 && weaponState == WeaponState.ranged)
             {
@@ -369,6 +367,7 @@ public class EnemyScript : GeneralCharacter
                         }
                         if (isCrouching) CrouchOrStand();
                         navAgent.stoppingDistance = 0.7f;
+                        IsCoveredSetter(true);
                     }
                 }
 
@@ -393,7 +392,8 @@ public class EnemyScript : GeneralCharacter
     {
         if (sqrDistFromPlayer > (visibleRange * visibleRange) / 4 && mainCharScript.closeToCampEnough)
         {
-            if (isCrouching) CrouchOrStand();
+            if (isCrouching) { CrouchOrStand(); }
+            StartCoroutine(IsCoveredSettingCoroutine());
             navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this));
             if(currentWeapon.currentAmmo < currentWeapon.maxAmmo && ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
             {
@@ -403,6 +403,7 @@ public class EnemyScript : GeneralCharacter
         else if (!currentCoverPoint.crouchOrPeek && Mathf.Abs(Vector3.Angle(-currentCoverPoint.coverForwardForPeek, 
             currentCoverPoint.worldPos - new Vector3(mainChar.position.x, currentCoverPoint.worldPos.y, mainChar.position.z))) > 15)
         {
+            StartCoroutine(IsCoveredSettingCoroutine());
             navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this, true));
         }
         yield return new WaitForSeconds(Random.Range(frequency, frequency + 1));
@@ -520,36 +521,54 @@ public class EnemyScript : GeneralCharacter
         peekableCoverCoroutine = null;
     }
 
-/*    IEnumerator IsCoveredSettingCoroutine()
+    IEnumerator IsCoveredSettingCoroutine()
     {
-        yield return null;
+        previousCoverIndexes = GameManager.CopyArray(currentCoveredIndexes, previousCoverIndexes);
         yield return null;
         IsCoveredSetter();
-        yield return new WaitForSeconds(1);
-        StartCoroutine(IsCoveredSettingCoroutine());
     }
-    void IsCoveredSetter()
+    void IsCoveredSetter(bool deleteCurrent = false)
     {
-        if(enemyState == EnemyAIState.Alerted)
+        if(!GameManager.CompareArray(previousCoverIndexes, currentCoveredIndexes) && !deleteCurrent)
         {
-            if (previousCPIndexes[0] != currentCPIndexes[0] && previousCPIndexes[1] != currentCPIndexes[1] && previousCPIndexes[2] != currentCPIndexes[2])
+            for(int i = CoverObjectsManager.coverObjectsOfWorld[previousCoverIndexes[0]].Length - 1; i >= 0; i--)
             {
-                CoverObjectsManager.unSortedCoverObjectsOfWorld[previousCPIndexes[0]][previousCPIndexes[1]].
-                                    unSortedCoverPoints[previousCPIndexes[2]].isCoveredAlready = false;
+                CoverTakeableObject coverObj = CoverObjectsManager.coverObjectsOfWorld[previousCoverIndexes[0]][i];
+                if(coverObj.coveredObjectIndex == previousCoverIndexes[1])
+                {
+                    for (int j = coverObj.coverPoints.Length - 1; j >= 0; j--)
+                    {
+                        if (coverObj.coverPoints[j].coveredPointIndex == previousCoverIndexes[2])
+                        {
+                            coverObj.coverPoints[j].isCoveredAlready = false;
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
         }
-        else
+        else if (deleteCurrent)
         {
-            CoverObjectsManager.unSortedCoverObjectsOfWorld[previousCPIndexes[0]][previousCPIndexes[1]].
-                                unSortedCoverPoints[previousCPIndexes[2]].isCoveredAlready = false;
-        }
-        for(int i = previousCPIndexes.Length - 1; i >= 0; i--)
-        {
-            if (currentCPIndexes.Length > i)
-            previousCPIndexes[i] = currentCPIndexes[i];
+            for (int i = CoverObjectsManager.coverObjectsOfWorld[currentCoveredIndexes[0]].Length - 1; i >= 0; i--)
+            {
+                CoverTakeableObject coverObj = CoverObjectsManager.coverObjectsOfWorld[currentCoveredIndexes[0]][i];
+                if (coverObj.coveredObjectIndex == currentCoveredIndexes[1])
+                {
+                    for (int j = coverObj.coverPoints.Length - 1; j >= 0; j--)
+                    {
+                        if (coverObj.coverPoints[j].coveredPointIndex == currentCoveredIndexes[2])
+                        {
+                            coverObj.coverPoints[j].isCoveredAlready = false;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
 
         }
-    }*/
+    }
 
     void SearchingFunction()
     {

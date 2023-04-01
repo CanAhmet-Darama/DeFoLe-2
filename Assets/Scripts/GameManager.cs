@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -182,6 +183,74 @@ public class GameManager : MonoBehaviour
     public static float SqrDistance(Vector3 a, Vector3 b)
     {
         return ((a.x - b.x)* (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+    }
+
+    public static short[] CopyArray(short[] sourceArray, short[] destinationArray)
+    {
+        if (sourceArray.Length > destinationArray.Length)
+            destinationArray = new short[sourceArray.Length];
+        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+        return destinationArray;
+    }
+    public static bool[] CopyArray(bool[] sourceArray, bool[] destinationArray)
+    {
+        if (sourceArray.Length > destinationArray.Length)
+            destinationArray = new bool[sourceArray.Length];
+        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+        return destinationArray;
+    }
+    public static byte[] CopyArray(byte[] sourceArray, byte[] destinationArray)
+    {
+        if (sourceArray.Length > destinationArray.Length)
+            destinationArray = new byte[sourceArray.Length];
+        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+        return destinationArray;
+    }
+    public static float[] CopyArray(float[] sourceArray, float[] destinationArray)
+    {
+        if (sourceArray.Length > destinationArray.Length)
+            destinationArray = new float[sourceArray.Length];
+        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+        return destinationArray;
+    }
+
+    public static bool CompareArray(short[] firstArray, short[] secondArray)
+    {
+        if(firstArray.Length != secondArray.Length)
+        {
+            return false;
+        }
+        else
+        {
+            bool arraysSame = true;
+            for(int index = firstArray.Length - 1; index >= 0; index--)
+            {
+                if (firstArray[index] != secondArray[index])
+                {
+                    arraysSame = false;
+                }
+            }
+            return arraysSame;
+        }
+    }
+    public static bool CompareArray(float[] firstArray, float[] secondArray)
+    {
+        if(firstArray.Length != secondArray.Length)
+        {
+            return false;
+        }
+        else
+        {
+            bool arraysSame = true;
+            for(int index = firstArray.Length - 1; index >= 0; index--)
+            {
+                if (firstArray[index] != secondArray[index])
+                {
+                    arraysSame = false;
+                }
+            }
+            return arraysSame;
+        }
     }
     #endregion
 }

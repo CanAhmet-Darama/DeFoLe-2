@@ -153,7 +153,7 @@ MonoBehaviour:
   firingTime: 0.25
   reloadTime: 2
   inaccuracyDegree: 1.5
-  maxAmmo: 3
+  maxAmmo: 30
   currentAmmo: 0
   weaponType: 1
   bullet: {fileID: 5235666667577190266, guid: feb44d6ff70e49f4c98e77f65a6cf047, type: 3}

@@ -389,7 +389,7 @@ MonoBehaviour:
   runAcceleration: 30
   jumpForce: 0
   jumpCooldown: 0
-  health: 250
+  health: 500
   rb: {fileID: 1643108193539418682}
   isEnemy: 1
   currentWeapon: {fileID: 0}
@@ -407,7 +407,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   ammoCounts: 00000000000000000000
-  magazineCount: 1
+  magazineCount: 5
   mainMelee: {fileID: 0}
   canShoot: 0
   canReload: 0
@@ -464,7 +464,7 @@ MonoBehaviour:
   alertedCoverCheckCooldown: 10
   alertRangeRate: 0.25
   waitBeforeAlertingAllDuration: 1.5
-  currentCPIndexes: 00000000
+  currentCoveredIndexes: 000000000000
   averageCrouchDuration: 3
   isAiming: 0
   previousAiming: 0
