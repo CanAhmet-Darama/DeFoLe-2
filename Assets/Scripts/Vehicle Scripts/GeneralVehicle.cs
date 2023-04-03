@@ -18,18 +18,24 @@ public class GeneralVehicle : MonoBehaviour
 
     [Header("Health and Other")]
     public short vehicleHealth;
+    short maxVehicleHealth;
 
     [Header("Wheels")]
     public Axle[] axles;
+
+    [Header("Vehicle Effects")]
+    public ParticleSystem halfDamagedSmoke;
 
     protected void VehicleStart()
     {
         vehicleRb = GetComponent<Rigidbody>();
         vehicleRb.centerOfMass += centerOfMassOffset;
+        maxVehicleHealth = vehicleHealth;
     }
     protected void VehicleUpdate()
     {
         UpdateWheelMeshes();
+        VehicleHealthManage();
     }
 
     protected void UpdateWheelMeshes()
@@ -66,6 +72,18 @@ public class GeneralVehicle : MonoBehaviour
             axles[i - 1].leftCol.motorTorque = 0;
             axles[i - 1].rightCol.motorTorque = 0;
         }
+    }
+
+    void VehicleHealthManage()
+    {
+        if(vehicleHealth < maxVehicleHealth*2 / 3 && !halfDamagedSmoke.isPlaying)
+        {
+            halfDamagedSmoke.Play();
+        }
+    }
+    public void DamageVehicle(short damage)
+    {
+        vehicleHealth -= damage;
     }
 }
 

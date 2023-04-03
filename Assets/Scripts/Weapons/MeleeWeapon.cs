@@ -6,7 +6,7 @@ using UnityEngine;
 public class MeleeWeapon : MonoBehaviour
 {
     [Header("General")]
-    public float damage;
+    public short damage;
     public float swingCooldown;
     public GeneralCharacter owner;
     public bool canSwing;
@@ -123,7 +123,22 @@ public class MeleeWeapon : MonoBehaviour
                 }
                 else
                 {
-                    ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
+                    EnvObject envObj = other.gameObject.GetComponent<EnvObject>();
+                    if (envObj.impactMarkable)
+                    {
+                        ImpactMarkManager.CallBladeMark(contactPoint + (transform.position - contactPoint).normalized*0.01f, 
+                            (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
+                    }
+                    else
+                    {
+                        ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (transform.position - contactPoint).normalized * 0.01f,
+                            (contactPoint - transform.position).normalized, other.GetComponent<EnvObject>().objectType);
+                    }
+
+                    if (envObj.destroyable)
+                    {
+                        envObj.ReduceObjHealth(damage);
+                    }
                 }
             }
             else if((other.CompareTag("Player") || other.CompareTag("Enemy")) && other.gameObject != owner.gameObject)
@@ -144,15 +159,21 @@ public class MeleeWeapon : MonoBehaviour
                     GeneralCharacter.GiveDamage(usedChar.ownerCharacter, (short)(damage * CharColliderManager.damageMultipliers[bodyPartIndex]));
                 }
             }
-            else if (other.GetType() == typeof(WheelCollider))
-            {
-                ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (contactPoint - transform.position).normalized * 0.01f, (contactPoint - transform.position).normalized,
-                    EnvObjType.general);
-            }
+
             else if (other.tag == "Vehicle")
             {
-                ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (contactPoint - transform.position).normalized * 0.01f, (contactPoint - transform.position).normalized,
-                    EnvObjType.metal);
+                GeneralVehicle shotVehicle = other.gameObject.GetComponentInParent<GeneralVehicle>();
+                shotVehicle.DamageVehicle(damage);
+                if (other.GetType() == typeof(WheelCollider))
+                {
+                    ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (contactPoint - transform.position).normalized * 0.01f, (contactPoint - transform.position).normalized,
+                        EnvObjType.general);
+                }
+                else
+                {
+                    ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (contactPoint - transform.position).normalized * 0.01f, (contactPoint - transform.position).normalized,
+                        EnvObjType.metal);
+                }
             }
 
         }

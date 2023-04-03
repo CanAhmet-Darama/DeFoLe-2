@@ -183,6 +183,7 @@ Transform:
   - {fileID: 348276870}
   - {fileID: 322249841}
   - {fileID: 855615516}
+  - {fileID: 8711006506131790301}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -221,7 +222,7 @@ MonoBehaviour:
   steerAngle: 35
   steerSpeed: 4
   brakePower: 2000
-  vehicleHealth: 0
+  vehicleHealth: 3500
   axles:
   - leftCol: {fileID: 5062277243917758868}
     rightCol: {fileID: 3919657009808483070}
@@ -231,6 +232,7 @@ MonoBehaviour:
     rightCol: {fileID: 3919657009654957741}
     leftMesh: {fileID: 7140998110450278803}
     rightMesh: {fileID: 8333300107612513261}
+  halfDamagedSmoke: {fileID: 5841377818217195112}
 --- !u!208 &2034346041
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -317,6 +319,105 @@ Transform:
   m_Father: {fileID: 5062277243738652696}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5817698904397772799
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8711006506131790301}
+  m_Layer: 0
+  m_Name: Effects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8711006506131790301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5817698904397772799}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6666217735279515028}
+  m_Father: {fileID: 5062277243738652696}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &580814976674727432
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8711006506131790301}
+    m_Modifications:
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 5.090001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8046839422523738322, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+      propertyPath: m_Name
+      value: Half Damaged Vehicle Smoke
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+--- !u!198 &5841377818217195112 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6422069339389829216, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+  m_PrefabInstance: {fileID: 580814976674727432}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6666217735279515028 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6092334087028216732, guid: d9b6431493d8e8448a5fced13c2e78a6, type: 3}
+  m_PrefabInstance: {fileID: 580814976674727432}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1706729648147551728
 PrefabInstance:
   m_ObjectHideFlags: 0

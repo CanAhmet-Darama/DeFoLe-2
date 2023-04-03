@@ -45,11 +45,8 @@ public class GeneralBullet : MonoBehaviour
     {
         if (collision.gameObject.tag != "Bullet")
         {
-            if ((transform.position - firedPos).sqrMagnitude < 50 || (transform.position - GameManager.mainCam.position).sqrMagnitude < 2500)
-            {
                 ContactPoint contact = collision.contacts[0];
-                //if (collision.gameObject.GetComponent<EnvObject>() != null || collision.collider.GetType() == typeof(TerrainCollider))
-                //{
+
                 if (collision.gameObject.CompareTag("Ground"))
                 {
                     if (collision.gameObject == GameManager.mainTerrain.gameObject)
@@ -122,15 +119,21 @@ public class GeneralBullet : MonoBehaviour
                         }
                     }
                 }
-                else if(collision.collider.GetType() == typeof(WheelCollider))
+                else if(collision.collider.tag == "Vehicle")
                 {
-                    ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
-                        EnvObjType.general);
-                }
-                else if (collision.collider.tag == "Vehicle")
-                {
-                    ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
-                        EnvObjType.metal);
+                    GeneralVehicle shotVehicle = collision.gameObject.GetComponentInParent<GeneralVehicle>();
+                    shotVehicle.DamageVehicle(itsOwnerWeapon.damage);
+                if (collision.collider.GetType() == typeof(WheelCollider))
+                    {
+                        ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                            EnvObjType.general);
+                        
+                    }
+                    else
+                    {
+                        ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                            EnvObjType.metal);
+                    }
                 }
                 else if (collision.collider.tag == "Player" || collision.collider.tag == "Enemy")
                 {
@@ -147,7 +150,6 @@ public class GeneralBullet : MonoBehaviour
                 Debug.DrawLine(firedPos, contact.point, Color.cyan);
             }
             itsOwnerWeapon.owner.ParentAndResetBullet(transform, itsHolder.transform, this);
-        }
     }
 
     //void OnCollisionEnter(Collision collision)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnvObject : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class EnvObject : MonoBehaviour
     public GameObject[] subPartObjs;
     public Collider mainCollider;
     public Rigidbody objRb;
+    public NavMeshObstacle navObstacle;
     public bool isSubPartItself;
     bool hasDestructed = false;
     
@@ -27,11 +29,16 @@ public class EnvObject : MonoBehaviour
             objRb = GetComponent<Rigidbody>();
             mainCollider = GetComponent<Collider>();
         }
-        if (!isSubPartItself && breakable)
+        if (destroyable && !isSubPartItself)
         {
-            for (int i = subPartObjs.Length - 1; i >= 0; i--)
+            navObstacle = GetComponent<NavMeshObstacle>();
+
+            if (breakable)
             {
-                subPartObjs[i].SetActive(false);
+                for (int i = subPartObjs.Length - 1; i >= 0; i--)
+                {
+                    subPartObjs[i].SetActive(false);
+                }
             }
         }
     }
@@ -64,6 +71,7 @@ public class EnvObject : MonoBehaviour
             objRb.isKinematic = true;
             hasDestructed = true;
             mainObj.SetActive(false);
+            navObstacle.enabled = false;
         }
         else
         {
