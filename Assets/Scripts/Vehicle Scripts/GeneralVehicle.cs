@@ -22,9 +22,16 @@ public class GeneralVehicle : MonoBehaviour
 
     [Header("Wheels")]
     public Axle[] axles;
+    public float currentRPM;
+    public float maxRPM;
+    public float gearRatio;
 
     [Header("Vehicle Effects")]
     public ParticleSystem halfDamagedSmoke;
+    public ParticleSystem seriousDamagedSmoke;
+    public ParticleSystem deadVehicleSmoke;
+    public AudioSource vehicleAudioSource;
+
 
     protected void VehicleStart()
     {
@@ -36,6 +43,7 @@ public class GeneralVehicle : MonoBehaviour
     {
         UpdateWheelMeshes();
         VehicleHealthManage();
+        VehicleSoundManage();
     }
 
     protected void UpdateWheelMeshes()
@@ -76,9 +84,42 @@ public class GeneralVehicle : MonoBehaviour
 
     void VehicleHealthManage()
     {
-        if(vehicleHealth < maxVehicleHealth*2 / 3 && !halfDamagedSmoke.isPlaying)
+        if(vehicleHealth < (maxVehicleHealth*2) / 3 && !halfDamagedSmoke.isPlaying)
         {
             halfDamagedSmoke.Play();
+            motorPower *= 0.75f;
+            maxSpeed *= 0.75f;
+            Debug.Log("Vehicle semi damaged");
+            Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
+        }
+        else if(vehicleHealth < (maxVehicleHealth / 3) && !seriousDamagedSmoke.isPlaying)
+        {
+            halfDamagedSmoke.Stop();
+            seriousDamagedSmoke.Play();
+            motorPower *= 0.75f;
+            maxSpeed *= 0.75f;
+            Debug.Log("Vehicle serious damaged");
+            Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
+        }
+        else if(vehicleHealth <= 0 && !deadVehicleSmoke.isPlaying)
+        {
+            seriousDamagedSmoke.Stop();
+            deadVehicleSmoke.Play();
+            motorPower = 0;
+            maxSpeed = 0;
+            Debug.Log("Vehicle broken");
+            Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
+        }
+    }
+    void VehicleSoundManage()
+    {
+        if(GameManager.mainState == PlayerState.inMainCar)
+        {
+            currentRPM = vehicleRb.velocity.magnitude * 60 / (2 * Mathf.PI * axles[0].leftCol.radius);
+            maxRPM = maxSpeed * 60 / (2 * Mathf.PI * axles[0].leftCol.radius);
+            gearRatio = currentRPM / maxRPM;
+
+            vehicleAudioSource.volume = 0.25f + gearRatio*0.75f;
         }
     }
     public void DamageVehicle(short damage)

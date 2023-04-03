@@ -47,10 +47,6 @@ public class GroundCheckScript : MonoBehaviour
     {
         if (other.tag == "Ground" || other.tag == "Vehicle")
         {
-            if(Char.GetComponent<MainCharacter>() != null)
-            {
-                Debug.Log("Exit : " + other.name);
-            }
             groundedCounting = StartCoroutine(CountForNotGrounded());
             touchingGround = false;
         }
