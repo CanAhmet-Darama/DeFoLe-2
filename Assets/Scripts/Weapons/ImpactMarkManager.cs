@@ -35,7 +35,7 @@ public class ImpactMarkManager : MonoBehaviour
     public static ParticleSystem[,] bulletImpacts;
     public static short impactsCount = 10;
 
-    [Header("Sound stuff")]
+    [Header("Impact Sounds And General")]
     public static AudioSource audioSource;
     [Range(0,1)]public float volumeOfAudio;
     public static AudioClip generalImpactSound;
@@ -47,6 +47,9 @@ public class ImpactMarkManager : MonoBehaviour
     public static AudioClip fleshImpactSound;
     public static AudioClip fleshBladeImpactSound;
     public static AudioClip bulletWhoosh;
+
+    public static AudioClip woodBreaking;
+
     #region Holder Sounds
     public AudioSource _audioSource;
     public AudioClip _generalImpactSound;
@@ -58,6 +61,8 @@ public class ImpactMarkManager : MonoBehaviour
     public AudioClip _fleshImpactSound;
     public AudioClip _fleshBladeImpactSound;
     public AudioClip _bulletWhoosh;
+    [Header("Breaking Sounds")]
+    public AudioClip _woodBreaking;
     #endregion
 
     [Header("Melee Impact")]
@@ -299,9 +304,33 @@ public class ImpactMarkManager : MonoBehaviour
         impact.Play();
     }
 
-    public static void MakeBulletImpactWithoutMark(Vector3 pos, Vector3 rot, EnvObjType objType)
+    public static void MakeBreakingSound(Vector3 pos, EnvObjType objType, float volume = 1)
     {
-        MakeImpactSound(pos, objType);
+        AudioClip impactSound = null;
+        switch (objType)
+        {
+            case EnvObjType.wood:
+                impactSound = woodBreaking;
+                break;
+        }
+        if(impactSound != null)
+        {
+            audioSource.transform.position = pos;
+            audioSource.PlayOneShot(impactSound, volume);
+        }
+
+    }
+
+    public static void MakeBulletImpactWithoutMark(Vector3 pos, Vector3 rot, EnvObjType objType, bool isBreaking = false)
+    {
+        if(!isBreaking)
+        {
+            MakeImpactSound(pos, objType);
+        }
+        else
+        {
+            MakeBreakingSound(pos, objType);
+        }
         MakeImpactParticle(pos, rot, objType);
     }
 
@@ -338,6 +367,8 @@ public class ImpactMarkManager : MonoBehaviour
         fleshImpactSound = _fleshImpactSound;
         fleshBladeImpactSound = _fleshBladeImpactSound;
         bulletWhoosh = _bulletWhoosh;
+
+        woodBreaking = _woodBreaking;
 
         audioSource.volume = volumeOfAudio;
     }

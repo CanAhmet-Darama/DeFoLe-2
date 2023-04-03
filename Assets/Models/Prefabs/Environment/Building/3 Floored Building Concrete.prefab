@@ -112,7 +112,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 4
   destroyable: 0
+  breakable: 0
+  impactMarkable: 1
   healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
 --- !u!1 &6735441696173812198
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +178,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 4
   destroyable: 0
+  breakable: 0
+  impactMarkable: 1
   healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
 --- !u!1 &7314239700959199877
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +244,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 4
   destroyable: 0
+  breakable: 0
+  impactMarkable: 1
   healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
 --- !u!1 &7677877996955039036
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,7 +310,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 4
   destroyable: 0
+  breakable: 0
+  impactMarkable: 1
   healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
 --- !u!1 &8284706188584026859
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +427,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 4
   destroyable: 0
+  breakable: 0
+  impactMarkable: 1
   healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
 --- !u!1 &8725071921559822061
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +571,8 @@ MonoBehaviour:
   furthestIsBetter: 0
   crouchOrPeekCover: 1
   peekCoverDistanceFromCenter: 0
+  forStaticUsage: 0
+  coveredObjectIndex: 0
 --- !u!1001 &3718161660572624189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -648,6 +670,8 @@ MonoBehaviour:
   furthestIsBetter: 0
   crouchOrPeekCover: 1
   peekCoverDistanceFromCenter: 0
+  forStaticUsage: 0
+  coveredObjectIndex: 0
 --- !u!1001 &4745160089947354968
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1069,6 +1093,8 @@ MonoBehaviour:
   furthestIsBetter: 0
   crouchOrPeekCover: 1
   peekCoverDistanceFromCenter: 0
+  forStaticUsage: 0
+  coveredObjectIndex: 0
 --- !u!4 &7725106024274631455 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f2e1e4b145bc3d04da0dfc1a3d033e4f, type: 3}

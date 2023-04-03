@@ -3,7 +3,21 @@ guid: d36a8ea444004744cb06afab25cb5483
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bMP_isThis: {instanceID: 0}
+  - _generalBulletImpact: {instanceID: 0}
+  - _metalBulletImpact: {instanceID: 0}
+  - _woodBulletImpact: {instanceID: 0}
+  - _dirtBulletImpact: {instanceID: 0}
+  - _bloodBulletImpact: {instanceID: 0}
+  - _audioSource: {instanceID: 0}
+  - _generalImpactSound: {instanceID: 0}
+  - _dirtImpactSound: {instanceID: 0}
+  - _glassImpactSound: {instanceID: 0}
+  - _woodImpactSound: {instanceID: 0}
+  - _fleshImpactSound: {instanceID: 0}
+  - _fleshBladeImpactSound: {instanceID: 0}
+  - _bulletWhoosh: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

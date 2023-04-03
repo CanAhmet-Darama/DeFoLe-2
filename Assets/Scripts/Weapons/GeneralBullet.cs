@@ -104,8 +104,22 @@ public class GeneralBullet : MonoBehaviour
                     }
                     else
                     {
-                        ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
-                                collision.gameObject.GetComponent<EnvObject>().objectType);
+                        EnvObject envObj = collision.gameObject.GetComponent<EnvObject>();
+                        if (envObj.impactMarkable)
+                        {
+                            ImpactMarkManager.CallMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                                    collision.gameObject.GetComponent<EnvObject>().objectType);
+                        }
+                        else
+                        {
+                            ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                                    collision.gameObject.GetComponent<EnvObject>().objectType);
+                        }
+
+                        if (envObj.destroyable)
+                        {
+                            envObj.ReduceObjHealth(itsOwnerWeapon.damage);
+                        }
                     }
                 }
                 else if(collision.collider.GetType() == typeof(WheelCollider))

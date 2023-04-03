@@ -7,7 +7,7 @@ public class GeneralWeapon : MonoBehaviour
     #region Variables
     [Header("General")]
     public GeneralCharacter owner;
-    public float damage;
+    public short damage;
     public float range;
     public float firingTime;
     public float reloadTime;

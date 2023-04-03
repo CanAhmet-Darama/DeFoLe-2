@@ -4,9 +4,74 @@ using UnityEngine;
 
 public class EnvObject : MonoBehaviour
 {
+    [Header("General Obj Properties")]
     public EnvObjType objectType;
     public bool destroyable;
+    public bool breakable;
+    public bool impactMarkable = true;
     public short healthOfObject;
+
+    [Header("For Destruction")]
+    public GameObject mainObj;
+    public GameObject[] subPartObjs;
+    public Collider mainCollider;
+    public Rigidbody objRb;
+    public bool isSubPartItself;
+    bool hasDestructed = false;
+    
+
+    void Start()
+    {
+        if(destroyable && breakable)
+        {
+            objRb = GetComponent<Rigidbody>();
+            mainCollider = GetComponent<Collider>();
+        }
+        if (!isSubPartItself && breakable)
+        {
+            for (int i = subPartObjs.Length - 1; i >= 0; i--)
+            {
+                subPartObjs[i].SetActive(false);
+            }
+        }
+    }
+    void Update()
+    {
+        if(healthOfObject <= 0 && destroyable && !hasDestructed)
+        {
+            DestroyEnvObject();
+        }
+    }
+    public void ReduceObjHealth(short damage)
+    {
+        healthOfObject -= damage;
+    }
+
+    public void DestroyEnvObject()
+    {
+        if (breakable)
+        {
+            for (int i = subPartObjs.Length - 1; i >= 0; i--)
+            {
+                subPartObjs[i].SetActive(true);
+            }
+        }
+
+        float volume = 1;
+        if (!isSubPartItself)
+        {
+            mainCollider.enabled = false;
+            objRb.isKinematic = true;
+            hasDestructed = true;
+            mainObj.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            volume = 0.5f;
+        }
+        ImpactMarkManager.MakeBreakingSound(transform.position, objectType, volume);
+    }
 }
 public enum EnvObjType { general, dirt, metal, wood, concrete}
 
