@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8081068642428768451}
   - component: {fileID: 8081068642428768450}
+  - component: {fileID: 697159222704635223}
   m_Layer: 0
   m_Name: Main Wheel_Col
   m_TagString: Untagged
@@ -62,3 +63,18 @@ WheelCollider:
     m_AsymptoteValue: 0.7
     m_Stiffness: 1.2
   m_Enabled: 1
+--- !u!114 &697159222704635223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8081068642428768508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001216d45184a0043a29b9826973d18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerVehicle: {fileID: 0}
+  wheelCol: {fileID: 8081068642428768450}
+  wheelAudio: {fileID: 0}

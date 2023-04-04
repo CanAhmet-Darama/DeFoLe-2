@@ -103,7 +103,7 @@ public class GeneralWeapon : MonoBehaviour
     public void Fire()
     {
         byte bulletPerShot = 1;
-        if (weaponType == WeaponType.Shotgun) { bulletPerShot = 12; }
+        if (weaponType == WeaponType.Shotgun) { bulletPerShot = 12;}
 
         for (byte i = bulletPerShot; i >0; i--)
         {
@@ -125,9 +125,10 @@ public class GeneralWeapon : MonoBehaviour
 
             float inaccX = Random.Range(-inaccuracyDegree / 100, inaccuracyDegree / 100);
             float inaccY = Random.Range(-inaccuracyDegree / 100, inaccuracyDegree / 100);
-            float launchSpeed = bulletToShoot.GetComponent<GeneralBullet>().bulletSpeed;
-            bulletToShoot.GetComponent<Rigidbody>().velocity = launchSpeed * transform.forward;
-            bulletToShoot.GetComponent<Rigidbody>().velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
+            float launchSpeed = gBullet.bulletSpeed;
+            Rigidbody bulletRB = bulletToShoot.GetComponent<Rigidbody>();
+            bulletRB.velocity = launchSpeed * transform.forward;
+            bulletRB.velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
             StartCoroutine(AFrameThenTrail(bulletToShoot));
         }
         owner.animator.SetTrigger("fire");

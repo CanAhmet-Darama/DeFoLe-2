@@ -123,7 +123,8 @@ public class GameManager : MonoBehaviour
             uiManager.totalAmmoText.gameObject.SetActive(true);
 
             MainCar mainCarScr = mainCar.GetComponent<MainCar>();
-            mainCarScr.vehicleAudioSource.Play();
+            mainCarScr.vehicleAudioSource.Stop();
+            mainCarScr.wheelAudioSource.Stop();
             mainCarScr.GetComponent<MainCar>().ResetMotorTorque();
 
             if (Input.GetMouseButton(1))
@@ -149,6 +150,7 @@ public class GameManager : MonoBehaviour
 
             MainCar mainCarScr =mainCar.GetComponent<MainCar>();
             mainCarScr.vehicleAudioSource.Play();
+            mainCarScr.wheelAudioSource.Play();
 
             if (Input.GetMouseButton(1))
             {

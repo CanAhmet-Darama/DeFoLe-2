@@ -22,6 +22,7 @@ public class GeneralVehicle : MonoBehaviour
 
     [Header("Wheels")]
     public Axle[] axles;
+    public WheelScript[] wheelScripts;
     public float currentRPM;
     public float maxRPM;
     public float gearRatio;
@@ -31,6 +32,10 @@ public class GeneralVehicle : MonoBehaviour
     public ParticleSystem seriousDamagedSmoke;
     public ParticleSystem deadVehicleSmoke;
     public AudioSource vehicleAudioSource;
+    public AudioSource wheelAudioSource;
+    public AudioClip deadVehicleSound;
+    public AudioSource crashAudioSource;
+    public AudioClip crashSound;
 
 
     protected void VehicleStart()
@@ -38,6 +43,12 @@ public class GeneralVehicle : MonoBehaviour
         vehicleRb = GetComponent<Rigidbody>();
         vehicleRb.centerOfMass += centerOfMassOffset;
         maxVehicleHealth = vehicleHealth;
+
+        for(int i = axles.Length - 1; i>= 0; i--)
+        {
+            axles[i].leftCol.GetComponent<WheelScript>().ownerVehicle = this;
+            axles[i].rightCol.GetComponent<WheelScript>().ownerVehicle = this;
+        }
     }
     protected void VehicleUpdate()
     {
@@ -107,6 +118,9 @@ public class GeneralVehicle : MonoBehaviour
             deadVehicleSmoke.Play();
             motorPower = 0;
             maxSpeed = 0;
+            vehicleAudioSource.Stop();
+            wheelAudioSource.Stop();
+            vehicleAudioSource.PlayOneShot(deadVehicleSound);
             Debug.Log("Vehicle broken");
             Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
         }
@@ -120,11 +134,45 @@ public class GeneralVehicle : MonoBehaviour
             gearRatio = currentRPM / maxRPM;
 
             vehicleAudioSource.volume = 0.25f + gearRatio*0.75f;
+
+            byte hittingWheels = 0;
+            for(int i = wheelScripts.Length - 1; i >= 0; i--)
+            {
+                if (wheelScripts[i].isHittingGround)
+                {
+                    hittingWheels++;
+                }
+            }
+            wheelAudioSource.volume = hittingWheels * gearRatio;
+
         }
     }
     public void DamageVehicle(short damage)
     {
         vehicleHealth -= damage;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(vehicleRb.velocity.sqrMagnitude > 25)
+        {
+            float velocityRate = vehicleRb.velocity.magnitude / maxSpeed;
+            if(collision.gameObject == GameManager.mainTerrain ||collision.gameObject.GetComponent<EnvObject>() != null)
+            {
+                crashAudioSource.transform.position = collision.GetContact(0).point;
+                crashAudioSource.PlayOneShot(crashSound,velocityRate);
+                EnvObject envObj = collision.gameObject.GetComponent<EnvObject>();
+                if (envObj.destroyable)
+                {
+                    envObj.ReduceObjHealth((short)(velocityRate * 1200));
+                }
+            }
+            else if(collision.gameObject.GetComponent<EnemyScript>() != null)
+            {
+                ImpactMarkManager.MakeBloodImpactAndSound(crashAudioSource.transform.position, Vector3.up, true);
+                EnemyScript.GiveDamage(collision.gameObject.GetComponent<EnemyScript>(), (short)(velocityRate * 1000));
+            }
+        }
     }
 }
 
