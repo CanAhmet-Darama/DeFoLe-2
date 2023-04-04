@@ -12,10 +12,13 @@ public class EnemyScript : GeneralCharacter
     public float visibleAngleX;
     public float visibleAngleY;
     public float visibleRange;
+    float visibleRangeInUse;
     public bool canSeeTarget;
     public float sqrDistFromPlayer;
     bool enteredNewState;
+    Transform targetTransform;
     Transform mainChar;
+    Transform mainCar;
     MainCharacter mainCharScript;
     [Range(1, 3)] public byte campOfEnemy;
     public byte enemyNumCode;
@@ -106,6 +109,7 @@ public class EnemyScript : GeneralCharacter
         GetAndDisableRagdollParts();
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
+        mainCar = GameManager.mainCar;
         mainCharScript = mainChar.GetComponent<MainCharacter>();
         for (short i = (short)(hasWeapons.Length - 1); i >= 0; i--)
         {
@@ -178,8 +182,17 @@ public class EnemyScript : GeneralCharacter
     }
     void GeneralEnemyUpdate()
     {
-        sqrDistFromPlayer = (mainChar.position - enemyEyes.position).sqrMagnitude;
-        if(navAgent.destination != null)
+        visibleRangeInUse = visibleRange;
+        targetTransform = mainCharScript.headOfChar;
+        if (GameManager.mainState == PlayerState.inMainCar)
+        {
+            visibleRangeInUse *= 2;
+            targetTransform = mainCar;
+        }
+
+
+        sqrDistFromPlayer = (targetTransform.position - enemyEyes.position).sqrMagnitude;
+        if (navAgent.destination != null)
         {
             Vector3 offset = new Vector3(0,1.5f,0);
             Debug.DrawRay(navAgent.destination + offset,
@@ -206,7 +219,7 @@ public class EnemyScript : GeneralCharacter
         yield return new WaitForSeconds(alertedCoverCheckCooldown);
         if(enemyState == EnemyAIState.Alerted)
         {
-            permanentCoverObject.SortPointsByDistance(mainChar.position);
+            permanentCoverObject.SortPointsByDistance(targetTransform.position);
         }
         StartCoroutine(PermanentPlaceCoverCheck());
     }
@@ -283,7 +296,7 @@ public class EnemyScript : GeneralCharacter
             }
             else
             {
-                RotateCharToLookAt(mainChar.position, 0.1f);
+                RotateCharToLookAt(targetTransform.position, 0.1f);
             }
         }
         else if(!canSeeTarget)
@@ -335,7 +348,7 @@ public class EnemyScript : GeneralCharacter
             }
             else if(navAgent.remainingDistance < navAgent.stoppingDistance && navAgent.isStopped)
             {
-                RotateCharToLookAt(mainChar.position, 0.1f);
+                RotateCharToLookAt(targetTransform.position, 0.1f);
                 OnCoverBehaviour();
             }
             else
@@ -384,8 +397,8 @@ public class EnemyScript : GeneralCharacter
         }
         else
         {
-            navAgent.SetDestination(mainChar.position);
-            RotateCharToLookAt(mainChar.position, 0.05f);
+            navAgent.SetDestination(targetTransform.position);
+            RotateCharToLookAt(targetTransform.position, 0.05f);
             if(sqrDistFromPlayer < meleeRange*meleeRange)
             {
                 EnemyFire();
@@ -409,7 +422,7 @@ public class EnemyScript : GeneralCharacter
             }
         }
         else if (!currentCoverPoint.crouchOrPeek && Mathf.Abs(Vector3.Angle(-currentCoverPoint.coverForwardForPeek, 
-            currentCoverPoint.worldPos - new Vector3(mainChar.position.x, currentCoverPoint.worldPos.y, mainChar.position.z))) > 15)
+            currentCoverPoint.worldPos - new Vector3(targetTransform.position.x, currentCoverPoint.worldPos.y, targetTransform.position.z))) > 15)
         {
             StartCoroutine(IsCoveredSettingCoroutine());
             navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this, true));
@@ -427,7 +440,7 @@ public class EnemyScript : GeneralCharacter
     }
     void OnCoverBehaviour()
     {
-        Vector2 targetVec = new Vector2(mainChar.position.x, mainChar.position.z) -
+        Vector2 targetVec = new Vector2(targetTransform.position.x, targetTransform.position.z) -
                     new Vector2(transform.position.x, transform.position.z);
         Vector2 enemyForward2 = new Vector2(enemyEyes.forward.x, enemyEyes.forward.z);
 
@@ -653,9 +666,9 @@ public class EnemyScript : GeneralCharacter
         byte countTimes = 0;
         while (countTimes < 30)
         {
-            float xPos = Random.Range(-searchRangeHorizontal + mainChar.position.x, searchRangeHorizontal + mainChar.position.x);
-            float zPos = Random.Range(-searchRangeHorizontal+ mainChar.position.z, searchRangeHorizontal + mainChar.position.z);
-            float yPos = Random.Range(-searchRangeVertical + mainChar.position.y, searchRangeVertical + mainChar.position.y);
+            float xPos = Random.Range(-searchRangeHorizontal + targetTransform.position.x, searchRangeHorizontal + targetTransform.position.x);
+            float zPos = Random.Range(-searchRangeHorizontal+ targetTransform.position.z, searchRangeHorizontal + targetTransform.position.z);
+            float yPos = Random.Range(-searchRangeVertical + targetTransform.position.y, searchRangeVertical + targetTransform.position.y);
             pointToSearchOn = basePos+new Vector3(xPos,yPos,zPos);
             if (IsPointOnNavMesh(pointToSearchOn))
             {
@@ -721,21 +734,12 @@ public class EnemyScript : GeneralCharacter
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, -visibleAngleX, enemyEyes.right, visibleAngleY) * visibleRange, Color.gray);
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, visibleAngleX, enemyEyes.right, -visibleAngleY) * visibleRange, Color.gray);
         Debug.DrawRay(enemyEyes.position, StairCheckScript.RotateVecAroundVec(enemyEyes.forward, enemyEyes.up, -visibleAngleX, enemyEyes.right, -visibleAngleY) * visibleRange, Color.gray);
-
         #endregion
-        if (sqrDistFromPlayer < visibleRange * visibleRange)
+
+        if (sqrDistFromPlayer < visibleRangeInUse * visibleRangeInUse)
         {
-            /*#region Calculate Eyesight Angle
-            Vector3 fromEyesToPlayer = (mainCharScript.headOfChar.position - enemyEyes.position).normalized;
-            Vector3 fromEyesToPlayerY = (new Vector3(0, fromEyesToPlayer.y,fromEyesToPlayer.z));
-            Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
-
-            angleY = Mathf.Abs(Vector3.Angle(enemyEyes.forward, fromEyesToPlayerY));
-            angleX = Mathf.Abs(Vector3.Angle(enemyEyes.forward, fromEyesToPlayerX));
-
-            #endregion*/
             #region Calculate Eyesight Angle
-            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformVector((mainCharScript.headOfChar.position - enemyEyes.position).normalized);
+            Vector3 fromEyesToPlayer = enemyEyes.InverseTransformVector((targetTransform.position - enemyEyes.position).normalized);
             Vector3 fromEyesToPlayerY = new Vector3(0, fromEyesToPlayer.y, fromEyesToPlayer.z);
             Vector3 fromEyesToPlayerX = new Vector3(fromEyesToPlayer.x, 0, fromEyesToPlayer.z);
 
@@ -746,18 +750,20 @@ public class EnemyScript : GeneralCharacter
 
             if (angleX <= visibleAngleX && angleY <= visibleAngleY)
             {
-                Ray rayToPlayer = new Ray(enemyEyes.position, mainCharScript.headOfChar.position - enemyEyes.position);
-                if (Physics.Raycast(rayToPlayer, out RaycastHit hitInfo,visibleRange, ~0,QueryTriggerInteraction.Ignore))
+                Ray rayToPlayer = new Ray(enemyEyes.position, targetTransform.position - enemyEyes.position);
+                if (Physics.Raycast(rayToPlayer, out RaycastHit hitInfo, visibleRangeInUse, ~0, QueryTriggerInteraction.Ignore))
                 {
-                    if (hitInfo.collider.CompareTag("Player"))
+                    if (hitInfo.collider.CompareTag("Player") || (hitInfo.collider.CompareTag("Vehicle")))
                     {
                         canSeeTarget = true;
+                        lastSeenPos = targetTransform.position;
                         Debug.DrawRay(rayToPlayer.origin, rayToPlayer.direction*hitInfo.distance, Color.green);
                     }
                     else
                     {
-                        //Debug.Log("canSeeTarget falsed by different collider");
+                        Debug.Log("canSeeTarget falsed by different collider");
                         canSeeTarget = false;
+                        Debug.Log("Hit collider : " + hitInfo.collider.tag);
                     }
                 }
                 else

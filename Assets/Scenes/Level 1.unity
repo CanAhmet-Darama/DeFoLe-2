@@ -4233,12 +4233,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88aba47edc49a734a819d403f52bbfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetVehicle: {x: 0, y: 2, z: 2}
+  offsetVehicle: {x: 0, y: 2, z: 0.5}
   mainCarTransform: {fileID: 1405969965}
   camCarPointTransform: {fileID: 348276870}
   camCarPoint2Transform: {fileID: 428852798}
   freeLookPivotCar: {fileID: 855615516}
-  freeOffsetCar: {x: 0, y: 1.5, z: -6}
+  freeOffsetCar: {x: 0, y: 1, z: -8}
   mainChar: {fileID: 1155065839}
   freeLookPivotOnFoot: {fileID: 1155065838}
   camPointOnFoot: {fileID: 457613557}

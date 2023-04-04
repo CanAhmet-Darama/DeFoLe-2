@@ -86,6 +86,7 @@ public class EnemyManager : MonoBehaviour
                     {
                         lastSeenPosOfPlayer[campIndex] = enemies[campIndex][enemyIndex].lastSeenPos;
                         anyoneSawTarget = true;
+                        break;
                     }
                 }
                 if(!anyoneSawTarget)

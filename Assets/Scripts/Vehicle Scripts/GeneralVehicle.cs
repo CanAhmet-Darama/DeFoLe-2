@@ -160,12 +160,13 @@ public class GeneralVehicle : MonoBehaviour
             if(collision.gameObject == GameManager.mainTerrain ||collision.gameObject.GetComponent<EnvObject>() != null)
             {
                 crashAudioSource.transform.position = collision.GetContact(0).point;
-                crashAudioSource.PlayOneShot(crashSound,velocityRate);
                 EnvObject envObj = collision.gameObject.GetComponent<EnvObject>();
                 if (envObj.destroyable)
                 {
                     envObj.ReduceObjHealth((short)(velocityRate * 1200));
+                    velocityRate *= 0.5f;
                 }
+                crashAudioSource.PlayOneShot(crashSound,velocityRate);
             }
             else if(collision.gameObject.GetComponent<EnemyScript>() != null)
             {

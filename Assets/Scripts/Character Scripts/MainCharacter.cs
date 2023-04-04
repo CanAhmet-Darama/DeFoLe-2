@@ -12,6 +12,7 @@ public class MainCharacter : GeneralCharacter
     public Transform centerPointBone;
     AnimatingClass playerAnimating;
     public Transform headOfChar;
+    public Transform playerTransform;
 
     #region Some Stuff
     Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
@@ -24,6 +25,7 @@ public class MainCharacter : GeneralCharacter
         closestCamp = 1;
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
+        playerTransform = transform;
         InvokeRepeating("CalculateClosestCamp",0,3);
     }
     void Update()
@@ -389,10 +391,19 @@ public class MainCharacter : GeneralCharacter
     }
     void CalculateClosestCamp()
     {
+        if(GameManager.mainState == PlayerState.onFoot)
+        {
+            playerTransform = transform;
+        }
+        else if(GameManager.mainState == PlayerState.inMainCar)
+        {
+            playerTransform = GameManager.mainCar.transform;
+        }
+
         for(int i = GameManager.enemyCamps.Length - 1; i >= 0; i--)
         {
-            float newCampDist =GameManager.SqrDistance(GameManager.enemyCamps[i].transform.position, transform.position);
-            if (newCampDist < GameManager.SqrDistance(GameManager.enemyCamps[closestCamp].transform.position, transform.position))
+            float newCampDist =GameManager.SqrDistance(GameManager.enemyCamps[i].transform.position, playerTransform.position);
+            if (newCampDist < GameManager.SqrDistance(GameManager.enemyCamps[closestCamp].transform.position, playerTransform.position))
             {
                 closestCamp = (byte)(i+1);
                 if(newCampDist < 150 * 150)

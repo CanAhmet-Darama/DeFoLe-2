@@ -128,7 +128,15 @@ public class AimManager : MonoBehaviour
                     float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
                     float inaccEnemyY = Random.Range(-(2*enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
 
-                    Vector3 targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * GameManager.mainChar.right + inaccEnemyY * GameManager.mainChar.up;
+                    Vector3 targetPos = enemyToUse.lastSeenPos;
+                    if (GameManager.mainState == PlayerState.onFoot)
+                    {
+                        targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
+                    }
+                    else if(GameManager.mainState == PlayerState.inMainCar)
+                    {
+                        targetPos = GameManager.mainCar.position + Vector3.up + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
+                    }
                     ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
                 }
                 targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);

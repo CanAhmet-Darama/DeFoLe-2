@@ -149,8 +149,11 @@ public class GameManager : MonoBehaviour
             uiManager.crosshair.gameObject.SetActive(false);
 
             MainCar mainCarScr =mainCar.GetComponent<MainCar>();
-            mainCarScr.vehicleAudioSource.Play();
-            mainCarScr.wheelAudioSource.Play();
+            if(mainCarScr.vehicleHealth > 0)
+            {
+                mainCarScr.vehicleAudioSource.Play();
+                mainCarScr.wheelAudioSource.Play();
+            }
 
             if (Input.GetMouseButton(1))
             {
