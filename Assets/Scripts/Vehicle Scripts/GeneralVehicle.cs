@@ -49,12 +49,13 @@ public class GeneralVehicle : MonoBehaviour
             axles[i].leftCol.GetComponent<WheelScript>().ownerVehicle = this;
             axles[i].rightCol.GetComponent<WheelScript>().ownerVehicle = this;
         }
+        maxRPM = maxSpeed * 60 / (2 * Mathf.PI * axles[0].leftCol.radius);
     }
     protected void VehicleUpdate()
     {
         UpdateWheelMeshes();
         VehicleHealthManage();
-        VehicleSoundManage();
+        VehicleSoundAndParticleManage();
     }
 
     protected void UpdateWheelMeshes()
@@ -125,26 +126,56 @@ public class GeneralVehicle : MonoBehaviour
             Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
         }
     }
-    void VehicleSoundManage()
+    void VehicleSoundAndParticleManage()
     {
-        if(GameManager.mainState == PlayerState.inMainCar)
+        currentRPM = vehicleRb.velocity.magnitude * 60 / (2 * Mathf.PI * axles[0].leftCol.radius);
+        gearRatio = currentRPM / maxRPM;
+
+        bool particleBackwards;
+        if(Vector3.Angle(vehicleRb.velocity, transform.forward) > 90)
         {
-            currentRPM = vehicleRb.velocity.magnitude * 60 / (2 * Mathf.PI * axles[0].leftCol.radius);
-            maxRPM = maxSpeed * 60 / (2 * Mathf.PI * axles[0].leftCol.radius);
-            gearRatio = currentRPM / maxRPM;
+            particleBackwards = false;
+        }
+        else
+        {
+            particleBackwards = true;
+        }
 
-            vehicleAudioSource.volume = 0.25f + gearRatio*0.75f;
-
-            byte hittingWheels = 0;
-            for(int i = wheelScripts.Length - 1; i >= 0; i--)
+        byte hittingWheels = 0;
+        for(int i = wheelScripts.Length - 1; i >= 0; i--)
+        {
+            if (wheelScripts[i].isHittingGround)
             {
-                if (wheelScripts[i].isHittingGround)
+                hittingWheels++;
+                if (!wheelScripts[i].wheelParticle.isPlaying)
                 {
-                    hittingWheels++;
+                    wheelScripts[i].wheelParticle.Play();
+                }
+
+                if (particleBackwards)
+                {
+                    wheelScripts[i].wheelParticle.transform.localEulerAngles = new Vector3(0, 180, 0);
+                }
+                else
+                {
+                    wheelScripts[i].wheelParticle.transform.localEulerAngles = Vector3.zero;
+                }
+
+                wheelScripts[i].wheelParticle.emissionRate = gearRatio * wheelScripts[i].particleEmissionLevel;
+            }
+            else
+            {
+                if (wheelScripts[i].wheelParticle.isPlaying)
+                {
+                    wheelScripts[i].wheelParticle.Stop();
                 }
             }
-            wheelAudioSource.volume = hittingWheels * gearRatio;
+        }
+        wheelAudioSource.volume = hittingWheels * gearRatio;
 
+        if (GameManager.mainState == PlayerState.inMainCar)
+        {
+            vehicleAudioSource.volume = 0.25f + gearRatio*0.75f;
         }
     }
     public void DamageVehicle(short damage)

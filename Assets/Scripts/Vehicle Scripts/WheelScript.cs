@@ -9,6 +9,9 @@ public class WheelScript : MonoBehaviour
     public bool isHittingGround;
     WheelHit wheelHit;
 
+    public ParticleSystem wheelParticle;
+    public float particleEmissionLevel;
+
     void Update()
     {
         ManageWheelSounds();

@@ -124,7 +124,6 @@ public class GameManager : MonoBehaviour
 
             MainCar mainCarScr = mainCar.GetComponent<MainCar>();
             mainCarScr.vehicleAudioSource.Stop();
-            mainCarScr.wheelAudioSource.Stop();
             mainCarScr.GetComponent<MainCar>().ResetMotorTorque();
 
             if (Input.GetMouseButton(1))
@@ -152,7 +151,6 @@ public class GameManager : MonoBehaviour
             if(mainCarScr.vehicleHealth > 0)
             {
                 mainCarScr.vehicleAudioSource.Play();
-                mainCarScr.wheelAudioSource.Play();
             }
 
             if (Input.GetMouseButton(1))
