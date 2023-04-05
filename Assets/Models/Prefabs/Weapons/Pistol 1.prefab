@@ -78,6 +78,8 @@ MonoBehaviour:
   animOverriderIndex: 1
   subAnimator: {fileID: 0}
   recommendedShotsBeforeCrouch: 3
+  meshedPartOfWeapon:
+  - {fileID: 217640931488567530}
 --- !u!82 &1357527824877083090
 AudioSource:
   m_ObjectHideFlags: 0
@@ -278,6 +280,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4f56f132ee09924294e3b24793f710d, type: 3}
+--- !u!1 &217640931488567530 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f4f56f132ee09924294e3b24793f710d, type: 3}
+  m_PrefabInstance: {fileID: 1136137012093070779}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &598670795702946384 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f4f56f132ee09924294e3b24793f710d, type: 3}

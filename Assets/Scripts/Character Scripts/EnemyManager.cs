@@ -117,4 +117,44 @@ public class EnemyManager : MonoBehaviour
         yield return new WaitForSeconds(2);
         StartCoroutine(AreEnemiesSeeingTarget());
     }
+
+    public static void ActivateEnemy(EnemyScript enemyScr, bool activate)
+    {
+
+        enemyScr.enabled = activate;
+        enemyScr.animator.enabled = activate;
+        enemyScr.enemyAimer.enabled = activate;
+        enemyScr.navAgent.enabled = activate;
+        if(enemyScr.health > 0)
+        {
+        enemyScr.enemyHitboxes.SetActive(activate);
+        }
+        enemyScr.stairSlopeChecker.enabled = activate;
+        enemyScr.groundChecker.SetActive(activate);
+        if(enemyScr.weaponState == GeneralCharacter.WeaponState.ranged)
+        {
+            for(int i = enemyScr.mainWeapon.meshedPartOfWeapon.Length - 1; i>= 0; i--)
+            {
+                enemyScr.mainWeapon.meshedPartOfWeapon[i].SetActive(activate);
+            }
+        }
+    }
+    public static void UndetailEnemy(EnemyScript enemyScr, bool undetailing)
+    {
+        enemyScr.animator.enabled = !undetailing;
+        enemyScr.enemyAimer.enabled = !undetailing;
+        enemyScr.stairSlopeChecker.enabled = !undetailing;
+        enemyScr.groundChecker.SetActive(!undetailing);
+        if (enemyScr.weaponState == GeneralCharacter.WeaponState.ranged)
+        {
+            for (int i = enemyScr.mainWeapon.meshedPartOfWeapon.Length - 1; i >= 0; i--)
+            {
+                enemyScr.mainWeapon.meshedPartOfWeapon[i].SetActive(!undetailing);
+            }
+        }
+        else if(enemyScr.weaponState == GeneralCharacter.WeaponState.melee)
+        {
+            enemyScr.mainMelee.meshPart.SetActive(!undetailing);
+        }
+    }
 }

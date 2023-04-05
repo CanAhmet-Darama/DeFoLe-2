@@ -59,6 +59,7 @@ MonoBehaviour:
   audioSource: {fileID: 1772829376415041122}
   sheathSound: {fileID: 8300000, guid: 2ca81cd095fc07e4ab73ed9647c26eef, type: 3}
   swingSound: {fileID: 8300000, guid: fd65050203645ea48a4485e375e01199, type: 3}
+  meshPart: {fileID: 8719802035538313078}
 --- !u!65 &5418318840478128906
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -248,5 +249,10 @@ PrefabInstance:
 --- !u!4 &8235154543391630796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
+  m_PrefabInstance: {fileID: 8485797722206503463}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8719802035538313078 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: da5b4b2fb211f4d428b8f9c02cb37c10, type: 3}
   m_PrefabInstance: {fileID: 8485797722206503463}
   m_PrefabAsset: {fileID: 0}

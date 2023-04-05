@@ -176,6 +176,9 @@ MonoBehaviour:
   animOverriderIndex: 0
   subAnimator: {fileID: 0}
   recommendedShotsBeforeCrouch: 5
+  meshedPartOfWeapon:
+  - {fileID: 7605772576011925924}
+  - {fileID: 5771008734487350889}
 --- !u!95 &-3090376747615051867
 Animator:
   serializedVersion: 5

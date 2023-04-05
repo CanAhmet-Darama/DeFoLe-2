@@ -79,6 +79,12 @@ MonoBehaviour:
   animOverriderIndex: 3
   subAnimator: {fileID: 4845926822839587}
   recommendedShotsBeforeCrouch: 1
+  meshedPartOfWeapon:
+  - {fileID: 3084860141343235994}
+  - {fileID: 6175845085695797875}
+  - {fileID: 2034338735417979580}
+  - {fileID: 3880886184210741833}
+  - {fileID: 3567813768733422060}
 --- !u!82 &301657730965318171
 AudioSource:
   m_ObjectHideFlags: 0

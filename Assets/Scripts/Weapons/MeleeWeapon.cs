@@ -23,6 +23,9 @@ public class MeleeWeapon : MonoBehaviour
     public AudioClip sheathSound;
     public AudioClip swingSound;
 
+    [Header("LOD Stuff")]
+    public GameObject meshPart;
+
     void Start()
     {
         canSwing = true;

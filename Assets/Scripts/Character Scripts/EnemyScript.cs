@@ -77,14 +77,17 @@ public class EnemyScript : GeneralCharacter
     [Range(0,1)] public float shootingFrequency;
     [HideInInspector] public GeneralWeapon mainWeapon;
     [SerializeField] float meleeRange;
+    public AimManager enemyAimer;
 
     [Header("Ragdoll")]
     Collider[] ragdollCols;
     Rigidbody[] ragdollRbs;
 
-    public EnemyScript()
-    {
-    }
+    [Header("Enemy Instance References")]
+    public GameObject enemyHitboxes;
+    public GameObject groundChecker;
+    [HideInInspector] public GameObject[] weaponMeshes;  
+
 
     void Start()
     {
@@ -93,6 +96,7 @@ public class EnemyScript : GeneralCharacter
         EnemyStart();
         ChangeWeapon(weapons[(int)mainWeapon.weaponType].GetComponent<GeneralWeapon>());
         EnemyManager.AddEnemyToList(campOfEnemy, this);
+        EnemyManager.ActivateEnemy(this, false);
     }
 
     void Update()
@@ -129,6 +133,7 @@ public class EnemyScript : GeneralCharacter
         {
             visibleRange = visibleRange * 2;
         }
+        weaponMeshes = mainWeapon.meshedPartOfWeapon;
 
     }
     void NavAgentSetter()

@@ -41,6 +41,7 @@ public class GeneralWeapon : MonoBehaviour
 
     [Header("Other Usage")]
     public byte recommendedShotsBeforeCrouch;
+    public GameObject[] meshedPartOfWeapon;
     #endregion
 
 
@@ -59,7 +60,6 @@ public class GeneralWeapon : MonoBehaviour
             bulletPool = new GameObject[5];
         }
         bulletScripts = new GeneralBullet[bulletPool.Length];
-
 
         for(int i = bulletPool.Length; i > 0; i--)
         {
@@ -83,10 +83,7 @@ public class GeneralWeapon : MonoBehaviour
         currentAmmo = maxAmmo;
 
     }
-    void Update()
-    {
-        
-    }
+
     public void Reload()
     {
         owner.StartCoroutine(owner.CanShootAgain(reloadTime));
