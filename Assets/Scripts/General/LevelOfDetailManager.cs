@@ -7,16 +7,16 @@ public class LevelOfDetailManager : MonoBehaviour
     #region Variables
     public bool objectOrEnemy = true;
     public float detailDiminishDistance;
+    public float sqrDistancePlayer;
 
     
     public MeshRenderer[] meshesDetailed;
     public MeshRenderer[] meshesNotDetailed;
-    public SkinnedMeshRenderer skinnedMesh;
     public bool isDetailedNow = false;
 
-    public float sqrDistancePlayer;
+    [Header("Enemy Detail")]
+    public SkinnedMeshRenderer skinnedMesh;
     public Transform mainCam;
-
     public bool enemyActivated = false;
     public EnemyScript enemyScr;
 
@@ -50,7 +50,7 @@ public class LevelOfDetailManager : MonoBehaviour
                 }
                 else
                 {
-                    EnemyManager.UndetailEnemy(enemyScr, true);
+                    EnemyManager.UndetailEnemy(enemyScr, false);
                 }
             }
         }
@@ -60,7 +60,7 @@ public class LevelOfDetailManager : MonoBehaviour
             isDetailedNow = false;
             if(!objectOrEnemy)
             {
-                EnemyManager.UndetailEnemy(enemyScr, false);
+                EnemyManager.UndetailEnemy(enemyScr, true);
             }
         }
     }
@@ -77,6 +77,7 @@ public class LevelOfDetailManager : MonoBehaviour
         {
             skinnedMesh.enabled = enableDetail;
         }
+
         for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
         {
             meshesNotDetailed[i].enabled = !enableDetail;

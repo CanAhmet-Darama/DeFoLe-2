@@ -172,7 +172,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectType: 4
   destroyable: 0
+  breakable: 0
+  impactMarkable: 1
   healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
+  mainCollider: {fileID: 0}
+  objRb: {fileID: 0}
+  navObstacle: {fileID: 0}
+  isSubPartItself: 0
 --- !u!1 &4489826555387455509
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3820391527344796335}
+  - component: {fileID: 6495252077931002038}
   m_Layer: 0
   m_Name: Stair with 7 step
   m_TagString: Ground
@@ -203,9 +212,34 @@ Transform:
   m_Children:
   - {fileID: 4675884877777527674}
   - {fileID: 2907475057380557726}
+  - {fileID: 677015538784625472}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
+--- !u!114 &6495252077931002038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4489826555387455509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 810975b8fb91acc48835a4337488cea8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectOrEnemy: 1
+  detailDiminishDistance: 50
+  sqrDistancePlayer: 0
+  meshesDetailed:
+  - {fileID: 7151800012604884285}
+  meshesNotDetailed:
+  - {fileID: 1814408414582970415}
+  isDetailedNow: 0
+  skinnedMesh: {fileID: 0}
+  mainCam: {fileID: 0}
+  enemyActivated: 0
+  enemyScr: {fileID: 0}
 --- !u!1 &5543403158921271104
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,3 +323,74 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &1076227780432102571
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3820391527344796335}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+      propertyPath: m_Name
+      value: Stair with 7step LowPoly
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+--- !u!4 &677015538784625472 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+  m_PrefabInstance: {fileID: 1076227780432102571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1814408414582970415 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: f977e5e7f5e5e4c4a8947857842aa837, type: 3}
+  m_PrefabInstance: {fileID: 1076227780432102571}
+  m_PrefabAsset: {fileID: 0}

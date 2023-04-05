@@ -134,7 +134,6 @@ public class EnemyScript : GeneralCharacter
             visibleRange = visibleRange * 2;
         }
         weaponMeshes = mainWeapon.meshedPartOfWeapon;
-
     }
     void NavAgentSetter()
     {
