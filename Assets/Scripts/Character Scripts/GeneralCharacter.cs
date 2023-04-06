@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
@@ -49,6 +50,14 @@ public class GeneralCharacter : MonoBehaviour
     [SerializeField]
     AnimatorOverrideController[] animOverriders;
     #endregion
+
+    [Header("For Audio")]
+    public AudioClip[] stepSounds;
+    public bool[] footTouchedGround; // First element is LEFT, second element is RIGHT
+    public bool[] footTouchedGroundPrevious; // First element is LEFT, second element is RIGHT
+    public AudioSource stepSoundMaker;
+    public GameObject[] footBones; // First element is LEFT, second element is RIGHT
+    float stepSoundMultiplier = 0.25f;
 
     [Header("Some Stuff")]
     public bool isGrounded;
@@ -329,6 +338,9 @@ public class GeneralCharacter : MonoBehaviour
         }
         CreateWeapons();
         weaponState = WeaponState.ranged;
+
+        footTouchedGround = new bool[2];
+        footTouchedGroundPrevious = new bool[2];
     }
     protected void GeneralCharUpdate()
     {
@@ -340,6 +352,7 @@ public class GeneralCharacter : MonoBehaviour
         {
             rb.velocity = new Vector3(rb.velocity.x, -20, rb.velocity.z);
         }
+        SteppedGroundCheck();
     }
 
     public IEnumerator CanShootAgain(float durat)
@@ -418,6 +431,93 @@ public class GeneralCharacter : MonoBehaviour
                 GameManager.ChangeState(PlayerState.gameOver);
             }
             animator.enabled = false;
+        }
+    }
+
+    void SteppedGroundCheck()
+    {
+        float castDistance = 0.085f;
+        int layerMask = 1;
+        RaycastHit hitInfoStep;
+        for (int i = footBones.Length - 1; i >= 0; i--)
+        {
+            Ray rayForStepCheck = new Ray(footBones[i].transform.position + new Vector3(0,-0.07f,0), Vector3.down);
+            footTouchedGround[i] = Physics.Raycast(rayForStepCheck, out hitInfoStep, castDistance, layerMask, QueryTriggerInteraction.Ignore);
+            //Debug.DrawRay(rayForStepCheck.origin, hitInfoStep.point - rayForStepCheck.origin, Color.white);
+            if (footTouchedGround[i])
+            {
+                if (!footTouchedGroundPrevious[i] && (animStateSpeed != AnimStateSpeed.idle))
+                {
+                    byte soundIndex;
+                    float stepSoundMultiplierInUse = stepSoundMultiplier;
+                    if (isCrouching)
+                    {
+                        stepSoundMultiplierInUse *= 0.5f;
+                    }
+                    else if(animStateSpeed == AnimStateSpeed.run)
+                    {
+                        stepSoundMultiplierInUse *= 2;
+                    }
+
+                    if (hitInfoStep.collider.CompareTag("Ground"))
+                    {
+                        if(hitInfoStep.collider.gameObject == GameManager.mainTerrain)
+                        {
+                            TerrainManager.GetTerrainTexture(hitInfoStep.point);
+                            float[] textureValues = new float[TerrainManager.textureValues.Length];
+                            GameManager.CopyArray(TerrainManager.textureValues, textureValues);
+                            stepSoundMaker.transform.position = hitInfoStep.point;
+                            for (short textureIndex = (short)(textureValues.Length - 1); textureIndex >= 0; textureIndex--)
+                            {
+                                if (textureValues[textureIndex] > 0)
+                                {
+                                    switch (textureIndex)
+                                    {
+                                        case 0:
+                                            soundIndex = 1;
+                                            break;
+                                        case 1:
+                                            soundIndex = 1;
+                                            break;
+                                        case 2:
+                                            soundIndex = 0;
+                                            break;
+                                        default: soundIndex = 0; 
+                                            break;
+                                    }
+                                    stepSoundMaker.PlayOneShot(stepSounds[soundIndex*2 + i], textureValues[textureIndex] * stepSoundMultiplierInUse);
+                                }
+                            }
+                        }
+                        else if (hitInfoStep.collider.GetComponent<EnvObject>() != null)
+                        {
+                            EnvObjType envObjType = hitInfoStep.collider.GetComponent<EnvObject>().objectType;
+                            switch (envObjType)
+                            {
+                                case EnvObjType.dirt: soundIndex = 1;
+                                    break;
+                                case EnvObjType.metal: soundIndex = 2;
+                                    break;
+                                case EnvObjType.wood: soundIndex = 3;
+                                    break;
+                                case EnvObjType.concrete: soundIndex = 0;
+                                    break;
+                                default : soundIndex = 0;break;
+                            }
+                            stepSoundMaker.transform.position = hitInfoStep.point;
+                            stepSoundMaker.PlayOneShot(stepSounds[soundIndex * 2 + i], stepSoundMultiplierInUse);
+                        }
+                        else if (hitInfoStep.collider.CompareTag("Vehicle"))
+                        {
+                            stepSoundMaker.transform.position = hitInfoStep.point;
+                            stepSoundMaker.PlayOneShot(stepSounds[4 + i], stepSoundMultiplierInUse);
+                        }
+                    }
+                }
+            }
+
+
+            footTouchedGroundPrevious[i] = footTouchedGround[i];
         }
     }
 }

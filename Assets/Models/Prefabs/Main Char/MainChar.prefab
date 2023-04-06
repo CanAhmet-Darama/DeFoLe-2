@@ -368,6 +368,7 @@ Transform:
   - {fileID: 3235253142232059463}
   - {fileID: 913370396216349503}
   - {fileID: 3414475216442716857}
+  - {fileID: 7991753685314953452}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -463,6 +464,21 @@ MonoBehaviour:
   - {fileID: 22100000, guid: f3e3d268218547d4fba41ce23107c9a4, type: 2}
   - {fileID: 22100000, guid: a86e97e245e8dc74f9f09c67f66b7ae1, type: 2}
   - {fileID: 22100000, guid: 71fc50187a65860468b1b7c9bd6938d5, type: 2}
+  stepSounds:
+  - {fileID: 8300000, guid: 8557ef3fb7e3ad14695cd0d2f4eedcd4, type: 3}
+  - {fileID: 8300000, guid: 035bd835d03222942bc3dea1c96a2636, type: 3}
+  - {fileID: 8300000, guid: a15d9019b96de4647aa952f53e571108, type: 3}
+  - {fileID: 8300000, guid: d7a6357da9c43224785f276fbfb3953d, type: 3}
+  - {fileID: 8300000, guid: fd6bcacb7511eaf4cb1427228b993db4, type: 3}
+  - {fileID: 8300000, guid: d7d61819f6caaf549820494ecc74e0db, type: 3}
+  - {fileID: 8300000, guid: 9a892e8d7222b664fa4941b1a5a85390, type: 3}
+  - {fileID: 8300000, guid: 4ae1359447e1cfc498e6ec63a8d087e6, type: 3}
+  footTouchedGround: 
+  footTouchedGroundPrevious: 
+  stepSoundMaker: {fileID: 4471540371132088587}
+  footBones:
+  - {fileID: 4623785516117438048}
+  - {fileID: 6923863544283135705}
   isGrounded: 0
   isCrouching: 0
   mainColl: {fileID: 7514421668650504797}
@@ -480,6 +496,7 @@ MonoBehaviour:
   closeToCampEnough: 0
   centerPointBone: {fileID: 5799607903079124862}
   headOfChar: {fileID: 4743320325820802173}
+  playerTransform: {fileID: 0}
 --- !u!1 &1754110545473961771
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,6 +675,134 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8174407375446354001, guid: 61e5349f8481b5c42a6c6d1ef11cc20c, type: 3}
+--- !u!1 &3196818203737124137
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7991753685314953452}
+  - component: {fileID: 4471540371132088587}
+  m_Layer: 7
+  m_Name: Step Sound Maker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7991753685314953452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3196818203737124137}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1643108193539418683}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &4471540371132088587
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3196818203737124137}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 0
+  MaxDistance: 15
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3304801017448299681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1731,6 +1876,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -5292419652488916902, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   m_PrefabInstance: {fileID: 803409797422003412}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4623785516117438048 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3815476212555408716, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  m_PrefabInstance: {fileID: 803409797422003412}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4743320325820802173 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5401469896873234601, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
@@ -1759,6 +1909,11 @@ GameObject:
 --- !u!1 &6523811662972654610 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5886051678211350726, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
+  m_PrefabInstance: {fileID: 803409797422003412}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6923863544283135705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7723895195299596813, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   m_PrefabInstance: {fileID: 803409797422003412}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7111855972755976173 stripped
