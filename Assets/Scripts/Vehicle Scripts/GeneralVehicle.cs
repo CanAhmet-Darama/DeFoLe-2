@@ -188,7 +188,7 @@ public class GeneralVehicle : MonoBehaviour
         if(vehicleRb.velocity.sqrMagnitude > 25)
         {
             float velocityRate = vehicleRb.velocity.magnitude / maxSpeed;
-            if(collision.gameObject == GameManager.mainTerrain ||collision.gameObject.GetComponent<EnvObject>() != null)
+            if(collision.gameObject == GameManager.mainTerrain.gameObject ||collision.gameObject.GetComponent<EnvObject>() != null)
             {
                 crashAudioSource.transform.position = collision.GetContact(0).point;
                 EnvObject envObj = collision.gameObject.GetComponent<EnvObject>();

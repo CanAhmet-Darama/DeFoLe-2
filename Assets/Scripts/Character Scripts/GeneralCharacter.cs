@@ -436,16 +436,16 @@ public class GeneralCharacter : MonoBehaviour
 
     void SteppedGroundCheck()
     {
-        float castDistance = 0.085f;
+        float castDistance = 0.25f;
         int layerMask = 1;
         RaycastHit hitInfoStep;
         for (int i = footBones.Length - 1; i >= 0; i--)
         {
-            Ray rayForStepCheck = new Ray(footBones[i].transform.position + new Vector3(0,-0.07f,0), Vector3.down);
+            Ray rayForStepCheck = new Ray(footBones[i].transform.position, -transform.up);
             footTouchedGround[i] = Physics.Raycast(rayForStepCheck, out hitInfoStep, castDistance, layerMask, QueryTriggerInteraction.Ignore);
-            //Debug.DrawRay(rayForStepCheck.origin, hitInfoStep.point - rayForStepCheck.origin, Color.white);
             if (footTouchedGround[i])
             {
+                Debug.DrawRay(rayForStepCheck.origin, hitInfoStep.point - rayForStepCheck.origin, Color.white);
                 if (!footTouchedGroundPrevious[i] && (animStateSpeed != AnimStateSpeed.idle))
                 {
                     byte soundIndex;
@@ -461,7 +461,7 @@ public class GeneralCharacter : MonoBehaviour
 
                     if (hitInfoStep.collider.CompareTag("Ground"))
                     {
-                        if(hitInfoStep.collider.gameObject == GameManager.mainTerrain)
+                        if(hitInfoStep.collider.gameObject == GameManager.mainTerrain.gameObject)
                         {
                             TerrainManager.GetTerrainTexture(hitInfoStep.point);
                             float[] textureValues = new float[TerrainManager.textureValues.Length];
@@ -485,6 +485,7 @@ public class GeneralCharacter : MonoBehaviour
                                         default: soundIndex = 0; 
                                             break;
                                     }
+                                    Debug.Log(textureIndex + " _ " + (textureValues[textureIndex]));
                                     stepSoundMaker.PlayOneShot(stepSounds[soundIndex*2 + i], textureValues[textureIndex] * stepSoundMultiplierInUse);
                                 }
                             }
@@ -507,15 +508,19 @@ public class GeneralCharacter : MonoBehaviour
                             stepSoundMaker.transform.position = hitInfoStep.point;
                             stepSoundMaker.PlayOneShot(stepSounds[soundIndex * 2 + i], stepSoundMultiplierInUse);
                         }
-                        else if (hitInfoStep.collider.CompareTag("Vehicle"))
-                        {
-                            stepSoundMaker.transform.position = hitInfoStep.point;
-                            stepSoundMaker.PlayOneShot(stepSounds[4 + i], stepSoundMultiplierInUse);
-                        }
                     }
+                    else if (hitInfoStep.collider.CompareTag("Vehicle"))
+                    {
+                        stepSoundMaker.transform.position = hitInfoStep.point;
+                        stepSoundMaker.PlayOneShot(stepSounds[4 + i], stepSoundMultiplierInUse);
+                    }
+
                 }
             }
-
+            else
+            {
+                Debug.Log("TOUCH FALSE");
+            }
 
             footTouchedGroundPrevious[i] = footTouchedGround[i];
         }

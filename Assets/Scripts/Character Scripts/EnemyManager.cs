@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static bool[] campsAlerted = new bool[GameManager.numberOfCamps];
-    public static bool[][] enemiesCanSee = new bool[GameManager.numberOfCamps][];
+    public static bool[][] enemiesCanSee;
     public static Vector3[] lastSeenPosOfPlayer = new Vector3[GameManager.numberOfCamps];
     public static EnemyScript[][] enemies;
     public static float sortCoversCooldown = 6;
@@ -15,6 +15,7 @@ public class EnemyManager : MonoBehaviour
 
     public void EnemyManagerStart()
     {
+        enemiesCanSee = new bool[GameManager.numberOfCamps][];
         enemies = new EnemyScript[GameManager.numberOfCamps][];
         enemyManagerIns = this;
         StartCoroutine(AreEnemiesSeeingTarget());

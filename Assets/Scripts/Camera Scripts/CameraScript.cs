@@ -25,6 +25,14 @@ public class CameraScript : MonoBehaviour
     [SerializeField] Vector3 offsetCharFollow;
     float smoothTimeOnFoot = 0.1f;
 
+    [Header("Sound Stuff")]
+    public AudioSource cameraAudioSource;
+    public AudioClip[] bulletWhizSounds;
+    public SphereCollider cameraRangeCollider;
+
+    [Header("General")]
+    Vector3 targetObjectPos;
+    float maxDistanceFromTarget;
 
     #region Mouse Inputs
     float mouseX;
@@ -172,6 +180,7 @@ public class CameraScript : MonoBehaviour
                 StopCoroutine(holdNumeratorCar);
                 camCanFollow = true;
             }
+            maxDistanceFromTarget = (GameManager.mainChar.position - transform.position).magnitude;
         }
         else if(pState == PlayerState.inMainCar)
         {
@@ -188,10 +197,9 @@ public class CameraScript : MonoBehaviour
                     transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
                     break;
             }
+            maxDistanceFromTarget = (GameManager.mainCar.position - transform.position).magnitude;
         }
     }
-
-
 
     public void DetectMouseMotion()
     {
@@ -205,12 +213,31 @@ public class CameraScript : MonoBehaviour
         }
         lastMousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
+    void CheckObjectBetweenTarget()
+    {
+        RaycastHit hitInfo;
+        Vector3 extents = new Vector3(0.4f, 0.4f, 0.1f);
+        //Vector3 dir = -transform.forward;
+        Vector3 dir = transform.position - targetObjectPos;
+        bool isHit = Physics.BoxCast(targetObjectPos, extents, dir, out hitInfo, Quaternion.LookRotation(transform.forward), maxDistanceFromTarget, 1);
+
+    }
     void UncontrolledCameraFollowChar()
     {
         mouseX += Input.GetAxis("Mouse X") * GameManager.mouseSensitivity;
         mouseY -= Input.GetAxis("Mouse Y") * GameManager.mouseSensitivity;
         mouseY = Mathf.Clamp(mouseY, -30, 50);
         camPointOnFoot.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Bullet"))
+        {
+            cameraAudioSource.transform.position = other.transform.position;
+            byte whizIndex = (byte)Random.Range(0, bulletWhizSounds.Length);
+            cameraAudioSource.PlayOneShot(bulletWhizSounds[whizIndex], 0.5f);
+        }
     }
 }
 public enum CamState { pivot, follow}
