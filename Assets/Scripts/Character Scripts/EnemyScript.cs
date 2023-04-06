@@ -765,9 +765,8 @@ public class EnemyScript : GeneralCharacter
                     }
                     else
                     {
-                        Debug.Log("canSeeTarget falsed by different collider");
+                        //Debug.Log("canSeeTarget falsed by different collider");
                         canSeeTarget = false;
-                        Debug.Log("Hit collider : " + hitInfo.collider.tag);
                     }
                 }
                 else

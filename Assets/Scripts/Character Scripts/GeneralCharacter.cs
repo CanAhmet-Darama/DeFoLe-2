@@ -485,7 +485,6 @@ public class GeneralCharacter : MonoBehaviour
                                         default: soundIndex = 0; 
                                             break;
                                     }
-                                    Debug.Log(textureIndex + " _ " + (textureValues[textureIndex]));
                                     stepSoundMaker.PlayOneShot(stepSounds[soundIndex*2 + i], textureValues[textureIndex] * stepSoundMultiplierInUse);
                                 }
                             }
@@ -516,10 +515,6 @@ public class GeneralCharacter : MonoBehaviour
                     }
 
                 }
-            }
-            else
-            {
-                Debug.Log("TOUCH FALSE");
             }
 
             footTouchedGroundPrevious[i] = footTouchedGround[i];

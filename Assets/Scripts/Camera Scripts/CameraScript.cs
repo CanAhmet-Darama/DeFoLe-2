@@ -32,7 +32,9 @@ public class CameraScript : MonoBehaviour
 
     [Header("General")]
     Vector3 targetObjectPos;
-    float maxDistanceFromTarget;
+    Vector3 defaultCamPos;
+    PlayerState camPlayerState;
+    CamState camOwnState;
 
     #region Mouse Inputs
     float mouseX;
@@ -60,10 +62,16 @@ public class CameraScript : MonoBehaviour
         if(GameManager.mainState == PlayerState.onFoot)
         {
             CamFollowMainCharacter();
+            SetDefaultPos();
+            targetObjectPos = mainChar.position;
+            CheckObjectBetweenTarget();
         }
         else if (GameManager.mainState == PlayerState.inMainCar)
         {
             CamFollowMainCar();
+            SetDefaultPos();
+            targetObjectPos = mainCarTransform.position;
+            CheckObjectBetweenTarget();
         }
     }
     IEnumerator ReadyToCamFollow(Transform pivot, float durat)
@@ -158,8 +166,9 @@ public class CameraScript : MonoBehaviour
 
     public void AdjustCameraPivotOrFollow(PlayerState pState,CamState stateCam)
     {
+        camPlayerState = pState;
+        camOwnState = stateCam;
         if(pState == PlayerState.onFoot){
-
             switch (stateCam)
             {
                 case CamState.pivot:
@@ -180,7 +189,6 @@ public class CameraScript : MonoBehaviour
                 StopCoroutine(holdNumeratorCar);
                 camCanFollow = true;
             }
-            maxDistanceFromTarget = (GameManager.mainChar.position - transform.position).magnitude;
         }
         else if(pState == PlayerState.inMainCar)
         {
@@ -194,13 +202,59 @@ public class CameraScript : MonoBehaviour
                     break;
                 case CamState.follow:
                     transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
-                    transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
+                    transform.LookAt(camCarPoint2Transform.position);
                     break;
             }
-            maxDistanceFromTarget = (GameManager.mainCar.position - transform.position).magnitude;
         }
     }
+    
+    void CheckObjectBetweenTarget()
+    {
+        RaycastHit hitInfo;
+        //Vector3 extents = new Vector3(0.4f, 0.4f, 0.1f);
+        Vector3 dir = defaultCamPos - targetObjectPos;
+        bool isHit = Physics.Linecast(targetObjectPos, defaultCamPos, out hitInfo, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
+        //bool isHit = Physics.BoxCast(targetObjectPos, extents, dir, out hitInfo, Quaternion.LookRotation(transform.forward), maxDistanceFromTarget, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
 
+        if(isHit && !(hitInfo.collider.CompareTag("Vehicle") && GameManager.mainState == PlayerState.inMainCar))
+        {
+            Debug.Log("Successful hit");
+            transform.position = targetObjectPos + (dir.normalized * hitInfo.distance);
+        }
+        else
+        {
+            Debug.Log("NOT SUCCESSFUL");
+            transform.position = defaultCamPos;
+        }
+
+    }
+    void SetDefaultPos()
+    {
+        if(camPlayerState == PlayerState.onFoot)
+        {
+            if(camOwnState == CamState.pivot)
+            {
+                defaultCamPos = freeLookPivotOnFoot.TransformVector(offsetCharPivot);
+            }
+            else
+            {
+                defaultCamPos = camPointOnFoot.TransformVector(offsetCharFollow);
+            }
+        }
+        else if(camPlayerState == PlayerState.inMainCar)
+        {
+            if (camOwnState == CamState.pivot)
+            {
+                defaultCamPos = freeLookPivotCar.TransformVector(offsetVehicle);
+            }
+            else
+            {
+            
+            }
+        }
+        Debug.Log(defaultCamPos);
+    }
+    
     public void DetectMouseMotion()
     {
         if(lastMousePos != new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")))
@@ -212,15 +266,6 @@ public class CameraScript : MonoBehaviour
             mouseMoved = false;
         }
         lastMousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-    }
-    void CheckObjectBetweenTarget()
-    {
-        RaycastHit hitInfo;
-        Vector3 extents = new Vector3(0.4f, 0.4f, 0.1f);
-        //Vector3 dir = -transform.forward;
-        Vector3 dir = transform.position - targetObjectPos;
-        bool isHit = Physics.BoxCast(targetObjectPos, extents, dir, out hitInfo, Quaternion.LookRotation(transform.forward), maxDistanceFromTarget, 1);
-
     }
     void UncontrolledCameraFollowChar()
     {
