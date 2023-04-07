@@ -32,9 +32,10 @@ public class CameraScript : MonoBehaviour
 
     [Header("General")]
     Vector3 targetObjectPos;
-    Vector3 defaultCamPos;
     PlayerState camPlayerState;
     CamState camOwnState;
+    bool setToDefaultAlready;
+    float maxCastDistance;
 
     #region Mouse Inputs
     float mouseX;
@@ -62,14 +63,12 @@ public class CameraScript : MonoBehaviour
         if(GameManager.mainState == PlayerState.onFoot)
         {
             CamFollowMainCharacter();
-            SetDefaultPos();
             targetObjectPos = mainChar.position;
             CheckObjectBetweenTarget();
         }
         else if (GameManager.mainState == PlayerState.inMainCar)
         {
             CamFollowMainCar();
-            SetDefaultPos();
             targetObjectPos = mainCarTransform.position;
             CheckObjectBetweenTarget();
         }
@@ -119,7 +118,7 @@ public class CameraScript : MonoBehaviour
         else if (camCanFollow)
         {
             transform.position = Vector3.SmoothDamp(transform.position, camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized, ref velocity, smoothTimeCar);
-            transform.LookAt(camCarPoint2Transform.position + new Vector3(0, 0, 0));
+            transform.LookAt(camCarPoint2Transform.position + new Vector3(0, -1, 0));
 
             if(transform.position.y < mainCarTransform.position.y - 1)
             {
@@ -189,6 +188,7 @@ public class CameraScript : MonoBehaviour
                 StopCoroutine(holdNumeratorCar);
                 camCanFollow = true;
             }
+            maxCastDistance = (mainChar.position - transform.position).magnitude;
         }
         else if(pState == PlayerState.inMainCar)
         {
@@ -205,56 +205,55 @@ public class CameraScript : MonoBehaviour
                     transform.LookAt(camCarPoint2Transform.position);
                     break;
             }
+            maxCastDistance = (mainCarTransform.position - transform.position).magnitude;
         }
     }
-    
+
     void CheckObjectBetweenTarget()
     {
         RaycastHit hitInfo;
-        //Vector3 extents = new Vector3(0.4f, 0.4f, 0.1f);
-        Vector3 dir = defaultCamPos - targetObjectPos;
-        bool isHit = Physics.Linecast(targetObjectPos, defaultCamPos, out hitInfo, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
-        //bool isHit = Physics.BoxCast(targetObjectPos, extents, dir, out hitInfo, Quaternion.LookRotation(transform.forward), maxDistanceFromTarget, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
+        Ray rayForCam = new Ray(targetObjectPos, (transform.position- targetObjectPos).normalized);
+        bool isHit = Physics.Raycast(rayForCam,out hitInfo, maxCastDistance, LayerMask.GetMask("Default"), QueryTriggerInteraction.Ignore);
 
-        if(isHit && !(hitInfo.collider.CompareTag("Vehicle") && GameManager.mainState == PlayerState.inMainCar))
+        if (isHit && !(hitInfo.collider.CompareTag("Vehicle") && GameManager.mainState == PlayerState.inMainCar))
         {
-            Debug.Log("Successful hit");
-            transform.position = targetObjectPos + (dir.normalized * hitInfo.distance);
+            transform.position = targetObjectPos + (rayForCam.direction * (hitInfo.distance - 0.01f));
+            setToDefaultAlready = false;
         }
-        else
+        else if (!setToDefaultAlready)
         {
-            Debug.Log("NOT SUCCESSFUL");
-            transform.position = defaultCamPos;
+            setToDefaultAlready = true;
+            CheckDefaultLocalPos();
         }
 
     }
-    void SetDefaultPos()
+    void CheckDefaultLocalPos()
     {
-        if(camPlayerState == PlayerState.onFoot)
-        {
-            if(camOwnState == CamState.pivot)
-            {
-                defaultCamPos = freeLookPivotOnFoot.TransformVector(offsetCharPivot);
-            }
-            else
-            {
-                defaultCamPos = camPointOnFoot.TransformVector(offsetCharFollow);
-            }
-        }
-        else if(camPlayerState == PlayerState.inMainCar)
+        if (camPlayerState == PlayerState.onFoot)
         {
             if (camOwnState == CamState.pivot)
             {
-                defaultCamPos = freeLookPivotCar.TransformVector(offsetVehicle);
+                transform.localPosition = offsetCharPivot;
             }
             else
             {
-            
+                transform.localPosition = offsetCharFollow;
             }
         }
-        Debug.Log(defaultCamPos);
+        else if (camPlayerState == PlayerState.inMainCar)
+        {
+            if (camOwnState == CamState.pivot)
+            {
+                transform.localPosition = freeOffsetCar;
+            }
+            else
+            {
+                transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
+            }
+        }
     }
-    
+
+
     public void DetectMouseMotion()
     {
         if(lastMousePos != new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")))
