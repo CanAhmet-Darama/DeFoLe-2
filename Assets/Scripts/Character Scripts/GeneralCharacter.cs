@@ -230,11 +230,10 @@ public class GeneralCharacter : MonoBehaviour
                 if (weaponScripts[i].weaponType == WeaponType.SR_1)
                 { weapons[i].transform.parent = leftHBone.transform; }
 
-                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
+                weapons[i].transform.localPosition = weaponScripts[i].weaponInternalPos;
                 weapons[i].SetActive(false);
 
                 weapons[i].transform.localScale *= 0.01f;
-                weapons[i].transform.localPosition = weapons[i].GetComponent<GeneralWeapon>().rightHandPosOffset;
                 if(weaponScripts[i].weaponType != WeaponType.SR_1)
                 {
                     weapons[i].transform.localEulerAngles += new Vector3(-90, 90, 0);
@@ -243,6 +242,7 @@ public class GeneralCharacter : MonoBehaviour
                 {
                     weapons[i].transform.localEulerAngles = new Vector3(-90, 0, 90);
                 }
+
                 weaponScripts[i].owner = this;
                 //Debug.Log(gameObject.name + " has created : " + weapons[i].name);
                 ammoCounts[i] = (short)(magazineCount * GameManager.weaponPrefabs[i].GetComponent<GeneralWeapon>().maxAmmo);
@@ -276,17 +276,16 @@ public class GeneralCharacter : MonoBehaviour
             canShoot = true;
         }
 
-        if(newWeapon.weaponType == WeaponType.SR_1)
-        {
-            rightHTarget.transform.localPosition = newWeapon.leftHandPos;
-            rightHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
-        }
-        else
-        {
-            leftHTarget.transform.localPosition = newWeapon.leftHandPos;
-            leftHTarget.transform.localEulerAngles = newWeapon.leftHandRot;
-        }
-
+        ResetHandTargets(newWeapon);
+        AimManager.ResetWeights(this);
+    }
+    public void ResetHandTargets(GeneralWeapon newWeapon)
+    {
+        rightHTarget.transform.localPosition = newWeapon.rightTargetPos;
+        rightHTarget.transform.localEulerAngles = newWeapon.rightTargetRot;
+        leftHTarget.transform.localPosition = newWeapon.leftTargetPos;
+        leftHTarget.transform.localEulerAngles = newWeapon.leftTargetRot;
+        Debug.Log("Resetted stats");
     }
     public void GetMeleeWeaponOrHandsFree(WeaponState stateX)
     {

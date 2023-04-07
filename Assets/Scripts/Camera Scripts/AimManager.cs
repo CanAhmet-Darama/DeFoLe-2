@@ -101,11 +101,15 @@ public class AimManager : MonoBehaviour
     }
     void RightClickedOrNotManage(float bodyTar)
     {
-            if (aimEnd)
+        if (aimEnd)
+        {
+            willQuitAimingCompletely = StartCoroutine(WaitToQuitAimingCompletely(1));
+            if (userIsPlayer)
             {
-                willQuitAimingCompletely = StartCoroutine(WaitToQuitAimingCompletely(1));
+                GameManager.uiManager.crosshair.gameObject.SetActive(false);
             }
-            if (aimStart)
+        }
+        if (aimStart)
             {
                 if(willQuitAimingCompletely != null)
                 {
@@ -113,92 +117,97 @@ public class AimManager : MonoBehaviour
                 }
                 quitAimingCompletely = false;
                 animator.SetBool("isAiming", true);
-            }
-            if (aimContinue)
+            if (userIsPlayer)
             {
-            #region Raycasting for aiming
-                Ray ray;
-                if (userIsPlayer)
-                {
-                    ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                GameManager.uiManager.crosshair.gameObject.SetActive(true);
+            }
+        }
 
-                }
-                else
-                {
-                    float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
-                    float inaccEnemyY = Random.Range(-(2*enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
-
-                    Vector3 targetPos = enemyToUse.lastSeenPos;
-                    if (GameManager.mainState == PlayerState.onFoot)
-                    {
-                        targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
-                    }
-                    else if(GameManager.mainState == PlayerState.inMainCar)
-                    {
-                        targetPos = GameManager.mainCar.position + Vector3.up + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
-                    }
-                    ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
-                }
-                targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);
-
-                Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
-
-                if (targetHit && hitInfo.distance > 3)
-                {
-                    aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.03f);
-                }
-                else
-                {
-                    aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 15), 0.03f);
-                }
-                #endregion
-
-                multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, bodyTar, lerpOrSnapSpeed);
-                if(charToAim.weaponState == GeneralCharacter.WeaponState.ranged)
-                {
-                    if (!isReloading) {
-                        if (charToAim.currentWeapon.weaponType != WeaponType.SR_1)
-                        {
-                            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
-                            leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 1, lerpOrSnapSpeed);
-                        }
-                        else
-                        {
-                            multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
-                            if (!charToAim.isShooting) {
-                                rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);}
-                        }
-
-                    }
-                    else
-                    {
-                        if (charToAim.currentWeapon.weaponType != WeaponType.SR_1)
-                        {
-                            multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
-                            leftHCoTBIK.weight = 0;
-                        }
-                        else
-                        {
-                            multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
-                            rightHCoTBIK.weight = 0;
-                        }
-
-                    }
-                }
+        if (aimContinue)
+        {
+        #region Raycasting for aiming
+            Ray ray;
+            if (userIsPlayer)
+            {
+                ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
             }
             else
             {
-                if (CameraScript.mouseMoved || charToAim.animStateSpeed != AnimStateSpeed.idle)
+                float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
+                float inaccEnemyY = Random.Range(-(2*enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
+
+                Vector3 targetPos = enemyToUse.lastSeenPos;
+                if (GameManager.mainState == PlayerState.onFoot)
                 {
-                    if(willQuitAimingCompletely != null)
+                    targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
+                }
+                else if(GameManager.mainState == PlayerState.inMainCar)
+                {
+                    targetPos = GameManager.mainCar.position + Vector3.up + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
+                }
+                ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
+            }
+            targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);
+
+            Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
+
+            if (targetHit && hitInfo.distance > 3)
+            {
+                aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.03f);
+            }
+            else
+            {
+                aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 15), 0.03f);
+            }
+            #endregion
+
+            multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, bodyTar, lerpOrSnapSpeed);
+            if(charToAim.weaponState == GeneralCharacter.WeaponState.ranged)
+            {
+                if (!isReloading) {
+                    if (charToAim.currentWeapon.weaponType != WeaponType.SR_1)
                     {
-                        StopCoroutine(willQuitAimingCompletely);
-                        quitAimingCompletely = true;
-                        animator.SetBool("isAiming", false);
+                        multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+                        leftHCoTBIK.weight = GameManager.LerpOrSnap(leftHCoTBIK.weight, 1, lerpOrSnapSpeed);
                     }
+                    else
+                    {
+                        multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
+                        if (!charToAim.isShooting) {
+                            rightHCoTBIK.weight = GameManager.LerpOrSnap(rightHCoTBIK.weight, 1, lerpOrSnapSpeed);}
+                    }
+
+                }
+                else
+                {
+                    if (charToAim.currentWeapon.weaponType != WeaponType.SR_1)
+                    {
+                        multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 1, lerpOrSnapSpeed);
+                        leftHCoTBIK.weight = 0;
+                    }
+                    else
+                    {
+                        multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 1, lerpOrSnapSpeed);
+                        rightHCoTBIK.weight = 0;
+                    }
+
                 }
             }
+
+        }
+        else
+        {
+            if (CameraScript.mouseMoved || charToAim.animStateSpeed != AnimStateSpeed.idle)
+            {
+                if(willQuitAimingCompletely != null)
+                {
+                    StopCoroutine(willQuitAimingCompletely);
+                    quitAimingCompletely = true;
+                    animator.SetBool("isAiming", false);
+                }
+            }
+        }
 
     }
     void SetBoolsOfAimer()
@@ -224,7 +233,6 @@ public class AimManager : MonoBehaviour
         character.rightHandTBIK.weight = 0;
         character.leftHandTBIK.weight = 0;
     }
-
 
     IEnumerator WaitToQuitAimingCompletely(float durat)
     {

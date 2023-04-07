@@ -118,7 +118,6 @@ public class GameManager : MonoBehaviour
         {
             mainChar.position = mainCar.position - mainCar.right * 3 + new Vector3(0,2,0);
             mainChar.gameObject.SetActive(true);
-            uiManager.crosshair.gameObject.SetActive(true);
             uiManager.curAmmoText.gameObject.SetActive(true);
             uiManager.totalAmmoText.gameObject.SetActive(true);
 
@@ -129,6 +128,7 @@ public class GameManager : MonoBehaviour
             if (Input.GetMouseButton(1))
             {
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
+                uiManager.crosshair.gameObject.SetActive(true);
             }
             else
             {
@@ -138,6 +138,7 @@ public class GameManager : MonoBehaviour
             MainCharacter charComp=mainChar.GetComponent<MainCharacter>();
             charComp.canShoot = true;
             charComp.canReload = true;
+            charComp.ResetHandTargets(charComp.currentWeapon);
         }
         else if(state == PlayerState.inMainCar)
         {

@@ -26,11 +26,12 @@ public class GeneralWeapon : MonoBehaviour
     public AudioClip reloadSound;
 
     [Header("For Animation etc")]
-    public Vector3 leftHandPos;
-    public Vector3 leftHandRot;
+    public Vector3 weaponInternalPos;
+    public Vector3 rightTargetPos;
+    public Vector3 rightTargetRot;
+    public Vector3 leftTargetPos;
+    public Vector3 leftTargetRot;
     public Vector3 bulletLaunchOffset;
-    public Vector3 rightHandPosOffset;
-    public Vector3 rightHandRotOffset;
     public AnimationClip idleAnim;
     public AnimationClip semiIdleAnim;
     public AnimationClip aimAnim;

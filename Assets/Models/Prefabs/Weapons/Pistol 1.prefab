@@ -65,11 +65,12 @@ MonoBehaviour:
   firingSound: {fileID: 8300000, guid: 3854235752c23444689bf97882f45007, type: 3}
   gunAudioSource: {fileID: 1357527824877083090}
   reloadSound: {fileID: 0}
-  leftHandPos: {x: 0.00028, y: -0.00064, z: 0.00382}
-  leftHandRot: {x: 0.007, y: -81.939, z: 0.005}
+  weaponInternalPos: {x: -0.0043, y: 0.0104, z: 0.0017}
+  rightTargetPos: {x: 0, y: 0, z: 0}
+  rightTargetRot: {x: 0, y: 0, z: 0}
+  leftTargetPos: {x: -0.00034, y: -0.00218, z: 0.00382}
+  leftTargetRot: {x: 0, y: -90, z: 0}
   bulletLaunchOffset: {x: 0, y: 1, z: -0.3}
-  rightHandPosOffset: {x: -0.00352, y: 0.01, z: 0.00156}
-  rightHandRotOffset: {x: -90, y: -92.077, z: 180.986}
   idleAnim: {fileID: 5741598095837895766, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   semiIdleAnim: {fileID: -4627031377627500269, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
   aimAnim: {fileID: -4814366651871952600, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
