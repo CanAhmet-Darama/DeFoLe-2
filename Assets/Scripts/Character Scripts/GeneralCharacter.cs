@@ -285,7 +285,6 @@ public class GeneralCharacter : MonoBehaviour
         rightHTarget.transform.localEulerAngles = newWeapon.rightTargetRot;
         leftHTarget.transform.localPosition = newWeapon.leftTargetPos;
         leftHTarget.transform.localEulerAngles = newWeapon.leftTargetRot;
-        Debug.Log("Resetted stats");
     }
     public void GetMeleeWeaponOrHandsFree(WeaponState stateX)
     {

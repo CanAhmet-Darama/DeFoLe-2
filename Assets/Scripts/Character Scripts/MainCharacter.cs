@@ -307,6 +307,15 @@ public class MainCharacter : GeneralCharacter
             {
                 currentWeapon.Reload();
             }
+
+            if(CameraScript.scrollInput > 0 && currentWeapon.weaponType == WeaponType.SR_1 && !currentWeapon.zoomedAlready)
+            {
+                currentWeapon.SniperZoom(true);
+            }
+            else if(CameraScript.scrollInput < 0 && currentWeapon.weaponType == WeaponType.SR_1 && currentWeapon.zoomedAlready)
+            {
+                currentWeapon.SniperZoom(false);
+            }
         }
         else if(weaponState == WeaponState.melee) {
             if(Input.GetMouseButton(0) && mainMelee.canSwing)

@@ -31,23 +31,29 @@ public class CameraScript : MonoBehaviour
     public SphereCollider cameraRangeCollider;
 
     [Header("General")]
+    public Camera CamScript;
     Vector3 targetObjectPos;
     PlayerState camPlayerState;
-    CamState camOwnState;
+    public CamState camOwnState;
     bool setToDefaultAlready;
     float maxCastDistance;
+    public float defaultFOV;
 
     #region Mouse Inputs
     float mouseX;
     float mouseY;
     public static bool mouseMoved;
     Vector2 lastMousePos;
+    static public float scrollInput;
     #endregion
 
     void Start()
     {
         freeLookPivotCar.localPosition = offsetVehicle;
         mainChar.GetComponent<MainCharacter>().charMoving = false;
+        CamScript = GetComponent<Camera>();
+        defaultFOV = CamScript.fieldOfView;
+
         if(GameManager.mainState == PlayerState.onFoot)
         {
 
@@ -60,17 +66,20 @@ public class CameraScript : MonoBehaviour
     }
     void LateUpdate()
     {
-        if(GameManager.mainState == PlayerState.onFoot)
+        if(camOwnState != CamState.zoomScope)
         {
-            CamFollowMainCharacter();
-            targetObjectPos = mainChar.position;
-            CheckObjectBetweenTarget();
-        }
-        else if (GameManager.mainState == PlayerState.inMainCar)
-        {
-            CamFollowMainCar();
-            targetObjectPos = mainCarTransform.position;
-            CheckObjectBetweenTarget();
+            if(GameManager.mainState == PlayerState.onFoot)
+            {
+                CamFollowMainCharacter();
+                targetObjectPos = mainChar.position;
+                CheckObjectBetweenTarget();
+            }
+            else if (GameManager.mainState == PlayerState.inMainCar)
+            {
+                CamFollowMainCar();
+                targetObjectPos = mainCarTransform.position;
+                CheckObjectBetweenTarget();
+            }
         }
     }
     IEnumerator ReadyToCamFollow(Transform pivot, float durat)
@@ -182,6 +191,9 @@ public class CameraScript : MonoBehaviour
                     transform.localPosition = offsetCharFollow;
                     transform.localEulerAngles = Vector3.zero;
                     break;
+                case CamState.zoomScope:
+
+                    break;
             }
             if (holdNumeratorCar != null)
             {
@@ -235,7 +247,7 @@ public class CameraScript : MonoBehaviour
             {
                 transform.localPosition = offsetCharPivot;
             }
-            else
+            else if(camOwnState == CamState.follow)
             {
                 transform.localPosition = offsetCharFollow;
             }
@@ -246,7 +258,7 @@ public class CameraScript : MonoBehaviour
             {
                 transform.localPosition = freeOffsetCar;
             }
-            else
+            else if (camOwnState == CamState.follow)
             {
                 transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
             }
@@ -265,6 +277,8 @@ public class CameraScript : MonoBehaviour
             mouseMoved = false;
         }
         lastMousePos = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+        scrollInput = Input.GetAxis("Mouse ScrollWheel");
     }
     void UncontrolledCameraFollowChar()
     {
@@ -284,4 +298,4 @@ public class CameraScript : MonoBehaviour
         }
     }
 }
-public enum CamState { pivot, follow}
+public enum CamState { pivot, follow, zoomScope}

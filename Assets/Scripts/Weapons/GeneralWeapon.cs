@@ -43,6 +43,11 @@ public class GeneralWeapon : MonoBehaviour
     [Header("Other Usage")]
     public byte recommendedShotsBeforeCrouch;
     public GameObject[] meshedPartOfWeapon;
+
+    [Header("For Sniper")]
+    public bool zoomedAlready;
+    public Vector3 zoomCamLocalPos;
+    public float zoomFieldOfView;
     #endregion
 
 
@@ -163,6 +168,29 @@ public class GeneralWeapon : MonoBehaviour
         oldestBullet.GetComponent<TrailRenderer>().enabled = false;
         oldestBullet.SetActive(false);
         return oldestBullet;
+    }
+
+    public void SniperZoom(bool activateZoom)
+    {
+        CameraScript mainCamScr = GameManager.mainCam.GetComponent<CameraScript>();
+
+
+        if (activateZoom)
+        {
+            mainCamScr.AdjustCameraPivotOrFollow(PlayerState.onFoot,CamState.zoomScope);
+            mainCamScr.transform.SetParent(transform);
+            mainCamScr.transform.localPosition = zoomCamLocalPos;
+            mainCamScr.transform.localEulerAngles = Vector3.zero;
+            mainCamScr.CamScript.fieldOfView = zoomFieldOfView;
+        }
+        else
+        {
+            mainCamScr.AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
+            mainCamScr.CamScript.fieldOfView = mainCamScr.defaultFOV;
+        }
+        zoomedAlready = activateZoom;
+        GameManager.uiManager.crosshair.gameObject.SetActive(!activateZoom);
+        GameManager.uiManager.sniperZoomScreen.gameObject.SetActive(activateZoom);
     }
 
     IEnumerator AFrameThenTrail(GameObject bullet)

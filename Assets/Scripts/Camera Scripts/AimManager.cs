@@ -117,7 +117,7 @@ public class AimManager : MonoBehaviour
                 }
                 quitAimingCompletely = false;
                 animator.SetBool("isAiming", true);
-            if (userIsPlayer)
+            if (userIsPlayer && !(mainCharToUse.currentWeapon.weaponType == WeaponType.SR_1 && mainCharToUse.currentWeapon.zoomedAlready))
             {
                 GameManager.uiManager.crosshair.gameObject.SetActive(true);
             }

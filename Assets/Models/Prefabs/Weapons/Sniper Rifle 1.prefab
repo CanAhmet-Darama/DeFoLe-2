@@ -86,6 +86,9 @@ MonoBehaviour:
   - {fileID: 2034338735417979580}
   - {fileID: 3880886184210741833}
   - {fileID: 3567813768733422060}
+  zoomedAlready: 0
+  zoomCamLocalPos: {x: 0, y: 0.33, z: 3.51}
+  zoomFieldOfView: 12
 --- !u!82 &301657730965318171
 AudioSource:
   m_ObjectHideFlags: 0

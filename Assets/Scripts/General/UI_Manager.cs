@@ -15,6 +15,7 @@ public class UI_Manager : MonoBehaviour
     public TextMeshProUGUI interactionText;
 
     public Image crosshair;
+    public Image sniperZoomScreen;
 
     MainCharacter mainChar;
 
