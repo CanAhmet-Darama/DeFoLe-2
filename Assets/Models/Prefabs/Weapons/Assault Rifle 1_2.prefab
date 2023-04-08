@@ -161,7 +161,11 @@ MonoBehaviour:
   muzzleFlash: {fileID: 5018446551271753501}
   firingSound: {fileID: 8300000, guid: fcdbbe4f9cf1cc64a8c95f1fd34acf54, type: 3}
   gunAudioSource: {fileID: 216908855763557982}
-  reloadSound: {fileID: 0}
+  magOutSound: {fileID: 8300000, guid: e1375aedbb39cf9489df90f77efa6faf, type: 3}
+  magInSound: {fileID: 8300000, guid: d0408dd5dca85354aa30b4c083440e28, type: 3}
+  putBulletInSound: {fileID: 0}
+  pullBoltSound: {fileID: 0}
+  pushBoltSound: {fileID: 0}
   weaponInternalPos: {x: -0.00412, y: 0.01201, z: 0.00095}
   rightTargetPos: {x: 0, y: 0, z: 0}
   rightTargetRot: {x: 0, y: 0, z: 0}

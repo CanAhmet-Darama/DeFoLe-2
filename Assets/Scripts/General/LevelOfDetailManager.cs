@@ -262,7 +262,15 @@ public class LevelOfDetailManager : MonoBehaviour
                 else
                 {
                     skinnedMesh.enabled = true;
-                    EnemyManager.UndetailEnemy(enemyScr, false);
+                    if (!enemyActivated)
+                    {
+                        EnemyManager.ActivateEnemy(enemyScr, true);
+                        enemyActivated = true;
+                    }
+                    else
+                    {
+                        EnemyManager.UndetailEnemy(enemyScr, false);
+                    }
                 }
 
                 for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)

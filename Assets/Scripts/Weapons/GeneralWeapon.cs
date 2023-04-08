@@ -27,10 +27,8 @@ public class GeneralWeapon : MonoBehaviour
     public AudioSource gunAudioSource;
     public AudioClip magOutSound;
     public AudioClip magInSound;
-    public AudioClip putBulletInSound;
     public AudioClip pullBoltSound;
     public AudioClip pushBoltSound;
-    public AudioClip pullAndPushBoltSound;
 
     [Header("For Animation etc")]
     public Vector3 weaponInternalPos;
@@ -105,6 +103,7 @@ public class GeneralWeapon : MonoBehaviour
         owner.isReloading = true;
         StartCoroutine(DisableSecondHandTBIK(reloadTime));
         StartCoroutine(IncreaseBulletWithReload());
+        StartCoroutine(WeaponExtraSound());
         if(weaponType == WeaponType.SR_1 || weaponType == WeaponType.Shotgun)
         {
             WeapSubAnimer.WeapunSubAnimReload(subAnimator);
@@ -146,6 +145,7 @@ public class GeneralWeapon : MonoBehaviour
         {
             StartCoroutine(DisableSecondHandTBIK(firingTime));
             WeapSubAnimer.WeaponSubAnimFire(subAnimator);
+            StartCoroutine(WeaponExtraSound(false));
         }
 
         if (gunAudioSource.clip != firingSound) gunAudioSource.clip = firingSound;
@@ -299,8 +299,10 @@ public class GeneralWeapon : MonoBehaviour
                 }
                 else
                 {
-                    yield return new WaitForSeconds(0.7f);
-                    gunAudioSource.PlayOneShot(pullAndPushBoltSound);
+                    yield return new WaitForSeconds(0.6f);
+                    gunAudioSource.PlayOneShot(pullBoltSound);
+                    yield return new WaitForSeconds(0.4f);
+                    gunAudioSource.PlayOneShot(pushBoltSound);
                 }
                 break;
         }
