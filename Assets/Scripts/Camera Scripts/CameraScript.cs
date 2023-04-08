@@ -63,6 +63,7 @@ public class CameraScript : MonoBehaviour
     void Update()
     {
         DetectMouseMotion();
+        LevelOfDetailManager.camForward2D = new Vector2(transform.forward.x, transform.forward.z);
     }
     void LateUpdate()
     {

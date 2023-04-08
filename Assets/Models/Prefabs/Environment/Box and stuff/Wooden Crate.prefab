@@ -324,7 +324,7 @@ MonoBehaviour:
   objectOrEnemy: 1
   detailDiminishDistance: 45
   sqrDistancePlayer: 0
-  deactivateMeshOnLongDistance: 0
+  deactivateMeshOnLongDistance: 1
   longDistance: 0
   meshesDetailed:
   - {fileID: 336909926804556152}
@@ -342,6 +342,7 @@ MonoBehaviour:
   - {fileID: 1837524082511526899}
   meshesNotDetailed: []
   isDetailedNow: 0
+  isDeactivated: 0
   skinnedMesh: {fileID: 0}
   mainCam: {fileID: 0}
   enemyActivated: 0
@@ -1386,6 +1387,7 @@ MonoBehaviour:
   meshesNotDetailed:
   - {fileID: 2893629599711420858}
   isDetailedNow: 0
+  isDeactivated: 0
   skinnedMesh: {fileID: 0}
   mainCam: {fileID: 0}
   enemyActivated: 0
