@@ -62,7 +62,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firedPos: {x: 0, y: 0, z: 0}
   duratPassed: 0
-  bulletSpeed: 200
+  bulletSpeed: 300
   itsHolder: {fileID: 0}
   itsOwnerWeapon: {fileID: 0}
   trailRenderer: {fileID: 6977852695581059242}

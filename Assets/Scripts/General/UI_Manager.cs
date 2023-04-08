@@ -47,5 +47,5 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    public enum InteractableForUI { mainCar}
+    public enum InteractableForUI { mainCar, healthPack, ammoPack}
 }

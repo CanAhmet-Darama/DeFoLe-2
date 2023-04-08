@@ -54,7 +54,7 @@ MonoBehaviour:
   range: 500
   firingTime: 1.7
   reloadTime: 4.7
-  inaccuracyDegree: 0.5
+  inaccuracyDegree: 0.25
   maxAmmo: 5
   currentAmmo: 0
   weaponType: 4

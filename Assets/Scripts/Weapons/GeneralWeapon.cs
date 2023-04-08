@@ -21,9 +21,16 @@ public class GeneralWeapon : MonoBehaviour
     public GeneralBullet[] bulletScripts;
     public GameObject bulletPoolHolder;
     public ParticleSystem muzzleFlash;
+
+    [Header("Sound Weapon")]
     public AudioClip firingSound;
     public AudioSource gunAudioSource;
-    public AudioClip reloadSound;
+    public AudioClip magOutSound;
+    public AudioClip magInSound;
+    public AudioClip putBulletInSound;
+    public AudioClip pullBoltSound;
+    public AudioClip pushBoltSound;
+    public AudioClip pullAndPushBoltSound;
 
     [Header("For Animation etc")]
     public Vector3 weaponInternalPos;
@@ -234,6 +241,68 @@ public class GeneralWeapon : MonoBehaviour
         {
             owner.ammoCounts[(int)weaponType] = 0;
             currentAmmo += (byte)owner.ammoCounts[(int)weaponType];
+        }
+    }
+
+    IEnumerator WeaponExtraSound(bool forReload = true)
+    {
+        yield return null;
+        switch(weaponType){
+            case WeaponType.AR_1:
+                yield return new WaitForSeconds(0.3f);
+                gunAudioSource.PlayOneShot(magOutSound);
+                yield return new WaitForSeconds(1.1f);
+                gunAudioSource.PlayOneShot(magInSound);
+                break;
+            case WeaponType.TR_1:
+                yield return new WaitForSeconds(0.3f);
+                gunAudioSource.PlayOneShot(magOutSound);
+                yield return new WaitForSeconds(1.1f);
+                gunAudioSource.PlayOneShot(magInSound);
+                break;
+            case WeaponType.Pistol:
+                yield return new WaitForSeconds(0.3f);
+                gunAudioSource.PlayOneShot(magOutSound);
+                yield return new WaitForSeconds(1.3f);
+                gunAudioSource.PlayOneShot(magInSound);
+                yield return new WaitForSeconds(0.4f);
+                gunAudioSource.PlayOneShot(pullBoltSound);
+                break;
+            case WeaponType.Shotgun:
+                gunAudioSource.PlayOneShot(pullBoltSound);
+                yield return new WaitForSeconds(0.7f);
+                gunAudioSource.PlayOneShot(magOutSound);
+                yield return new WaitForSeconds(1f);
+                gunAudioSource.PlayOneShot(magInSound);
+                yield return new WaitForSeconds(0.2f);
+                gunAudioSource.PlayOneShot(magInSound);
+                yield return new WaitForSeconds(0.4f);
+                gunAudioSource.PlayOneShot(pushBoltSound);
+                break;
+            case WeaponType.SR_1:
+                if (forReload)
+                {
+                    yield return new WaitForSeconds(0.7f);
+                    gunAudioSource.PlayOneShot(pullBoltSound);
+                    yield return new WaitForSeconds(1.6f);
+                    gunAudioSource.PlayOneShot(magInSound);
+                    yield return new WaitForSeconds(0.3f);
+                    gunAudioSource.PlayOneShot(magInSound);
+                    yield return new WaitForSeconds(0.3f);
+                    gunAudioSource.PlayOneShot(magInSound);
+                    yield return new WaitForSeconds(0.3f);
+                    gunAudioSource.PlayOneShot(magInSound);
+                    yield return new WaitForSeconds(0.3f);
+                    gunAudioSource.PlayOneShot(magInSound);
+                    yield return new WaitForSeconds(0.53f);
+                    gunAudioSource.PlayOneShot(pushBoltSound);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(0.7f);
+                    gunAudioSource.PlayOneShot(pullAndPushBoltSound);
+                }
+                break;
         }
     }
 }

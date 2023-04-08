@@ -342,8 +342,8 @@ public class MainCharacter : GeneralCharacter
                 if (UI_Manager.isLookingInteractable == false)
                 {
                     GameManager.uiManager.interactionText.gameObject.SetActive(true);
+                    UI_Manager.isLookingInteractable= true;
                 }
-                UI_Manager.isLookingInteractable= true;
                 UI_Manager.interactionType = UI_Manager.InteractableForUI.mainCar;
                 if(Input.GetKeyDown(KeyCode.F)) {
                     GameManager.ChangeState(PlayerState.inMainCar);
@@ -354,7 +354,15 @@ public class MainCharacter : GeneralCharacter
                 if (UI_Manager.isLookingInteractable == true)
                 {
                     GameManager.uiManager.interactionText.gameObject.SetActive(false);
+                    UI_Manager.isLookingInteractable = false;
                 }
+            }
+        }
+        else
+        {
+            if (UI_Manager.isLookingInteractable == true)
+            {
+                GameManager.uiManager.interactionText.gameObject.SetActive(false);
                 UI_Manager.isLookingInteractable = false;
             }
         }

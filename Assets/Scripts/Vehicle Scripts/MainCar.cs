@@ -91,7 +91,7 @@ public class MainCar : GeneralVehicle
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.F) && vehicleRb.velocity.sqrMagnitude < 200)
+        if(Input.GetKey(KeyCode.F) && vehicleRb.velocity.sqrMagnitude < 100)
         {
             GameManager.ChangeState(PlayerState.onFoot);
         }
