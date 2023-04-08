@@ -324,6 +324,8 @@ MonoBehaviour:
   objectOrEnemy: 1
   detailDiminishDistance: 45
   sqrDistancePlayer: 0
+  deactivateMeshOnLongDistance: 0
+  longDistance: 0
   meshesDetailed:
   - {fileID: 336909926804556152}
   - {fileID: 3250985014921450654}
@@ -344,6 +346,7 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 0}
+  mainCamScr: {fileID: 0}
 --- !u!23 &100960130832397409 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -8305939833324721217, guid: d69fbd793a9b9c14e91603fc003dfa48, type: 3}
@@ -1370,6 +1373,8 @@ MonoBehaviour:
   objectOrEnemy: 1
   detailDiminishDistance: 30
   sqrDistancePlayer: 0
+  deactivateMeshOnLongDistance: 1
+  longDistance: 150
   meshesDetailed:
   - {fileID: 8058576309480679767}
   - {fileID: 1661924446893024932}
@@ -1385,6 +1390,7 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 0}
+  mainCamScr: {fileID: 0}
 --- !u!23 &8058576309480679767 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 680325866263762598, guid: f6c86961d0661914c8363abbe4b2f8ff, type: 3}

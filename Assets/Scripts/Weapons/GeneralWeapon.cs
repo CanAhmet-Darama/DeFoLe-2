@@ -182,11 +182,15 @@ public class GeneralWeapon : MonoBehaviour
             mainCamScr.transform.localPosition = zoomCamLocalPos;
             mainCamScr.transform.localEulerAngles = Vector3.zero;
             mainCamScr.CamScript.fieldOfView = zoomFieldOfView;
+            owner.aimTarget.transform.SetParent(mainCamScr.freeLookPivotOnFoot);
+            LevelOfDetailManager.detailDistanceMultiplier *= mainCamScr.defaultFOV / zoomFieldOfView;
         }
         else
         {
             mainCamScr.AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
             mainCamScr.CamScript.fieldOfView = mainCamScr.defaultFOV;
+            owner.aimTarget.transform.SetParent(mainCamScr.transform);
+            LevelOfDetailManager.detailDistanceMultiplier *= zoomFieldOfView / mainCamScr.defaultFOV;
         }
         zoomedAlready = activateZoom;
         GameManager.uiManager.crosshair.gameObject.SetActive(!activateZoom);

@@ -7,7 +7,10 @@ public class LevelOfDetailManager : MonoBehaviour
     #region Variables
     public bool objectOrEnemy = true;
     public float detailDiminishDistance;
+    static public float detailDistanceMultiplier = 1;
     public float sqrDistancePlayer;
+    public bool deactivateMeshOnLongDistance;
+    public float longDistance;
 
     
     public MeshRenderer[] meshesDetailed;
@@ -19,12 +22,14 @@ public class LevelOfDetailManager : MonoBehaviour
     public Transform mainCam;
     public bool enemyActivated = false;
     public EnemyScript enemyScr;
+    public CameraScript mainCamScr;
 
     #endregion
 
     void Start()
     {
         mainCam = GameManager.mainCam;
+        mainCamScr = mainCam.GetComponent<CameraScript>();
         EnableOrDisableMeshes(false);
     }
 
@@ -37,50 +42,119 @@ public class LevelOfDetailManager : MonoBehaviour
 
     void CheckRequiredLOD()
     {
-        if(!isDetailedNow && sqrDistancePlayer < detailDiminishDistance*detailDiminishDistance)
+        Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
+        Vector2 camForward2D = new Vector2((mainCam.forward).x, (mainCam.forward).z);
+        float AngleBetweenCam = Vector2.Angle(toTargetVector2D,camForward2D);
+
+        float perspectiveAngle = 75;
+        if (mainCamScr.camOwnState == CamState.zoomScope)
         {
-            EnableOrDisableMeshes(true);
-            isDetailedNow = true;
-            if (!objectOrEnemy)
+            perspectiveAngle = 30;
+        }
+
+        if (AngleBetweenCam < perspectiveAngle)
+        {
+            if(deactivateMeshOnLongDistance && sqrDistancePlayer > longDistance * longDistance * detailDistanceMultiplier * detailDistanceMultiplier)
             {
-                if (!enemyActivated)
+                if (isDetailedNow)
                 {
-                    EnemyManager.ActivateEnemy(enemyScr, true);
-                    enemyActivated = true;
+                    EnableOrDisableMeshes(true, true);
+                    isDetailedNow = false;
+                    if (!objectOrEnemy)
+                    {
+                        EnemyManager.UndetailEnemy(enemyScr, true);
+                    }
                 }
-                else
+            }
+            else
+            {
+                if (!isDetailedNow && sqrDistancePlayer < detailDiminishDistance*detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier)
                 {
-                    EnemyManager.UndetailEnemy(enemyScr, false);
+                    EnableOrDisableMeshes(true);
+                    isDetailedNow = true;
+                    if (!objectOrEnemy)
+                    {
+                        if (!enemyActivated)
+                        {
+                            EnemyManager.ActivateEnemy(enemyScr, true);
+                            enemyActivated = true;
+                        }
+                        else
+                        {
+                            EnemyManager.UndetailEnemy(enemyScr, false);
+                        }
+                    }
+                }
+                else if(isDetailedNow && sqrDistancePlayer > detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier)
+                {
+                    EnableOrDisableMeshes(false);
+                    isDetailedNow = false;
+                    if(!objectOrEnemy)
+                    {
+                        EnemyManager.UndetailEnemy(enemyScr, true);
+                    }
+                }
+            }
+
+        }
+        else if(sqrDistancePlayer > 25)
+        {
+            if (isDetailedNow)
+            {
+                EnableOrDisableMeshes(true, true);
+                isDetailedNow = false;
+                if (!objectOrEnemy)
+                {
+                    EnemyManager.UndetailEnemy(enemyScr, true);
                 }
             }
         }
-        else if(isDetailedNow && sqrDistancePlayer > detailDiminishDistance * detailDiminishDistance)
-        {
-            EnableOrDisableMeshes(false);
-            isDetailedNow = false;
-            if(!objectOrEnemy)
-            {
-                EnemyManager.UndetailEnemy(enemyScr, true);
-            }
-        }
+
     }
-    void EnableOrDisableMeshes(bool enableDetail)
+    void EnableOrDisableMeshes(bool enableDetail, bool disableAll = false)
     {
-        if (objectOrEnemy)
+        if (!disableAll)
         {
-            for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+            if (objectOrEnemy)
             {
-                meshesDetailed[i].enabled = enableDetail;
+                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+                {
+                    if(i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
+                    meshesDetailed[i].enabled = enableDetail;
+                }
+            }
+            else
+            {
+                skinnedMesh.enabled = enableDetail;
+            }
+
+            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
+            {
+                meshesNotDetailed[i].enabled = !enableDetail;
             }
         }
         else
         {
-            skinnedMesh.enabled = enableDetail;
-        }
+            if (objectOrEnemy)
+            {
+                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+                {
+                    meshesDetailed[i].enabled = false;
+                }
+            }
+            else
+            {
+                skinnedMesh.enabled = false;
+            }
 
-        for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
-        {
-            meshesNotDetailed[i].enabled = !enableDetail;
+            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
+            {
+                meshesNotDetailed[i].enabled = false;
+            }
+
         }
     }
 }

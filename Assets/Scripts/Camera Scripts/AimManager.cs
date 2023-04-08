@@ -72,8 +72,13 @@ public class AimManager : MonoBehaviour
     {
         if(charToAim.weaponState == GeneralCharacter.WeaponState.ranged)
         {
-            isReloading = charToAim.isReloading;
+            if(!(userIsPlayer && mainCharToUse.currentWeapon.weaponType == WeaponType.SR_1 
+                && mainCharToUse.currentWeapon.zoomedAlready))
+            {
+
+            }
             RightClickedOrNotManage(0.7f);
+            isReloading = charToAim.isReloading;
 
             if (quitAimingCompletely)
             {
@@ -107,6 +112,10 @@ public class AimManager : MonoBehaviour
             if (userIsPlayer)
             {
                 GameManager.uiManager.crosshair.gameObject.SetActive(false);
+                if(mainCharToUse.currentWeapon.weaponType == WeaponType.SR_1 && mainCharToUse.currentWeapon.zoomedAlready)
+                {
+                    mainCharToUse.currentWeapon.SniperZoom(false);
+                }
             }
         }
         if (aimStart)
@@ -125,40 +134,48 @@ public class AimManager : MonoBehaviour
 
         if (aimContinue)
         {
-        #region Raycasting for aiming
-            Ray ray;
-            if (userIsPlayer)
+            #region Raycasting for aiming
+            if (!(userIsPlayer && mainCharToUse.currentWeapon.weaponType == WeaponType.SR_1 && mainCharToUse.currentWeapon.zoomedAlready))
             {
-                ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                Ray ray;
+                if (userIsPlayer)
+                {
+                    ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+                }
+                else
+                {
+                    float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
+                    float inaccEnemyY = Random.Range(-(2*enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
+
+                    Vector3 targetPos = enemyToUse.lastSeenPos;
+                    if (GameManager.mainState == PlayerState.onFoot)
+                    {
+                        targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
+                    }
+                    else if(GameManager.mainState == PlayerState.inMainCar)
+                    {
+                        targetPos = GameManager.mainCar.position + Vector3.up + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
+                    }
+                    ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
+                }
+                targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);
+
+                Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
+
+                if (targetHit && hitInfo.distance > 3)
+                {
+                    aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.03f);
+                }
+                else
+                {
+                    aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 15), 0.03f);
+                }
 
             }
             else
             {
-                float inaccEnemyX = Random.Range(-(enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
-                float inaccEnemyY = Random.Range(-(2*enemyToUse.enemyInaccuracy), enemyToUse.enemyInaccuracy);
-
-                Vector3 targetPos = enemyToUse.lastSeenPos;
-                if (GameManager.mainState == PlayerState.onFoot)
-                {
-                    targetPos = mainCharToUse.centerPointBone.position + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
-                }
-                else if(GameManager.mainState == PlayerState.inMainCar)
-                {
-                    targetPos = GameManager.mainCar.position + Vector3.up + inaccEnemyX * enemyToUse.transform.right + inaccEnemyY * enemyToUse.transform.up;
-                }
-                ray = new Ray(enemyToUse.enemyEyes.position, targetPos - enemyToUse.enemyEyes.position);
-            }
-            targetHit = Physics.Raycast(ray, out hitInfo, aimCastDistance, ~(1 << 7), QueryTriggerInteraction.Ignore);
-
-            Debug.DrawRay(ray.origin, ray.direction*hitInfo.distance, Color.gray);
-
-            if (targetHit && hitInfo.distance > 3)
-            {
-                aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.03f);
-            }
-            else
-            {
-                aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 15), 0.03f);
+                aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 500), 0.03f);
             }
             #endregion
 

@@ -176,6 +176,8 @@ MonoBehaviour:
   objectOrEnemy: 1
   detailDiminishDistance: 75
   sqrDistancePlayer: 0
+  deactivateMeshOnLongDistance: 1
+  longDistance: 100
   meshesDetailed:
   - {fileID: 6164586162469390052}
   meshesNotDetailed:
@@ -185,6 +187,7 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 0}
+  mainCamScr: {fileID: 0}
 --- !u!1001 &4777360249103604320
 PrefabInstance:
   m_ObjectHideFlags: 0

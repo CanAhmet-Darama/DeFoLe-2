@@ -255,6 +255,9 @@ MonoBehaviour:
   - {fileID: 2060228522481370091}
   - {fileID: 846888003321820999}
   - {fileID: 7378417644203037813}
+  zoomedAlready: 0
+  zoomCamLocalPos: {x: 0, y: 0, z: 0}
+  zoomFieldOfView: 0
 --- !u!82 &3828759886042159648
 AudioSource:
   m_ObjectHideFlags: 0
@@ -275,10 +278,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0
+  MaxDistance: 250
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -311,7 +314,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

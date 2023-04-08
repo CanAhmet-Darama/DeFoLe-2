@@ -61,7 +61,7 @@ AudioSource:
   MinDistance: 0.1
   MaxDistance: 350
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -94,7 +94,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -180,6 +180,9 @@ MonoBehaviour:
   meshedPartOfWeapon:
   - {fileID: 7605772576011925924}
   - {fileID: 5771008734487350889}
+  zoomedAlready: 0
+  zoomCamLocalPos: {x: 0, y: 0, z: 0}
+  zoomFieldOfView: 0
 --- !u!95 &-3090376747615051867
 Animator:
   serializedVersion: 5

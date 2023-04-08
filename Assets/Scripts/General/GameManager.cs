@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public static Terrain mainTerrain;
     public static UI_Manager uiManager;
     public static EnemyManager enemyManager;
+
     public static GameObject[] weaponPrefabs = new GameObject[6];
     public static GameObject[] enemyCamps;
     [SerializeField] GameObject[] weaponPrefabsAreThese;

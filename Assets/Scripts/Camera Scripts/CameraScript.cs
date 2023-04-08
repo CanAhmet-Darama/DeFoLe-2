@@ -34,7 +34,7 @@ public class CameraScript : MonoBehaviour
     public Camera CamScript;
     Vector3 targetObjectPos;
     PlayerState camPlayerState;
-    public CamState camOwnState;
+    public CamState camOwnState = CamState.follow;
     bool setToDefaultAlready;
     float maxCastDistance;
     public float defaultFOV;
@@ -80,6 +80,10 @@ public class CameraScript : MonoBehaviour
                 targetObjectPos = mainCarTransform.position;
                 CheckObjectBetweenTarget();
             }
+        }
+        else
+        {
+            CamMovementOnSniperZoom();
         }
     }
     IEnumerator ReadyToCamFollow(Transform pivot, float durat)
@@ -168,6 +172,16 @@ public class CameraScript : MonoBehaviour
         else
         {
             UncontrolledCameraFollowChar();
+        }
+    }
+    void CamMovementOnSniperZoom()
+    {
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            mouseX += Input.GetAxis("Mouse X") * (GameManager.mouseSensitivity /4);
+            mouseY -= Input.GetAxis("Mouse Y") * (GameManager.mouseSensitivity /4);
+            mouseY = Mathf.Clamp(mouseY, -40, 60);
+            freeLookPivotOnFoot.rotation = Quaternion.Euler(mouseY, mouseX, 0);
         }
     }
 
