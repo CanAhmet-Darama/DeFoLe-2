@@ -14,8 +14,8 @@ public class LevelOfDetailManager : MonoBehaviour
     float perspectiveAngle;
 
 
-    public MeshRenderer[] meshesDetailed;
-    public MeshRenderer[] meshesNotDetailed;
+    public Renderer[] meshesDetailed;
+    public Renderer[] meshesNotDetailed;
     public bool isDetailedNow = false;
     public bool isDeactivated = false;
 

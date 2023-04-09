@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Settings")]
     public static byte mouseSensitivity = 10;
+    public static float generalSoundMultiplier;
 
     [Header("Instances")]
     public static Transform mainCam;

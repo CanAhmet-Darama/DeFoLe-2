@@ -260,7 +260,7 @@ public class GeneralCharacter : MonoBehaviour
     }
     public void ChangeWeapon(GeneralWeapon newWeapon)
     {
-        if(weaponState != WeaponState.ranged)
+        if (weaponState != WeaponState.ranged)
         {
             GetMeleeWeaponOrHandsFree(WeaponState.ranged);
         }
@@ -282,6 +282,10 @@ public class GeneralCharacter : MonoBehaviour
         }
         ResetHandTargets(newWeapon);
         AimManager.ResetWeights(this);
+        if (!isEnemy)
+        {
+            GameManager.uiManager.SetAmmoUI();
+        }
     }
     public void ResetHandTargets(GeneralWeapon newWeapon)
     {
@@ -316,6 +320,10 @@ public class GeneralCharacter : MonoBehaviour
                 AimManager.ResetWeights(this);
                 animator.SetLayerWeight(2, 0);
                 break;
+        }
+        if (!isEnemy)
+        {
+            GameManager.uiManager.SetAmmoUI();
         }
     }
     public void AnimationOverride(AnimatorOverrideController overrider)
@@ -369,6 +377,7 @@ public class GeneralCharacter : MonoBehaviour
         yield return new WaitForSeconds(durat);
         canReload = true;
         isReloading = false;
+
     }
 
     public IEnumerator IsInFiring(float durat)
@@ -408,6 +417,10 @@ public class GeneralCharacter : MonoBehaviour
         if (harmedChar.isEnemy)
         {
             harmedChar.GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+        }
+        else
+        {
+            GameManager.uiManager.SetHealthUI();
         }
         //Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
     }

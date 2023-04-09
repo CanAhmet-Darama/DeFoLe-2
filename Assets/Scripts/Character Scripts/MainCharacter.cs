@@ -27,6 +27,8 @@ public class MainCharacter : GeneralCharacter
         closestCamp = 1;
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
         GameManager.mainChar = transform;
+        GameManager.uiManager.SetAmmoUI();
+        GameManager.uiManager.SetHealthUI();
         playerTransform = transform;
         InvokeRepeating("CalculateClosestCamp",0,3);
     }
@@ -303,6 +305,7 @@ public class MainCharacter : GeneralCharacter
             if (Input.GetMouseButton(0) && canShoot && !isReloading && Input.GetMouseButton(1))
             {
                 currentWeapon.Fire();
+                GameManager.uiManager.SetAmmoUI();
                 if (!EnemyManager.campsAlerted[closestCamp - 1])
                 {
                     nearbyColliders = Physics.OverlapSphere(transform.position, currentWeapon.range / 3, LayerMask.GetMask("Player"));
@@ -320,6 +323,7 @@ public class MainCharacter : GeneralCharacter
             if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
             {
                 currentWeapon.Reload();
+                Invoke("WaitToSetAmmoUI", currentWeapon.reloadTime + 0.01f);
             }
 
             if(CameraScript.scrollInput > 0 && currentWeapon.weaponType == WeaponType.SR_1 && !currentWeapon.zoomedAlready)
@@ -409,7 +413,6 @@ public class MainCharacter : GeneralCharacter
         {
             ChangeWeapon(weapons[4].GetComponent<GeneralWeapon>());
         }
-
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             GetMeleeWeaponOrHandsFree(WeaponState.melee);
@@ -447,5 +450,11 @@ public class MainCharacter : GeneralCharacter
                 }
             }
         }
+    }
+
+    void WaitToSetAmmoUI()
+    {
+        Debug.Log("UI SET");
+        GameManager.uiManager.SetAmmoUI();
     }
 }
