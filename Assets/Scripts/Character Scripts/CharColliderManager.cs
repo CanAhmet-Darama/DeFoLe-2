@@ -53,10 +53,6 @@ public class CharColliderManager : MonoBehaviour
         bones = _bones;
 
         ownerCharacter.charColManager = this;
-        if(GetComponent<EnemyScript>() != null)
-        {
-            enemySc = GetComponent<EnemyScript>();
-        }
     }
 
     public static byte ReturnBodyPartTypeIndex(GameObject bodyPart, CharColliderManager colManager)

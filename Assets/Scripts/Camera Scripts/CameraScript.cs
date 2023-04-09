@@ -215,7 +215,7 @@ public class CameraScript : MonoBehaviour
                 StopCoroutine(holdNumeratorCar);
                 camCanFollow = true;
             }
-            maxCastDistance = (mainChar.position - transform.position).magnitude;
+            maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude,0, 5);
         }
         else if(pState == PlayerState.inMainCar)
         {
@@ -232,7 +232,7 @@ public class CameraScript : MonoBehaviour
                     transform.LookAt(camCarPoint2Transform.position);
                     break;
             }
-            maxCastDistance = (mainCarTransform.position - transform.position).magnitude;
+            maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude, 0, 25);
         }
     }
 

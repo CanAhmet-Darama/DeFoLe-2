@@ -267,7 +267,12 @@ public class GeneralCharacter : MonoBehaviour
 
         if (currentWeapon != null && currentWeapon != newWeapon) {        
             currentWeapon.gameObject.SetActive(false);
+            if(currentWeapon.zoomedAlready)
+            {
+                currentWeapon.SniperZoom(false);
+            }
         }
+
         currentWeapon = newWeapon;
         currentWeapon.gameObject.SetActive(true);
         AnimationOverride(animOverriders[currentWeapon.animOverriderIndex]);
@@ -275,7 +280,6 @@ public class GeneralCharacter : MonoBehaviour
         {
             canShoot = true;
         }
-
         ResetHandTargets(newWeapon);
         AimManager.ResetWeights(this);
     }
@@ -411,25 +415,29 @@ public class GeneralCharacter : MonoBehaviour
     {
         if(health <= 0)
         {
-            if (isEnemy)
-            {
-                EnemyScript enemyS = GetComponent<EnemyScript>();
-                enemyS.StopAllCoroutines();
-                enemyS.navAgent.enabled = false;
-                enemyS.enabled = false;
-                enemyS.EnableRagdoll();
-            }
-            else
-            {
-                MainCharacter mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
-                mainChar.stairSlopeChecker.enabled = false;
-                mainChar.StopAllCoroutines();
-                mainChar.enabled = false;
-                rb.velocity = Vector3.zero;
-                GameManager.ChangeState(PlayerState.gameOver);
-            }
-            animator.enabled = false;
+            KillCharacter();
         }
+    }
+    public void KillCharacter()
+    {
+        if (isEnemy)
+        {
+            EnemyScript enemyS = GetComponent<EnemyScript>();
+            enemyS.StopAllCoroutines();
+            enemyS.navAgent.enabled = false;
+            enemyS.enabled = false;
+            enemyS.EnableRagdoll();
+        }
+        else
+        {
+            MainCharacter mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
+            mainChar.stairSlopeChecker.enabled = false;
+            mainChar.StopAllCoroutines();
+            mainChar.enabled = false;
+            rb.velocity = Vector3.zero;
+            GameManager.ChangeState(PlayerState.gameOver);
+        }
+        animator.enabled = false;
     }
 
     void SteppedGroundCheck()

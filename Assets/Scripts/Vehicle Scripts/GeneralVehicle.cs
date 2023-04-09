@@ -171,7 +171,7 @@ public class GeneralVehicle : MonoBehaviour
                 }
             }
         }
-        wheelAudioSource.volume = hittingWheels * gearRatio;
+        wheelAudioSource.volume = hittingWheels * gearRatio * 0.2f;
 
         if (GameManager.mainState == PlayerState.inMainCar)
         {

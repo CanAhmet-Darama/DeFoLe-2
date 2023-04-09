@@ -126,6 +126,12 @@ public class GameManager : MonoBehaviour
             mainCarScr.vehicleAudioSource.Stop();
             mainCarScr.GetComponent<MainCar>().ResetMotorTorque();
 
+            MainCharacter charComp=mainChar.GetComponent<MainCharacter>();
+            charComp.canShoot = true;
+            charComp.canReload = true;
+            charComp.ResetHandTargets(charComp.currentWeapon);
+            AimManager.ResetWeights(charComp);
+
             if (Input.GetMouseButton(1))
             {
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
@@ -136,10 +142,6 @@ public class GameManager : MonoBehaviour
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
             }
 
-            MainCharacter charComp=mainChar.GetComponent<MainCharacter>();
-            charComp.canShoot = true;
-            charComp.canReload = true;
-            charComp.ResetHandTargets(charComp.currentWeapon);
         }
         else if(state == PlayerState.inMainCar)
         {

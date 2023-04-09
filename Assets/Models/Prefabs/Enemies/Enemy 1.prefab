@@ -392,7 +392,7 @@ MonoBehaviour:
   runAcceleration: 30
   jumpForce: 0
   jumpCooldown: 0
-  health: 500
+  health: 300
   rb: {fileID: 1643108193539418682}
   isEnemy: 1
   currentWeapon: {fileID: 0}
@@ -477,7 +477,7 @@ MonoBehaviour:
   patrolPoints: []
   lastPatrolIndex: 0
   patrolWaitDuration: 0
-  noticeDuration: 4
+  noticeDuration: 3
   suspectedDuration: 3
   alertedCoverCheckCooldown: 10
   alertRangeRate: 0.25
@@ -538,15 +538,19 @@ MonoBehaviour:
   objectOrEnemy: 0
   detailDiminishDistance: 120
   sqrDistancePlayer: 0
+  deactivateMeshOnLongDistance: 0
+  longDistance: 0
   meshesDetailed: []
   meshesNotDetailed:
   - {fileID: 5054165831789001886}
   - {fileID: 3302034092590389718}
   isDetailedNow: 0
+  isDeactivated: 0
   skinnedMesh: {fileID: 6763794978334999788}
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 779311080259487559}
+  mainCamScr: {fileID: 0}
 --- !u!1 &1754110545473961771
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,7 +1393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownerCharacter: {fileID: 779311080259487559}
-  enemySc: {fileID: 0}
+  enemySc: {fileID: 779311080259487559}
   _head: {fileID: 3054736952154243165}
   _helmet: {fileID: 5808586239758231881}
   _upperBody: {fileID: 7457955553551124557}

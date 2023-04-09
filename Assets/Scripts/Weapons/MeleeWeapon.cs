@@ -154,7 +154,8 @@ public class MeleeWeapon : MonoBehaviour
                 CharColliderManager usedChar = other.GetComponentInParent<CharColliderManager>();
                 if(usedChar.enemySc != null && usedChar.enemySc.enemyState != EnemyScript.EnemyAIState.Alerted)
                 {
-                    GeneralCharacter.GiveDamage(usedChar.ownerCharacter, usedChar.ownerCharacter.health);
+                    usedChar.enemySc.KillCharacter();
+                    Debug.Log("Sneak kill");
                 }
                 else
                 {

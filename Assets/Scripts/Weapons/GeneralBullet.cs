@@ -17,6 +17,9 @@ public class GeneralBullet : MonoBehaviour
     public TrailRenderer trailRenderer;
     public byte index;
 
+    public static Collider[] nearbyColliders;
+    public float collisionAlertRange;
+
 
     void Start()
     {
@@ -146,6 +149,15 @@ public class GeneralBullet : MonoBehaviour
                 CharColliderManager usedChar = contact.otherCollider.GetComponentInParent<CharColliderManager>();
                 byte bodyPartIndex = CharColliderManager.ReturnBodyPartTypeIndex(contact.otherCollider.gameObject, usedChar);
                 GeneralCharacter.GiveDamage(usedChar.ownerCharacter, (short)(itsOwnerWeapon.damage * CharColliderManager.damageMultipliers[bodyPartIndex]));
+            }
+
+            nearbyColliders = Physics.OverlapSphere(contact.point, collisionAlertRange, LayerMask.GetMask("Player"));
+            for(int i = nearbyColliders.Length - 1; i >= 0;i--)
+            {
+                if (nearbyColliders[i].CompareTag("Enemy"))
+                {
+                    nearbyColliders[i].GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+                }
             }
 
             Debug.DrawLine(firedPos, contact.point, Color.cyan);

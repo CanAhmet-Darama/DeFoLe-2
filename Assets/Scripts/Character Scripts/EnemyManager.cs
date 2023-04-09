@@ -142,10 +142,12 @@ public class EnemyManager : MonoBehaviour
     }
     public static void UndetailEnemy(EnemyScript enemyScr, bool undetailing)
     {
-        enemyScr.animator.enabled = !undetailing;
-        //enemyScr.enemyAimer.enabled = !undetailing;
-        enemyScr.stairSlopeChecker.enabled = !undetailing;
-        enemyScr.groundChecker.SetActive(!undetailing);
+        if(enemyScr.health > 0)
+        {
+            enemyScr.animator.enabled = !undetailing;
+            enemyScr.stairSlopeChecker.enabled = !undetailing;
+            enemyScr.groundChecker.SetActive(!undetailing);
+        }
         if (enemyScr.weaponState == GeneralCharacter.WeaponState.ranged)
         {
             for (int i = enemyScr.mainWeapon.meshedPartOfWeapon.Length - 1; i >= 0; i--)

@@ -251,7 +251,7 @@ public class GeneralWeapon : MonoBehaviour
             case WeaponType.AR_1:
                 yield return new WaitForSeconds(0.3f);
                 gunAudioSource.PlayOneShot(magOutSound);
-                yield return new WaitForSeconds(1.1f);
+                yield return new WaitForSeconds(0.9f);
                 gunAudioSource.PlayOneShot(magInSound);
                 break;
             case WeaponType.TR_1:
@@ -272,11 +272,11 @@ public class GeneralWeapon : MonoBehaviour
                 gunAudioSource.PlayOneShot(pullBoltSound);
                 yield return new WaitForSeconds(0.7f);
                 gunAudioSource.PlayOneShot(magOutSound);
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.8f);
                 gunAudioSource.PlayOneShot(magInSound);
                 yield return new WaitForSeconds(0.2f);
                 gunAudioSource.PlayOneShot(magInSound);
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.2f);
                 gunAudioSource.PlayOneShot(pushBoltSound);
                 break;
             case WeaponType.SR_1:

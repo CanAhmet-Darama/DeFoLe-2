@@ -14,6 +14,8 @@ public class MainCharacter : GeneralCharacter
     public Transform headOfChar;
     public Transform playerTransform;
 
+    static Collider[] nearbyColliders;
+
     #region Some Stuff
     Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
     #endregion
@@ -301,6 +303,18 @@ public class MainCharacter : GeneralCharacter
             if (Input.GetMouseButton(0) && canShoot && !isReloading && Input.GetMouseButton(1))
             {
                 currentWeapon.Fire();
+                if (!EnemyManager.campsAlerted[closestCamp - 1])
+                {
+                    nearbyColliders = Physics.OverlapSphere(transform.position, currentWeapon.range / 3, LayerMask.GetMask("Player"));
+                    for (int i = nearbyColliders.Length - 1; i >= 0; i--)
+                    {
+                        if (nearbyColliders[i].CompareTag("Enemy"))
+                        {
+                            nearbyColliders[i].GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+                        }
+                    }
+
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
