@@ -285,6 +285,8 @@ public class GeneralCharacter : MonoBehaviour
         if (!isEnemy)
         {
             GameManager.uiManager.SetAmmoUI();
+            GameManager.uiManager.weaponIcon.sprite = GameManager.uiManager.weaponIconSprites[(int)newWeapon.weaponType];
+            GameManager.uiManager.ReduceOpacity(GameManager.uiManager.weaponIcon, 1, 1);
         }
     }
     public void ResetHandTargets(GeneralWeapon newWeapon)
@@ -305,6 +307,12 @@ public class GeneralCharacter : MonoBehaviour
                 AnimationOverride(mainMelee.overrideController);
                 animator.SetLayerWeight(2, 1);
                 mainMelee.audioSource.PlayOneShot(mainMelee.sheathSound);
+                if (!isEnemy)
+                {
+                    GameManager.uiManager.SetAmmoUI();
+                    GameManager.uiManager.weaponIcon.sprite = GameManager.uiManager.weaponIconSprites[5];
+                    GameManager.uiManager.ReduceOpacity(GameManager.uiManager.weaponIcon, 1, 1);
+                }
                 break;
             case WeaponState.ranged:
                 currentWeapon.gameObject.SetActive(true);

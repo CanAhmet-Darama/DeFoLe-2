@@ -18,11 +18,16 @@ public class UI_Manager : MonoBehaviour
 
     public Image crosshair;
     public Image sniperZoomScreen;
+    public Image weaponIcon;
+
+    public Sprite[] weaponIconSprites;
 
     public GameObject playerHealthFill;
     
     MainCharacter mainChar;
     float maxHealth;
+
+    public Coroutine weaponIconOpacityCoroutine;
 
     void Start()
     {
@@ -79,6 +84,30 @@ public class UI_Manager : MonoBehaviour
                     break;
             }
             interactionText.text = interactText;
+    }
+
+    public void ReduceOpacity(Image opaqueImage, float waitDurat, float reduceDurat)
+    {
+        opaqueImage.SetNativeSize();
+        if(weaponIconOpacityCoroutine != null)
+        {
+            StopCoroutine(weaponIconOpacityCoroutine);
+            Color currentColor = opaqueImage.color;
+            currentColor.a = 1;
+            opaqueImage.color = currentColor;
+        }
+        weaponIconOpacityCoroutine = StartCoroutine(ReduceOpacityNumerator(opaqueImage, waitDurat, reduceDurat / 100));
+    }
+    IEnumerator ReduceOpacityNumerator(Image opaqueImage, float waitDurat, float reduceRate)
+    {
+        yield return new WaitForSeconds(waitDurat);
+        while(opaqueImage.color.a > 0)
+        {
+            Color currentColor = opaqueImage.color;
+            currentColor.a -= reduceRate;
+            opaqueImage.color = currentColor;
+            yield return null;
+        }
     }
 
     public enum InteractableForUI { mainCar, healthPack, ammoPack}
