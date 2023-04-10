@@ -26,6 +26,8 @@ public class StairCheckScript : MonoBehaviour
     bool isHit2;
     bool isHit3;
     float diagonalRayAngle = 40;
+
+    bool normalsNotSloped;
     #endregion
 
     #region Slope
@@ -37,7 +39,7 @@ public class StairCheckScript : MonoBehaviour
     [HideInInspector]public float normalAngle;
     [HideInInspector]public Vector3 crossProduct;
 
-    RaycastHit hitInfo2;
+    RaycastHit hitInfoForSlope;
 
     #endregion
     void FixedUpdate()
@@ -101,9 +103,24 @@ public class StairCheckScript : MonoBehaviour
             isHit3 = Physics.Raycast(ray_3, out hitInfo_3, castDistance, lMask, QueryTriggerInteraction.Ignore);
             Debug.DrawRay(transform.position + new Vector3(0, castCurrentHeight, 0), rayDir3 * castDistance, Color.cyan);
 
+            float[] normalAngles = new float[3];
+            normalAngles[0] = Vector3.Angle(hitInfo.normal, Vector3.up);
+            normalAngles[1] = Vector3.Angle(hitInfo_2.normal, Vector3.up);
+            normalAngles[2] = Vector3.Angle(hitInfo_3.normal, Vector3.up);
+
+            normalsNotSloped = true;
+            for(int i = normalAngles.Length - 1; i >= 0; i--)
+            {
+                if (normalAngles[i] < 80)
+                {
+                    normalsNotSloped = false;
+                    break;
+                }
+            }
+
             if (!isHit && !isHit2 && !isHit3)
             {
-                if(character.animStateSpeed != AnimStateSpeed.idle){
+                if(character.animStateSpeed != AnimStateSpeed.idle && normalsNotSloped){
                     character.transform.position = Vector3.Lerp(character.transform.position,
                                                   character.transform.position + new Vector3(0, castCurrentHeight, 0), 0.1f * stairJumpForce);
                 }
@@ -122,11 +139,11 @@ public class StairCheckScript : MonoBehaviour
            then set the onSlopeMoving true. If it is true, MoveChar and AccelerateChar will behave accordingly
            in the GeneralCharacter script */
         ray2 = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(ray2, out hitInfo2, castDistance2, lMask, QueryTriggerInteraction.Ignore)){
+        if (Physics.Raycast(ray2, out hitInfoForSlope, castDistance2, lMask, QueryTriggerInteraction.Ignore)){
 
             Debug.DrawRay(transform.position, Vector3.down * castDistance2, Color.yellow);
-            normalAngle = Vector3.Angle(Vector3.up, hitInfo2.normal);
-            crossProduct = Vector3.Cross(hitInfo2.normal, Vector3.up);
+            normalAngle = Vector3.Angle(Vector3.up, hitInfoForSlope.normal);
+            crossProduct = Vector3.Cross(hitInfoForSlope.normal, Vector3.up);
             Debug.DrawRay(transform.position + new Vector3(0,0.5f,0), crossProduct, Color.yellow);
 
             if (normalAngle < maxSlopeAngle && normalAngle > 5)

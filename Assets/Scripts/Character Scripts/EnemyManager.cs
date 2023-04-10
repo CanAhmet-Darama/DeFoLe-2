@@ -7,6 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     public static bool[] campsAlerted = new bool[GameManager.numberOfCamps];
     public static bool[][] enemiesCanSee;
+    public static bool[][] enemiesDead;
     public static Vector3[] lastSeenPosOfPlayer = new Vector3[GameManager.numberOfCamps];
     public static EnemyScript[][] enemies;
     public static float sortCoversCooldown = 6;
@@ -16,6 +17,7 @@ public class EnemyManager : MonoBehaviour
     public void EnemyManagerStart()
     {
         enemiesCanSee = new bool[GameManager.numberOfCamps][];
+        enemiesDead = new bool[GameManager.numberOfCamps][];
         enemies = new EnemyScript[GameManager.numberOfCamps][];
         enemyManagerIns = this;
         StartCoroutine(AreEnemiesSeeingTarget());
@@ -31,16 +33,18 @@ public class EnemyManager : MonoBehaviour
         if (enemiesCanSee[campNumber - 1] == null)
         {
             enemiesCanSee[campNumber - 1] = new bool[0];
+            enemiesDead[campNumber - 1] = new bool[0];
         }
         EnemyScript[] holderArray = enemies[campNumber - 1];
         enemies[campNumber - 1] = new EnemyScript[holderArray.Length + 1];
-        Array.Copy(holderArray, enemies[campNumber - 1], holderArray.Length);
+        enemiesDead[campNumber - 1] = new bool[holderArray.Length + 1];
+        GameManager.CopyArray(holderArray, enemies[campNumber - 1]);
         enemies[campNumber - 1][holderArray.Length] = newEnemy;
         newEnemy.enemyNumCode = (byte)holderArray.Length;
 
         bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
         enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
-        Array.Copy(visionHolderArray, enemiesCanSee[campNumber - 1], visionHolderArray.Length);
+        GameManager.CopyArray(visionHolderArray, enemiesCanSee[campNumber - 1]);
     }
     public static void AlertWholeCamp(byte campNumber)
     {

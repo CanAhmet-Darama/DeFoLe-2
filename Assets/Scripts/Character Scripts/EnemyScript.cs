@@ -21,7 +21,8 @@ public class EnemyScript : GeneralCharacter
     Transform mainCar;
     MainCharacter mainCharScript;
     [Range(1, 3)] public byte campOfEnemy;
-    public byte enemyNumCode;
+    [HideInInspector]public byte enemyNumCode;
+    public byte enemyStaticIndex;
 
     [Header("Patrol")]
     public bool hasPermanentPlace;
@@ -371,7 +372,7 @@ public class EnemyScript : GeneralCharacter
             {
                 isAiming = false;
                 navAgent.isStopped = false;
-                if (angleX < 15 && angleY < 15)
+                if (angleX < 15 && angleY < 15 && canShoot)
                 {
                     isAiming = true;
                     EnemyFire(false);

@@ -64,25 +64,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            int totalCoverObj = 0;
-            for (int i = CoverObjectsManager.coverObjectsOfWorld.Length - 1; i >= 0; i--)
-            {
-                if (CoverObjectsManager.coverObjectsOfWorld[i] != null)
-                    totalCoverObj += CoverObjectsManager.coverObjectsOfWorld[i].Length;
-            }
-            Debug.Log("Cover Objects : " + totalCoverObj);
-
-
-            int totalCoverPoints = 0;
-            for(int i = CoverObjectsManager.coverPointsOfWorld.Length - 1; i >= 0; i--)
-            {
-                if(CoverObjectsManager.coverPointsOfWorld[i] != null)
-                totalCoverPoints += CoverObjectsManager.coverPointsOfWorld[i].Length;
-            }
-            Debug.Log("Cover Points : " + totalCoverPoints);
-        }
+        
     }
 
     public static void ChangeState()
@@ -227,6 +209,14 @@ public class GameManager : MonoBehaviour
         Array.Copy(sourceArray, destinationArray, sourceArray.Length);
         return destinationArray;
     }
+    public static T[] CopyArray<T>(T[] sourceArray, T[] destinationArray)
+    {
+        if (sourceArray.Length > destinationArray.Length)
+            destinationArray = new T[sourceArray.Length];
+        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+        return destinationArray;
+    }
+
 
     public static bool CompareArray(short[] firstArray, short[] secondArray)
     {
@@ -269,3 +259,23 @@ public class GameManager : MonoBehaviour
     #endregion
 }
 public enum PlayerState { inMainCar, onFoot, observing , gameOver}
+
+[System.Serializable]
+public class GameData
+{
+    #region For Player
+    public float[] playerPos;
+    public float[] playerRot;
+    public short playerHealth;
+    public short[] ammoCounts;
+    public byte currentWeaponIndex;
+    #endregion
+
+    #region For Vehicle
+    public float[] vehiclePos;
+    public float[] vehicleRot;
+    public short vehicleHealth;
+    #endregion
+
+
+}

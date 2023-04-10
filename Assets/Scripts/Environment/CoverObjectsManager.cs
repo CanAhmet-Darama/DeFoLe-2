@@ -95,9 +95,8 @@ public class CoverObjectsManager : MonoBehaviour
         enemyScriptIns.currentCoveredIndexes[0] = (short)(campNumber - 1);
         if (!stayOnSamePeekCover)
         {
-            short calculateTicket = 15;
             short coverIndex;
-            while (calculateTicket > 0)
+            while (true)
             {
                 /* I don't let it to take a random object which is too close or far from enemy */
                 coverIndex = (short)(Random.Range(3, coverObjectsOfWorld[campNumber - 1].Length / 2));
@@ -143,9 +142,7 @@ public class CoverObjectsManager : MonoBehaviour
                     }
 
                 }
-                calculateTicket--;
             }
-            return Vector3.zero;
         }
         else
         {
