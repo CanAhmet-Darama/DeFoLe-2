@@ -128,8 +128,13 @@ public class EnemyScript : GeneralCharacter
         if (hasPermanentPlace)
         {
             StartCoroutine(PermanentPlaceCoverCheck());
+            patrolPoints = new Vector3[permanentCoverObject.coverPositions.Length];
+            for (int i = patrolPoints.Length - 1; i >= 0; i--)
+            {
+                patrolPoints[i] = permanentCoverObject.transform.TransformVector((permanentCoverObject.coverPositions[i]));
+            }
         }
-        if(mainWeapon.weaponType == WeaponType.SR_1)
+        if (mainWeapon.weaponType == WeaponType.SR_1)
         {
             visibleRange = visibleRange * 2;
         }
@@ -236,7 +241,14 @@ public class EnemyScript : GeneralCharacter
             navAgent.speed = walkSpeed;
             navAgent.acceleration = walkAcceleration;
             navAgent.isStopped = false;
-            navAgent.SetDestination(patrolPoints[lastPatrolIndex]);
+            if(lastPatrolIndex != 0)
+            {
+                navAgent.SetDestination(patrolPoints[0]);
+            }
+            else
+            {
+                navAgent.SetDestination(patrolPoints[lastPatrolIndex]);
+            }
             isAiming = false;
             enteredNewState = false;
         }

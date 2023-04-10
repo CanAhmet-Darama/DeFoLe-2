@@ -493,7 +493,6 @@ public class MainCharacter : GeneralCharacter
 
     void WaitToSetAmmoUI()
     {
-        Debug.Log("UI SET");
         GameManager.uiManager.SetAmmoUI();
     }
 

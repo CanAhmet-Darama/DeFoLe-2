@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &189237878061253515
 Transform:
@@ -99,7 +99,7 @@ GameObject:
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3302953889205384450
 Transform:
@@ -168,7 +168,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3516175689296398021
 Transform:
@@ -252,7 +252,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &596823725225241703
 Transform:
@@ -336,7 +336,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6127396337033490856
 Transform:
@@ -464,6 +464,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 3289151125425585944, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
+    - target: {fileID: -3469630426390011754, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -3104141745751844883, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
       propertyPath: m_Name
       value: Tower 1_2 LowPoly
@@ -471,6 +479,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080733263970631023, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7649201875063736720, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
       propertyPath: m_Enabled
@@ -561,6 +577,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Ground
       objectReference: {fileID: 0}
+    - target: {fileID: -7036208232964940657, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
       propertyPath: m_Name
       value: Tower 1 (1)
@@ -568,6 +588,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
       propertyPath: m_TagString
       value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}

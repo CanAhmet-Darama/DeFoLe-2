@@ -83,13 +83,16 @@ public class AimManager : MonoBehaviour
             if (quitAimingCompletely)
             {
                 multiAimCoBody.weight = GameManager.LerpOrSnap(multiAimCoBody.weight, 0, lerpOrSnapSpeed);
-                if(charToAim.currentWeapon.weaponType != WeaponType.SR_1)
+                if(charToAim.currentWeapon != null)
                 {
-                    multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
-                }
-                else
-                {
-                    multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 0, lerpOrSnapSpeed);
+                    if(charToAim.currentWeapon.weaponType != WeaponType.SR_1)
+                    {
+                        multiAimCoRHand.weight = GameManager.LerpOrSnap(multiAimCoRHand.weight, 0, lerpOrSnapSpeed);
+                    }
+                    else
+                    {
+                        multiAimCoLHand.weight = GameManager.LerpOrSnap(multiAimCoLHand.weight, 0, lerpOrSnapSpeed);
+                    }
                 }
             }
 
