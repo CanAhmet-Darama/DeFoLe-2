@@ -16,6 +16,8 @@ public class MainCharacter : GeneralCharacter
 
     static Collider[] nearbyColliders;
 
+    short maxHealth;
+
     #region Some Stuff
     Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
     #endregion
@@ -31,6 +33,8 @@ public class MainCharacter : GeneralCharacter
         GameManager.uiManager.SetHealthUI();
         playerTransform = transform;
         InvokeRepeating("CalculateClosestCamp",0,3);
+
+        maxHealth = health;
     }
     void Update()
     {
@@ -361,11 +365,45 @@ public class MainCharacter : GeneralCharacter
                 {
                     GameManager.uiManager.interactionText.gameObject.SetActive(true);
                     UI_Manager.isLookingInteractable= true;
+                    GameManager.uiManager.InteractionUISetter();
                 }
                 UI_Manager.interactionType = UI_Manager.InteractableForUI.mainCar;
                 if(Input.GetKeyDown(KeyCode.F)) {
                     GameManager.ChangeState(PlayerState.inMainCar);
                 }
+            }
+            else if (GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && hitInfo.collider.name == "Health Pack")
+            {
+                if (UI_Manager.isLookingInteractable == false)
+                {
+                    GameManager.uiManager.interactionText.gameObject.SetActive(true);
+                    UI_Manager.isLookingInteractable = true;
+                    UI_Manager.interactionType = UI_Manager.InteractableForUI.healthPack;
+                    GameManager.uiManager.InteractionUISetter();
+                }
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    IncreaseHealth(hitInfo.collider.GetComponent<InteractableSpecial>().healthAmount);
+                    hitInfo.collider.gameObject.SetActive(false);
+                }
+
+            }
+            else if (GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && hitInfo.collider.name == "Ammo Box")
+            {
+                if (UI_Manager.isLookingInteractable == false)
+                {
+                    GameManager.uiManager.InteractionUISetter();
+                    GameManager.uiManager.interactionText.gameObject.SetActive(true);
+                    UI_Manager.isLookingInteractable = true;
+                    UI_Manager.interactionType = UI_Manager.InteractableForUI.ammoPack;
+                }
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    IncreaseAmmo(hitInfo.collider.GetComponent<InteractableSpecial>().magazineCount);
+                    GameManager.uiManager.SetAmmoUI();
+                    hitInfo.collider.gameObject.SetActive(false);
+                }
+
             }
             else
             {
@@ -456,5 +494,28 @@ public class MainCharacter : GeneralCharacter
     {
         Debug.Log("UI SET");
         GameManager.uiManager.SetAmmoUI();
+    }
+
+    public void IncreaseHealth(short amount)
+    {
+        health += amount;
+        if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
+    }
+    public void IncreaseAmmo(short magazineCount, bool toAllWeapons = true, byte weaponIndex = 0)
+    {
+        if (toAllWeapons)
+        {
+            for(int i = weaponScripts.Length - 1; i >= 0; i--)
+            {
+                ammoCounts[i] += (short)(magazineCount * weaponScripts[i].maxAmmo);
+            }
+        }
+        else
+        {
+            ammoCounts[weaponIndex] += (short)(magazineCount * weaponScripts[weaponIndex].maxAmmo);
+        }
     }
 }

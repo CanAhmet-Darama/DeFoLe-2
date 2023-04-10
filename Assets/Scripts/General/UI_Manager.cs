@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,6 @@ public class UI_Manager : MonoBehaviour
 
     void Update()
     {
-        GeneralUISetter();
     }
     public void SetAmmoUI()
     {
@@ -61,21 +61,24 @@ public class UI_Manager : MonoBehaviour
             playerHealthText.text = "DEAD";
         }
     }
-    void GeneralUISetter()
+    public void InteractionUISetter()
     {
-        if (isLookingInteractable)
-        {
-
             string interactText;
             switch(interactionType)
             {
                 case InteractableForUI.mainCar:
                     interactText = "Press F to get in car";
                     break;
-                default: interactText = ""; break;
+                case InteractableForUI.healthPack:
+                    interactText = "Press F to get Health";
+                    break;
+                case InteractableForUI.ammoPack:
+                    interactText = "Press F to get Ammo";
+                    break;
+                default: interactText = ""; 
+                    break;
             }
             interactionText.text = interactText;
-        }
     }
 
     public enum InteractableForUI { mainCar, healthPack, ammoPack}
