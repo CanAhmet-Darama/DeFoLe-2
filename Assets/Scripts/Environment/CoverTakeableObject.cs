@@ -17,8 +17,11 @@ public class CoverTakeableObject : MonoBehaviour
     void Start()
     {
         SetCoverPointPositions();
-        CoverObjectsManager.AddCoverPointsToList(campNumber,coverPoints);
-        CoverObjectsManager.AddCoverTakeableObjectToList(campNumber, this);
+        if (!forStaticUsage)
+        {
+            CoverObjectsManager.AddCoverPointsToList(campNumber,coverPoints);
+            CoverObjectsManager.AddCoverTakeableObjectToList(campNumber, this);
+        }
     }
     void Update()
     {

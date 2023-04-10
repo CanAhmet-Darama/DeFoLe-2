@@ -11,7 +11,7 @@ public class InteractableSpecial : EnvObject
 
     public AudioClip pickUpSound;
 
-    void OnDisable()
+    void OnDestroy()
     {
         AudioSource.PlayClipAtPoint(pickUpSound,transform.position);
     }

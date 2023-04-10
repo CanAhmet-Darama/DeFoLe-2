@@ -181,6 +181,7 @@ public class GeneralVehicle : MonoBehaviour
     public void DamageVehicle(short damage)
     {
         vehicleHealth -= damage;
+        GameManager.uiManager.SetVehicleHealthUI();
     }
 
     void OnCollisionEnter(Collision collision)

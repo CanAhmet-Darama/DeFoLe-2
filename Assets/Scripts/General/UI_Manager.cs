@@ -11,33 +11,47 @@ public class UI_Manager : MonoBehaviour
     public static bool isLookingInteractable;
     public static InteractableForUI interactionType;
 
+    [Header("Texts")]
     public TextMeshProUGUI curAmmoText;
     public TextMeshProUGUI totalAmmoText;
     public TextMeshProUGUI interactionText;
     public TextMeshProUGUI playerHealthText;
+    public TextMeshProUGUI vehicleHealthText;
 
+    [Header("Images")]
     public Image crosshair;
     public Image sniperZoomScreen;
     public Image weaponIcon;
 
     public Sprite[] weaponIconSprites;
 
+    [Header("Player Health")]
     public GameObject playerHealthFill;
     
     MainCharacter mainChar;
     float maxHealth;
+
+    [Header("Vehicle")]
+    public GameObject vehicleHealthFill;
+    public GameObject vehicleHealthBarWhole;
+
+    MainCar mainCar;
+    float maxVehicleHealth;
 
     public Coroutine weaponIconOpacityCoroutine;
 
     void Start()
     {
         mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
+        mainCar = GameManager.mainCar.GetComponent<MainCar>();
         maxHealth = mainChar.health;
+        maxVehicleHealth = mainCar.vehicleHealth;
     }
 
     void Update()
     {
     }
+
     public void SetAmmoUI()
     {
         curAmmoText.text = Convert.ToString(mainChar.currentWeapon.currentAmmo);
@@ -84,6 +98,29 @@ public class UI_Manager : MonoBehaviour
                     break;
             }
             interactionText.text = interactText;
+    }
+
+    public void SetVehicleHealthUI()
+    {
+        if (mainCar.vehicleHealth > 0)
+        {
+            vehicleHealthFill.transform.localScale = new Vector3(mainCar.vehicleHealth / maxVehicleHealth, vehicleHealthFill.transform.localScale.y, vehicleHealthFill.transform.localScale.z);
+            vehicleHealthText.text = "Vehicle  : " + mainCar.vehicleHealth;
+        }
+        else
+        {
+            vehicleHealthFill.transform.localScale = Vector3.zero;
+            vehicleHealthText.text = "BROKEN";
+        }
+        
+        if(GameManager.mainState == PlayerState.inMainCar && !vehicleHealthBarWhole.activeInHierarchy)
+        {
+            vehicleHealthBarWhole.SetActive(true);
+        }
+        else if(GameManager.mainState != PlayerState.inMainCar && vehicleHealthBarWhole.activeInHierarchy)
+        {
+            vehicleHealthBarWhole.SetActive(false);
+        }
     }
 
     public void ReduceOpacity(Image opaqueImage, float waitDurat, float reduceDurat)

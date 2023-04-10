@@ -168,6 +168,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        uiManager.SetVehicleHealthUI();
     }
 
     #region General Functions

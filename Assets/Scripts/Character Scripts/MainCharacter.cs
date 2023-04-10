@@ -384,7 +384,8 @@ public class MainCharacter : GeneralCharacter
                 if (Input.GetKeyDown(KeyCode.F))
                 {
                     IncreaseHealth(hitInfo.collider.GetComponent<InteractableSpecial>().healthAmount);
-                    hitInfo.collider.gameObject.SetActive(false);
+                    GameManager.uiManager.SetHealthUI();
+                    Destroy(hitInfo.collider.gameObject);
                 }
 
             }
@@ -401,7 +402,7 @@ public class MainCharacter : GeneralCharacter
                 {
                     IncreaseAmmo(hitInfo.collider.GetComponent<InteractableSpecial>().magazineCount);
                     GameManager.uiManager.SetAmmoUI();
-                    hitInfo.collider.gameObject.SetActive(false);
+                    Destroy(hitInfo.collider.gameObject);
                 }
 
             }

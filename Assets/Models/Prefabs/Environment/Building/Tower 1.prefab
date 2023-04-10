@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5810678940949134316}
   m_Layer: 0
   m_Name: Tower 1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectOrEnemy: 1
-  detailDiminishDistance: 75
+  detailDiminishDistance: 100
   sqrDistancePlayer: 0
   deactivateMeshOnLongDistance: 0
   longDistance: 0
@@ -458,7 +458,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5385305161004563141, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5385305161004563141, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -471,6 +471,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7649201875063736720, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7718367342427121688, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d44ab4cda40ab0429ce6a76d05c7621, type: 3}
@@ -549,9 +557,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7036208232964940657, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
       propertyPath: m_Name
       value: Tower 1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
