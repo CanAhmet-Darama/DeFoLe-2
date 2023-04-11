@@ -472,12 +472,13 @@ MonoBehaviour:
   sqrDistFromPlayer: 0
   campOfEnemy: 0
   enemyNumCode: 0
+  enemyStaticIndex: 0
   hasPermanentPlace: 0
   permanentCoverObject: {fileID: 0}
   patrolPoints: []
   lastPatrolIndex: 0
   patrolWaitDuration: 0
-  noticeDuration: 3
+  noticeDuration: 1.5
   suspectedDuration: 3
   alertedCoverCheckCooldown: 10
   alertRangeRate: 0.25

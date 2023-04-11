@@ -177,28 +177,42 @@ public class EnemyManager : MonoBehaviour
 
     public static void SaveAllEnemies(GameData gameDataToUse)
     {
-        for(int campIndex = enemies.Length - 1; campIndex>= 0; campIndex--)
+        gameDataToUse.enemyPoses = new float[GameManager.numberOfCamps][][];
+        gameDataToUse.enemyHealths = new short[GameManager.numberOfCamps][];
+        gameDataToUse.enemyAmmoCounts = new short[GameManager.numberOfCamps][][];
+        gameDataToUse.campsAlerted = new bool[GameManager.numberOfCamps];
+
+        gameDataToUse.enemyPoses[0] = new float[enemies[0].Length][];
+
+
+        for (int campIndex = enemies.Length - 1; campIndex>= 0; campIndex--)
         {
-            gameDataToUse.enemyPoses[campIndex] = new float[enemies[campIndex].Length][];
-            gameDataToUse.campsAlerted[campIndex] = campsAlerted[campIndex];
-
-            for (int enemyIndex = enemies[campIndex].Length - 1; enemyIndex >= 0; enemyIndex--)
+            if (enemies[campIndex] != null)
             {
-                EnemyScript enemyScr = enemies[campIndex][enemyIndex];
-                int staticIndex = enemyScr.enemyStaticIndex;
+                gameDataToUse.campsAlerted[campIndex] = campsAlerted[campIndex];
 
-                gameDataToUse.enemyPoses[campIndex][staticIndex] = new float[3];
-                gameDataToUse.enemyPoses[campIndex][staticIndex][0] =
-                enemyScr.transform.position.x;
-                gameDataToUse.enemyPoses[campIndex][staticIndex][1] =
-                enemyScr.transform.position.y;
-                gameDataToUse.enemyPoses[campIndex][staticIndex][2] =
-                enemyScr.transform.position.z;
+                gameDataToUse.enemyPoses[campIndex] = new float[enemies[campIndex].Length][];
+                gameDataToUse.enemyHealths[campIndex] = new short[enemies[campIndex].Length];
+                gameDataToUse.enemyAmmoCounts[campIndex] = new short[enemies[campIndex].Length][];
 
-                gameDataToUse.enemyHealths[campIndex][staticIndex] = enemyScr.health;
+                for (int enemyIndex = enemies[campIndex].Length - 1; enemyIndex >= 0; enemyIndex--)
+                {
+                    EnemyScript enemyScr = enemies[campIndex][enemyIndex];
+                    int staticIndex = enemyScr.enemyStaticIndex;
 
-                gameDataToUse.enemyAmmoCounts[campIndex][staticIndex] = new short[5];
-                GameManager.CopyArray(enemyScr.ammoCounts, gameDataToUse.enemyAmmoCounts[campIndex][staticIndex]);
+                    gameDataToUse.enemyPoses[campIndex][staticIndex] = new float[3];
+                    gameDataToUse.enemyPoses[campIndex][staticIndex][0] =
+                    enemyScr.transform.position.x;
+                    gameDataToUse.enemyPoses[campIndex][staticIndex][1] =
+                    enemyScr.transform.position.y;
+                    gameDataToUse.enemyPoses[campIndex][staticIndex][2] =
+                    enemyScr.transform.position.z;
+
+                    gameDataToUse.enemyHealths[campIndex][staticIndex] = enemyScr.health;
+
+                    gameDataToUse.enemyAmmoCounts[campIndex][staticIndex] = new short[5];
+                    GameManager.CopyArray(enemyScr.ammoCounts, gameDataToUse.enemyAmmoCounts[campIndex][staticIndex]);
+                }
             }
         }
     }

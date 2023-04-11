@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -64,7 +64,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SaveGame();
+        }
     }
 
     public static void ChangeState()
@@ -151,6 +154,13 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.SetVehicleHealthUI();
+    }
+
+    public static void SaveGame()
+    {
+        GameData gameDataForSave = new GameData(true);
+        string saveJSON = JsonConvert.SerializeObject(gameDataForSave, Formatting.Indented);
+        File.WriteAllText(Application.dataPath + "/Saves/SaveData.json", saveJSON);
     }
 
     #region General Functions
@@ -284,21 +294,24 @@ public class GameData
     public bool[] campsAlerted;
     #endregion
 
-    public GameData()
+    public GameData(bool forCreating)
     {
-        MainCharacter mainCharScr = GameManager.mainChar.GetComponent<MainCharacter>();
-        playerPos = new float[3] { GameManager.mainChar.position.x, GameManager.mainChar.position.y, GameManager.mainChar.position.z};
-        playerRot = new float[3] { GameManager.mainChar.eulerAngles.x, GameManager.mainChar.eulerAngles.y, GameManager.mainChar.eulerAngles.z };
-        playerHealth = mainCharScr.health;
-        playerAmmoCounts = new short[5];
-        GameManager.CopyArray(mainCharScr.ammoCounts, playerAmmoCounts);
-        currentWeaponIndex = (byte)mainCharScr.currentWeapon.weaponType;
+        if (forCreating)
+        {
+            MainCharacter mainCharScr = GameManager.mainChar.GetComponent<MainCharacter>();
+            playerPos = new float[3] { GameManager.mainChar.position.x, GameManager.mainChar.position.y, GameManager.mainChar.position.z};
+            playerRot = new float[3] { GameManager.mainChar.eulerAngles.x, GameManager.mainChar.eulerAngles.y, GameManager.mainChar.eulerAngles.z };
+            playerHealth = mainCharScr.health;
+            playerAmmoCounts = new short[5];
+            GameManager.CopyArray(mainCharScr.ammoCounts, playerAmmoCounts);
+            currentWeaponIndex = (byte)mainCharScr.currentWeapon.weaponType;
 
-        vehiclePos = new float[3] { GameManager.mainCar.position.x, GameManager.mainCar.position.y, GameManager.mainCar.position.z };
-        vehicleRot = new float[3] { GameManager.mainCar.eulerAngles.x, GameManager.mainCar.eulerAngles.y, GameManager.mainCar.eulerAngles.z };
-        vehicleHealth = GameManager.mainCar.GetComponent<MainCar>().vehicleHealth;
+            vehiclePos = new float[3] { GameManager.mainCar.position.x, GameManager.mainCar.position.y, GameManager.mainCar.position.z };
+            vehicleRot = new float[3] { GameManager.mainCar.eulerAngles.x, GameManager.mainCar.eulerAngles.y, GameManager.mainCar.eulerAngles.z };
+            vehicleHealth = GameManager.mainCar.GetComponent<MainCar>().vehicleHealth;
 
-        EnemyManager.SaveAllEnemies(this);
+            EnemyManager.SaveAllEnemies(this);
+        }
 
     }
 }
