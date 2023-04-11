@@ -32,12 +32,10 @@ public class InteractableSpecial : EnvObject
 
     void AddInteractableToList(InteractableSpecial interactObj)
     {
-        GameManager.IncreaseArray(ref interactableObjects);
-        interactableObjects[interactableObjects.Length - 1] = interactObj;
-        GameManager.IncreaseArray(ref interObjIndexArray);
-        interObjIndexArray[interObjIndexArray.Length - 1] = interactObj.interObjIndex;
-
+        GameManager.AddToArray(interactObj, ref interactableObjects);
+        GameManager.AddToArray(interactObj.interObjIndex, ref interObjIndexArray);
     }
+
     public static void SaveInteractableObjects(GameData gameDataToUse)
     {
         gameDataToUse.interactablesTaken = new bool[interactableObjects.Length];

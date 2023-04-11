@@ -37,24 +37,27 @@ public class EnemyManager : MonoBehaviour
             enemiesDead[campNumber - 1] = new bool[0];
             enemiesStaticIndexes[campNumber - 1] = new short[0];
         }
-        short[] staticIndexHolderArray = new short[enemiesStaticIndexes[campNumber - 1].Length];
-        GameManager.CopyArray(enemiesStaticIndexes[campNumber - 1], ref staticIndexHolderArray);
-        enemiesStaticIndexes[campNumber - 1] = new short[enemiesStaticIndexes[campNumber - 1].Length + 1];
-        GameManager.CopyArray(staticIndexHolderArray, ref enemiesStaticIndexes[campNumber - 1]);
-        enemiesStaticIndexes[campNumber - 1][staticIndexHolderArray.Length] = newEnemy.enemyStaticIndex;
+        //short[] staticIndexHolderArray = new short[enemiesStaticIndexes[campNumber - 1].Length];
+        //GameManager.CopyArray(enemiesStaticIndexes[campNumber - 1], ref staticIndexHolderArray);
+        //enemiesStaticIndexes[campNumber - 1] = new short[enemiesStaticIndexes[campNumber - 1].Length + 1];
+        //GameManager.CopyArray(staticIndexHolderArray, ref enemiesStaticIndexes[campNumber - 1]);
+        //enemiesStaticIndexes[campNumber - 1][staticIndexHolderArray.Length] = newEnemy.enemyStaticIndex;
+        GameManager.AddToArray(newEnemy.enemyStaticIndex, ref enemiesStaticIndexes[campNumber - 1]);
 
+        //EnemyScript[] holderArray = enemies[campNumber - 1];
+        //enemies[campNumber - 1] = new EnemyScript[holderArray.Length + 1];
+        //GameManager.CopyArray(holderArray, ref enemies[campNumber - 1]);
+        //enemies[campNumber - 1][holderArray.Length] = newEnemy;
+        GameManager.AddToArray(newEnemy, ref enemies[campNumber - 1]);
+        newEnemy.enemyNumCode = (byte)(enemies[campNumber - 1].Length - 1);
 
-        EnemyScript[] holderArray = enemies[campNumber - 1];
-        enemies[campNumber - 1] = new EnemyScript[holderArray.Length + 1];
-        GameManager.CopyArray(holderArray, ref enemies[campNumber - 1]);
-        enemies[campNumber - 1][holderArray.Length] = newEnemy;
-        newEnemy.enemyNumCode = (byte)holderArray.Length;
+        enemiesDead[campNumber - 1] = new bool[enemies[campNumber - 1].Length + 1];
 
-        enemiesDead[campNumber - 1] = new bool[holderArray.Length + 1];
-
-        bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
-        enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
-        GameManager.CopyArray(visionHolderArray, ref enemiesCanSee[campNumber - 1]);
+        GameManager.IncreaseArray(ref enemiesCanSee[campNumber - 1]);
+        Debug.Log(enemiesCanSee[campNumber - 1].Length);
+        //bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
+        //enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
+        //GameManager.CopyArray(visionHolderArray, ref enemiesCanSee[campNumber - 1]);
     }
     public static void AlertWholeCamp(byte campNumber)
     {
@@ -180,6 +183,7 @@ public class EnemyManager : MonoBehaviour
         gameDataToUse.enemyPoses = new float[GameManager.numberOfCamps][][];
         gameDataToUse.enemyHealths = new short[GameManager.numberOfCamps][];
         gameDataToUse.enemyAmmoCounts = new short[GameManager.numberOfCamps][][];
+        gameDataToUse.enemyCurrentAmmoCounts = new short[GameManager.numberOfCamps][][];
         gameDataToUse.campsAlerted = new bool[GameManager.numberOfCamps];
 
         gameDataToUse.enemyPoses[0] = new float[enemies[0].Length][];
@@ -194,6 +198,7 @@ public class EnemyManager : MonoBehaviour
                 gameDataToUse.enemyPoses[campIndex] = new float[enemies[campIndex].Length][];
                 gameDataToUse.enemyHealths[campIndex] = new short[enemies[campIndex].Length];
                 gameDataToUse.enemyAmmoCounts[campIndex] = new short[enemies[campIndex].Length][];
+                gameDataToUse.enemyCurrentAmmoCounts[campIndex] = new short[enemies[campIndex].Length][];
 
                 for (int enemyIndex = enemies[campIndex].Length - 1; enemyIndex >= 0; enemyIndex--)
                 {
@@ -210,8 +215,14 @@ public class EnemyManager : MonoBehaviour
 
                     gameDataToUse.enemyHealths[campIndex][staticIndex] = enemyScr.health;
 
-                    gameDataToUse.enemyAmmoCounts[campIndex][staticIndex] = new short[5];
+                    gameDataToUse.enemyAmmoCounts[campIndex][staticIndex] = new short[enemyScr.weaponScripts.Length];
+                    gameDataToUse.enemyCurrentAmmoCounts[campIndex][staticIndex] = new short[enemyScr.weaponScripts.Length];
                     GameManager.CopyArray(enemyScr.ammoCounts, ref gameDataToUse.enemyAmmoCounts[campIndex][staticIndex]);
+                    for(int i = enemyScr.weaponScripts.Length-1; i >= 0; i--)
+                    {
+                        if (enemyScr.hasWeapons[i])
+                        gameDataToUse.enemyCurrentAmmoCounts[campIndex][staticIndex][i] = enemyScr.weaponScripts[i].currentAmmo;
+                    }
                 }
             }
         }
@@ -242,6 +253,12 @@ public class EnemyManager : MonoBehaviour
                     enemyScr.health = gameDataToUse.enemyHealths[campIndex][staticIndex];
 
                     GameManager.CopyArray(gameDataToUse.enemyAmmoCounts[campIndex][staticIndex], ref enemyScr.ammoCounts);
+                    for (int i = enemyScr.weaponScripts.Length - 1; i >= 0; i--)
+                    {
+                        if (enemyScr.hasWeapons[i])
+                        enemyScr.weaponScripts[i].currentAmmo = (byte)gameDataToUse.enemyCurrentAmmoCounts[campIndex][staticIndex][i];
+                    }
+
                 }
             }
         }

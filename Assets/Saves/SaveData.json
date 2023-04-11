@@ -1,32 +1,50 @@
 {
+  "mainState": 1,
   "playerPos": [
-    714.1312,
-    23.1343384,
-    -49.4334641
+    705.5177,
+    20.533329,
+    -90.64046
   ],
   "playerRot": [
-    2.672699E-07,
-    216.000061,
-    -6.59489024E-06
+    -6.118262E-06,
+    256.990784,
+    7.67708752E-06
   ],
   "playerHealth": 30000,
   "playerAmmoCounts": [
-    270,
-    270,
-    81,
-    18,
-    45
+    180,
+    180,
+    54,
+    8,
+    30
   ],
-  "currentWeaponIndex": 0,
+  "playerCurrentAmmoCounts": [
+    30,
+    19,
+    9,
+    2,
+    5
+  ],
+  "currentWeaponIndex": 1,
   "vehiclePos": [
-    709.8941,
-    21.3099022,
-    -66.7079239
+    709.8924,
+    21.3102627,
+    -66.70622
   ],
   "vehicleRot": [
-    0.343063027,
-    269.9955,
-    0.191749319
+    0.4111535,
+    269.995483,
+    0.117015682
+  ],
+  "vehicleVelocity": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "vehicleAngularVelocity": [
+    0.0,
+    0.0,
+    0.0
   ],
   "vehicleHealth": 3500,
   "enemyPoses": [
@@ -48,7 +66,7 @@
       ],
       [
         722.95,
-        16.56498,
+        16.5649776,
         -407.86
       ]
     ],
@@ -102,6 +120,41 @@
     null,
     null
   ],
+  "enemyCurrentAmmoCounts": [
+    [
+      [
+        0,
+        30,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        30,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        30,
+        9,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        9,
+        0,
+        5
+      ]
+    ],
+    null,
+    null,
+    null
+  ],
   "campsAlerted": [
     false,
     false,
@@ -109,8 +162,91 @@
     false
   ],
   "interactablesTaken": [
-    true,
+    false,
+    false
+  ],
+  "envObjectsDestroyed": [
+    false,
+    false,
+    false,
+    false,
     true
   ],
-  "envObjectsDestroyed": null
+  "envObjectsSubPartsDestroyed": [
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true
+    ]
+  ]
 }

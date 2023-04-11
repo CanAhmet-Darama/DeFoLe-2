@@ -167,6 +167,7 @@ public class GameManager : MonoBehaviour
         GameData gameDataForSave = new GameData(true);
         EnemyManager.SaveAllEnemies(gameDataForSave);
         InteractableSpecial.SaveInteractableObjects(gameDataForSave);
+        EnvObject.SaveDestroyableObjects(gameDataForSave);
         string saveJSON = JsonConvert.SerializeObject(gameDataForSave, Formatting.Indented);
         File.WriteAllText(saveDataPath, saveJSON);
     }
@@ -238,19 +239,12 @@ public class GameManager : MonoBehaviour
         Array.Copy(sourceArray, destinationArray, sourceArray.Length);
     }
 
-    //public static void IncreaseArray<T>(ref T[] arrayToInc, int increaseAmmount = 1){
-    //    if(arrayToInc == null || arrayToInc.Length == 0)
-    //    {
-    //        arrayToInc = new T[1];
-    //    }
-    //    else
-    //    {
-    //        T[] holderArray = new T[arrayToInc.Length];
-    //        CopyArray(arrayToInc, holderArray);
-    //        arrayToInc = new T[arrayToInc.Length + increaseAmmount];
-    //        CopyArray(holderArray, arrayToInc);
-    //    }
-    //}
+    public static void AddToArray<T>(T obj, ref T[] arrayToAdd)
+    {
+        IncreaseArray(ref arrayToAdd);
+        arrayToAdd[arrayToAdd.Length - 1] = obj;
+    }
+
     public static void IncreaseArray<T>(ref T[] arrayToInc, int increaseAmmount = 1){
         if(arrayToInc == null || arrayToInc.Length == 0)
         {
@@ -311,17 +305,24 @@ public enum PlayerState { inMainCar, onFoot, observing , gameOver}
 [System.Serializable]
 public class GameData
 {
+    #region General
+    public PlayerState mainState;
+    #endregion
+    
     #region For Player
     public float[] playerPos;
     public float[] playerRot;
     public short playerHealth;
     public short[] playerAmmoCounts;
+    public short[] playerCurrentAmmoCounts;
     public byte currentWeaponIndex;
     #endregion
 
     #region For Vehicle
     public float[] vehiclePos;
     public float[] vehicleRot;
+    public float[] vehicleVelocity;
+    public float[] vehicleAngularVelocity;
     public short vehicleHealth;
     #endregion
 
@@ -329,18 +330,22 @@ public class GameData
     public float[][][] enemyPoses;
     public short[][] enemyHealths;
     public short[][][] enemyAmmoCounts;
+    public short[][][] enemyCurrentAmmoCounts;
     public bool[] campsAlerted;
     #endregion
 
     #region Environment
     public bool[] interactablesTaken;
     public bool[] envObjectsDestroyed;
+    public bool[][] envObjectsSubPartsDestroyed;
     #endregion
 
     public GameData(bool forCreating = false)
     {
         if (forCreating)
         {
+            mainState = GameManager.mainState;
+
             MainCharacter mainCharScr = GameManager.mainChar.GetComponent<MainCharacter>();
             playerPos = new float[3] { GameManager.mainChar.position.x, GameManager.mainChar.position.y, GameManager.mainChar.position.z};
             playerRot = new float[3] { GameManager.mainChar.eulerAngles.x, GameManager.mainChar.eulerAngles.y, GameManager.mainChar.eulerAngles.z };
@@ -348,10 +353,18 @@ public class GameData
             playerAmmoCounts = new short[5];
             GameManager.CopyArray(mainCharScr.ammoCounts, ref playerAmmoCounts);
             currentWeaponIndex = (byte)mainCharScr.currentWeapon.weaponType;
+            playerCurrentAmmoCounts = new short[mainCharScr.weaponScripts.Length];
+            for(int i = mainCharScr.weaponScripts.Length- 1; i >= 0; i--)
+            {
+                playerCurrentAmmoCounts[i] = mainCharScr.weaponScripts[i].currentAmmo;
+            }
 
+            MainCar mainCarScr = GameManager.mainCar.GetComponent<MainCar>();
             vehiclePos = new float[3] { GameManager.mainCar.position.x, GameManager.mainCar.position.y, GameManager.mainCar.position.z };
             vehicleRot = new float[3] { GameManager.mainCar.eulerAngles.x, GameManager.mainCar.eulerAngles.y, GameManager.mainCar.eulerAngles.z };
-            vehicleHealth = GameManager.mainCar.GetComponent<MainCar>().vehicleHealth;
+            vehicleVelocity = new float[3] { mainCarScr.vehicleRb.velocity.x, mainCarScr.vehicleRb.velocity.y, mainCarScr.vehicleRb.velocity.z};
+            vehicleAngularVelocity = new float[3] { mainCarScr.vehicleRb.angularVelocity.x, mainCarScr.vehicleRb.angularVelocity.y, mainCarScr.vehicleRb.angularVelocity.z };
+            vehicleHealth = mainCarScr.vehicleHealth;
 
         }
 
@@ -366,14 +379,28 @@ public class GameData
         mainCharScr.health = gameDataToUse.playerHealth;
         GameManager.CopyArray(gameDataToUse.playerAmmoCounts, ref mainCharScr.ammoCounts);
         mainCharScr.ChangeWeapon(mainCharScr.weaponScripts[gameDataToUse.currentWeaponIndex]);
+        for (int i = mainCharScr.weaponScripts.Length - 1; i >= 0; i--)
+        {
+            mainCharScr.weaponScripts[i].currentAmmo = (byte)gameDataToUse.playerCurrentAmmoCounts[i];
+        }
+        GameManager.uiManager.SetAmmoUI();
+
+        if(GameManager.mainState != gameDataToUse.mainState)
+        {
+            GameManager.ChangeState(gameDataToUse.mainState);
+        }
 
         MainCar mainCarScr = GameManager.mainCar.GetComponent<MainCar>();
         mainCarScr.transform.position = new Vector3(gameDataToUse.vehiclePos[0], gameDataToUse.vehiclePos[1], gameDataToUse.vehiclePos[2]);
         mainCarScr.transform.eulerAngles = new Vector3(gameDataToUse.vehicleRot[0], gameDataToUse.vehicleRot[1], gameDataToUse.vehicleRot[2]);
+        mainCarScr.vehicleRb.velocity = new Vector3(gameDataToUse.vehicleVelocity[0], gameDataToUse.vehicleVelocity[1], gameDataToUse.vehicleVelocity[2]);
+        mainCarScr.vehicleRb.angularVelocity = new Vector3(gameDataToUse.vehicleAngularVelocity[0], gameDataToUse.vehicleAngularVelocity[1], gameDataToUse.vehicleAngularVelocity[2]);
         mainCarScr.vehicleHealth = gameDataToUse.vehicleHealth;
+        
     }
     public static void LoadEnvironmentObjects(GameData gameDataToUse)
     {
         InteractableSpecial.LoadInteractableObjects(gameDataToUse);
+        EnvObject.LoadDestroyableObjects(gameDataToUse);
     }
 }

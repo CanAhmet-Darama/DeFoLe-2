@@ -20,38 +20,46 @@ public class EnvObject : MonoBehaviour
     public NavMeshObstacle navObstacle;
     public bool isSubPartItself;
     bool hasDestructed = false;
-    
+
+    [Header("Destructable Index Things")]
+    public short destObjIndex;
+    public static short[] destObjIndexArray;
+
+    public static EnvObject[] destroyableObjects;
 
     void Start()
     {
-        if(destroyable && breakable)
+        if(destroyable)
         {
-            objRb = GetComponent<Rigidbody>();
-            mainCollider = GetComponent<Collider>();
-        }
-        if (destroyable && !isSubPartItself)
-        {
-            navObstacle = GetComponent<NavMeshObstacle>();
-
-            if (breakable)
+            if(breakable)
             {
-                for (int i = subPartObjs.Length - 1; i >= 0; i--)
+                objRb = GetComponent<Rigidbody>();
+                mainCollider = GetComponent<Collider>();
+            }
+            if (!isSubPartItself)
+            {
+                navObstacle = GetComponent<NavMeshObstacle>();
+                AddDestroyableToList(this);
+
+
+                if (breakable)
                 {
-                    subPartObjs[i].SetActive(false);
+                    for (int i = subPartObjs.Length - 1; i >= 0; i--)
+                    {
+                        subPartObjs[i].SetActive(false);
+                    }
                 }
             }
         }
     }
-    void Update()
-    {
-        if(healthOfObject <= 0 && destroyable && !hasDestructed)
-        {
-            DestroyEnvObject();
-        }
-    }
+
     public void ReduceObjHealth(short damage)
     {
         healthOfObject -= damage;
+        if (healthOfObject <= 0 && destroyable && !hasDestructed)
+        {
+            DestroyEnvObject();
+        }
     }
 
     public void DestroyEnvObject()
@@ -70,16 +78,91 @@ public class EnvObject : MonoBehaviour
             mainCollider.enabled = false;
             objRb.isKinematic = true;
             hasDestructed = true;
-            mainObj.SetActive(false);
+            Destroy(mainObj);
             navObstacle.enabled = false;
         }
         else
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
             volume = 0.5f;
         }
         ImpactMarkManager.MakeBreakingSound(transform.position, objectType, volume);
     }
+
+    void AddDestroyableToList(EnvObject destroyObj)
+    {
+        GameManager.AddToArray(destroyObj, ref destroyableObjects);
+        GameManager.AddToArray(destObjIndex, ref destObjIndexArray);
+    }
+
+    public static void SaveDestroyableObjects(GameData gameDataToUse)
+    {
+        gameDataToUse.envObjectsDestroyed = new bool[destroyableObjects.Length];
+        gameDataToUse.envObjectsSubPartsDestroyed = new bool[destroyableObjects.Length][];
+        bool[] destroyedArray = gameDataToUse.envObjectsDestroyed;
+        for (int i = destroyableObjects.Length - 1; i >= 0; i--)
+        {
+            if (destroyableObjects[i].breakable)
+            {
+                gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]] 
+                    = new bool[destroyableObjects[i].subPartObjs.Length];
+                bool[] destSubArray = gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]];
+                for(int j = destSubArray.Length - 1; j >= 0; j--)
+                {
+                    if (destroyableObjects[i].subPartObjs[j] == null)
+                    {
+                        destSubArray[j] = true;
+                    }
+                    else
+                    {
+                        destSubArray[j] = false;
+                    }
+                }
+
+            }
+
+
+            if (destroyableObjects[i].hasDestructed)
+                destroyedArray[destObjIndexArray[i]] = true;
+            else
+            {
+                destroyedArray[destObjIndexArray[i]] = false;
+            }
+        }
+    }
+    public static void LoadDestroyableObjects(GameData gameDataToUse)
+    {
+        for (int i = destroyableObjects.Length - 1; i >= 0; i--)
+        {
+            if (gameDataToUse.envObjectsDestroyed[destObjIndexArray[i]])
+            {
+                if (destroyableObjects[i] != null)
+                {
+                    destroyableObjects[i].mainCollider.enabled = false;
+                    destroyableObjects[i].objRb.isKinematic = true;
+                    destroyableObjects[i].hasDestructed = true;
+                    Destroy(destroyableObjects[i].mainObj);
+                    destroyableObjects[i].navObstacle.enabled = false;
+                }
+
+                if (gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]] != null)
+                {
+                    for(int j = gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]].Length - 1; j >= 0; j--)
+                    {
+                        if (gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]][j])
+                        {
+                            Destroy(destroyableObjects[i].subPartObjs[j]);
+                        }
+                        else
+                        {
+                            destroyableObjects[i].subPartObjs[j].SetActive(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 public enum EnvObjType { general, dirt, metal, wood, concrete}
 
