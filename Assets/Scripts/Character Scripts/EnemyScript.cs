@@ -561,7 +561,7 @@ public class EnemyScript : GeneralCharacter
 
     IEnumerator IsCoveredSettingCoroutine()
     {
-        previousCoverIndexes = GameManager.CopyArray(currentCoveredIndexes, previousCoverIndexes);
+        GameManager.CopyArray(currentCoveredIndexes, ref previousCoverIndexes);
         yield return null;
         IsCoveredSetter();
     }

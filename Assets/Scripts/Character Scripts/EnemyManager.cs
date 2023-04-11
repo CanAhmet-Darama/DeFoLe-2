@@ -38,15 +38,15 @@ public class EnemyManager : MonoBehaviour
             enemiesStaticIndexes[campNumber - 1] = new short[0];
         }
         short[] staticIndexHolderArray = new short[enemiesStaticIndexes[campNumber - 1].Length];
-        GameManager.CopyArray(enemiesStaticIndexes[campNumber - 1], staticIndexHolderArray);
+        GameManager.CopyArray(enemiesStaticIndexes[campNumber - 1], ref staticIndexHolderArray);
         enemiesStaticIndexes[campNumber - 1] = new short[enemiesStaticIndexes[campNumber - 1].Length + 1];
-        GameManager.CopyArray(staticIndexHolderArray, enemiesStaticIndexes[campNumber - 1]);
+        GameManager.CopyArray(staticIndexHolderArray, ref enemiesStaticIndexes[campNumber - 1]);
         enemiesStaticIndexes[campNumber - 1][staticIndexHolderArray.Length] = newEnemy.enemyStaticIndex;
 
 
         EnemyScript[] holderArray = enemies[campNumber - 1];
         enemies[campNumber - 1] = new EnemyScript[holderArray.Length + 1];
-        GameManager.CopyArray(holderArray, enemies[campNumber - 1]);
+        GameManager.CopyArray(holderArray, ref enemies[campNumber - 1]);
         enemies[campNumber - 1][holderArray.Length] = newEnemy;
         newEnemy.enemyNumCode = (byte)holderArray.Length;
 
@@ -54,7 +54,7 @@ public class EnemyManager : MonoBehaviour
 
         bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
         enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
-        GameManager.CopyArray(visionHolderArray, enemiesCanSee[campNumber - 1]);
+        GameManager.CopyArray(visionHolderArray, ref enemiesCanSee[campNumber - 1]);
     }
     public static void AlertWholeCamp(byte campNumber)
     {
@@ -211,7 +211,37 @@ public class EnemyManager : MonoBehaviour
                     gameDataToUse.enemyHealths[campIndex][staticIndex] = enemyScr.health;
 
                     gameDataToUse.enemyAmmoCounts[campIndex][staticIndex] = new short[5];
-                    GameManager.CopyArray(enemyScr.ammoCounts, gameDataToUse.enemyAmmoCounts[campIndex][staticIndex]);
+                    GameManager.CopyArray(enemyScr.ammoCounts, ref gameDataToUse.enemyAmmoCounts[campIndex][staticIndex]);
+                }
+            }
+        }
+    }
+    public static void LoadAllEnemies(GameData gameDataToUse)
+    {
+        for (int campIndex = enemies.Length - 1; campIndex>= 0; campIndex--)
+        {
+            if (enemies[campIndex] != null)
+            {
+                campsAlerted[campIndex] = gameDataToUse.campsAlerted[campIndex];
+                if (campsAlerted[campIndex])
+                {
+                    AlertWholeCamp((byte)(campIndex + 1));
+                }
+
+                for (int enemyIndex = enemies[campIndex].Length - 1; enemyIndex >= 0; enemyIndex--)
+                {
+                    EnemyScript enemyScr = enemies[campIndex][enemyIndex];
+                    int staticIndex = enemyScr.enemyStaticIndex;
+
+                    float posX = gameDataToUse.enemyPoses[campIndex][staticIndex][0];
+                    float posY = gameDataToUse.enemyPoses[campIndex][staticIndex][1];
+                    float posZ = gameDataToUse.enemyPoses[campIndex][staticIndex][2];
+
+                    enemyScr.transform.position = new(posX,posY,posZ);
+
+                    enemyScr.health = gameDataToUse.enemyHealths[campIndex][staticIndex];
+
+                    GameManager.CopyArray(gameDataToUse.enemyAmmoCounts[campIndex][staticIndex], ref enemyScr.ammoCounts);
                 }
             }
         }

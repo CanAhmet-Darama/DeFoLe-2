@@ -35,9 +35,11 @@ public class GameManager : MonoBehaviour
 
     [Header("General Numbers")]
     [HideInInspector] public static byte numberOfCamps = 4;
+    static string saveDataPath;
 
     void Awake()
     {
+        saveDataPath = Application.dataPath + "/Saves/SaveData.json";
         weaponPrefabs = weaponPrefabsAreThese;
         switch (SceneManager.GetActiveScene().name)
         {
@@ -68,11 +70,15 @@ public class GameManager : MonoBehaviour
         {
             SaveGame();
         }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadGame();
+        }
     }
 
     public static void ChangeState()
     {
-        if(mainState == 0)
+        if (mainState == 0)
         {
             mainState = PlayerState.onFoot;
             if (Input.GetMouseButton(1))
@@ -101,9 +107,9 @@ public class GameManager : MonoBehaviour
     {
         mainState = state;
 
-        if(state == PlayerState.onFoot)
+        if (state == PlayerState.onFoot)
         {
-            mainChar.position = mainCar.position - mainCar.right * 3 + new Vector3(0,2,0);
+            mainChar.position = mainCar.position - mainCar.right * 3 + new Vector3(0, 2, 0);
             mainChar.gameObject.SetActive(true);
             uiManager.curAmmoText.gameObject.SetActive(true);
             uiManager.totalAmmoText.gameObject.SetActive(true);
@@ -112,7 +118,7 @@ public class GameManager : MonoBehaviour
             mainCarScr.vehicleAudioSource.Stop();
             mainCarScr.GetComponent<MainCar>().ResetMotorTorque();
 
-            MainCharacter charComp=mainChar.GetComponent<MainCharacter>();
+            MainCharacter charComp = mainChar.GetComponent<MainCharacter>();
             charComp.canShoot = true;
             charComp.canReload = true;
             charComp.ResetHandTargets(charComp.currentWeapon);
@@ -129,7 +135,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        else if(state == PlayerState.inMainCar)
+        else if (state == PlayerState.inMainCar)
         {
             mainChar.gameObject.SetActive(false);
             uiManager.interactionText.gameObject.SetActive(false);
@@ -137,8 +143,8 @@ public class GameManager : MonoBehaviour
             uiManager.totalAmmoText.gameObject.SetActive(false);
             uiManager.crosshair.gameObject.SetActive(false);
 
-            MainCar mainCarScr =mainCar.GetComponent<MainCar>();
-            if(mainCarScr.vehicleHealth > 0)
+            MainCar mainCarScr = mainCar.GetComponent<MainCar>();
+            if (mainCarScr.vehicleHealth > 0)
             {
                 mainCarScr.vehicleAudioSource.Play();
             }
@@ -159,8 +165,18 @@ public class GameManager : MonoBehaviour
     public static void SaveGame()
     {
         GameData gameDataForSave = new GameData(true);
+        EnemyManager.SaveAllEnemies(gameDataForSave);
+        InteractableSpecial.SaveInteractableObjects(gameDataForSave);
         string saveJSON = JsonConvert.SerializeObject(gameDataForSave, Formatting.Indented);
-        File.WriteAllText(Application.dataPath + "/Saves/SaveData.json", saveJSON);
+        File.WriteAllText(saveDataPath, saveJSON);
+    }
+    public static void LoadGame()
+    {
+        string loadJson = File.ReadAllText(saveDataPath);
+        GameData gameDataForLoad = JsonConvert.DeserializeObject<GameData>(loadJson);
+        EnemyManager.LoadAllEnemies(gameDataForLoad);
+        GameData.LoadFieldsOfCharAndVehicle(gameDataForLoad);
+        GameData.LoadEnvironmentObjects(gameDataForLoad);
     }
 
     #region General Functions
@@ -188,43 +204,65 @@ public class GameManager : MonoBehaviour
     }
     public static float SqrDistance(Vector3 a, Vector3 b)
     {
-        return ((a.x - b.x)* (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+        return ((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
     }
 
-    public static short[] CopyArray(short[] sourceArray, short[] destinationArray)
-    {
-        if (sourceArray.Length > destinationArray.Length)
-            destinationArray = new short[sourceArray.Length];
-        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
-        return destinationArray;
-    }
-    public static bool[] CopyArray(bool[] sourceArray, bool[] destinationArray)
-    {
-        if (sourceArray.Length > destinationArray.Length)
-            destinationArray = new bool[sourceArray.Length];
-        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
-        return destinationArray;
-    }
-    public static byte[] CopyArray(byte[] sourceArray, byte[] destinationArray)
-    {
-        if (sourceArray.Length > destinationArray.Length)
-            destinationArray = new byte[sourceArray.Length];
-        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
-        return destinationArray;
-    }
-    public static float[] CopyArray(float[] sourceArray, float[] destinationArray)
-    {
-        if (sourceArray.Length > destinationArray.Length)
-            destinationArray = new float[sourceArray.Length];
-        Array.Copy(sourceArray, destinationArray, sourceArray.Length);
-        return destinationArray;
-    }
-    public static T[] CopyArray<T>(T[] sourceArray, T[] destinationArray)
+    //public static void CopyArray(short[] sourceArray, short[] destinationArray)
+    //{
+    //    if (sourceArray.Length > destinationArray.Length)
+    //        destinationArray = new short[sourceArray.Length];
+    //    Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+    //}
+    //public static void CopyArray(bool[] sourceArray, bool[] destinationArray)
+    //{
+    //    if (sourceArray.Length > destinationArray.Length)
+    //        destinationArray = new bool[sourceArray.Length];
+    //    Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+    //}
+    //public static void CopyArray(byte[] sourceArray, byte[] destinationArray)
+    //{
+    //    if (sourceArray.Length > destinationArray.Length)
+    //        destinationArray = new byte[sourceArray.Length];
+    //    Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+    //}
+    //public static void CopyArray(float[] sourceArray, float[] destinationArray)
+    //{
+    //    if (sourceArray.Length > destinationArray.Length)
+    //        destinationArray = new float[sourceArray.Length];
+    //    Array.Copy(sourceArray, destinationArray, sourceArray.Length);
+    //}
+    public static void CopyArray<T>(T[] sourceArray, ref T[] destinationArray)
     {
         if (sourceArray.Length > destinationArray.Length)
             destinationArray = new T[sourceArray.Length];
         Array.Copy(sourceArray, destinationArray, sourceArray.Length);
-        return destinationArray;
+    }
+
+    //public static void IncreaseArray<T>(ref T[] arrayToInc, int increaseAmmount = 1){
+    //    if(arrayToInc == null || arrayToInc.Length == 0)
+    //    {
+    //        arrayToInc = new T[1];
+    //    }
+    //    else
+    //    {
+    //        T[] holderArray = new T[arrayToInc.Length];
+    //        CopyArray(arrayToInc, holderArray);
+    //        arrayToInc = new T[arrayToInc.Length + increaseAmmount];
+    //        CopyArray(holderArray, arrayToInc);
+    //    }
+    //}
+    public static void IncreaseArray<T>(ref T[] arrayToInc, int increaseAmmount = 1){
+        if(arrayToInc == null || arrayToInc.Length == 0)
+        {
+            arrayToInc = new T[1];
+        }
+        else
+        {
+            T[] holderArray = new T[arrayToInc.Length];
+            CopyArray(arrayToInc, ref holderArray);
+            arrayToInc = new T[arrayToInc.Length + increaseAmmount];
+            CopyArray(holderArray, ref arrayToInc);
+        }
     }
 
 
@@ -294,7 +332,12 @@ public class GameData
     public bool[] campsAlerted;
     #endregion
 
-    public GameData(bool forCreating)
+    #region Environment
+    public bool[] interactablesTaken;
+    public bool[] envObjectsDestroyed;
+    #endregion
+
+    public GameData(bool forCreating = false)
     {
         if (forCreating)
         {
@@ -303,15 +346,34 @@ public class GameData
             playerRot = new float[3] { GameManager.mainChar.eulerAngles.x, GameManager.mainChar.eulerAngles.y, GameManager.mainChar.eulerAngles.z };
             playerHealth = mainCharScr.health;
             playerAmmoCounts = new short[5];
-            GameManager.CopyArray(mainCharScr.ammoCounts, playerAmmoCounts);
+            GameManager.CopyArray(mainCharScr.ammoCounts, ref playerAmmoCounts);
             currentWeaponIndex = (byte)mainCharScr.currentWeapon.weaponType;
 
             vehiclePos = new float[3] { GameManager.mainCar.position.x, GameManager.mainCar.position.y, GameManager.mainCar.position.z };
             vehicleRot = new float[3] { GameManager.mainCar.eulerAngles.x, GameManager.mainCar.eulerAngles.y, GameManager.mainCar.eulerAngles.z };
             vehicleHealth = GameManager.mainCar.GetComponent<MainCar>().vehicleHealth;
 
-            EnemyManager.SaveAllEnemies(this);
         }
 
+    }
+
+    public static void LoadFieldsOfCharAndVehicle(GameData gameDataToUse)
+    {
+        Transform mainChar = GameManager.mainChar;
+        mainChar.position = new Vector3(gameDataToUse.playerPos[0], gameDataToUse.playerPos[1], gameDataToUse.playerPos[2]);
+        mainChar.eulerAngles = new Vector3(gameDataToUse.playerRot[0], gameDataToUse.playerRot[1], gameDataToUse.playerRot[2]);
+        MainCharacter mainCharScr = GameManager.mainChar.GetComponent<MainCharacter>();
+        mainCharScr.health = gameDataToUse.playerHealth;
+        GameManager.CopyArray(gameDataToUse.playerAmmoCounts, ref mainCharScr.ammoCounts);
+        mainCharScr.ChangeWeapon(mainCharScr.weaponScripts[gameDataToUse.currentWeaponIndex]);
+
+        MainCar mainCarScr = GameManager.mainCar.GetComponent<MainCar>();
+        mainCarScr.transform.position = new Vector3(gameDataToUse.vehiclePos[0], gameDataToUse.vehiclePos[1], gameDataToUse.vehiclePos[2]);
+        mainCarScr.transform.eulerAngles = new Vector3(gameDataToUse.vehicleRot[0], gameDataToUse.vehicleRot[1], gameDataToUse.vehicleRot[2]);
+        mainCarScr.vehicleHealth = gameDataToUse.vehicleHealth;
+    }
+    public static void LoadEnvironmentObjects(GameData gameDataToUse)
+    {
+        InteractableSpecial.LoadInteractableObjects(gameDataToUse);
     }
 }

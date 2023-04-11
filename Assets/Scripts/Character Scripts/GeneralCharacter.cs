@@ -492,7 +492,7 @@ public class GeneralCharacter : MonoBehaviour
                         {
                             TerrainManager.GetTerrainTexture(hitInfoStep.point);
                             float[] textureValues = new float[TerrainManager.textureValues.Length];
-                            GameManager.CopyArray(TerrainManager.textureValues, textureValues);
+                            GameManager.CopyArray(TerrainManager.textureValues, ref textureValues);
                             stepSoundMaker.transform.position = hitInfoStep.point;
                             for (short textureIndex = (short)(textureValues.Length - 1); textureIndex >= 0; textureIndex--)
                             {
