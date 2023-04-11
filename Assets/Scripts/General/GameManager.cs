@@ -267,7 +267,7 @@ public class GameData
     public float[] playerPos;
     public float[] playerRot;
     public short playerHealth;
-    public short[] ammoCounts;
+    public short[] playerAmmoCounts;
     public byte currentWeaponIndex;
     #endregion
 
@@ -277,5 +277,28 @@ public class GameData
     public short vehicleHealth;
     #endregion
 
+    #region For Enemies
+    public float[][][] enemyPoses;
+    public short[][] enemyHealths;
+    public short[][][] enemyAmmoCounts;
+    public bool[] campsAlerted;
+    #endregion
 
+    public GameData()
+    {
+        MainCharacter mainCharScr = GameManager.mainChar.GetComponent<MainCharacter>();
+        playerPos = new float[3] { GameManager.mainChar.position.x, GameManager.mainChar.position.y, GameManager.mainChar.position.z};
+        playerRot = new float[3] { GameManager.mainChar.eulerAngles.x, GameManager.mainChar.eulerAngles.y, GameManager.mainChar.eulerAngles.z };
+        playerHealth = mainCharScr.health;
+        playerAmmoCounts = new short[5];
+        GameManager.CopyArray(mainCharScr.ammoCounts, playerAmmoCounts);
+        currentWeaponIndex = (byte)mainCharScr.currentWeapon.weaponType;
+
+        vehiclePos = new float[3] { GameManager.mainCar.position.x, GameManager.mainCar.position.y, GameManager.mainCar.position.z };
+        vehicleRot = new float[3] { GameManager.mainCar.eulerAngles.x, GameManager.mainCar.eulerAngles.y, GameManager.mainCar.eulerAngles.z };
+        vehicleHealth = GameManager.mainCar.GetComponent<MainCar>().vehicleHealth;
+
+        EnemyManager.SaveAllEnemies(this);
+
+    }
 }

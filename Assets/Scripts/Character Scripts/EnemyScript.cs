@@ -22,7 +22,7 @@ public class EnemyScript : GeneralCharacter
     MainCharacter mainCharScript;
     [Range(1, 3)] public byte campOfEnemy;
     [HideInInspector]public byte enemyNumCode;
-    public byte enemyStaticIndex;
+    public short enemyStaticIndex;
 
     [Header("Patrol")]
     public bool hasPermanentPlace;

@@ -1621,6 +1621,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
+      propertyPath: enemyStaticIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
       propertyPath: walkAcceleration
       value: 15
       objectReference: {fileID: 0}
@@ -2388,6 +2392,10 @@ PrefabInstance:
     - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
       propertyPath: runAcceleration
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
+      propertyPath: enemyStaticIndex
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
       propertyPath: walkAcceleration
@@ -4463,6 +4471,10 @@ PrefabInstance:
     - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
       propertyPath: runAcceleration
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
+      propertyPath: enemyStaticIndex
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 779311080259487559, guid: 5c62ac3e4c07d9d49bb94db079bfa9a3, type: 3}
       propertyPath: walkAcceleration
