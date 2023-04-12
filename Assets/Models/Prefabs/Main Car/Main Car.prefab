@@ -146,6 +146,146 @@ Transform:
   m_Father: {fileID: 5062277243738652696}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &282628055468837900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5976618361675968105}
+  - component: {fileID: 1160454852456141126}
+  - component: {fileID: 7519640515273065784}
+  m_Layer: 0
+  m_Name: Glass Window (3)
+  m_TagString: Vehicle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5976618361675968105
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282628055468837900}
+  m_LocalRotation: {x: 0.49850458, y: -0, z: 0.000000029802315, w: 0.86688715}
+  m_LocalPosition: {x: -0, y: 0.219, z: -1.837}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 63507246053396456}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 59.802, y: 0, z: 0}
+--- !u!65 &1160454852456141126
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282628055468837900}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1, y: 0.9, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7519640515273065784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282628055468837900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 5
+  destroyable: 0
+  breakable: 0
+  impactMarkable: 1
+  healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
+  mainCollider: {fileID: 0}
+  objRb: {fileID: 0}
+  navObstacle: {fileID: 0}
+  isSubPartItself: 0
+  destObjIndex: 0
+--- !u!1 &1750778598337925295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5710329319293958503}
+  - component: {fileID: 1957143922305751909}
+  - component: {fileID: 3289090276633744622}
+  m_Layer: 0
+  m_Name: Glass Window (2)
+  m_TagString: Vehicle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5710329319293958503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750778598337925295}
+  m_LocalRotation: {x: 0.29892573, y: 0.64081466, z: -0.29892573, w: 0.64081466}
+  m_LocalPosition: {x: -0.882, y: 0.22, z: -0.416}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 63507246053396456}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 50.016, y: 90, z: 0}
+--- !u!65 &1957143922305751909
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750778598337925295}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.95, y: 0.6, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3289090276633744622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750778598337925295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 5
+  destroyable: 0
+  breakable: 0
+  impactMarkable: 1
+  healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
+  mainCollider: {fileID: 0}
+  objRb: {fileID: 0}
+  navObstacle: {fileID: 0}
+  isSubPartItself: 0
+  destObjIndex: 0
 --- !u!1 &3162422559347345819
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,6 +414,76 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &4761614810035454654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 141442331423607956}
+  - component: {fileID: 8642864928477740058}
+  - component: {fileID: 8049565219102533017}
+  m_Layer: 0
+  m_Name: Glass Window
+  m_TagString: Vehicle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &141442331423607956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761614810035454654}
+  m_LocalRotation: {x: -0.5430508, y: 0.000000089406946, z: -0.00000017881389, w: 0.8396999}
+  m_LocalPosition: {x: -0, y: 0.18, z: 1.097}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 63507246053396456}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -65.783, y: 0, z: 0}
+--- !u!65 &8642864928477740058
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761614810035454654}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2, y: 0.9, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8049565219102533017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761614810035454654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 5
+  destroyable: 0
+  breakable: 0
+  impactMarkable: 1
+  healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
+  mainCollider: {fileID: 0}
+  objRb: {fileID: 0}
+  navObstacle: {fileID: 0}
+  isSubPartItself: 0
+  destObjIndex: 0
 --- !u!1 &5062277243738652702
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +524,7 @@ Transform:
   - {fileID: 8711006506131790301}
   - {fileID: 3471491705695640166}
   - {fileID: 7426000739580522302}
+  - {fileID: 63507246053396456}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -464,6 +675,76 @@ Transform:
   m_Father: {fileID: 5062277243738652696}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5566027840367897555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9147191074183567623}
+  - component: {fileID: 791466356815280076}
+  - component: {fileID: 5044414839434668503}
+  m_Layer: 0
+  m_Name: Glass Window (1)
+  m_TagString: Vehicle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9147191074183567623
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566027840367897555}
+  m_LocalRotation: {x: -0.29892612, y: 0.6408145, z: 0.29892612, w: 0.6408145}
+  m_LocalPosition: {x: 0.882, y: 0.22, z: -0.416}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 63507246053396456}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -50.016, y: 90, z: 0}
+--- !u!65 &791466356815280076
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566027840367897555}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.95, y: 0.6, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5044414839434668503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5566027840367897555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fefac993b5c0d434bbb0572d09a993a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 5
+  destroyable: 0
+  breakable: 0
+  impactMarkable: 1
+  healthOfObject: 0
+  mainObj: {fileID: 0}
+  subPartObjs: []
+  mainCollider: {fileID: 0}
+  objRb: {fileID: 0}
+  navObstacle: {fileID: 0}
+  isSubPartItself: 0
+  destObjIndex: 0
 --- !u!1 &5794433611394425077
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,6 +1004,41 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &7559992474793701660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 63507246053396456}
+  m_Layer: 0
+  m_Name: Glass Colliders
+  m_TagString: Vehicle
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &63507246053396456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7559992474793701660}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.51, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 141442331423607956}
+  - {fileID: 9147191074183567623}
+  - {fileID: 5710329319293958503}
+  - {fileID: 5976618361675968105}
+  m_Father: {fileID: 5062277243738652696}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &580814976674727432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1068,6 +1384,10 @@ PrefabInstance:
     - target: {fileID: 4061306623757267429, guid: 3a5d76990a0c0c946a56c24ecf20aa5f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4599883474978166292, guid: 3a5d76990a0c0c946a56c24ecf20aa5f, type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a5d76990a0c0c946a56c24ecf20aa5f, type: 3}

@@ -54,7 +54,6 @@ public class EnemyManager : MonoBehaviour
         enemiesDead[campNumber - 1] = new bool[enemies[campNumber - 1].Length + 1];
 
         GameManager.IncreaseArray(ref enemiesCanSee[campNumber - 1]);
-        Debug.Log(enemiesCanSee[campNumber - 1].Length);
         //bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
         //enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
         //GameManager.CopyArray(visionHolderArray, ref enemiesCanSee[campNumber - 1]);

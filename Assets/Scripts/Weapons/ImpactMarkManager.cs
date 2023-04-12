@@ -26,12 +26,14 @@ public class ImpactMarkManager : MonoBehaviour
     public static ParticleSystem woodBulletImpactPrefab;
     public static ParticleSystem dirtBulletImpactPrefab;
     public static ParticleSystem bloodBulletImpactPrefab;
+    public static ParticleSystem glassBulletImpactPrefab;
     public static ParticleSystem[] impactPrefabs;
     [SerializeField] ParticleSystem _generalBulletImpact;
     [SerializeField] ParticleSystem _metalBulletImpact;
     [SerializeField] ParticleSystem _woodBulletImpact;
     [SerializeField] ParticleSystem _dirtBulletImpact;
     [SerializeField] ParticleSystem _bloodBulletImpact;
+    [SerializeField] ParticleSystem _glassBulletImpact;
     public static ParticleSystem[,] bulletImpacts;
     public static short impactsCount = 10;
 
@@ -49,6 +51,7 @@ public class ImpactMarkManager : MonoBehaviour
     public static AudioClip bulletWhoosh;
 
     public static AudioClip woodBreaking;
+    public static AudioClip glassBreaking;
 
     #region Holder Sounds
     public AudioSource _audioSource;
@@ -63,6 +66,7 @@ public class ImpactMarkManager : MonoBehaviour
     public AudioClip _bulletWhoosh;
     [Header("Breaking Sounds")]
     public AudioClip _woodBreaking;
+    public AudioClip _glassBreaking;
     #endregion
 
     [Header("Melee Impact")]
@@ -273,6 +277,9 @@ public class ImpactMarkManager : MonoBehaviour
             case EnvObjType.dirt:
                 impactSound = dirtImpactSound;
                 break;
+            case EnvObjType.glass:
+                impactSound = glassImpactSound;
+                break;
             default:
                 impactSound = generalImpactSound;
                 break;
@@ -294,6 +301,9 @@ public class ImpactMarkManager : MonoBehaviour
             case EnvObjType.wood:
                 impact = GetImpactReady(bulletImpacts, 2);
                 break;
+            case EnvObjType.glass:
+                impact = GetImpactReady(bulletImpacts, 5);
+                break;
             default:
                 impact = GetImpactReady(bulletImpacts, 0);
                 break;
@@ -311,6 +321,9 @@ public class ImpactMarkManager : MonoBehaviour
         {
             case EnvObjType.wood:
                 impactSound = woodBreaking;
+                break;
+            case EnvObjType.glass:
+                impactSound = glassBreaking;
                 break;
         }
         if(impactSound != null)
@@ -369,6 +382,7 @@ public class ImpactMarkManager : MonoBehaviour
         bulletWhoosh = _bulletWhoosh;
 
         woodBreaking = _woodBreaking;
+        glassBreaking = _glassBreaking;
 
         audioSource.volume = volumeOfAudio;
     }
@@ -379,7 +393,9 @@ public class ImpactMarkManager : MonoBehaviour
         woodBulletImpactPrefab = _woodBulletImpact;
         dirtBulletImpactPrefab = _dirtBulletImpact;
         bloodBulletImpactPrefab = _bloodBulletImpact;
-        impactPrefabs = new ParticleSystem[] { generalBulletImpactPrefab, metalBulletImpactPrefab, woodBulletImpactPrefab, dirtBulletImpactPrefab, bloodBulletImpactPrefab };
+        glassBulletImpactPrefab = _glassBulletImpact;
+        impactPrefabs = new ParticleSystem[] { generalBulletImpactPrefab, metalBulletImpactPrefab, woodBulletImpactPrefab,
+            dirtBulletImpactPrefab, bloodBulletImpactPrefab, glassBulletImpactPrefab };
     }
 
 }

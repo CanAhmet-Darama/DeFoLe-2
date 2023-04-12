@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class EnvObject : MonoBehaviour
 {
+    public static float collideSoundVelocity = 2;
+
     [Header("General Obj Properties")]
     public EnvObjType objectType;
     public bool destroyable;
@@ -78,8 +80,11 @@ public class EnvObject : MonoBehaviour
             mainCollider.enabled = false;
             objRb.isKinematic = true;
             hasDestructed = true;
-            Destroy(mainObj);
+
+            if(navObstacle != null)
             navObstacle.enabled = false;
+
+            Destroy(mainObj);
         }
         else
         {
@@ -163,8 +168,17 @@ public class EnvObject : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if(objRb != null && !collision.collider.CompareTag("Bullet") &&objRb.velocity.sqrMagnitude > collideSoundVelocity*collideSoundVelocity)
+        {
+            float sqrVelo = Mathf.Clamp(objRb.velocity.sqrMagnitude, collideSoundVelocity * collideSoundVelocity, collideSoundVelocity * collideSoundVelocity * 25);
+            float veloRate = sqrVelo / (collideSoundVelocity * collideSoundVelocity * 25);
+            ImpactMarkManager.MakeImpactSound(collision.contacts[0].point, objectType, veloRate);
+        }
+    }
 }
-public enum EnvObjType { general, dirt, metal, wood, concrete}
+public enum EnvObjType { general, dirt, metal, wood, concrete, glass}
 
 public class TerrainManager : MonoBehaviour
 {

@@ -132,6 +132,11 @@ public class GeneralBullet : MonoBehaviour
                         EnvObjType.general);
                         
                 }
+                else if(collision.collider.GetType() == typeof(BoxCollider))
+                {
+                    ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
+                    EnvObjType.glass);
+                }
                 else
                 {
                     ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal,
