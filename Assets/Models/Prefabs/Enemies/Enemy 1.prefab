@@ -477,7 +477,7 @@ MonoBehaviour:
   permanentCoverObject: {fileID: 0}
   patrolPoints: []
   lastPatrolIndex: 0
-  patrolWaitDuration: 0
+  patrolWaitDuration: 4
   noticeDuration: 1.5
   suspectedDuration: 3
   alertedCoverCheckCooldown: 10
