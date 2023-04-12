@@ -22,6 +22,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject areYouSurePanel;
     public GameObject mainButtonsPanel;
     public GameObject developerPanel;
+    public GameObject settingsPanel;
 
     [Header("Texts")]
     public TextMeshProUGUI areYouSureText;
@@ -54,11 +55,11 @@ public class MainMenuManager : MonoBehaviour
     {
         if(question == AreYouSureQuestion.newGame && areYouSurePanel.activeInHierarchy)
         {
-            areYouSurePanel.SetActive(false);
+            ChangePanels(PanelType.none);
         }
         else
         {
-            areYouSurePanel.SetActive(true);
+            ChangePanels(PanelType.areYouSure);
             areYouSureText.text = "Are you sure you want to start a new game by deleting the previous save game?";
         }
         question = AreYouSureQuestion.newGame;
@@ -68,11 +69,11 @@ public class MainMenuManager : MonoBehaviour
     {
         if (question == AreYouSureQuestion.exitGame && areYouSurePanel.activeInHierarchy)
         {
-            areYouSurePanel.SetActive(false);
+            ChangePanels(PanelType.none);
         }
         else
         {
-            areYouSurePanel.SetActive(true);
+            ChangePanels(PanelType.areYouSure);
             areYouSureText.text = "Are you sure you want to exit the game?";
         }
         question = AreYouSureQuestion.exitGame;
@@ -88,7 +89,64 @@ public class MainMenuManager : MonoBehaviour
         hasLoadedGame = true;
         SceneManager.LoadScene("Level 1");
     }
+    public void AreYouSureYES()
+    {
+        if(question == AreYouSureQuestion.newGame)
+        {
+            NewGameStart();
+        }
+        else
+        {
+            Application.Quit();
+        }
+    }
+    public void AreYouSureNO()
+    {
+        ChangePanels(PanelType.none);
+    }
+    public void DeveloperButton(bool onOff)
+    {
+        if (onOff)
+        {
+            ChangePanels(PanelType.developer);
+        }
+        else
+        {
+            ChangePanels(PanelType.none);
+        }
+    }
 
+    void ChangePanels(PanelType newPanelState)
+    {
+        switch (newPanelState)
+        {
+            case PanelType.none:
+                areYouSurePanel.SetActive(false);
+                mainButtonsPanel.SetActive(true);
+                developerPanel.SetActive(false);
+                settingsPanel.SetActive(false);
+                break;
+            case PanelType.areYouSure:
+                areYouSurePanel.SetActive(true);
+                mainButtonsPanel.SetActive(false);
+                developerPanel.SetActive(false);
+                settingsPanel.SetActive(false);
+                break;
+            case PanelType.settings:
+                areYouSurePanel.SetActive(false);
+                mainButtonsPanel.SetActive(false);
+                developerPanel.SetActive(false);
+                settingsPanel.SetActive(true);
+                break;
+            case PanelType.developer:
+                areYouSurePanel.SetActive(false);
+                mainButtonsPanel.SetActive(false);
+                developerPanel.SetActive(true);
+                settingsPanel.SetActive(false);
+                break;
+        }
+    }
     #endregion
 }
-public enum AreYouSureQuestion { newGame, exitGame}
+enum AreYouSureQuestion { newGame, exitGame}
+enum PanelType { none, areYouSure, settings, developer}
