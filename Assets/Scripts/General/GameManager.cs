@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("State Bools")]
     public static PlayerState mainState;
-
+    
     [Header("Settings")]
     public static byte mouseSensitivity = 10;
     public static float generalSoundMultiplier;
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     [Header("General Numbers")]
     [HideInInspector] public static byte numberOfCamps = 4;
-    static string saveDataPath;
+    public static string saveDataPath;
 
     void Awake()
     {
@@ -63,6 +63,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        if (MainMenuManager.hasLoadedGame)
+        {
+            LoadGame();
+        }
+    }
 
     void Update()
     {

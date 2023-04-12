@@ -1,40 +1,40 @@
 {
   "mainState": 1,
   "playerPos": [
-    705.5177,
-    20.533329,
-    -90.64046
+    678.13916,
+    19.9747963,
+    -93.5259247
   ],
   "playerRot": [
-    -6.118262E-06,
-    256.990784,
-    7.67708752E-06
+    1.43730113E-05,
+    74.4994659,
+    -3.67136522E-06
   ],
   "playerHealth": 30000,
   "playerAmmoCounts": [
     180,
     180,
     54,
-    8,
+    12,
     30
   ],
   "playerCurrentAmmoCounts": [
     30,
-    19,
+    15,
     9,
     2,
     5
   ],
   "currentWeaponIndex": 1,
   "vehiclePos": [
-    709.8924,
-    21.3102627,
-    -66.70622
+    709.8452,
+    19.81054,
+    -66.70505
   ],
   "vehicleRot": [
-    0.4111535,
-    269.995483,
-    0.117015682
+    359.523438,
+    272.2699,
+    0.277121723
   ],
   "vehicleVelocity": [
     0.0,
@@ -170,7 +170,9 @@
     false,
     false,
     false,
-    true
+    false,
+    false,
+    false
   ],
   "envObjectsSubPartsDestroyed": [
     [
@@ -234,19 +236,35 @@
       false
     ],
     [
-      true,
-      true,
-      true,
       false,
       false,
-      true,
-      true,
-      true,
       false,
-      true,
       false,
-      true,
-      true
-    ]
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    null
   ]
 }
