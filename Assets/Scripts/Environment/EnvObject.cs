@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnvObject : MonoBehaviour
 {
-    public static float collideSoundVelocity = 2;
+    public static float collideSoundVelocity = 1.5f;
 
     [Header("General Obj Properties")]
     public EnvObjType objectType;
@@ -53,6 +53,11 @@ public class EnvObject : MonoBehaviour
                 }
             }
         }
+
+        if(gameObject.name == "Terrain")
+        {
+            StartCoroutine(AssignDestObjIndexCoroutine());
+        }
     }
 
     public void ReduceObjHealth(short damage)
@@ -97,7 +102,6 @@ public class EnvObject : MonoBehaviour
     void AddDestroyableToList(EnvObject destroyObj)
     {
         GameManager.AddToArray(destroyObj, ref destroyableObjects);
-        GameManager.AddToArray(destObjIndex, ref destObjIndexArray);
     }
 
     public static void SaveDestroyableObjects(GameData gameDataToUse)
@@ -168,6 +172,21 @@ public class EnvObject : MonoBehaviour
         }
     }
 
+    public IEnumerator AssignDestObjIndexCoroutine()
+    {
+        yield return null;
+        Transform[] destTransforms = new Transform[destroyableObjects.Length];
+        for(int index = destroyableObjects.Length-1; index >= 0; index--)
+        {
+            destTransforms[index] = destroyableObjects[index].transform;
+        }
+        GameManager.SortObjectArrayByDistance(ref destroyableObjects, destTransforms, GameManager.mainChar.position);
+        for(int index = destroyableObjects.Length - 1; index >= 0; index--)
+        {
+            destroyableObjects[index].destObjIndex = (short)index;
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if(objRb != null && !collision.collider.CompareTag("Bullet") &&objRb.velocity.sqrMagnitude > collideSoundVelocity*collideSoundVelocity)
@@ -175,6 +194,7 @@ public class EnvObject : MonoBehaviour
             float sqrVelo = Mathf.Clamp(objRb.velocity.sqrMagnitude, collideSoundVelocity * collideSoundVelocity, collideSoundVelocity * collideSoundVelocity * 25);
             float veloRate = sqrVelo / (collideSoundVelocity * collideSoundVelocity * 25);
             ImpactMarkManager.MakeImpactSound(collision.contacts[0].point, objectType, veloRate);
+            ReduceObjHealth((short)(sqrVelo * 0.6f));
         }
     }
 }

@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("State Bools")]
     public static PlayerState mainState;
-    
+
     [Header("Settings")]
     public static byte mouseSensitivity = 10;
     public static float generalSoundMultiplier;
@@ -190,12 +190,12 @@ public class GameManager : MonoBehaviour
     }
     public static void PauseGame()
     {
-        if(Time.timeScale == 1)
+        if (Time.timeScale == 1)
         {
             Time.timeScale = 0;
             mainCam.GetComponent<AudioListener>().enabled = false;
         }
-        else{
+        else {
             Time.timeScale = 1;
             mainCam.GetComponent<AudioListener>().enabled = true;
         }
@@ -266,8 +266,8 @@ public class GameManager : MonoBehaviour
         arrayToAdd[arrayToAdd.Length - 1] = obj;
     }
 
-    public static void IncreaseArray<T>(ref T[] arrayToInc, int increaseAmmount = 1){
-        if(arrayToInc == null || arrayToInc.Length == 0)
+    public static void IncreaseArray<T>(ref T[] arrayToInc, int increaseAmmount = 1) {
+        if (arrayToInc == null || arrayToInc.Length == 0)
         {
             arrayToInc = new T[1];
         }
@@ -278,6 +278,33 @@ public class GameManager : MonoBehaviour
             arrayToInc = new T[arrayToInc.Length + increaseAmmount];
             CopyArray(holderArray, ref arrayToInc);
         }
+    }
+
+    public static void SortObjectArrayByDistance<T>(ref T[] arrayToSort, Transform[] arrayToTakeDistance,Vector3 posToTakeDistance)
+    {
+        bool hasSwapped = true;
+        T holderObj;
+        Transform holderTransform;
+        while (hasSwapped)
+        {
+            hasSwapped = false;
+            for (short index = 0, limit = (short)(arrayToSort.Length - 1); index < limit; index++)
+            {
+                if ((arrayToTakeDistance[index].position - posToTakeDistance).sqrMagnitude >
+                    (arrayToTakeDistance[index + 1].position - posToTakeDistance).sqrMagnitude)
+                {
+                    holderObj = arrayToSort[index];
+                    arrayToSort[index] = arrayToSort[index + 1];
+                    arrayToSort[index + 1] = holderObj;
+                    hasSwapped = true;
+
+                    holderTransform = arrayToTakeDistance[index];
+                    arrayToTakeDistance[index] = arrayToTakeDistance[index + 1];
+                    arrayToTakeDistance[index + 1] = holderTransform;
+                }
+            }
+        }
+
     }
 
 

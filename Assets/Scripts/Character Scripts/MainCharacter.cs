@@ -327,7 +327,7 @@ public class MainCharacter : GeneralCharacter
             if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
             {
                 currentWeapon.Reload();
-                Invoke("WaitToSetAmmoUI", currentWeapon.reloadTime + 0.01f);
+                StartCoroutine(WaitToSetAmmoUI());
             }
 
             if(CameraScript.scrollInput > 0 && currentWeapon.weaponType == WeaponType.SR_1 && !currentWeapon.zoomedAlready)
@@ -491,8 +491,9 @@ public class MainCharacter : GeneralCharacter
         }
     }
 
-    void WaitToSetAmmoUI()
+    IEnumerator WaitToSetAmmoUI()
     {
+        yield return null;
         GameManager.uiManager.SetAmmoUI();
     }
 

@@ -54,7 +54,7 @@ MonoBehaviour:
   destroyable: 1
   breakable: 0
   impactMarkable: 1
-  healthOfObject: 5
+  healthOfObject: 25
   mainObj: {fileID: 6013468219715542248}
   subPartObjs: []
   mainCollider: {fileID: 3724707017115957314}

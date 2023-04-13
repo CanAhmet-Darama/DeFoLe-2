@@ -152,7 +152,7 @@ public class LevelOfDetailManager : MonoBehaviour
             perspectiveAngle = 30;
         }
 
-        if(AngleBetweenCam > perspectiveAngle && sqrDistancePlayer > 225)
+        if(AngleBetweenCam > perspectiveAngle && sqrDistancePlayer > 400)
         {
             if(!isDeactivated)
             {
