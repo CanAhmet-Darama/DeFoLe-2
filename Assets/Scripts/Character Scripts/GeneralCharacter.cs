@@ -424,7 +424,9 @@ public class GeneralCharacter : MonoBehaviour
         harmedChar.DeathCheck();
         if (harmedChar.isEnemy)
         {
-            harmedChar.GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+            EnemyScript enemyS = harmedChar.GetComponent<EnemyScript>();
+            enemyS.ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+            EnemyScript.MakeEnemyVoice(enemyS, 1);
         }
         else
         {
@@ -448,6 +450,7 @@ public class GeneralCharacter : MonoBehaviour
             enemyS.navAgent.enabled = false;
             enemyS.enabled = false;
             enemyS.EnableRagdoll();
+            EnemyScript.MakeEnemyVoice(enemyS, 2);
         }
         else
         {

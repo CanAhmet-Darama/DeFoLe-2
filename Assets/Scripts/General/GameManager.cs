@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     [Header("Settings")]
     public static byte mouseSensitivity = 10;
     public static float generalSoundMultiplier;
+    public static float grassDisappearDistance;
+    public static float detailDiminishMultiplier;
 
     [Header("Instances")]
     public static Transform mainCam;
@@ -185,6 +187,18 @@ public class GameManager : MonoBehaviour
         EnemyManager.LoadAllEnemies(gameDataForLoad);
         GameData.LoadFieldsOfCharAndVehicle(gameDataForLoad);
         GameData.LoadEnvironmentObjects(gameDataForLoad);
+    }
+    public static void PauseGame()
+    {
+        if(Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+            mainCam.GetComponent<AudioListener>().enabled = false;
+        }
+        else{
+            Time.timeScale = 1;
+            mainCam.GetComponent<AudioListener>().enabled = true;
+        }
     }
 
     #region General Functions

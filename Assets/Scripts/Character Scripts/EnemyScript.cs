@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -87,8 +89,10 @@ public class EnemyScript : GeneralCharacter
     [Header("Enemy Instance References")]
     public GameObject enemyHitboxes;
     public GameObject groundChecker;
-    [HideInInspector] public GameObject[] weaponMeshes;  
+    [HideInInspector] public GameObject[] weaponMeshes;
 
+    [Header("Other Stuff")]
+    [HideInInspector] public bool createdVoiceAlready;
 
     void Start()
     {
@@ -358,6 +362,11 @@ public class EnemyScript : GeneralCharacter
                 shouldFire = true;
                 if (patrolWaitCoroutine != null) StopCoroutine(patrolWaitCoroutine);
                 enteredNewState = false;
+
+                if (!EnemyManager.campsAlerted[campOfEnemy - 1])
+                {
+                    MakeEnemyVoice(this, 0);
+                }
             }
             if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
             {
@@ -841,5 +850,41 @@ public class EnemyScript : GeneralCharacter
         mainColl.enabled = true;
         rb.isKinematic = false;
         navAgent.enabled = true;
+    }
+
+
+    /// <summary>
+    /// 0 = AlertVoice, 1 <-> Last - 1 = HurtVoice,  Last = DeathVoice
+    /// </summary>
+    public static void MakeEnemyVoice(EnemyScript enemyToVoice, byte voiceType)
+    {
+        if (!enemyToVoice.createdVoiceAlready)
+        {
+            bool makeSound = true;
+            short soundIndex = 0;
+            float volumeToVoice = 1;
+            switch (voiceType)
+            {
+                case 0:
+                    break;
+                case 1:
+                    soundIndex = (short)Random.Range(1, EnemyManager.enemyVoices.Length - 1);
+                    volumeToVoice = 0.4f;
+                    break;
+                case 2:
+                    soundIndex = (short)(EnemyManager.enemyVoices.Length - 1);
+                    volumeToVoice = 0.35f;
+                    break;
+                default:makeSound = false;
+                    break;
+            }
+            if (makeSound)
+            {
+                EnemyManager.enemiesVoiceSource.transform.position = enemyToVoice.transform.position + new Vector3(0, enemyToVoice.mainColl.height / 4, 0);
+                EnemyManager.enemiesVoiceSource.PlayOneShot(EnemyManager.enemyVoices[soundIndex], volumeToVoice);
+                enemyToVoice.createdVoiceAlready = true;
+                GameManager.enemyManager.StartCoroutine(GameManager.enemyManager.SetEnemyCanMakeVoice(enemyToVoice, 0.5f));
+            }
+        }
     }
 }

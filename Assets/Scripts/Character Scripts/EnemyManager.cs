@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public static AudioClip[] enemyVoices;
+    public static AudioSource enemiesVoiceSource;
+
+    [SerializeField] AudioClip[] _enemyVoices;
+    [SerializeField] AudioSource _enemiesVoiceSource;
+
     public static bool[] campsAlerted = new bool[GameManager.numberOfCamps];
     public static bool[][] enemiesCanSee;
     public static bool[][] enemiesDead;
@@ -25,6 +31,10 @@ public class EnemyManager : MonoBehaviour
         enemies = new EnemyScript[GameManager.numberOfCamps][];
         enemyManagerIns = this;
         StartCoroutine(AreEnemiesSeeingTarget());
+
+        enemyVoices = _enemyVoices;
+        enemiesVoiceSource = _enemiesVoiceSource;
+
     }
 
     // Adds enemy to the given camp list
@@ -261,5 +271,12 @@ public class EnemyManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public IEnumerator SetEnemyCanMakeVoice(EnemyScript enemyScr, float durat)
+    {
+        yield return new WaitForSeconds(durat);
+        if(enemyScr != null)
+        enemyScr.createdVoiceAlready = false;
     }
 }
