@@ -9,7 +9,6 @@ public class InteractableSpecial : EnvObject
     public short magazineCount;
     public short healthAmount;
     public short interObjIndex;
-    public static short[] interObjIndexArray;
 
     public static InteractableSpecial[] interactableObjects = new InteractableSpecial[0];
 
@@ -23,6 +22,10 @@ public class InteractableSpecial : EnvObject
     void Start()
     {
         AddInteractableToList(this);
+        if(gameObject.name == "Ammo Box" && transform.parent.name == "Start Point")
+        {
+            StartCoroutine(AssignInteractObjIndexCoroutine());
+        }
     }
 
     void Update()
@@ -33,8 +36,22 @@ public class InteractableSpecial : EnvObject
     void AddInteractableToList(InteractableSpecial interactObj)
     {
         GameManager.AddToArray(interactObj, ref interactableObjects);
-        GameManager.AddToArray(interactObj.interObjIndex, ref interObjIndexArray);
     }
+    public IEnumerator AssignInteractObjIndexCoroutine()
+    {
+        yield return null;
+        Transform[] interactTransforms = new Transform[interactableObjects.Length];
+        for (int index = interactableObjects.Length - 1; index >= 0; index--)
+        {
+            interactTransforms[index] = interactableObjects[index].transform;
+        }
+        GameManager.SortObjectArrayByDistance(ref interactableObjects, interactTransforms, Vector3.zero);
+        for (int index = interactableObjects.Length - 1; index >= 0; index--)
+        {
+            interactableObjects[index].interObjIndex = (short)index;
+        }
+    }
+
 
     public static void SaveInteractableObjects(GameData gameDataToUse)
     {
@@ -43,7 +60,7 @@ public class InteractableSpecial : EnvObject
         for(int i = interactableObjects.Length - 1; i >= 0; i--)
         {
             if (interactableObjects[i] == null)
-            takenObjArray[interObjIndexArray[i]] = true;
+            takenObjArray[interactableObjects[i].interObjIndex] = true;
             else
             {
                 takenObjArray[interactableObjects[i].interObjIndex] = false;
@@ -54,7 +71,7 @@ public class InteractableSpecial : EnvObject
     {
         for (int i = interactableObjects.Length - 1; i >= 0; i--)
         {
-            if (gameDataToUse.interactablesTaken[interObjIndexArray[i]])
+            if (gameDataToUse.interactablesTaken[interactableObjects[i].interObjIndex])
             {
                 if(interactableObjects[i] != null)
                 Destroy(interactableObjects[i].gameObject);

@@ -25,7 +25,6 @@ public class EnvObject : MonoBehaviour
 
     [Header("Destructable Index Things")]
     public short destObjIndex;
-    public static short[] destObjIndexArray;
 
     public static EnvObject[] destroyableObjects;
 
@@ -113,9 +112,9 @@ public class EnvObject : MonoBehaviour
         {
             if (destroyableObjects[i].breakable)
             {
-                gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]] 
+                gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex] 
                     = new bool[destroyableObjects[i].subPartObjs.Length];
-                bool[] destSubArray = gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]];
+                bool[] destSubArray = gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex];
                 for(int j = destSubArray.Length - 1; j >= 0; j--)
                 {
                     if (destroyableObjects[i].subPartObjs[j] == null)
@@ -132,10 +131,10 @@ public class EnvObject : MonoBehaviour
 
 
             if (destroyableObjects[i].hasDestructed)
-                destroyedArray[destObjIndexArray[i]] = true;
+                destroyedArray[destroyableObjects[i].destObjIndex] = true;
             else
             {
-                destroyedArray[destObjIndexArray[i]] = false;
+                destroyedArray[destroyableObjects[i].destObjIndex] = false;
             }
         }
     }
@@ -143,7 +142,7 @@ public class EnvObject : MonoBehaviour
     {
         for (int i = destroyableObjects.Length - 1; i >= 0; i--)
         {
-            if (gameDataToUse.envObjectsDestroyed[destObjIndexArray[i]])
+            if (gameDataToUse.envObjectsDestroyed[destroyableObjects[i].destObjIndex])
             {
                 if (destroyableObjects[i] != null)
                 {
@@ -151,14 +150,17 @@ public class EnvObject : MonoBehaviour
                     destroyableObjects[i].objRb.isKinematic = true;
                     destroyableObjects[i].hasDestructed = true;
                     Destroy(destroyableObjects[i].mainObj);
-                    destroyableObjects[i].navObstacle.enabled = false;
+                    if(destroyableObjects[i].navObstacle != null)
+                    {
+                        destroyableObjects[i].navObstacle.enabled = false;
+                    }
                 }
 
-                if (gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]] != null)
+                if (gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex] != null)
                 {
-                    for(int j = gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]].Length - 1; j >= 0; j--)
+                    for(int j = gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex].Length - 1; j >= 0; j--)
                     {
-                        if (gameDataToUse.envObjectsSubPartsDestroyed[destObjIndexArray[i]][j])
+                        if (gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex][j])
                         {
                             Destroy(destroyableObjects[i].subPartObjs[j]);
                         }
@@ -180,7 +182,7 @@ public class EnvObject : MonoBehaviour
         {
             destTransforms[index] = destroyableObjects[index].transform;
         }
-        GameManager.SortObjectArrayByDistance(ref destroyableObjects, destTransforms, GameManager.mainChar.position);
+        GameManager.SortObjectArrayByDistance(ref destroyableObjects, destTransforms, Vector3.zero);
         for(int index = destroyableObjects.Length - 1; index >= 0; index--)
         {
             destroyableObjects[index].destObjIndex = (short)index;
