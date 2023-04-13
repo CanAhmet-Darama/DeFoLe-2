@@ -80,6 +80,7 @@ MonoBehaviour:
   objRb: {fileID: 0}
   navObstacle: {fileID: 0}
   isSubPartItself: 0
+  destObjIndex: 0
 --- !u!114 &1964107750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +116,8 @@ MonoBehaviour:
   objectOrEnemy: 1
   detailDiminishDistance: 75
   sqrDistancePlayer: 0
+  deactivateMeshOnLongDistance: 0
+  longDistance: 0
   meshesDetailed:
   - {fileID: 5885615773190089443}
   - {fileID: 4232235017141092675}
@@ -127,10 +130,12 @@ MonoBehaviour:
   - {fileID: 8973998999002854009}
   - {fileID: 2479606145825310746}
   isDetailedNow: 0
+  isDeactivated: 0
   skinnedMesh: {fileID: 0}
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 0}
+  mainCamScr: {fileID: 0}
 --- !u!1 &3991644397028331717
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,8 +391,12 @@ PrefabInstance:
       value: Leaves 1 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
@@ -469,8 +478,12 @@ PrefabInstance:
       value: Leaves 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
@@ -552,8 +565,12 @@ PrefabInstance:
       value: Leaves 1 (3)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
@@ -639,8 +656,12 @@ PrefabInstance:
       value: Leaves 1 (5)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
@@ -722,8 +743,12 @@ PrefabInstance:
       value: Leaves 1 (4)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
@@ -805,8 +830,12 @@ PrefabInstance:
       value: Leaves 1 (2)
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 95
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0339006b9ede66d4a84b77dd5f109385, type: 3}

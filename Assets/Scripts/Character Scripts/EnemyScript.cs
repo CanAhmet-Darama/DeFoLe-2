@@ -20,7 +20,7 @@ public class EnemyScript : GeneralCharacter
     Transform mainChar;
     Transform mainCar;
     MainCharacter mainCharScript;
-    [Range(1, 3)] public byte campOfEnemy;
+    [Range(1, 4)] public byte campOfEnemy;
     [HideInInspector]public byte enemyNumCode;
     public short enemyStaticIndex;
 

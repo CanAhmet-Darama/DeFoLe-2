@@ -111,7 +111,7 @@ public class StairCheckScript : MonoBehaviour
             normalsNotSloped = true;
             for(int i = normalAngles.Length - 1; i >= 0; i--)
             {
-                if (normalAngles[i] < 80)
+                if (normalAngles[i] < 75)
                 {
                     normalsNotSloped = false;
                     break;

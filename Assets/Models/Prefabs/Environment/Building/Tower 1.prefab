@@ -578,6 +578,10 @@ PrefabInstance:
       value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: -7036208232964940657, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7036208232964940657, guid: 45290bb20b0a5c44aaed4e42d987f0c5, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -647,6 +651,7 @@ MonoBehaviour:
   objRb: {fileID: 0}
   navObstacle: {fileID: 0}
   isSubPartItself: 0
+  destObjIndex: 0
 --- !u!114 &3264454342658269954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,3 +722,4 @@ MonoBehaviour:
   objRb: {fileID: 0}
   navObstacle: {fileID: 0}
   isSubPartItself: 0
+  destObjIndex: 0

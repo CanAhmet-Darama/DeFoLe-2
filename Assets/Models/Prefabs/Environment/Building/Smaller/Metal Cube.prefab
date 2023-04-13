@@ -19,7 +19,7 @@ GameObject:
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5402853453340486155
 Transform:
@@ -123,6 +123,7 @@ MonoBehaviour:
   objRb: {fileID: 0}
   navObstacle: {fileID: 0}
   isSubPartItself: 0
+  destObjIndex: 0
 --- !u!114 &4252737534074278395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,15 +139,19 @@ MonoBehaviour:
   objectOrEnemy: 1
   detailDiminishDistance: 10
   sqrDistancePlayer: 0
+  deactivateMeshOnLongDistance: 0
+  longDistance: 0
   meshesDetailed:
   - {fileID: 5402853453340486157}
   meshesNotDetailed:
   - {fileID: 839692669563016604}
   isDetailedNow: 0
+  isDeactivated: 0
   skinnedMesh: {fileID: 0}
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 0}
+  mainCamScr: {fileID: 0}
 --- !u!1 &8936690998166380800
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +170,7 @@ GameObject:
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4568501994707782668
 Transform:
@@ -268,3 +273,4 @@ MonoBehaviour:
   objRb: {fileID: 0}
   navObstacle: {fileID: 0}
   isSubPartItself: 0
+  destObjIndex: 0

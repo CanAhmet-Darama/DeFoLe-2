@@ -476,7 +476,7 @@ public class MainCharacter : GeneralCharacter
         for(int i = GameManager.enemyCamps.Length - 1; i >= 0; i--)
         {
             float newCampDist =GameManager.SqrDistance(GameManager.enemyCamps[i].transform.position, playerTransform.position);
-            if (newCampDist < GameManager.SqrDistance(GameManager.enemyCamps[closestCamp].transform.position, playerTransform.position))
+            if (newCampDist < GameManager.SqrDistance(GameManager.enemyCamps[closestCamp - 1].transform.position, playerTransform.position))
             {
                 closestCamp = (byte)(i+1);
                 if(newCampDist < 150 * 150)
