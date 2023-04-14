@@ -1,8 +1,11 @@
+using OpenCover.Framework.Model;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
@@ -14,7 +17,12 @@ public class SettingsManager : MonoBehaviour
     [Header("Sub Things")]
     public static Button settingsExitButton;
     public static TMP_Dropdown resolutionDropdown;
+    public static TMP_Dropdown qualityDropdown;
     public static Toggle fullScreenToggle;
+    public static Slider brightnessSlider;
+    public static Slider volumeSlider;
+    public static Slider mouseSensitivitySlider;
+
 
     Resolution[] resolutions;
 
@@ -39,15 +47,33 @@ public class SettingsManager : MonoBehaviour
 
         settingsExitButton = settingsPanel.transform.Find("Exit Settings Panel").GetComponent<Button>();
         resolutionDropdown = settingsPanel.transform.Find("Resolution Dropdown").GetComponent<TMP_Dropdown>();
+        qualityDropdown = settingsPanel.transform.Find("Quality Dropdown").GetComponent<TMP_Dropdown>();
         fullScreenToggle = settingsPanel.transform.Find("FullScreen Toggle").GetComponent<Toggle>();
+        brightnessSlider = settingsPanel.transform.Find("Brightness Setter").GetComponentInChildren<Slider>();
+        volumeSlider = settingsPanel.transform.Find("Volume Setter").GetComponentInChildren<Slider>();
+        mouseSensitivitySlider = settingsPanel.transform.Find("Mouse Sensitivity Setter").GetComponentInChildren<Slider>();
 
-        settingsExitButton.onClick.AddListener(FindAnyObjectByType<MainMenuManager>().JustMainButtons);
+        settingsExitButton.onClick.AddListener(ExitSettingsMenu);
+        qualityDropdown.onValueChanged.AddListener(SetQuality);
+        fullScreenToggle.onValueChanged.AddListener(SetFullscreen);
+        brightnessSlider.onValueChanged.AddListener(SetBrightness);
+        volumeSlider.onValueChanged.AddListener(SetVolume);
+        mouseSensitivitySlider.onValueChanged.AddListener(SetMouseSensitivity);
 
-        if (resolutionDropdown == null)
+    }
+
+    public void ExitSettingsMenu()
+    {
+        if(SceneManager.GetActiveScene().name == "Main Menu")
         {
-            Debug.Log("NULL");
+            FindAnyObjectByType<MainMenuManager>().JustMainButtons();
+        }
+        else
+        {
+            GameManager.uiManager.ChangePanels(PanelType.none);
         }
     }
+
 
     void ResolutionStart()
     {
@@ -56,12 +82,46 @@ public class SettingsManager : MonoBehaviour
 
         resolutionDropdown.ClearOptions();
 
+        byte currentResoIndex = 0;
         List<string> resolutionOptions = new List<string>();
         for (int i = 0, z = resolutions.Length; i < z; i++)
         {
             resolutionOptions.Add(resolutions[i].width + " x " + resolutions[i].height);
+            if(resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            {
+                currentResoIndex = (byte)i;
+            }
         }
         resolutionDropdown.AddOptions(resolutionOptions);
+        resolutionDropdown.value = currentResoIndex;
 
+        UnityAction<int> onValueChanged = new UnityAction<int>(SetResolution);
+        resolutionDropdown.onValueChanged.RemoveAllListeners();
+        resolutionDropdown.onValueChanged.AddListener(onValueChanged);
+    }
+    public void SetResolution(int resolutionIndex)
+    {
+        Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, true);
+        //Debug.Log("Resolution set to : " + resolutions[resolutionIndex].width + " x " + resolutions[resolutionIndex].height);
+    }
+    public void SetQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex);
+    }
+    public void SetFullscreen(bool fullscreenEnabled)
+    {
+        Screen.fullScreen = fullscreenEnabled;
+    }
+    public void SetBrightness(float brightnessValue)
+    {
+        Screen.brightness = brightnessValue;
+    }
+    public void SetVolume(float volumeValue)
+    {
+        AudioListener.volume = volumeValue;
+    }
+    public void SetMouseSensitivity(float newSensitivity)
+    {
+        GameManager.mouseSensitivity = newSensitivity;
     }
 }

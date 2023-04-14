@@ -90,7 +90,7 @@ public class GeneralWeapon : MonoBehaviour
             bulletPool[i - 1].GetComponent<GeneralBullet>().itsOwnerWeapon = this;
 
         }
-        gunAudioSource.volume = 0.05f;
+        gunAudioSource.volume = 0.25f;
         currentAmmo = maxAmmo;
 
     }

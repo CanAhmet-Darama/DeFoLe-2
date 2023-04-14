@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public static PlayerState mainState;
 
     [Header("Settings")]
-    public static byte mouseSensitivity = 10;
+    public static float mouseSensitivity = 10;
     public static float generalSoundMultiplier;
     public static float grassDisappearDistance;
     public static float detailDiminishMultiplier;
