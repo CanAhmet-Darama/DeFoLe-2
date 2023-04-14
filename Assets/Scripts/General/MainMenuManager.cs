@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenuManager : MonoBehaviour
+public class MainMenuManager : UI_Manager
 {
+    [Header("MAIN MENU")]
     [Header("Buttons")]
     public Button newGameButton;
     public Button continueGameButton;
@@ -22,7 +23,6 @@ public class MainMenuManager : MonoBehaviour
     public GameObject areYouSurePanel;
     public GameObject mainButtonsPanel;
     public GameObject developerPanel;
-    public GameObject settingsPanel;
 
     [Header("Texts")]
     public TextMeshProUGUI areYouSureText;
@@ -35,6 +35,7 @@ public class MainMenuManager : MonoBehaviour
 
     void Start()
     {
+
         GameManager.saveDataPath = Application.dataPath + "/Saves/SaveData.json";
         hasSavedGame = File.Exists(GameManager.saveDataPath);
         if(!hasSavedGame )
@@ -46,20 +47,24 @@ public class MainMenuManager : MonoBehaviour
         {
             continueGameText.text = "CONTINUE";
             continueGameText.color = Color.white;
-
         }
+
     }
 
     #region Button Functions
+    public void JustMainButtons()
+    {
+        ChangePanels(PanelTypeMainMenu.none);
+    }
     public void NewGameAreYouSure()
     {
         if(question == AreYouSureQuestion.newGame && areYouSurePanel.activeInHierarchy)
         {
-            ChangePanels(PanelType.none);
+            ChangePanels(PanelTypeMainMenu.none);
         }
         else
         {
-            ChangePanels(PanelType.areYouSure);
+            ChangePanels(PanelTypeMainMenu.areYouSure);
             areYouSureText.text = "Are you sure you want to start a new game by deleting the previous save game?";
         }
         question = AreYouSureQuestion.newGame;
@@ -69,11 +74,11 @@ public class MainMenuManager : MonoBehaviour
     {
         if (question == AreYouSureQuestion.exitGame && areYouSurePanel.activeInHierarchy)
         {
-            ChangePanels(PanelType.none);
+            ChangePanels(PanelTypeMainMenu.none);
         }
         else
         {
-            ChangePanels(PanelType.areYouSure);
+            ChangePanels(PanelTypeMainMenu.areYouSure);
             areYouSureText.text = "Are you sure you want to exit the game?";
         }
         question = AreYouSureQuestion.exitGame;
@@ -102,51 +107,48 @@ public class MainMenuManager : MonoBehaviour
     }
     public void AreYouSureNO()
     {
-        ChangePanels(PanelType.none);
+        ChangePanels(PanelTypeMainMenu.none);
     }
-    public void DeveloperButton(bool onOff)
+    public void DeveloperButton()
     {
-        if (onOff)
-        {
-            ChangePanels(PanelType.developer);
-        }
-        else
-        {
-            ChangePanels(PanelType.none);
-        }
+        ChangePanels(PanelTypeMainMenu.developer);
+    }
+    public override void SettingsButton()
+    {
+        ChangePanels(PanelTypeMainMenu.settings);
     }
 
-    void ChangePanels(PanelType newPanelState)
+    void ChangePanels(PanelTypeMainMenu newPanelState)
     {
         switch (newPanelState)
         {
-            case PanelType.none:
+            case PanelTypeMainMenu.none:
                 areYouSurePanel.SetActive(false);
                 mainButtonsPanel.SetActive(true);
                 developerPanel.SetActive(false);
-                settingsPanel.SetActive(false);
+                SettingsManager.settingsPanel.SetActive(false);
                 break;
-            case PanelType.areYouSure:
+            case PanelTypeMainMenu.areYouSure:
                 areYouSurePanel.SetActive(true);
                 mainButtonsPanel.SetActive(false);
                 developerPanel.SetActive(false);
-                settingsPanel.SetActive(false);
+                SettingsManager.settingsPanel.SetActive(false);
                 break;
-            case PanelType.settings:
+            case PanelTypeMainMenu.settings:
                 areYouSurePanel.SetActive(false);
                 mainButtonsPanel.SetActive(false);
                 developerPanel.SetActive(false);
-                settingsPanel.SetActive(true);
+                SettingsManager.settingsPanel.SetActive(true);
                 break;
-            case PanelType.developer:
+            case PanelTypeMainMenu.developer:
                 areYouSurePanel.SetActive(false);
                 mainButtonsPanel.SetActive(false);
                 developerPanel.SetActive(true);
-                settingsPanel.SetActive(false);
+                SettingsManager.settingsPanel.SetActive(false);
                 break;
         }
     }
     #endregion
 }
 enum AreYouSureQuestion { newGame, exitGame}
-enum PanelType { none, areYouSure, settings, developer}
+enum PanelTypeMainMenu { none, areYouSure, settings, developer}

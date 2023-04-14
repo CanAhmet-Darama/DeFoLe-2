@@ -11,6 +11,8 @@ public class UI_Manager : MonoBehaviour
     public static bool isLookingInteractable;
     public static InteractableForUI interactionType;
 
+    public static Canvas mainCanvas;
+
     [Header("Texts")]
     public TextMeshProUGUI curAmmoText;
     public TextMeshProUGUI totalAmmoText;
@@ -147,5 +149,27 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
+    #region Button Functions
+    public virtual void SettingsButton()
+    {
+        ChangePanels(PanelType.settings);
+    }
+
+    #endregion
+
+    public virtual void ChangePanels(PanelType pType)
+    {
+        switch (pType)
+        {
+            case PanelType.none:
+                //settingsPanel.SetActive(false);
+                break;
+            case PanelType.settings:
+                //settingsPanel.SetActive(true);
+                break;
+        }
+    }
+
     public enum InteractableForUI { mainCar, healthPack, ammoPack}
 }
+public enum PanelType { none,settings}

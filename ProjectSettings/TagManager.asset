@@ -8,6 +8,7 @@ TagManager:
   - Vehicle
   - Bullet
   - Enemy
+  - Interface
   layers:
   - Default
   - TransparentFX
