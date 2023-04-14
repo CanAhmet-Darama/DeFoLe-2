@@ -58,10 +58,12 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
+  destObjIndex: 0
   interactType: 1
-  magazineCount: 3
+  magazineCount: 2
   healthAmount: 0
   interObjIndex: 0
   pickUpSound: {fileID: 8300000, guid: dfd3efbb441fbd245991851898e54ad6, type: 3}

@@ -29,7 +29,7 @@ public class AimManager : MonoBehaviour
     public bool isReloading;
     Coroutine willQuitAimingCompletely;
 
-    float lerpOrSnapSpeed = 0.04f;
+    float lerpOrSnapSpeed = 0.05f;
 
     [SerializeField]bool userIsPlayer;
 

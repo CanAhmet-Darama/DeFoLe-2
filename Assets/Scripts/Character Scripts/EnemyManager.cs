@@ -31,6 +31,7 @@ public class EnemyManager : MonoBehaviour
         enemies = new EnemyScript[GameManager.numberOfCamps][];
         enemyManagerIns = this;
         StartCoroutine(AreEnemiesSeeingTarget());
+        StartCoroutine(AssignEnemyStaticIndexCoroutine());
 
         enemyVoices = _enemyVoices;
         enemiesVoiceSource = _enemiesVoiceSource;
@@ -99,6 +100,26 @@ public class EnemyManager : MonoBehaviour
             enemyManagerIns.StartCoroutine(SortCoversByDistance(campNumber));
         }
     }
+
+    public IEnumerator AssignEnemyStaticIndexCoroutine()
+    {
+        yield return null;
+        for(short campIndex = (short)(GameManager.enemyCamps.Length-1); campIndex >= 0; campIndex--)
+        {
+            Transform[] enemyTransforms = new Transform[enemies[campIndex].Length];
+            for (int index = enemies[campIndex].Length - 1; index >= 0; index--)
+            {
+                enemyTransforms[index] = enemies[campIndex][index].transform;
+            }
+            GameManager.SortObjectArrayByDistance(ref enemies[campIndex], enemyTransforms, Vector3.zero);
+            for (int index = enemies[campIndex].Length - 1; index >= 0; index--)
+            {
+                enemies[campIndex][index].enemyStaticIndex = (short)index;
+            }
+
+        }
+    }
+
 
     public static void CheckAnyoneInCampCanSeeTarget()
     {

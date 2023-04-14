@@ -23,6 +23,7 @@ public class CameraScript : MonoBehaviour
     [SerializeField] Transform camPointOnFoot;
     [SerializeField] Vector3 offsetCharPivot;
     [SerializeField] Vector3 offsetCharFollow;
+    MainCharacter mainCharScr;
     float smoothTimeOnFoot = 0.1f;
 
     [Header("Sound Stuff")]
@@ -50,7 +51,8 @@ public class CameraScript : MonoBehaviour
     void Start()
     {
         freeLookPivotCar.localPosition = offsetVehicle;
-        mainChar.GetComponent<MainCharacter>().charMoving = false;
+        mainCharScr = mainChar.GetComponent<MainCharacter>();
+        mainCharScr.charMoving = false;
         CamScript = GetComponent<Camera>();
         defaultFOV = CamScript.fieldOfView;
 
@@ -144,7 +146,13 @@ public class CameraScript : MonoBehaviour
     }
     void CamFollowMainCharacter()
     {
-        camPointOnFoot.position = Vector3.SmoothDamp(camPointOnFoot.transform.position, mainChar.position, ref velocity, smoothTimeOnFoot);
+        Vector3 crouchOrNotOffset = Vector3.zero;
+        if (mainCharScr.isCrouching)
+        {
+            crouchOrNotOffset = new(0, -0.75f, 0);
+        }
+        camPointOnFoot.position = Vector3.SmoothDamp(camPointOnFoot.transform.position, mainChar.position + crouchOrNotOffset, ref velocity, smoothTimeOnFoot);
+        
         if(Mathf.Abs((camPointOnFoot.eulerAngles.y - mainChar.eulerAngles.y)) < 180 && !mouseMoved)
         {
             camPointOnFoot.eulerAngles = Vector3.Lerp(camPointOnFoot.eulerAngles, mainChar.eulerAngles, 0.2f);

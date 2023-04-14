@@ -420,19 +420,22 @@ public class GeneralCharacter : MonoBehaviour
 
     public static void GiveDamage(GeneralCharacter harmedChar, short damage)
     {
-        harmedChar.health -= damage;
-        harmedChar.DeathCheck();
-        if (harmedChar.isEnemy)
+        if(harmedChar.health > 0)
         {
-            EnemyScript enemyS = harmedChar.GetComponent<EnemyScript>();
-            enemyS.ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
-            EnemyScript.MakeEnemyVoice(enemyS, 1);
+            harmedChar.health -= damage;
+            harmedChar.DeathCheck();
+            if (harmedChar.isEnemy)
+            {
+                EnemyScript enemyS = harmedChar.GetComponent<EnemyScript>();
+                enemyS.ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+                EnemyScript.MakeEnemyVoice(enemyS, 1);
+            }
+            else
+            {
+                GameManager.uiManager.SetHealthUI();
+            }
+            //Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
         }
-        else
-        {
-            GameManager.uiManager.SetHealthUI();
-        }
-        //Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);
     }
     public void DeathCheck()
     {

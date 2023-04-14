@@ -1,0 +1,74 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RegionOptimizer : MonoBehaviour
+{
+    [Header("Collections")]
+    public GameObject destroyableCollection;
+    public GameObject interactableCollection;
+    public GameObject enemiesCollection;
+    [Header("Values")]
+    public float sqrDistancePlayer;
+    static float baseRange = 200;
+    bool closeEnoughToPlayer = false;
+    float sqrRangeInUse;
+
+    Transform mainChar;
+    Transform mainCam;
+    CameraScript mainCamScr;
+
+    float perspectiveAngle;
+
+
+    void Start()
+    {
+        mainChar = GameManager.mainChar;
+        mainCam = GameManager.mainCam;
+        mainCamScr = GameManager.mainCam.GetComponent<CameraScript>();
+        StartCoroutine(DeactivatingFarObjectsCoroutine());
+    }
+
+    void Update()
+    {
+        sqrDistancePlayer = GameManager.SqrDistance(GameManager.mainCam.position, transform.position);
+        sqrRangeInUse = baseRange * baseRange * LevelOfDetailManager.detailDistanceMultiplier * LevelOfDetailManager.detailDistanceMultiplier;
+
+        CheckRegion();
+    }
+
+    void CheckRegion()
+    {
+        Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
+        float AngleBetweenCam = Vector2.Angle(toTargetVector2D, LevelOfDetailManager.camForward2D);
+
+        perspectiveAngle = 80;
+        if (mainCamScr.camOwnState == CamState.zoomScope)
+        {
+            perspectiveAngle = 30;
+        }
+
+        if (!closeEnoughToPlayer && (((AngleBetweenCam < perspectiveAngle) && (sqrDistancePlayer < sqrRangeInUse)) || (sqrDistancePlayer < sqrRangeInUse/4)))
+        {
+            closeEnoughToPlayer = true;
+            destroyableCollection.SetActive(true);
+            interactableCollection.SetActive(true);
+            enemiesCollection.SetActive(true);
+        }
+        else if (closeEnoughToPlayer && sqrDistancePlayer > sqrRangeInUse*2)
+        {
+            closeEnoughToPlayer = false;
+            destroyableCollection.SetActive(false);
+            interactableCollection.SetActive(false);
+        }
+
+    }
+    
+    IEnumerator DeactivatingFarObjectsCoroutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+        destroyableCollection.SetActive(false);
+        interactableCollection.SetActive(false);
+        enemiesCollection.SetActive(false);
+    }
+}
