@@ -56,14 +56,22 @@ public class InteractableSpecial : EnvObject
     public static void SaveInteractableObjects(GameData gameDataToUse)
     {
         gameDataToUse.interactablesTaken = new bool[interactableObjects.Length];
+        gameDataToUse.interactablePositions = new float[interactableObjects.Length][];
         bool[] takenObjArray = gameDataToUse.interactablesTaken;
         for(int i = interactableObjects.Length - 1; i >= 0; i--)
         {
+
             if (interactableObjects[i] == null)
             takenObjArray[interactableObjects[i].interObjIndex] = true;
             else
             {
                 takenObjArray[interactableObjects[i].interObjIndex] = false;
+                gameDataToUse.interactablePositions[interactableObjects[i].interObjIndex] = new float[3]
+                {
+                interactableObjects[i].transform.position.x,
+                interactableObjects[i].transform.position.y,
+                interactableObjects[i].transform.position.z
+                };
             }
         }
     }
@@ -75,6 +83,14 @@ public class InteractableSpecial : EnvObject
             {
                 if(interactableObjects[i] != null)
                 Destroy(interactableObjects[i].gameObject);
+            }
+            else
+            {
+                interactableObjects[i].transform.position = new Vector3(
+                    gameDataToUse.interactablePositions[interactableObjects[i].interObjIndex][0],
+                    gameDataToUse.interactablePositions[interactableObjects[i].interObjIndex][1],
+                    gameDataToUse.interactablePositions[interactableObjects[i].interObjIndex][2]
+                    );
             }
         }
     }

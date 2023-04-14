@@ -386,7 +386,7 @@ public class GameData
     public bool[] interactablesTaken;
     public float[][] interactablePositions;
     public bool[] envObjectsDestroyed;
-    public float[][] envObjPoses;;
+    public float[][] envObjPoses;
     public bool[][] envObjectsSubPartsDestroyed;
     #endregion
 

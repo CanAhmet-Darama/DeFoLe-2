@@ -19,6 +19,7 @@ public class EnvObject : MonoBehaviour
     public GameObject[] subPartObjs;
     public Collider mainCollider;
     public Rigidbody objRb;
+    public Rigidbody[] subRbs;
     public NavMeshObstacle navObstacle;
     public bool isSubPartItself;
     bool hasDestructed = false;
@@ -75,6 +76,7 @@ public class EnvObject : MonoBehaviour
             for (int i = subPartObjs.Length - 1; i >= 0; i--)
             {
                 subPartObjs[i].SetActive(true);
+                subRbs[i].velocity = objRb.velocity;
             }
         }
 
@@ -88,7 +90,14 @@ public class EnvObject : MonoBehaviour
             if(navObstacle != null)
             navObstacle.enabled = false;
 
-            Destroy(mainObj);
+            if (breakable)
+            {
+                mainObj.gameObject.SetActive(false);
+            }
+            else
+            {
+                Destroy(mainObj.transform.parent.gameObject);
+            }
         }
         else
         {
@@ -106,10 +115,31 @@ public class EnvObject : MonoBehaviour
     public static void SaveDestroyableObjects(GameData gameDataToUse)
     {
         gameDataToUse.envObjectsDestroyed = new bool[destroyableObjects.Length];
+        gameDataToUse.envObjPoses = new float[destroyableObjects.Length][];
         gameDataToUse.envObjectsSubPartsDestroyed = new bool[destroyableObjects.Length][];
         bool[] destroyedArray = gameDataToUse.envObjectsDestroyed;
         for (int i = destroyableObjects.Length - 1; i >= 0; i--)
         {
+            if (destroyableObjects[i] == null || destroyableObjects[i].hasDestructed)
+            {
+                destroyedArray[destroyableObjects[i].destObjIndex] = true;
+                if (!destroyableObjects[i].breakable)
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                destroyedArray[destroyableObjects[i].destObjIndex] = false;
+            }
+
+            gameDataToUse.envObjPoses[destroyableObjects[i].destObjIndex] = new float[3]
+            {
+                destroyableObjects[i].transform.position.x,
+                destroyableObjects[i].transform.position.y,
+                destroyableObjects[i].transform.position.z
+            };
+
             if (destroyableObjects[i].breakable)
             {
                 gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex] 
@@ -128,49 +158,68 @@ public class EnvObject : MonoBehaviour
                 }
 
             }
-
-
-            if (destroyableObjects[i].hasDestructed)
-                destroyedArray[destroyableObjects[i].destObjIndex] = true;
-            else
-            {
-                destroyedArray[destroyableObjects[i].destObjIndex] = false;
-            }
         }
     }
     public static void LoadDestroyableObjects(GameData gameDataToUse)
     {
         for (int i = destroyableObjects.Length - 1; i >= 0; i--)
         {
+
             if (gameDataToUse.envObjectsDestroyed[destroyableObjects[i].destObjIndex])
             {
                 if (destroyableObjects[i] != null)
                 {
-                    destroyableObjects[i].mainCollider.enabled = false;
-                    destroyableObjects[i].objRb.isKinematic = true;
-                    destroyableObjects[i].hasDestructed = true;
-                    Destroy(destroyableObjects[i].mainObj);
-                    if(destroyableObjects[i].navObstacle != null)
+                    if (!destroyableObjects[i].breakable)
                     {
-                        destroyableObjects[i].navObstacle.enabled = false;
+                        Destroy(destroyableObjects[i].gameObject, 0.05f);
                     }
+                    else
+                    {
+                        destroyableObjects[i].mainCollider.enabled = false;
+                        destroyableObjects[i].objRb.isKinematic = true;
+                        destroyableObjects[i].hasDestructed = true;
+                        Destroy(destroyableObjects[i].mainObj);
+                        if(destroyableObjects[i].navObstacle != null)
+                        {
+                            destroyableObjects[i].navObstacle.enabled = false;
+                        }
+                    }
+
+                    if (gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex] != null)
+                    {
+                        bool noPartRemains = true;
+                        for(int j = gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex].Length - 1; j >= 0; j--)
+                        {
+                            if (gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex][j])
+                            {
+                                Destroy(destroyableObjects[i].subPartObjs[j]);
+                            }
+                            else
+                            {
+                                noPartRemains = false;
+                                destroyableObjects[i].subPartObjs[j].SetActive(true);
+                            }
+                        }
+                        if (noPartRemains)
+                        {
+                            Destroy(destroyableObjects[i], 0.05f);
+                        }
+                    }
+
                 }
 
-                if (gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex] != null)
-                {
-                    for(int j = gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex].Length - 1; j >= 0; j--)
-                    {
-                        if (gameDataToUse.envObjectsSubPartsDestroyed[destroyableObjects[i].destObjIndex][j])
-                        {
-                            Destroy(destroyableObjects[i].subPartObjs[j]);
-                        }
-                        else
-                        {
-                            destroyableObjects[i].subPartObjs[j].SetActive(true);
-                        }
-                    }
-                }
             }
+
+            if(destroyableObjects[i] != null && gameDataToUse.envObjPoses[destroyableObjects[i].destObjIndex] != null)
+            {
+                destroyableObjects[i].transform.position = new Vector3
+                (gameDataToUse.envObjPoses[destroyableObjects[i].destObjIndex][0],
+                gameDataToUse.envObjPoses[destroyableObjects[i].destObjIndex][1],
+                gameDataToUse.envObjPoses[destroyableObjects[i].destObjIndex][2]);
+
+                destroyableObjects[i].transform.eulerAngles = new Vector3(0, Random.Range(0, 180), 0);
+            }
+
         }
     }
 

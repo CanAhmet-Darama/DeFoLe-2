@@ -71,6 +71,20 @@ MonoBehaviour:
   - {fileID: 8266150187986350661}
   mainCollider: {fileID: 6676115650326075037}
   objRb: {fileID: 4022922645656877576}
+  subRbs:
+  - {fileID: 8562575296287423342}
+  - {fileID: 1841967192801024006}
+  - {fileID: 710162570536395443}
+  - {fileID: 1129920824762667744}
+  - {fileID: 2918996096200243185}
+  - {fileID: 6061515634986346860}
+  - {fileID: 2804604621685921373}
+  - {fileID: 1895262109264885765}
+  - {fileID: 2065888853002179649}
+  - {fileID: 1037910685814186201}
+  - {fileID: 5846904756326509705}
+  - {fileID: 5439389062845963069}
+  - {fileID: 412690544050583087}
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0
@@ -413,6 +427,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -476,6 +491,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -547,6 +563,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -605,6 +622,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -668,6 +686,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -741,6 +760,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -804,6 +824,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -867,6 +888,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -925,6 +947,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -983,6 +1006,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -1056,6 +1080,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -1119,6 +1144,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0
@@ -1177,6 +1203,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 1
   destObjIndex: 0

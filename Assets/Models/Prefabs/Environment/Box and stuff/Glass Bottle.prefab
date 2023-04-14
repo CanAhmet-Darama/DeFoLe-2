@@ -52,13 +52,13 @@ MonoBehaviour:
   objectType: 5
   destroyable: 1
   breakable: 0
-  impactMarkable: 1
+  impactMarkable: 0
   healthOfObject: 25
-  mainObj: {fileID: 6013468219715542248}
+  mainObj: {fileID: 1691003183838003131}
   subPartObjs: []
-  lowPart: {fileID: 6045136151871938114}
   mainCollider: {fileID: 3724707017115957314}
   objRb: {fileID: 8171541247793447901}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0
@@ -385,6 +385,11 @@ PrefabInstance:
 --- !u!23 &898285742023269998 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 065e4a9261ca5c345b3e84e506f6ed9f, type: 3}
+  m_PrefabInstance: {fileID: 1997011901124100842}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1691003183838003131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 065e4a9261ca5c345b3e84e506f6ed9f, type: 3}
   m_PrefabInstance: {fileID: 1997011901124100842}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2034631712294020353 stripped
