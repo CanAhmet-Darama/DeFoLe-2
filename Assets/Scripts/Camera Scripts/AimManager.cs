@@ -61,10 +61,13 @@ public class AimManager : MonoBehaviour
 
     void Update()
     {
-        if ((userIsPlayer && GameManager.mainState == PlayerState.onFoot) || !userIsPlayer)
+        if(!GameManager.isGamePaused)
         {
-            SetBoolsOfAimer();
-            AimTargetPositioner();
+            if ((userIsPlayer && GameManager.mainState == PlayerState.onFoot) || !userIsPlayer)
+            {
+                SetBoolsOfAimer();
+                AimTargetPositioner();
+            }
         }
     }
 

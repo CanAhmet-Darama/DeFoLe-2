@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,6 +13,12 @@ public class UI_Manager : MonoBehaviour
     public static InteractableForUI interactionType;
 
     public static Canvas mainCanvas;
+    [Header("ESC Menu")]
+    public GameObject escMenuPanel;
+    public GameObject settingsMenuPanel;
+    public GameObject normalUIPanel;
+    public GameObject areYouSurePanel;
+
 
     [Header("Texts")]
     public TextMeshProUGUI curAmmoText;
@@ -19,6 +26,9 @@ public class UI_Manager : MonoBehaviour
     public TextMeshProUGUI interactionText;
     public TextMeshProUGUI playerHealthText;
     public TextMeshProUGUI vehicleHealthText;
+    public TextMeshProUGUI areYouSureText;
+    public TextMeshProUGUI loadGameButtonText;
+    
 
     [Header("Images")]
     public Image crosshair;
@@ -38,7 +48,9 @@ public class UI_Manager : MonoBehaviour
     MainCar mainCar;
     float maxVehicleHealth;
 
+    [Header("Different Stuff")]
     public Coroutine weaponIconOpacityCoroutine;
+    bool askingForSave;
 
     void Start()
     {
@@ -155,6 +167,42 @@ public class UI_Manager : MonoBehaviour
     {
         ChangePanels(PanelType.settings);
     }
+    public void SaveGameButton()
+    {
+        if(File.Exists(GameManager.saveDataPath))
+        {
+            askingForSave = true;
+            ChangePanels(PanelType.areYouSure);
+        }
+        else
+        {
+            GameManager.SaveGame();
+        }
+    }
+    public void LoadGameButton()
+    {
+        if (File.Exists(GameManager.saveDataPath))
+        {
+            askingForSave = false;
+            ChangePanels(PanelType.areYouSure);
+        }
+
+    }
+    public void AreYouSureYes()
+    {
+        if (askingForSave)
+        {
+            GameManager.SaveGame();
+        }
+        else
+        {
+            GameManager.LoadGameCompletely();
+        }
+    }
+    public void AreYouSureNo()
+    {
+        ChangePanels(PanelType.escMenu);
+    }
 
     #endregion
 
@@ -163,14 +211,54 @@ public class UI_Manager : MonoBehaviour
         switch (pType)
         {
             case PanelType.none:
-                //settingsPanel.SetActive(false);
+                settingsMenuPanel.SetActive(false);
+                escMenuPanel.SetActive(false);
+                normalUIPanel.SetActive(true);
+                areYouSurePanel.SetActive(false);
                 break;
             case PanelType.settings:
-                //settingsPanel.SetActive(true);
+                settingsMenuPanel.SetActive(true);
+                escMenuPanel.SetActive(false);
+                normalUIPanel.SetActive(false);
+                areYouSurePanel.SetActive(false);
                 break;
+            case PanelType.escMenu:
+                if (File.Exists(GameManager.saveDataPath))
+                {
+                    loadGameButtonText.text = "Load Game";
+                    loadGameButtonText.color = Color.black;
+                }
+                else
+                {
+                    loadGameButtonText.text = "NO SAVED GAME";
+                    loadGameButtonText.color = Color.red;
+                }
+                settingsMenuPanel.SetActive(false);
+                escMenuPanel.SetActive(true);
+                normalUIPanel.SetActive(false);
+                areYouSurePanel.SetActive(false);
+                break;
+            case PanelType.areYouSure:
+                settingsMenuPanel.SetActive(false);
+                escMenuPanel.SetActive(false);
+                normalUIPanel.SetActive(false);
+                ChangeQuestionText();
+                areYouSurePanel.SetActive(true);
+                break;
+        }
+    }
+    void ChangeQuestionText()
+    {
+        if (askingForSave)
+        {
+            areYouSureText.text = "Are you sure to overrite the existing save file?";
+        }
+        else
+        {
+            areYouSureText.text = "Are you sure to load the save game? Any unsaved progress will be lost";
         }
     }
 
     public enum InteractableForUI { mainCar, healthPack, ammoPack}
 }
-public enum PanelType { none,settings}
+public enum PanelType { none,settings, escMenu, areYouSure}

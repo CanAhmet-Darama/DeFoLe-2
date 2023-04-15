@@ -5092,11 +5092,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 731167abc5abba046bc583569074396c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  escMenuPanel: {fileID: 0}
+  settingsMenuPanel: {fileID: 0}
+  normalUIPanel: {fileID: 0}
+  areYouSurePanel: {fileID: 1396159439}
   curAmmoText: {fileID: 0}
   totalAmmoText: {fileID: 0}
   interactionText: {fileID: 0}
   playerHealthText: {fileID: 0}
   vehicleHealthText: {fileID: 0}
+  areYouSureText: {fileID: 903657004}
+  loadGameButtonText: {fileID: 0}
   crosshair: {fileID: 0}
   sniperZoomScreen: {fileID: 0}
   weaponIcon: {fileID: 0}
@@ -5112,10 +5118,10 @@ MonoBehaviour:
   developerButton: {fileID: 1696350998}
   yesButton: {fileID: 507277348}
   noButton: {fileID: 1084110473}
-  areYouSurePanel: {fileID: 1396159439}
+  areYouSurePanelMainMenu: {fileID: 1396159439}
   mainButtonsPanel: {fileID: 10064724}
   developerPanel: {fileID: 425019289}
-  areYouSureText: {fileID: 903657004}
+  areYouSureTextMainMenu: {fileID: 903657004}
   continueGameText: {fileID: 2073088283}
   hasSavedGame: 0
 --- !u!114 &1942726312

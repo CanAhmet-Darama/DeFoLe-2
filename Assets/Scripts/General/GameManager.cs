@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [Header("General Numbers")]
     [HideInInspector] public static byte numberOfCamps = 4;
     public static string saveDataPath;
+    public static bool isGamePaused;
 
     void Awake()
     {
@@ -64,8 +65,11 @@ public class GameManager : MonoBehaviour
                 enemyManager = enemyManagerIsThis;
                 enemyManager.EnemyManagerStart();
 
+                settingsManager.SettingsManagerAssignments(false);
+
                 TerrainManager.mainTerrain = mainTerrain;
                 mainTerrain.detailObjectDistance = SettingsManager.detailDistance;
+                uiManager.settingsMenuPanel = SettingsManager.settingsPanel;
                 break;
         }
     }
@@ -81,14 +85,17 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SaveGame();
-            Debug.Log("Saved");
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadGame();
+            PauseGame();
+            if (uiManager.escMenuPanel.activeInHierarchy || uiManager.settingsMenuPanel.activeInHierarchy || uiManager.areYouSurePanel.activeInHierarchy)
+            {
+                uiManager.ChangePanels(PanelType.none);
+            }
+            else
+            {
+                uiManager.ChangePanels(PanelType.escMenu);
+            }
         }
     }
 
@@ -186,6 +193,11 @@ public class GameManager : MonoBehaviour
         string saveJSON = JsonConvert.SerializeObject(gameDataForSave, Formatting.Indented);
         File.WriteAllText(saveDataPath, saveJSON);
     }
+    public static void LoadGameCompletely()
+    {
+        MainMenuManager.hasLoadedGame = true;
+        SceneManager.LoadScene("Level 1");
+    }
     public static void LoadGame()
     {
         mainCharScr.StartCoroutine(WaitOneFrameToLoad());
@@ -195,11 +207,15 @@ public class GameManager : MonoBehaviour
         if (Time.timeScale == 1)
         {
             Time.timeScale = 0;
-            mainCam.GetComponent<AudioListener>().enabled = false;
+            AudioListener.volume = 0;
+            mouseSensitivity = 0;
+            isGamePaused = true;
         }
         else {
             Time.timeScale = 1;
-            mainCam.GetComponent<AudioListener>().enabled = true;
+            AudioListener.volume = settingsManager.GetVolume();
+            mouseSensitivity = SettingsManager.mouseSensitivityValue;
+            isGamePaused = false;
         }
     }
     public static IEnumerator WaitOneFrameToLoad()
@@ -212,6 +228,10 @@ public class GameManager : MonoBehaviour
         GameData.LoadFieldsOfCharAndVehicle(gameDataForLoad);
         GameData.LoadEnvironmentObjects(gameDataForLoad);
 
+    }
+    public static void ExitGame()
+    {
+        Application.Quit();
     }
 
     #region General Functions

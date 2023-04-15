@@ -69,24 +69,27 @@ public class CameraScript : MonoBehaviour
     }
     void LateUpdate()
     {
-        if(camOwnState != CamState.zoomScope)
+        if(!GameManager.isGamePaused)
         {
-            if(GameManager.mainState == PlayerState.onFoot)
+            if(camOwnState != CamState.zoomScope)
             {
-                CamFollowMainCharacter();
-                targetObjectPos = mainChar.position;
-                CheckObjectBetweenTarget();
+                if(GameManager.mainState == PlayerState.onFoot)
+                {
+                    CamFollowMainCharacter();
+                    targetObjectPos = mainChar.position;
+                    CheckObjectBetweenTarget();
+                }
+                else if (GameManager.mainState == PlayerState.inMainCar)
+                {
+                    CamFollowMainCar();
+                    targetObjectPos = mainCarTransform.position;
+                    CheckObjectBetweenTarget();
+                }
             }
-            else if (GameManager.mainState == PlayerState.inMainCar)
+            else
             {
-                CamFollowMainCar();
-                targetObjectPos = mainCarTransform.position;
-                CheckObjectBetweenTarget();
+                CamMovementOnSniperZoom();
             }
-        }
-        else
-        {
-            CamMovementOnSniperZoom();
         }
     }
     IEnumerator ReadyToCamFollow(Transform pivot, float durat)

@@ -25,12 +25,12 @@ public class MainMenuManager : UI_Manager
     public Button noButton;
 
     [Header("Objects")]
-    public GameObject areYouSurePanel;
+    public GameObject areYouSurePanelMainMenu;
     public GameObject mainButtonsPanel;
     public GameObject developerPanel;
 
     [Header("Texts")]
-    public TextMeshProUGUI areYouSureText;
+    public TextMeshProUGUI areYouSureTextMainMenu;
     public TextMeshProUGUI continueGameText;
 
     [Header("Other")]
@@ -70,28 +70,28 @@ public class MainMenuManager : UI_Manager
     }
     public void NewGameAreYouSure()
     {
-        if(question == AreYouSureQuestion.newGame && areYouSurePanel.activeInHierarchy)
+        if(question == AreYouSureQuestion.newGame && areYouSurePanelMainMenu.activeInHierarchy)
         {
             ChangePanels(PanelTypeMainMenu.none);
         }
         else
         {
             ChangePanels(PanelTypeMainMenu.areYouSure);
-            areYouSureText.text = "Are you sure you want to start a new game by deleting the previous save game?";
+            areYouSureTextMainMenu.text = "Are you sure you want to start a new game by deleting the previous save game?";
         }
         question = AreYouSureQuestion.newGame;
 
     }
     public void ExitGameAreYouSure()
     {
-        if (question == AreYouSureQuestion.exitGame && areYouSurePanel.activeInHierarchy)
+        if (question == AreYouSureQuestion.exitGame && areYouSurePanelMainMenu.activeInHierarchy)
         {
             ChangePanels(PanelTypeMainMenu.none);
         }
         else
         {
             ChangePanels(PanelTypeMainMenu.areYouSure);
-            areYouSureText.text = "Are you sure you want to exit the game?";
+            areYouSureTextMainMenu.text = "Are you sure you want to exit the game?";
         }
         question = AreYouSureQuestion.exitGame;
     }
@@ -153,25 +153,25 @@ public class MainMenuManager : UI_Manager
         switch (newPanelState)
         {
             case PanelTypeMainMenu.none:
-                areYouSurePanel.SetActive(false);
+                areYouSurePanelMainMenu.SetActive(false);
                 mainButtonsPanel.SetActive(true);
                 developerPanel.SetActive(false);
                 SettingsManager.settingsPanel.SetActive(false);
                 break;
             case PanelTypeMainMenu.areYouSure:
-                areYouSurePanel.SetActive(true);
+                areYouSurePanelMainMenu.SetActive(true);
                 mainButtonsPanel.SetActive(false);
                 developerPanel.SetActive(false);
                 SettingsManager.settingsPanel.SetActive(false);
                 break;
             case PanelTypeMainMenu.settings:
-                areYouSurePanel.SetActive(false);
+                areYouSurePanelMainMenu.SetActive(false);
                 mainButtonsPanel.SetActive(false);
                 developerPanel.SetActive(false);
                 SettingsManager.settingsPanel.SetActive(true);
                 break;
             case PanelTypeMainMenu.developer:
-                areYouSurePanel.SetActive(false);
+                areYouSurePanelMainMenu.SetActive(false);
                 mainButtonsPanel.SetActive(false);
                 developerPanel.SetActive(true);
                 SettingsManager.settingsPanel.SetActive(false);

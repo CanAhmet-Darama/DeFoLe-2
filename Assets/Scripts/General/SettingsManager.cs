@@ -16,6 +16,7 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] GameObject settingsPanelPrefab;
     public static GameObject settingsPanel;
     public static float detailDistance;
+    public static float mouseSensitivityValue;
 
     [Header("Sub Things")]
     public static Button settingsExitButton;
@@ -34,8 +35,8 @@ public class SettingsManager : MonoBehaviour
     Resolution[] resolutions;
     void Start()
     {
-        SettingsManagerAssignments();
-        ResolutionStart();
+        GameManager.settingsManager = this;
+        SettingsManagerAssignments(true);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -44,10 +45,8 @@ public class SettingsManager : MonoBehaviour
         
     }
 
-    void SettingsManagerAssignments()
+    public void SettingsManagerAssignments(bool firstTime)
     {
-        GameManager.settingsManager = this;
-
         brightnessProfile.TryGetSettings(out brightnessExposure);
 
         UI_Manager.mainCanvas = FindObjectOfType<Canvas>();
@@ -68,12 +67,17 @@ public class SettingsManager : MonoBehaviour
         volumeSlider.onValueChanged.AddListener(SetVolume);
         mouseSensitivitySlider.onValueChanged.AddListener(SetMouseSensitivity);
 
-        brightnessExposure.keyValue.value = 1;
+        if (firstTime)
+        {
+            brightnessExposure.keyValue.value = 1;
+            SetQuality(2);
+        }
         brightnessSlider.value = brightnessExposure.keyValue.value;
-        SetQuality(2);
-        qualityDropdown.value = 2;
+        qualityDropdown.value = QualitySettings.GetQualityLevel();
+        mouseSensitivityValue = mouseSensitivitySlider.value;
         SetVolume(volumeSlider.value);
 
+        ResolutionStart();
     }
 
     public void ExitSettingsMenu()
@@ -153,9 +157,15 @@ public class SettingsManager : MonoBehaviour
     {
         AudioListener.volume = volumeValue;
     }
+    public float GetVolume()
+    {
+        return volumeSlider.value;
+    }
+
     public void SetMouseSensitivity(float newSensitivity)
     {
         GameManager.mouseSensitivity = newSensitivity;
+        mouseSensitivityValue = newSensitivity;
     }
 
 }
