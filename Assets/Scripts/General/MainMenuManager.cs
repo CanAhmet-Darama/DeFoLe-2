@@ -186,7 +186,7 @@ public class MainMenuManager : UI_Manager
     }
     IEnumerator RandomAngle()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
         
         newLightRotation = Quaternion.Euler(new Vector3(initialLightRotation.x + Random.Range(-5,5), initialLightRotation.y + Random.Range(-5, 5), initialLightRotation.z));
         StartCoroutine(RandomAngle());

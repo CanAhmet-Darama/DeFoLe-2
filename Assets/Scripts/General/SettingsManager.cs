@@ -15,6 +15,7 @@ public class SettingsManager : MonoBehaviour
     [Header("Main Things")]
     [SerializeField] GameObject settingsPanelPrefab;
     public static GameObject settingsPanel;
+    public static float detailDistance;
 
     [Header("Sub Things")]
     public static Button settingsExitButton;
@@ -71,6 +72,7 @@ public class SettingsManager : MonoBehaviour
         brightnessSlider.value = brightnessExposure.keyValue.value;
         SetQuality(2);
         qualityDropdown.value = 2;
+        SetVolume(volumeSlider.value);
 
     }
 
@@ -119,6 +121,25 @@ public class SettingsManager : MonoBehaviour
     public void SetQuality(int qualityIndex)
     {
         QualitySettings.SetQualityLevel(qualityIndex);
+        switch (qualityIndex)
+        {
+            case 0:
+                detailDistance = 75;
+                LevelOfDetailManager.detailDistanceMultiplier = 0.5f;
+                break;
+            case 1:
+                detailDistance = 150;
+                LevelOfDetailManager.detailDistanceMultiplier = 0.75f;
+                break;
+            case 2:
+                detailDistance = 250;
+                LevelOfDetailManager.detailDistanceMultiplier = 1;
+                break;
+        }
+        if(SceneManager.GetActiveScene().name == "Level 1")
+        {
+            GameManager.mainTerrain.detailObjectDistance = detailDistance;
+        }
     }
     public void SetFullscreen(bool fullscreenEnabled)
     {

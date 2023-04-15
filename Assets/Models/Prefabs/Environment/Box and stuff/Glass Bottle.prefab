@@ -104,10 +104,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectOrEnemy: 1
-  detailDiminishDistance: 10
+  detailDiminishDistance: 20
   sqrDistancePlayer: 0
   deactivateMeshOnLongDistance: 1
-  longDistance: 25
+  longDistance: 40
   meshesDetailed:
   - {fileID: 898285742023269998}
   meshesNotDetailed:

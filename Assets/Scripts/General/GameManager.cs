@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
                 enemyManager.EnemyManagerStart();
 
                 TerrainManager.mainTerrain = mainTerrain;
+                mainTerrain.detailObjectDistance = SettingsManager.detailDistance;
                 break;
         }
     }

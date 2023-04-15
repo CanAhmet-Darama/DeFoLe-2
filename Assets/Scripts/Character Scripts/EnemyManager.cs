@@ -22,6 +22,8 @@ public class EnemyManager : MonoBehaviour
     static EnemyManager enemyManagerIns;
     static Coroutine dealertCampCoroutine;
 
+    public static float enemyActivateRange = 150;
+
     public void EnemyManagerStart()
     {
         enemiesCanSee = new bool[GameManager.numberOfCamps][];
@@ -177,7 +179,6 @@ public class EnemyManager : MonoBehaviour
         {
         enemyScr.enemyHitboxes.SetActive(activate);
         }
-        enemyScr.stairSlopeChecker.enabled = activate;
         enemyScr.groundChecker.SetActive(activate);
         if(enemyScr.weaponState == GeneralCharacter.WeaponState.ranged)
         {
@@ -192,7 +193,6 @@ public class EnemyManager : MonoBehaviour
         if(enemyScr.health > 0)
         {
             enemyScr.animator.enabled = !undetailing;
-            enemyScr.stairSlopeChecker.enabled = !undetailing;
             enemyScr.groundChecker.SetActive(!undetailing);
         }
         if (enemyScr.weaponState == GeneralCharacter.WeaponState.ranged)

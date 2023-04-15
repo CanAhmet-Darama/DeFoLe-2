@@ -349,13 +349,13 @@ public class GeneralCharacter : MonoBehaviour
     {
         canJump = true;
         canReload = true;
-        stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
         if (GetComponent<MainCharacter>() == null)
         {
             isEnemy = true;
         }
         else
         {
+            stairSlopeChecker = stairSlopeCheckerGO_.GetComponent<StairCheckScript>();
             isEnemy = false;
         }
         CreateWeapons();

@@ -44,7 +44,7 @@ public class LevelOfDetailManager : MonoBehaviour
     {
         sqrDistancePlayer = GameManager.SqrDistance(mainCam.position, transform.position);
         sqrRangeInUse = detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier; 
-        sqrDeactivateRangeInUse = longDistance * longDistance * detailDistanceMultiplier * detailDistanceMultiplier; 
+        sqrDeactivateRangeInUse = longDistance * longDistance; 
         CheckRequiredLOD();
     }
 
@@ -183,6 +183,13 @@ public class LevelOfDetailManager : MonoBehaviour
                 }
             }
         }
+
+        if(!objectOrEnemy && !enemyActivated && sqrDistancePlayer < EnemyManager.enemyActivateRange * EnemyManager.enemyActivateRange)
+        {
+            EnemyManager.ActivateEnemy(enemyScr, true);
+            enemyActivated = true;
+        }
+
     }
 
     void DetermineMeshLevel(byte meshLevel)
@@ -262,15 +269,7 @@ public class LevelOfDetailManager : MonoBehaviour
                 else
                 {
                     skinnedMesh.enabled = true;
-                    if (!enemyActivated)
-                    {
-                        EnemyManager.ActivateEnemy(enemyScr, true);
-                        enemyActivated = true;
-                    }
-                    else
-                    {
-                        EnemyManager.UndetailEnemy(enemyScr, false);
-                    }
+                    EnemyManager.UndetailEnemy(enemyScr, false);
                 }
 
                 for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
