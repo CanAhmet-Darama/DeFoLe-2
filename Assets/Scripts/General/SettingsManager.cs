@@ -2,9 +2,11 @@ using OpenCover.Framework.Model;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -23,9 +25,12 @@ public class SettingsManager : MonoBehaviour
     public static Slider volumeSlider;
     public static Slider mouseSensitivitySlider;
 
+    [Header("Post Process")]
+    public PostProcessProfile brightnessProfile;
+    AutoExposure brightnessExposure;
+
 
     Resolution[] resolutions;
-
     void Start()
     {
         SettingsManagerAssignments();
@@ -41,6 +46,8 @@ public class SettingsManager : MonoBehaviour
     void SettingsManagerAssignments()
     {
         GameManager.settingsManager = this;
+
+        brightnessProfile.TryGetSettings(out brightnessExposure);
 
         UI_Manager.mainCanvas = FindObjectOfType<Canvas>();
         settingsPanel = Instantiate(settingsPanelPrefab, UI_Manager.mainCanvas.transform);
@@ -59,6 +66,11 @@ public class SettingsManager : MonoBehaviour
         brightnessSlider.onValueChanged.AddListener(SetBrightness);
         volumeSlider.onValueChanged.AddListener(SetVolume);
         mouseSensitivitySlider.onValueChanged.AddListener(SetMouseSensitivity);
+
+        brightnessExposure.keyValue.value = 1;
+        brightnessSlider.value = brightnessExposure.keyValue.value;
+        SetQuality(2);
+        qualityDropdown.value = 2;
 
     }
 
@@ -114,7 +126,7 @@ public class SettingsManager : MonoBehaviour
     }
     public void SetBrightness(float brightnessValue)
     {
-        Screen.brightness = brightnessValue;
+        brightnessExposure.keyValue.value = brightnessValue;
     }
     public void SetVolume(float volumeValue)
     {
@@ -124,4 +136,5 @@ public class SettingsManager : MonoBehaviour
     {
         GameManager.mouseSensitivity = newSensitivity;
     }
+
 }

@@ -9,6 +9,11 @@ using UnityEngine.UI;
 public class MainMenuManager : UI_Manager
 {
     [Header("MAIN MENU")]
+    [Header("Special")]
+    public Light spotLight;
+    Vector3 initialLightRotation;
+    Quaternion newLightRotation;
+
     [Header("Buttons")]
     public Button newGameButton;
     public Button continueGameButton;
@@ -35,6 +40,8 @@ public class MainMenuManager : UI_Manager
 
     void Start()
     {
+        initialLightRotation = spotLight.transform.eulerAngles;
+        StartCoroutine(RandomAngle());
 
         GameManager.saveDataPath = Application.dataPath + "/Saves/SaveData.json";
         hasSavedGame = File.Exists(GameManager.saveDataPath);
@@ -49,6 +56,11 @@ public class MainMenuManager : UI_Manager
             continueGameText.color = Color.white;
         }
 
+    }
+
+    void Update()
+    {
+        SpotLightRotate();
     }
 
     #region Button Functions
@@ -167,6 +179,18 @@ public class MainMenuManager : UI_Manager
         }
     }
     #endregion
+
+    void SpotLightRotate()
+    {
+        spotLight.transform.rotation = Quaternion.Slerp(spotLight.transform.rotation, newLightRotation, 2 * Time.deltaTime);
+    }
+    IEnumerator RandomAngle()
+    {
+        yield return new WaitForSeconds(3);
+        
+        newLightRotation = Quaternion.Euler(new Vector3(initialLightRotation.x + Random.Range(-5,5), initialLightRotation.y + Random.Range(-5, 5), initialLightRotation.z));
+        StartCoroutine(RandomAngle());
+    }
 }
 enum AreYouSureQuestion { newGame, exitGame}
 enum PanelTypeMainMenu { none, areYouSure, settings, developer}
