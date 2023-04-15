@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MainCharacter : GeneralCharacter
@@ -16,15 +17,17 @@ public class MainCharacter : GeneralCharacter
 
     static Collider[] nearbyColliders;
 
-    short maxHealth;
+    public static short maxHealth;
 
     #region Some Stuff
     Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
     #endregion
 
-    void Start()
+    public void MainCharStart()
     {
         GeneralCharStart();
+        maxHealth = health;
+
         ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
         closestCamp = 1;
         playerAnimating = meshAndArmature.GetComponent<AnimatingClass>();
@@ -34,7 +37,6 @@ public class MainCharacter : GeneralCharacter
         playerTransform = transform;
         InvokeRepeating("CalculateClosestCamp",0,3);
 
-        maxHealth = health;
     }
     void Update()
     {

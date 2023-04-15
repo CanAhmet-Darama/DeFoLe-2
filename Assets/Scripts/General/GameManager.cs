@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     public static Transform mainCam;
     public static Transform mainCar;
     public static Transform mainChar;
+    public static MainCharacter mainCharScr;
     public static Terrain mainTerrain;
     public static UI_Manager uiManager;
     public static EnemyManager enemyManager;
@@ -54,7 +56,8 @@ public class GameManager : MonoBehaviour
                 mainCar = mainCarIsThis;
                 uiManager = userInterfaceManagerIsThis;
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.follow);
-                mainChar.GetComponent<MainCharacter>().RegulateMainChar();
+                mainCharScr = mainChar.GetComponent<MainCharacter>();
+                mainCharScr.RegulateMainChar();
 
                 numberOfCamps = 4;
                 enemyCamps = enemyCampsAreThese;
@@ -68,6 +71,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        mainCharScr.MainCharStart();
         if (MainMenuManager.hasLoadedGame)
         {
             LoadGame();
@@ -79,6 +83,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             SaveGame();
+            Debug.Log("Saved");
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -128,11 +133,10 @@ public class GameManager : MonoBehaviour
             mainCarScr.vehicleAudioSource.Stop();
             mainCarScr.GetComponent<MainCar>().ResetMotorTorque();
 
-            MainCharacter charComp = mainChar.GetComponent<MainCharacter>();
-            charComp.canShoot = true;
-            charComp.canReload = true;
-            charComp.ResetHandTargets(charComp.currentWeapon);
-            AimManager.ResetWeights(charComp);
+            mainCharScr.canShoot = true;
+            mainCharScr.canReload = true;
+            mainCharScr.ResetHandTargets(mainCharScr.currentWeapon);
+            AimManager.ResetWeights(mainCharScr);
 
             if (Input.GetMouseButton(1))
             {
@@ -183,11 +187,7 @@ public class GameManager : MonoBehaviour
     }
     public static void LoadGame()
     {
-        string loadJson = File.ReadAllText(saveDataPath);
-        GameData gameDataForLoad = JsonConvert.DeserializeObject<GameData>(loadJson);
-        EnemyManager.LoadAllEnemies(gameDataForLoad);
-        GameData.LoadFieldsOfCharAndVehicle(gameDataForLoad);
-        GameData.LoadEnvironmentObjects(gameDataForLoad);
+        mainCharScr.StartCoroutine(WaitOneFrameToLoad());
     }
     public static void PauseGame()
     {
@@ -200,6 +200,16 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
             mainCam.GetComponent<AudioListener>().enabled = true;
         }
+    }
+    public static IEnumerator WaitOneFrameToLoad()
+    {
+        yield return null;
+        string loadJson = File.ReadAllText(saveDataPath);
+        GameData gameDataForLoad = JsonConvert.DeserializeObject<GameData>(loadJson);
+        EnemyManager.LoadAllEnemies(gameDataForLoad);
+        GameData.LoadFieldsOfCharAndVehicle(gameDataForLoad);
+        GameData.LoadEnvironmentObjects(gameDataForLoad);
+
     }
 
     #region General Functions

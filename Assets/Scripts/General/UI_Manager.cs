@@ -30,8 +30,6 @@ public class UI_Manager : MonoBehaviour
     [Header("Player Health")]
     public GameObject playerHealthFill;
     
-    MainCharacter mainChar;
-    float maxHealth;
 
     [Header("Vehicle")]
     public GameObject vehicleHealthFill;
@@ -44,9 +42,8 @@ public class UI_Manager : MonoBehaviour
 
     void Start()
     {
-        mainChar = GameManager.mainChar.GetComponent<MainCharacter>();
         mainCar = GameManager.mainCar.GetComponent<MainCar>();
-        maxHealth = mainChar.health;
+        MainCharacter.maxHealth = GameManager.mainCharScr.health;
         maxVehicleHealth = mainCar.vehicleHealth;
     }
 
@@ -56,9 +53,13 @@ public class UI_Manager : MonoBehaviour
 
     public void SetAmmoUI()
     {
-        curAmmoText.text = Convert.ToString(mainChar.currentWeapon.currentAmmo);
-        totalAmmoText.text = Convert.ToString(mainChar.ammoCounts[(int)mainChar.currentWeapon.weaponType]);
-        if(mainChar.weaponState != GeneralCharacter.WeaponState.ranged && (curAmmoText.gameObject.activeInHierarchy || totalAmmoText.gameObject.activeInHierarchy))
+        if(GameManager.mainCharScr == null)
+        {
+            Debug.Log("NULL");
+        }
+        curAmmoText.text = "" + GameManager.mainCharScr.currentWeapon.currentAmmo;
+        totalAmmoText.text = "" + GameManager.mainCharScr.ammoCounts[(int)GameManager.mainCharScr.currentWeapon.weaponType];
+        if(GameManager.mainCharScr.weaponState != GeneralCharacter.WeaponState.ranged && (curAmmoText.gameObject.activeInHierarchy || totalAmmoText.gameObject.activeInHierarchy))
         {
             curAmmoText.gameObject.SetActive(false);
             totalAmmoText.gameObject.SetActive(false);
@@ -71,10 +72,10 @@ public class UI_Manager : MonoBehaviour
     }
     public void SetHealthUI()
     {
-        if(mainChar.health > 0)
+        if(GameManager.mainCharScr.health > 0)
         {
-            playerHealthFill.transform.localScale = new Vector3(mainChar.health / maxHealth, playerHealthFill.transform.localScale.y, playerHealthFill.transform.localScale.z) ;
-            playerHealthText.text = "Health : " + mainChar.health;
+            playerHealthFill.transform.localScale = new Vector3(GameManager.mainCharScr.health / MainCharacter.maxHealth, playerHealthFill.transform.localScale.y, playerHealthFill.transform.localScale.z) ;
+            playerHealthText.text = "Health : " + GameManager.mainCharScr.health;
         }
         else
         {

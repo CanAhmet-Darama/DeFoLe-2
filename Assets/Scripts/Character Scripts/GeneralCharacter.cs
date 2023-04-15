@@ -274,6 +274,10 @@ public class GeneralCharacter : MonoBehaviour
         }
 
         currentWeapon = newWeapon;
+        if(newWeapon == null)
+        {
+            Debug.Log("NULL");
+        }
         currentWeapon.gameObject.SetActive(true);
         AnimationOverride(animOverriders[currentWeapon.animOverriderIndex]);
         if(currentWeapon.currentAmmo > 0)
