@@ -91,8 +91,11 @@ public class MainMenuManager : UI_Manager
     }
     public void ContinueGame()
     {
-        hasLoadedGame = true;
-        SceneManager.LoadScene("Level 1");
+        if (hasSavedGame)
+        {
+            hasLoadedGame = true;
+            SceneManager.LoadScene("Level 1");
+        }
     }
     public void AreYouSureYES()
     {
@@ -112,6 +115,21 @@ public class MainMenuManager : UI_Manager
     public void DeveloperButton()
     {
         ChangePanels(PanelTypeMainMenu.developer);
+    }
+    public void OpenDeveloperLink(int code)
+    {
+        switch (code)
+        {
+            case 0:
+                Application.OpenURL("https://www.youtube.com/@CanAhmetDarama-GDev");
+                break;
+            case 1:
+                Application.OpenURL("https://twitter.com/CanADarama_GDev");
+                break;
+            case 2:
+                Application.OpenURL("https://www.linkedin.com/in/can-ahmet-darama-226742225/");
+                break;
+        }
     }
     public override void SettingsButton()
     {

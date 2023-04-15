@@ -204,6 +204,7 @@ public class GameManager : MonoBehaviour
     public static IEnumerator WaitOneFrameToLoad()
     {
         yield return null;
+        yield return null;
         string loadJson = File.ReadAllText(saveDataPath);
         GameData gameDataForLoad = JsonConvert.DeserializeObject<GameData>(loadJson);
         EnemyManager.LoadAllEnemies(gameDataForLoad);
