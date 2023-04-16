@@ -70,16 +70,23 @@ public class MainMenuManager : UI_Manager
     }
     public void NewGameAreYouSure()
     {
-        if(question == AreYouSureQuestion.newGame && areYouSurePanelMainMenu.activeInHierarchy)
+        if (File.Exists(GameManager.saveDataPath))
         {
-            ChangePanels(PanelTypeMainMenu.none);
+            if(question == AreYouSureQuestion.newGame && areYouSurePanelMainMenu.activeInHierarchy)
+            {
+                ChangePanels(PanelTypeMainMenu.none);
+            }
+            else
+            {
+                ChangePanels(PanelTypeMainMenu.areYouSure);
+                areYouSureTextMainMenu.text = "Are you sure you want to start a new game by deleting the previous save game?";
+            }
+            question = AreYouSureQuestion.newGame;
         }
         else
         {
-            ChangePanels(PanelTypeMainMenu.areYouSure);
-            areYouSureTextMainMenu.text = "Are you sure you want to start a new game by deleting the previous save game?";
+            NewGameStart();
         }
-        question = AreYouSureQuestion.newGame;
 
     }
     public void ExitGameAreYouSure()

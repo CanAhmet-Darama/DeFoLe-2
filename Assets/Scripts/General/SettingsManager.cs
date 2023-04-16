@@ -88,7 +88,7 @@ public class SettingsManager : MonoBehaviour
         }
         else
         {
-            GameManager.uiManager.ChangePanels(PanelType.none);
+            GameManager.uiManager.ChangePanels(PanelType.escMenu);
         }
     }
 

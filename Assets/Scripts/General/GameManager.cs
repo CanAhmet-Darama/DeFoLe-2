@@ -211,7 +211,7 @@ public class GameManager : MonoBehaviour
             mouseSensitivity = 0;
             isGamePaused = true;
         }
-        else {
+        else if(mainCharScr.health > 0){
             Time.timeScale = 1;
             AudioListener.volume = settingsManager.GetVolume();
             mouseSensitivity = SettingsManager.mouseSensitivityValue;
@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
     }
     public static Vector3 LerpOrSnap(Vector3 valueToChange, Vector3 targetValue, float lerpRate)
     {
-        if ((targetValue - valueToChange).magnitude < 0.01)
+        if ((targetValue - valueToChange).sqrMagnitude < 0.0001)
         {
             return targetValue;
         }

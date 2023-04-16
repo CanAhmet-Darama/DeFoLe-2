@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
     public static bool[] campsAlerted = new bool[GameManager.numberOfCamps];
     public static bool[][] enemiesCanSee;
     public static bool[][] enemiesDead;
+    public static bool[] campsCleared;
     public static short[][] enemiesStaticIndexes;
 
     public static Vector3[] lastSeenPosOfPlayer = new Vector3[GameManager.numberOfCamps];
@@ -29,6 +30,7 @@ public class EnemyManager : MonoBehaviour
         enemiesCanSee = new bool[GameManager.numberOfCamps][];
         enemiesDead = new bool[GameManager.numberOfCamps][];
         enemiesStaticIndexes = new short[GameManager.numberOfCamps][];
+        campsCleared = new bool[GameManager.numberOfCamps];
 
         enemies = new EnemyScript[GameManager.numberOfCamps][];
         enemyManagerIns = this;
@@ -64,8 +66,7 @@ public class EnemyManager : MonoBehaviour
         GameManager.AddToArray(newEnemy, ref enemies[campNumber - 1]);
         newEnemy.enemyNumCode = (byte)(enemies[campNumber - 1].Length - 1);
 
-        enemiesDead[campNumber - 1] = new bool[enemies[campNumber - 1].Length + 1];
-
+        GameManager.IncreaseArray(ref enemiesDead[campNumber - 1]);
         GameManager.IncreaseArray(ref enemiesCanSee[campNumber - 1]);
         //bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
         //enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
@@ -78,8 +79,6 @@ public class EnemyManager : MonoBehaviour
             if(enemies[campNumber - 1][index].enemyState != EnemyScript.EnemyAIState.Alerted)
             enemies[campNumber - 1][index].ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
         }
-        campsAlerted[campNumber - 1] = true;
-        //Debug.Log("Camp " + (campNumber) + " is alerted");
         enemyManagerIns.StartCoroutine(enemyManagerIns.SortCoversByDistance(campNumber));
     }
     public static void DealertWholeCamp(byte campNumber)
@@ -130,6 +129,14 @@ public class EnemyManager : MonoBehaviour
                 return;
         }
         GameManager.uiManager.CampClearedText(campNumber);
+        campsCleared[campNumber - 1] = true;
+        for(int i = campsCleared.Length - 1; i >= 0; i--)
+        {
+            if (!campsCleared[i])
+                return;
+        }
+        GameManager.uiManager.GameFinishedText();
+
     }
     public static void CheckAnyoneInCampCanSeeTarget()
     {

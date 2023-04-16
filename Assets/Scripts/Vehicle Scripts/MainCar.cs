@@ -24,7 +24,7 @@ public class MainCar : GeneralVehicle
 
     void Drive()
     {
-        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && vehicleRb.velocity.magnitude <= maxSpeed)
+        if((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && vehicleRb.velocity.sqrMagnitude <= maxSpeed*maxSpeed)
         {
             for(int i = axles.Length; i > 0; i--)
             {
@@ -32,7 +32,7 @@ public class MainCar : GeneralVehicle
                 axles[i-1].rightCol.motorTorque = motorPower;
             }
         }
-        else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && vehicleRb.velocity.magnitude <= maxSpeed)
+        else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && vehicleRb.velocity.sqrMagnitude <= maxSpeed*maxSpeed)
         {
             for (int i = axles.Length; i > 0; i--)
             {

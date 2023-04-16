@@ -122,7 +122,7 @@ public class GeneralCharacter : MonoBehaviour
             direction = StairCheckScript.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
         }
 
-        if (rb.velocity.magnitude > walkSpeed)
+        if (rb.velocity.sqrMagnitude > walkSpeed*walkSpeed)
         {
             MoveChar(direction, walkSpeed);
         }
@@ -138,7 +138,7 @@ public class GeneralCharacter : MonoBehaviour
             direction = StairCheckScript.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
         }
 
-        if (rb.velocity.magnitude > speed)
+        if (rb.velocity.sqrMagnitude > speed*speed)
         {
             MoveChar(direction, speed);
         }
@@ -155,7 +155,7 @@ public class GeneralCharacter : MonoBehaviour
             direction = StairCheckScript.RotateVecAroundVec(direction, stairSlopeChecker.crossProduct, stairSlopeChecker.normalAngle);
         }
 
-        if (rb.velocity.magnitude > runSpeed)
+        if (rb.velocity.sqrMagnitude > runSpeed * runSpeed)
         {
             MoveChar(direction, runSpeed);
         }
@@ -469,6 +469,7 @@ public class GeneralCharacter : MonoBehaviour
             mainChar.enabled = false;
             rb.velocity = Vector3.zero;
             GameManager.ChangeState(PlayerState.gameOver);
+            GameManager.uiManager.GameOverDeathText();
         }
         animator.enabled = false;
     }

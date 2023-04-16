@@ -420,7 +420,7 @@ MonoBehaviour:
   runAcceleration: 50
   jumpForce: 450
   jumpCooldown: 1.5
-  health: 30000
+  health: 150
   rb: {fileID: 1643108193539418682}
   isEnemy: 0
   currentWeapon: {fileID: 0}
@@ -1608,7 +1608,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1643108193539418682}
   character: {fileID: 1643108193539418684}
-  stairJumpForce: 4
+  stairJumpForce: 8
   onSlopeMoving: 0
   normalAngle: 0
   crossProduct: {x: 0, y: 0, z: 0}

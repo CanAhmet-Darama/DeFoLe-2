@@ -24,6 +24,7 @@ public class UI_Manager : MonoBehaviour
     public TextMeshProUGUI[] campTexts = new TextMeshProUGUI[4];
     public GameObject startingPoint;
     public GameObject[] startingTexts;
+    public Image endgamePanel;
 
 
     [Header("Texts")]
@@ -59,6 +60,10 @@ public class UI_Manager : MonoBehaviour
     public Coroutine notificationOpacityCoroutine;
     bool askingForSave;
     bool atStartingPoint;
+
+    [Header("Music Stuff")]
+    public AudioSource musicSource;
+    public AudioClip[] musics; // First one is win, second one is death
 
     void Start()
     {
@@ -264,6 +269,26 @@ public class UI_Manager : MonoBehaviour
         }
         notificationText.text = "Enemy camp " + campNumber + " is completely cleared";
         ReduceOpacity(notificationText, 4, 2, false);        
+    }
+    public void GameFinishedText()
+    {
+        if(!endgamePanel.gameObject.activeInHierarchy)
+        {
+            endgamePanel.gameObject.SetActive(true);
+        }
+        musicSource.PlayOneShot(musics[0]);
+        ReduceOpacity(endgamePanel, 5, 3, false);        
+    }
+    public void GameOverDeathText()
+    {
+        if (!endgamePanel.gameObject.activeInHierarchy)
+        {
+            endgamePanel.transform.Find("Endgame Text").GetComponent<TextMeshProUGUI>().text = "You are dead. You lost !!!";
+            endgamePanel.gameObject.SetActive(true);
+        }
+        musicSource.PlayOneShot(musics[1]);
+        ReduceOpacity(endgamePanel, 5, 3, false);
+        GameManager.PauseGame();
     }
 
     public virtual void ChangePanels(PanelType pType)

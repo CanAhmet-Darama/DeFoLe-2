@@ -355,18 +355,20 @@ public class EnemyScript : GeneralCharacter
                 }
                 else
                 {
-                    navAgent.SetDestination(permanentCoverObject.coverPoints[0].worldPos);
+                    navAgent.SetDestination(permanentCoverObject.coverPoints[permanentCoverObject.coverPoints.Length - 1].worldPos);
                 }
                 checkCoverCoroutine = StartCoroutine(AlertCoverCheckPeriodically(alertedCoverCheckCooldown));
+                
+                if (!EnemyManager.campsAlerted[campOfEnemy - 1])
+                {
+                    MakeEnemyVoice(this, 0);
+                }
+
                 StartCoroutine(AlertEntireCamp());
                 shouldFire = true;
                 if (patrolWaitCoroutine != null) StopCoroutine(patrolWaitCoroutine);
                 enteredNewState = false;
 
-                if (!EnemyManager.campsAlerted[campOfEnemy - 1])
-                {
-                    MakeEnemyVoice(this, 0);
-                }
             }
             if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
             {
@@ -461,6 +463,7 @@ public class EnemyScript : GeneralCharacter
     }
     IEnumerator AlertEntireCamp()
     {
+        EnemyManager.campsAlerted[campOfEnemy - 1] = true;
         yield return new WaitForSeconds(waitBeforeAlertingAllDuration);
         EnemyManager.AlertWholeCamp(campOfEnemy);
     }
