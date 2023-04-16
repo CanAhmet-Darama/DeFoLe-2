@@ -23,6 +23,7 @@ public class UI_Manager : MonoBehaviour
     public GameObject notificationPanel;
     public TextMeshProUGUI[] campTexts = new TextMeshProUGUI[4];
     public GameObject startingPoint;
+    public GameObject[] startingTexts;
 
 
     [Header("Texts")]
@@ -230,6 +231,14 @@ public class UI_Manager : MonoBehaviour
         {
             atStartingPoint = false;
             campTexts[0].transform.parent.gameObject.SetActive(false);
+            for (int i = startingTexts.Length - 1; i >= 0; i--)
+            {
+                startingTexts[i].gameObject.SetActive(false);
+            }
+        }
+        for (int i = startingTexts.Length-1; i >= 0; i--)
+        {
+            startingTexts[i].transform.forward = -(GameManager.mainCam.position + new Vector3(0, 1, 0) - startingTexts[i].transform.position).normalized;
         }
     }
 
