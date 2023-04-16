@@ -20,7 +20,7 @@ public class UI_Manager : MonoBehaviour
     public GameObject areYouSurePanel;
 
     [Header("Other UI Elements")]
-    public GameObject notificationPanel;
+    public TextMeshProUGUI notificationText;
     public TextMeshProUGUI[] campTexts = new TextMeshProUGUI[4];
     public GameObject startingPoint;
     public GameObject[] startingTexts;
@@ -56,6 +56,7 @@ public class UI_Manager : MonoBehaviour
 
     [Header("Different Stuff")]
     public Coroutine weaponIconOpacityCoroutine;
+    public Coroutine notificationOpacityCoroutine;
     bool askingForSave;
     bool atStartingPoint;
 
@@ -156,19 +157,33 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    public void ReduceOpacity(Image opaqueImage, float waitDurat, float reduceDurat)
+    public void ReduceOpacity(MaskableGraphic opaqueImage, float waitDurat, float reduceDurat, bool forWeaponIcon)
     {
         opaqueImage.SetNativeSize();
-        if(weaponIconOpacityCoroutine != null)
+        if (forWeaponIcon)
         {
-            StopCoroutine(weaponIconOpacityCoroutine);
-            Color currentColor = opaqueImage.color;
-            currentColor.a = 1;
-            opaqueImage.color = currentColor;
+            if(weaponIconOpacityCoroutine != null)
+            {
+                StopCoroutine(weaponIconOpacityCoroutine);
+                Color currentColor = opaqueImage.color;
+                currentColor.a = 1;
+                opaqueImage.color = currentColor;
+            }
+            weaponIconOpacityCoroutine = StartCoroutine(ReduceOpacityNumerator(opaqueImage, waitDurat, reduceDurat / 100));
         }
-        weaponIconOpacityCoroutine = StartCoroutine(ReduceOpacityNumerator(opaqueImage, waitDurat, reduceDurat / 100));
+        else
+        {
+            if (notificationOpacityCoroutine != null)
+            {
+                StopCoroutine(notificationOpacityCoroutine);
+                Color currentColor = opaqueImage.color;
+                currentColor.a = 1;
+                opaqueImage.color = currentColor;
+            }
+            notificationOpacityCoroutine = StartCoroutine(ReduceOpacityNumerator(opaqueImage, waitDurat, reduceDurat / 100));
+        }
     }
-    IEnumerator ReduceOpacityNumerator(Image opaqueImage, float waitDurat, float reduceRate)
+    IEnumerator ReduceOpacityNumerator(MaskableGraphic opaqueImage, float waitDurat, float reduceRate)
     {
         yield return new WaitForSeconds(waitDurat);
         while(opaqueImage.color.a > 0)
@@ -240,6 +255,15 @@ public class UI_Manager : MonoBehaviour
         {
             startingTexts[i].transform.forward = -(GameManager.mainCam.position + new Vector3(0, 1, 0) - startingTexts[i].transform.position).normalized;
         }
+    }
+    public void CampClearedText(byte campNumber)
+    {
+        if(!notificationText.gameObject.activeInHierarchy)
+        {
+            notificationText.gameObject.SetActive(true);
+        }
+        notificationText.text = "Enemy camp " + campNumber + " is completely cleared";
+        ReduceOpacity(notificationText, 4, 2, false);        
     }
 
     public virtual void ChangePanels(PanelType pType)

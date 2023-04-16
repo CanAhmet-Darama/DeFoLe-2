@@ -28,10 +28,11 @@ public class StairCheckScript : MonoBehaviour
     float diagonalRayAngle = 40;
 
     bool normalsNotSloped;
+    float[] normalAngles = new float[3];
     #endregion
 
     #region Slope
-    Ray ray2;
+    Ray rayForSlope;
     float castDistance2 = 0.2f;
     float maxSlopeAngle = 55;
     float slopeForceMultiplier = 0.99f;
@@ -54,7 +55,7 @@ public class StairCheckScript : MonoBehaviour
         Vector3 rayDir = new Vector3(rb.velocity.x, 0, rb.velocity.z).normalized;
         Vector3 rayDir2 = RotateVecAroundVec(rayDir, Vector3.up, diagonalRayAngle);
         Vector3 rayDir3 = RotateVecAroundVec(rayDir, Vector3.up, -diagonalRayAngle);
-        if(rb.velocity.magnitude < 0.01f)
+        if(rb.velocity.sqrMagnitude < 0.0001f)
         {
             /* If velocity is too low, then launch rays into the following directions */
             switch(character.animStatePriDir)
@@ -103,28 +104,31 @@ public class StairCheckScript : MonoBehaviour
             isHit3 = Physics.Raycast(ray_3, out hitInfo_3, castDistance, lMask, QueryTriggerInteraction.Ignore);
             Debug.DrawRay(transform.position + new Vector3(0, castCurrentHeight, 0), rayDir3 * castDistance, Color.cyan);
 
-            float[] normalAngles = new float[3];
-            normalAngles[0] = Vector3.Angle(hitInfo.normal, Vector3.up);
-            normalAngles[1] = Vector3.Angle(hitInfo_2.normal, Vector3.up);
-            normalAngles[2] = Vector3.Angle(hitInfo_3.normal, Vector3.up);
 
-            normalsNotSloped = true;
-            for(int i = normalAngles.Length - 1; i >= 0; i--)
-            {
-                if (normalAngles[i] < 75)
-                {
-                    normalsNotSloped = false;
-                    break;
-                }
-            }
 
             if (!isHit && !isHit2 && !isHit3)
             {
+                normalsNotSloped = true;
+                for(int i = normalAngles.Length - 1; i >= 0; i--)
+                {
+                    if (normalAngles[i] < 45)
+                    {
+                        normalsNotSloped = false;
+                        break;
+                    }
+                }
+
                 if(character.animStateSpeed != AnimStateSpeed.idle && normalsNotSloped){
                     character.transform.position = Vector3.Lerp(character.transform.position,
                                                   character.transform.position + new Vector3(0, castCurrentHeight, 0), 0.1f * stairJumpForce);
                 }
                 break;
+            }
+            else
+            {
+                normalAngles[0] = Vector3.Angle(hitInfo.normal, Vector3.up);
+                normalAngles[1] = Vector3.Angle(hitInfo_2.normal, Vector3.up);
+                normalAngles[2] = Vector3.Angle(hitInfo_3.normal, Vector3.up);
             }
             castCurrentHeight += iterateIncrease;
         } while (castCurrentHeight < stairMaxHeight);
@@ -138,8 +142,8 @@ public class StairCheckScript : MonoBehaviour
            And lerp the velocity to zero, or with zero gravity it fill float. If it is not waiting idle
            then set the onSlopeMoving true. If it is true, MoveChar and AccelerateChar will behave accordingly
            in the GeneralCharacter script */
-        ray2 = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(ray2, out hitInfoForSlope, castDistance2, lMask, QueryTriggerInteraction.Ignore)){
+        rayForSlope = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(rayForSlope, out hitInfoForSlope, castDistance2, lMask, QueryTriggerInteraction.Ignore)){
 
             Debug.DrawRay(transform.position, Vector3.down * castDistance2, Color.yellow);
             normalAngle = Vector3.Angle(Vector3.up, hitInfoForSlope.normal);
@@ -158,6 +162,10 @@ public class StairCheckScript : MonoBehaviour
                 {
                     onSlopeMoving = true;
                 }
+            }
+            else
+            {
+                onSlopeMoving = false;
             }
         }
 

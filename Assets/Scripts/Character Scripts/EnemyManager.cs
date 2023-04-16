@@ -122,7 +122,15 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-
+    public static void CampClearedCheck(byte campNumber)
+    {
+        for(int index = enemiesDead[campNumber -1].Length - 1; index >= 0; index--)
+        {
+            if (!enemiesDead[campNumber - 1][index])
+                return;
+        }
+        GameManager.uiManager.CampClearedText(campNumber);
+    }
     public static void CheckAnyoneInCampCanSeeTarget()
     {
         for (short campIndex = (short)(enemies.Length - 1) ; campIndex >= 0 ; campIndex--)

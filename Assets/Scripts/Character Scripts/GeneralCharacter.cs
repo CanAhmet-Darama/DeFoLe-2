@@ -290,7 +290,7 @@ public class GeneralCharacter : MonoBehaviour
         {
             GameManager.uiManager.SetAmmoUI();
             GameManager.uiManager.weaponIcon.sprite = GameManager.uiManager.weaponIconSprites[(int)newWeapon.weaponType];
-            GameManager.uiManager.ReduceOpacity(GameManager.uiManager.weaponIcon, 1, 1);
+            GameManager.uiManager.ReduceOpacity(GameManager.uiManager.weaponIcon, 1, 1, true);
         }
     }
     public void ResetHandTargets(GeneralWeapon newWeapon)
@@ -315,7 +315,7 @@ public class GeneralCharacter : MonoBehaviour
                 {
                     GameManager.uiManager.SetAmmoUI();
                     GameManager.uiManager.weaponIcon.sprite = GameManager.uiManager.weaponIconSprites[5];
-                    GameManager.uiManager.ReduceOpacity(GameManager.uiManager.weaponIcon, 1, 1);
+                    GameManager.uiManager.ReduceOpacity(GameManager.uiManager.weaponIcon, 1, 1, true);
                 }
                 break;
             case WeaponState.ranged:
@@ -458,6 +458,8 @@ public class GeneralCharacter : MonoBehaviour
             enemyS.enabled = false;
             enemyS.EnableRagdoll();
             EnemyScript.MakeEnemyVoice(enemyS, 2);
+            EnemyManager.enemiesDead[enemyS.campOfEnemy - 1][enemyS.enemyStaticIndex] = true;
+            EnemyManager.CampClearedCheck(enemyS.campOfEnemy);
         }
         else
         {
