@@ -19,6 +19,11 @@ public class UI_Manager : MonoBehaviour
     public GameObject normalUIPanel;
     public GameObject areYouSurePanel;
 
+    [Header("Other UI Elements")]
+    public GameObject notificationPanel;
+    public TextMeshProUGUI[] campTexts = new TextMeshProUGUI[4];
+    public GameObject startingPoint;
+
 
     [Header("Texts")]
     public TextMeshProUGUI curAmmoText;
@@ -51,16 +56,28 @@ public class UI_Manager : MonoBehaviour
     [Header("Different Stuff")]
     public Coroutine weaponIconOpacityCoroutine;
     bool askingForSave;
+    bool atStartingPoint;
 
     void Start()
     {
         mainCar = GameManager.mainCar.GetComponent<MainCar>();
         MainCharacter.maxHealth = GameManager.mainCharScr.health;
         maxVehicleHealth = mainCar.vehicleHealth;
+
+        atStartingPoint = true;
+        for (int i = campTexts.Length - 1; i >= 0; i--)
+        {
+            campTexts[i].transform.LookAt(GameManager.mainCam);
+            campTexts[i].transform.localEulerAngles += new Vector3(0, 180, 0);
+        }
     }
 
     void Update()
     {
+        if (atStartingPoint)
+        {
+            UI3DSetter();
+        }
     }
 
     public void SetAmmoUI()
@@ -205,6 +222,16 @@ public class UI_Manager : MonoBehaviour
     }
 
     #endregion
+
+    void UI3DSetter()
+    {
+        float sqrDistance = GameManager.SqrDistance(startingPoint.transform.position, GameManager.mainCam.position);
+        if (sqrDistance > 100*100)
+        {
+            atStartingPoint = false;
+            campTexts[0].transform.parent.gameObject.SetActive(false);
+        }
+    }
 
     public virtual void ChangePanels(PanelType pType)
     {
