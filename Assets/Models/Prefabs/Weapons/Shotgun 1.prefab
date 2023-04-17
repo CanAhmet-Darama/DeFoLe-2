@@ -222,7 +222,7 @@ MonoBehaviour:
   owner: {fileID: 0}
   damage: 20
   range: 75
-  firingTime: 0.3
+  firingTime: 0.4
   reloadTime: 2.5
   inaccuracyDegree: 5
   maxAmmo: 2

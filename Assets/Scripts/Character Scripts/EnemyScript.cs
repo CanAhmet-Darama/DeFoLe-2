@@ -7,6 +7,9 @@ using UnityEngine.AI;
 
 public class EnemyScript : GeneralCharacter
 {
+    public static float generalMeleeDistance = 0.7f;
+    float generalMeleeDistanceInUse;
+
     [Header("Enemy AI")]
     public NavMeshAgent navAgent;
     public EnemyAIState enemyState;
@@ -139,6 +142,7 @@ public class EnemyScript : GeneralCharacter
             visibleRange = visibleRange * 2;
         }
         weaponMeshes = mainWeapon.meshedPartOfWeapon;
+        generalMeleeDistanceInUse = generalMeleeDistance;
     }
     void NavAgentSetter()
     {
@@ -197,6 +201,10 @@ public class EnemyScript : GeneralCharacter
         {
             visibleRangeInUse *= 2;
             targetTransform = mainCar;
+            if(weaponState == WeaponState.melee)
+            {
+                generalMeleeDistanceInUse = generalMeleeDistance * 3;
+            }
         }
 
 
@@ -270,6 +278,10 @@ public class EnemyScript : GeneralCharacter
             {
                 ChangeEnemyAIState(EnemyAIState.SemiDetected);
             }
+        }
+        if(navAgent.isStopped)
+        {
+            rb.velocity *= 0.1f;
         }
     }
     IEnumerator WaitForOtherPatrolPoint()
@@ -361,11 +373,11 @@ public class EnemyScript : GeneralCharacter
                 enteredNewState = false;
 
             }
-            if (navAgent.remainingDistance < navAgent.stoppingDistance && !navAgent.isStopped)
+            if (!navAgent.isStopped && navAgent.remainingDistance < navAgent.stoppingDistance)
             {
                 StopNavMovement();
             }
-            else if(navAgent.remainingDistance < navAgent.stoppingDistance && navAgent.isStopped)
+            else if(navAgent.isStopped && navAgent.remainingDistance < navAgent.stoppingDistance)
             {
                 RotateCharToLookAt(targetTransform.position, 0.1f);
                 OnCoverBehaviour();
@@ -406,7 +418,7 @@ public class EnemyScript : GeneralCharacter
                             StopCoroutine(checkCoverCoroutine);
                         }
                         if (isCrouching) CrouchOrStand();
-                        navAgent.stoppingDistance = 0.7f;
+                        navAgent.stoppingDistance = generalMeleeDistanceInUse;
                         IsCoveredSetter(true);
                     }
                 }

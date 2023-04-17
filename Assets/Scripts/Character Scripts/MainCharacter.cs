@@ -338,7 +338,7 @@ public class MainCharacter : GeneralCharacter
             {
                 currentWeapon.SniperZoom(true);
             }
-            else if(CameraScript.scrollInput < 0 && currentWeapon.weaponType == WeaponType.SR_1 && currentWeapon.zoomedAlready)
+            else if((CameraScript.scrollInput < 0 && currentWeapon.weaponType == WeaponType.SR_1 && currentWeapon.zoomedAlready) || Input.GetMouseButtonUp(1))
             {
                 currentWeapon.SniperZoom(false);
             }

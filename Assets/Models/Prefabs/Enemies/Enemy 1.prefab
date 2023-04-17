@@ -541,13 +541,13 @@ MonoBehaviour:
   sqrDistancePlayer: 0
   deactivateMeshOnLongDistance: 0
   longDistance: 0
-  meshesDetailed: []
+  meshesDetailed:
+  - {fileID: 6763794978334999788}
   meshesNotDetailed:
   - {fileID: 5054165831789001886}
   - {fileID: 3302034092590389718}
   isDetailedNow: 0
   isDeactivated: 0
-  skinnedMesh: {fileID: 6763794978334999788}
   mainCam: {fileID: 0}
   enemyActivated: 0
   enemyScr: {fileID: 779311080259487559}

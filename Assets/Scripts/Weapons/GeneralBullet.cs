@@ -17,6 +17,8 @@ public class GeneralBullet : MonoBehaviour
     public TrailRenderer trailRenderer;
     public byte index;
 
+    public Rigidbody bulletRb;
+
     public static Collider[] nearbyColliders;
     public float collisionAlertRange;
 

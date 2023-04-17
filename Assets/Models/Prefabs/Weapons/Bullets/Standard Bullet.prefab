@@ -67,6 +67,7 @@ MonoBehaviour:
   itsOwnerWeapon: {fileID: 0}
   trailRenderer: {fileID: -266407137353818149}
   index: 0
+  bulletRb: {fileID: 2854387188385965417}
   collisionAlertRange: 8
 --- !u!54 &2854387188385965417
 Rigidbody:

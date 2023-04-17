@@ -100,7 +100,6 @@ public class GeneralWeapon : MonoBehaviour
         owner.StartCoroutine(owner.CanShootAgain(reloadTime));
         owner.StartCoroutine(owner.CanReloadAgain(reloadTime));
         owner.animator.SetTrigger("reload");
-        owner.isReloading = true;
         StartCoroutine(DisableSecondHandTBIK(reloadTime));
         StartCoroutine(IncreaseBulletWithReload());
         StartCoroutine(WeaponExtraSound());
@@ -117,8 +116,9 @@ public class GeneralWeapon : MonoBehaviour
         for (byte i = bulletPerShot; i >0; i--)
         {
             GameObject bulletToShoot = GetAmmo();
-
-            bulletToShoot.GetComponent<TrailRenderer>().enabled = false;
+            GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
+            
+            gBullet.trailRenderer.enabled = false;
             bulletToShoot.SetActive(false);
 
 
@@ -127,7 +127,6 @@ public class GeneralWeapon : MonoBehaviour
             bulletToShoot.transform.SetParent(null);
 
             bulletToShoot.SetActive(true);
-            GeneralBullet gBullet = bulletToShoot.GetComponent<GeneralBullet>();
             gBullet.duratPassed = 0;
             gBullet.firedPos = bulletToShoot.transform.position;
 
@@ -135,9 +134,8 @@ public class GeneralWeapon : MonoBehaviour
             float inaccX = Random.Range(-inaccuracyDegree / 100, inaccuracyDegree / 100);
             float inaccY = Random.Range(-inaccuracyDegree / 100, inaccuracyDegree / 100);
             float launchSpeed = gBullet.bulletSpeed;
-            Rigidbody bulletRB = bulletToShoot.GetComponent<Rigidbody>();
-            bulletRB.velocity = launchSpeed * transform.forward;
-            bulletRB.velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
+            gBullet.bulletRb.velocity = launchSpeed * transform.forward;
+            gBullet.bulletRb.velocity += (transform.right * inaccX * launchSpeed) + (transform.up * inaccY * launchSpeed);
             StartCoroutine(AFrameThenTrail(bulletToShoot));
         }
         owner.animator.SetTrigger("fire");
@@ -215,14 +213,18 @@ public class GeneralWeapon : MonoBehaviour
         if(weaponType == WeaponType.SR_1)
         {
             owner.rightHandTBIK.weight = 0;
+            owner.rightHandConstraint.weight = 0;
             yield return new WaitForSeconds(durat);
             owner.rightHandTBIK.weight = 1;
+            owner.rightHandConstraint.weight = 1;
         }
         else// if(weaponType == WeaponType.Shotgun)
         {
             owner.leftHandTBIK.weight = 0;
+            owner.leftHandConstraint.weight = 0;
             yield return new WaitForSeconds(durat);
             owner.leftHandTBIK.weight = 1;
+            owner.leftHandConstraint.weight = 1;
         }
     }
     IEnumerator IncreaseBulletWithReload()
@@ -246,63 +248,68 @@ public class GeneralWeapon : MonoBehaviour
 
     IEnumerator WeaponExtraSound(bool forReload = true)
     {
+        float weaponExtraSoundVolume = 0.1f;
         yield return null;
-        switch(weaponType){
+        switch (weaponType)
+        {
             case WeaponType.AR_1:
                 yield return new WaitForSeconds(0.3f);
-                gunAudioSource.PlayOneShot(magOutSound);
+                gunAudioSource.PlayOneShot(magOutSound, weaponExtraSoundVolume);
                 yield return new WaitForSeconds(0.9f);
-                gunAudioSource.PlayOneShot(magInSound);
+                gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                 break;
             case WeaponType.TR_1:
                 yield return new WaitForSeconds(0.3f);
-                gunAudioSource.PlayOneShot(magOutSound);
+                gunAudioSource.PlayOneShot(magOutSound, weaponExtraSoundVolume);
                 yield return new WaitForSeconds(1.1f);
-                gunAudioSource.PlayOneShot(magInSound);
+                gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                 break;
             case WeaponType.Pistol:
                 yield return new WaitForSeconds(0.3f);
-                gunAudioSource.PlayOneShot(magOutSound);
+                gunAudioSource.PlayOneShot(magOutSound, weaponExtraSoundVolume);
                 yield return new WaitForSeconds(1.3f);
-                gunAudioSource.PlayOneShot(magInSound);
+                gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                 yield return new WaitForSeconds(0.4f);
-                gunAudioSource.PlayOneShot(pullBoltSound);
+                gunAudioSource.PlayOneShot(pullBoltSound, weaponExtraSoundVolume);
                 break;
             case WeaponType.Shotgun:
-                gunAudioSource.PlayOneShot(pullBoltSound);
-                yield return new WaitForSeconds(0.7f);
-                gunAudioSource.PlayOneShot(magOutSound);
-                yield return new WaitForSeconds(0.8f);
-                gunAudioSource.PlayOneShot(magInSound);
-                yield return new WaitForSeconds(0.2f);
-                gunAudioSource.PlayOneShot(magInSound);
-                yield return new WaitForSeconds(0.2f);
-                gunAudioSource.PlayOneShot(pushBoltSound);
+                if (!owner.isEnemy)
+                {
+                    gunAudioSource.PlayOneShot(pullBoltSound, weaponExtraSoundVolume);
+                    yield return new WaitForSeconds(0.7f);
+                    gunAudioSource.PlayOneShot(magOutSound, weaponExtraSoundVolume);
+                    yield return new WaitForSeconds(0.8f);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
+                    yield return new WaitForSeconds(0.2f);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
+                    yield return new WaitForSeconds(0.2f);
+                    gunAudioSource.PlayOneShot(pushBoltSound, weaponExtraSoundVolume);
+                }
                 break;
             case WeaponType.SR_1:
-                if (forReload)
+                if (!owner.isEnemy && forReload)
                 {
                     yield return new WaitForSeconds(0.7f);
-                    gunAudioSource.PlayOneShot(pullBoltSound);
+                    gunAudioSource.PlayOneShot(pullBoltSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(1.6f);
-                    gunAudioSource.PlayOneShot(magInSound);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(0.3f);
-                    gunAudioSource.PlayOneShot(magInSound);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(0.3f);
-                    gunAudioSource.PlayOneShot(magInSound);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(0.3f);
-                    gunAudioSource.PlayOneShot(magInSound);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(0.3f);
-                    gunAudioSource.PlayOneShot(magInSound);
+                    gunAudioSource.PlayOneShot(magInSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(0.53f);
-                    gunAudioSource.PlayOneShot(pushBoltSound);
+                    gunAudioSource.PlayOneShot(pushBoltSound, weaponExtraSoundVolume);
                 }
                 else
                 {
                     yield return new WaitForSeconds(0.6f);
-                    gunAudioSource.PlayOneShot(pullBoltSound);
+                    gunAudioSource.PlayOneShot(pullBoltSound, weaponExtraSoundVolume);
                     yield return new WaitForSeconds(0.4f);
-                    gunAudioSource.PlayOneShot(pushBoltSound);
+                    gunAudioSource.PlayOneShot(pushBoltSound, weaponExtraSoundVolume);
                 }
                 break;
         }
