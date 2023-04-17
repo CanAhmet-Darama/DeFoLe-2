@@ -814,9 +814,6 @@ public class EnemyScript : GeneralCharacter
 
 
 
-    /// <summary>
-    /// 0 = AlertVoice, 1 <-> Last - 1 = HurtVoice,  Last = DeathVoice
-    /// </summary>
     public static void MakeEnemyVoice(EnemyScript enemyToVoice, byte voiceType)
     {
         if (!enemyToVoice.createdVoiceAlready)
