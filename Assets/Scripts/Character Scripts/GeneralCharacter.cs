@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
 
 public class GeneralCharacter : MonoBehaviour
@@ -66,6 +67,10 @@ public class GeneralCharacter : MonoBehaviour
     [HideInInspector]public StairCheckScript stairSlopeChecker;
     [SerializeField] GameObject stairSlopeCheckerGO_;
     [HideInInspector] public CharColliderManager charColManager;
+
+    [Header("Ragdoll")]
+    protected Collider[] ragdollCols;
+    protected Rigidbody[] ragdollRbs;
 
     [Header("Not to meddle with")]
     #region Some Variables
@@ -363,6 +368,7 @@ public class GeneralCharacter : MonoBehaviour
 
         footTouchedGround = new bool[2];
         footTouchedGroundPrevious = new bool[2];
+        GetAndDisableRagdollParts();
     }
     protected void GeneralCharUpdate()
     {
@@ -456,7 +462,6 @@ public class GeneralCharacter : MonoBehaviour
             enemyS.StopAllCoroutines();
             enemyS.navAgent.enabled = false;
             enemyS.enabled = false;
-            enemyS.EnableRagdoll();
             EnemyScript.MakeEnemyVoice(enemyS, 2);
             EnemyManager.enemiesDead[enemyS.campOfEnemy - 1][enemyS.enemyStaticIndex] = true;
             EnemyManager.CampClearedCheck(enemyS.campOfEnemy);
@@ -472,6 +477,7 @@ public class GeneralCharacter : MonoBehaviour
             GameManager.uiManager.GameOverDeathText();
         }
         animator.enabled = false;
+        EnableRagdoll();
     }
 
     void SteppedGroundCheck()
@@ -560,6 +566,47 @@ public class GeneralCharacter : MonoBehaviour
             footTouchedGroundPrevious[i] = footTouchedGround[i];
         }
     }
+    void GetAndDisableRagdollParts()
+    {
+        ragdollCols = skeleton.GetComponentsInChildren<Collider>();
+        ragdollRbs = skeleton.GetComponentsInChildren<Rigidbody>();
+        DisableRagdoll();
+    }
+    public void EnableRagdoll()
+    {
+        for (int ragdollIndex = ragdollCols.Length - 1; ragdollIndex >= 0; ragdollIndex--)
+        {
+            ragdollCols[ragdollIndex].enabled = true;
+        }
+        for (int ragdollIndex = ragdollRbs.Length - 1; ragdollIndex >= 0; ragdollIndex--)
+        {
+            ragdollRbs[ragdollIndex].isKinematic = false;
+        }
+        mainColl.enabled = false;
+        rb.isKinematic = true;
+        if (isEnemy)
+        {
+            GetComponent<NavMeshAgent>().enabled = false;
+        }
+    }
+    public void DisableRagdoll()
+    {
+        for (int ragdollIndex = ragdollCols.Length - 1; ragdollIndex >= 0; ragdollIndex--)
+        {
+            ragdollCols[ragdollIndex].enabled = false;
+        }
+        for (int ragdollIndex = ragdollRbs.Length - 1; ragdollIndex >= 0; ragdollIndex--)
+        {
+            ragdollRbs[ragdollIndex].isKinematic = true;
+        }
+        mainColl.enabled = true;
+        rb.isKinematic = false;
+        if (isEnemy)
+        {
+            GetComponent<NavMeshAgent>().enabled = true;
+        }
+    }
+
 }
 public enum AnimStateSpeed { idle, walk, run }
 public enum AnimStatePriDir { front, back, none }

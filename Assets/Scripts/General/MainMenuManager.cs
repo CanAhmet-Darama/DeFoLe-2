@@ -28,6 +28,7 @@ public class MainMenuManager : UI_Manager
     public GameObject areYouSurePanelMainMenu;
     public GameObject mainButtonsPanel;
     public GameObject developerPanel;
+    public GameObject loadingIcon;
 
     [Header("Texts")]
     public TextMeshProUGUI areYouSureTextMainMenu;
@@ -104,6 +105,7 @@ public class MainMenuManager : UI_Manager
     }
     public void NewGameStart()
     {
+        loadingIcon.SetActive(true);
         hasLoadedGame = false;
         SceneManager.LoadScene("Level 1");
 

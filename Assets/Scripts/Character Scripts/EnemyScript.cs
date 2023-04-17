@@ -82,10 +82,6 @@ public class EnemyScript : GeneralCharacter
     [SerializeField] float meleeRange;
     public AimManager enemyAimer;
 
-    [Header("Ragdoll")]
-    Collider[] ragdollCols;
-    Rigidbody[] ragdollRbs;
-
     [Header("Enemy Instance References")]
     public GameObject enemyHitboxes;
     public GameObject groundChecker;
@@ -115,7 +111,6 @@ public class EnemyScript : GeneralCharacter
 
     void EnemyStart()
     {
-        GetAndDisableRagdollParts();
         lastPatrolIndex = 0;
         mainChar = GameManager.mainChar;
         mainCar = GameManager.mainCar;
@@ -820,40 +815,6 @@ public class EnemyScript : GeneralCharacter
     }
     public enum EnemyAIState { Patrol, SemiDetected, Alerted, Searching, GameOver}
 
-    void GetAndDisableRagdollParts()
-    {
-        ragdollCols = skeleton.GetComponentsInChildren<Collider>();
-        ragdollRbs = skeleton.GetComponentsInChildren<Rigidbody>();
-        DisableRagdoll();
-    }
-    public void EnableRagdoll()
-    {
-        for (int ragdollIndex = ragdollCols.Length - 1; ragdollIndex >= 0; ragdollIndex--)
-        {
-            ragdollCols[ragdollIndex].enabled = true;
-        }
-        for (int ragdollIndex = ragdollRbs.Length - 1; ragdollIndex >= 0; ragdollIndex--)
-        {
-            ragdollRbs[ragdollIndex].isKinematic = false;
-        }
-        mainColl.enabled = false;
-        rb.isKinematic = true;
-        navAgent.enabled = false;
-    }
-    public void DisableRagdoll()
-    {
-        for(int ragdollIndex = ragdollCols.Length-1;ragdollIndex>= 0;ragdollIndex--)
-        {
-            ragdollCols[ragdollIndex].enabled = false;
-        }
-        for(int ragdollIndex = ragdollRbs.Length-1;ragdollIndex>= 0;ragdollIndex--)
-        {
-            ragdollRbs[ragdollIndex].isKinematic = true;
-        }
-        mainColl.enabled = true;
-        rb.isKinematic = false;
-        navAgent.enabled = true;
-    }
 
 
     /// <summary>

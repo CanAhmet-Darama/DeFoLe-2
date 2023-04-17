@@ -288,7 +288,6 @@ public class UI_Manager : MonoBehaviour
         }
         musicSource.PlayOneShot(musics[1]);
         ReduceOpacity(endgamePanel, 5, 3, false);
-        GameManager.PauseGame();
     }
 
     public virtual void ChangePanels(PanelType pType)
