@@ -101,8 +101,8 @@ public class GeneralVehicle : MonoBehaviour
             halfDamagedSmoke.Play();
             motorPower *= 0.75f;
             maxSpeed *= 0.75f;
-            Debug.Log("Vehicle semi damaged");
-            Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
+            //Debug.Log("Vehicle semi damaged");
+            //Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
         }
         else if(vehicleHealth < (maxVehicleHealth / 3) && !seriousDamagedSmoke.isPlaying)
         {
@@ -110,8 +110,8 @@ public class GeneralVehicle : MonoBehaviour
             seriousDamagedSmoke.Play();
             motorPower *= 0.75f;
             maxSpeed *= 0.75f;
-            Debug.Log("Vehicle serious damaged");
-            Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
+            //Debug.Log("Vehicle serious damaged");
+            //Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
         }
         else if(vehicleHealth <= 0 && !deadVehicleSmoke.isPlaying)
         {
@@ -122,8 +122,8 @@ public class GeneralVehicle : MonoBehaviour
             vehicleAudioSource.Stop();
             wheelAudioSource.Stop();
             vehicleAudioSource.PlayOneShot(deadVehicleSound);
-            Debug.Log("Vehicle broken");
-            Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
+            //Debug.Log("Vehicle broken");
+            //Debug.Log("MP : " + motorPower + ", MS : " + maxSpeed);
         }
     }
     void VehicleSoundAndParticleManage()

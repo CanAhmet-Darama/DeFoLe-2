@@ -38,12 +38,13 @@ public class RegionOptimizer : MonoBehaviour
         //Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
         //float AngleBetweenCam = Vector2.Angle(toTargetVector2D, LevelOfDetailManager.camForward2D);
 
-        if (!closeEnoughToPlayer && (((sqrDistancePlayer < sqrRangeInUse)) || (sqrDistancePlayer < sqrRangeInUse/4)))
+        if (!closeEnoughToPlayer && (sqrDistancePlayer < sqrRangeInUse))
         {
             closeEnoughToPlayer = true;
             destroyableCollection.SetActive(true);
             interactableCollection.SetActive(true);
             enemiesCollection.SetActive(true);
+            Destroy(this);
         }
         //else if (closeEnoughToPlayer && sqrDistancePlayer > sqrRangeInUse*2)
         //{

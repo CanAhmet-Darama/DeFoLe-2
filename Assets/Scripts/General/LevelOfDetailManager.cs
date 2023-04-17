@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelOfDetailManager : MonoBehaviour
@@ -20,7 +18,6 @@ public class LevelOfDetailManager : MonoBehaviour
     public bool isDeactivated = false;
 
     [Header("Enemy Detail")]
-    public SkinnedMeshRenderer skinnedMesh;
     public Transform mainCam;
     public bool enemyActivated = false;
     public EnemyScript enemyScr;
@@ -48,98 +45,6 @@ public class LevelOfDetailManager : MonoBehaviour
         CheckRequiredLOD();
     }
 
-    /*void CheckRequiredLOD()
-    {
-        Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
-        Vector2 camForward2D = new Vector2(mainCam.forward.x, mainCam.forward.z);
-        float AngleBetweenCam = Vector2.Angle(toTargetVector2D, camForward2D);
-        if(gameObject.name == "Metal Cube (14)")
-        {
-            //Debug.Log(AngleBetweenCam + " _ " + Mathf.Sqrt(sqrDistancePlayer));
-            //Debug.DrawLine(mainCam.position, transform.position);
-        }
-
-        float perspectiveAngle = 75;
-        if (mainCamScr.camOwnState == CamState.zoomScope)
-        {
-            perspectiveAngle = 30;
-        }
-
-        if (AngleBetweenCam < perspectiveAngle)
-        {
-            if(deactivateMeshOnLongDistance && sqrDistancePlayer > longDistance * longDistance * detailDistanceMultiplier * detailDistanceMultiplier)
-            {
-                if(!isDeactivated)
-                {
-                    EnableOrDisableMeshes(true, true);
-                    isDeactivated = true;
-                    if (!objectOrEnemy)
-                    {
-                        EnemyManager.UndetailEnemy(enemyScr, true);
-                    }
-                    if (gameObject.name == "Metal Cube (14)")
-                    {
-                        Debug.Log("DEACTIVATED");
-                    }
-                }
-            }
-            else if(!deactivateMeshOnLongDistance)
-            {
-                if (!isDetailedNow && sqrDistancePlayer < detailDiminishDistance*detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier)
-                {
-                    EnableOrDisableMeshes(true);
-                    isDetailedNow = true;
-                    isDeactivated = false;
-                    if (!objectOrEnemy)
-                    {
-                        if (!enemyActivated)
-                        {
-                            EnemyManager.ActivateEnemy(enemyScr, true);
-                            enemyActivated = true;
-                        }
-                        else
-                        {
-                            EnemyManager.UndetailEnemy(enemyScr, false);
-                        }
-                    }
-                    if (gameObject.name == "Metal Cube (14)")
-                    {
-                        Debug.Log("DETAILED");
-                    }
-
-                }
-                else if(isDetailedNow && sqrDistancePlayer > detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier)
-                {
-                    EnableOrDisableMeshes(false);
-                    isDetailedNow = false;
-                    isDeactivated = false;
-                    if (!objectOrEnemy)
-                    {
-                        EnemyManager.UndetailEnemy(enemyScr, true);
-                    }
-                    if (gameObject.name == "Metal Cube (14)")
-                    {
-                        Debug.Log("NOT DETAILED");
-                    }
-
-                }
-            }
-
-        }
-        else if(sqrDistancePlayer > 64)
-        {
-            if (isDetailedNow)
-            {
-                EnableOrDisableMeshes(true, true);
-                isDetailedNow = false;
-                if (!objectOrEnemy)
-                {
-                    EnemyManager.UndetailEnemy(enemyScr, true);
-                }
-            }
-        }
-
-    }*/
 
     void CheckRequiredLOD()
     {
@@ -161,26 +66,19 @@ public class LevelOfDetailManager : MonoBehaviour
         }
         else
         {
-            if(deactivateMeshOnLongDistance &&sqrDistancePlayer > sqrDeactivateRangeInUse)
+            if(!isDeactivated && deactivateMeshOnLongDistance &&sqrDistancePlayer > sqrDeactivateRangeInUse)
             {
-                if (!isDeactivated)
-                {
-                    DetermineMeshLevel(0);
-                }
+                DetermineMeshLevel(0);
             }
-            else if( sqrDistancePlayer > sqrRangeInUse)
+            else if((isDetailedNow || isDeactivated) && sqrDistancePlayer > sqrRangeInUse)
             {
-                if (isDetailedNow || isDeactivated)
-                {
-                    DetermineMeshLevel(1);
-                }
+                Debug.Log("Not close enough");
+                DetermineMeshLevel(1);
             }
-            else
+            else if(!isDetailedNow && sqrDistancePlayer < sqrRangeInUse)
             {
-                if (!isDetailedNow || isDeactivated)
-                {
-                    DetermineMeshLevel(2);
-                }
+                Debug.Log("Close enough");
+                DetermineMeshLevel(2);
             }
         }
 
@@ -199,21 +97,21 @@ public class LevelOfDetailManager : MonoBehaviour
             case 0:
                 isDeactivated = true;
                 isDetailedNow = false;
-                if (objectOrEnemy)
+                if (!objectOrEnemy)
                 {
-                    for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+                    EnemyManager.UndetailEnemy(enemyScr, true);
+
+                }
+                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+                {
+                    if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
                     {
-                        if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                        {
-                            break;
-                        }
+                        break;
+                    }
+                    if (meshesDetailed[i] != null)
+                    {
                         meshesDetailed[i].enabled = false;
                     }
-                }
-                else
-                {
-                    skinnedMesh.enabled = false;
-                    EnemyManager.UndetailEnemy(enemyScr, true);
                 }
 
                 for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
@@ -229,21 +127,18 @@ public class LevelOfDetailManager : MonoBehaviour
             case 1:
                 isDeactivated = false;
                 isDetailedNow = false;
-                if (objectOrEnemy)
+                if (!objectOrEnemy)
                 {
-                    for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                    {
-                        if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                        {
-                            break;
-                        }
-                        meshesDetailed[i].enabled = false;
-                    }
-                }
-                else
-                {
-                    skinnedMesh.enabled = false;
                     EnemyManager.UndetailEnemy(enemyScr, true);
+
+                }
+                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+                {
+                    if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
+                    meshesDetailed[i].enabled = false;
                 }
 
                 for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
@@ -255,21 +150,17 @@ public class LevelOfDetailManager : MonoBehaviour
             case 2:
                 isDeactivated = false;
                 isDetailedNow = true;
-                if (objectOrEnemy)
+                if (!objectOrEnemy)
                 {
-                    for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                    {
-                        if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                        {
-                            break;
-                        }
-                        meshesDetailed[i].enabled = true;
-                    }
-                }
-                else
-                {
-                    skinnedMesh.enabled = true;
                     EnemyManager.UndetailEnemy(enemyScr, false);
+                }
+                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+                {
+                    if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
+                    {
+                        break;
+                    }
+                    meshesDetailed[i].enabled = true;
                 }
 
                 for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
@@ -280,50 +171,4 @@ public class LevelOfDetailManager : MonoBehaviour
         }
     }
 
-    /*void EnableOrDisableMeshes(bool enableDetail, bool disableAll = false)
-    {
-        if (!disableAll)
-        {
-            if (objectOrEnemy)
-            {
-                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                {
-                    if(i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                    {
-                        break;
-                    }
-                    meshesDetailed[i].enabled = enableDetail;
-                }
-            }
-            else
-            {
-                skinnedMesh.enabled = enableDetail;
-            }
-
-            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
-            {
-                meshesNotDetailed[i].enabled = !enableDetail;
-            }
-        }
-        else
-        {
-            if (objectOrEnemy)
-            {
-                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                {
-                    meshesDetailed[i].enabled = false;
-                }
-            }
-            else
-            {
-                skinnedMesh.enabled = false;
-            }
-
-            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
-            {
-                meshesNotDetailed[i].enabled = false;
-            }
-
-        }
-    }*/
 }

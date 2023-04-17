@@ -80,7 +80,6 @@ public class AimManager : MonoBehaviour
             {
                 RightClickedOrNotManage(0.7f);
                 isReloading = charToAim.isReloading;
-
             }
 
             if (quitAimingCompletely)
