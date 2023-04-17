@@ -110,7 +110,7 @@ public class UI_Manager : MonoBehaviour
     {
         if(GameManager.mainCharScr.health > 0)
         {
-            playerHealthFill.transform.localScale = new Vector3(GameManager.mainCharScr.health / MainCharacter.maxHealth, playerHealthFill.transform.localScale.y, playerHealthFill.transform.localScale.z) ;
+            playerHealthFill.transform.localScale = new Vector3(MainCharacter.healthRate, 1, 1) ;
             playerHealthText.text = "Health : " + GameManager.mainCharScr.health;
         }
         else
@@ -286,7 +286,13 @@ public class UI_Manager : MonoBehaviour
             endgamePanel.transform.Find("Endgame Text").GetComponent<TextMeshProUGUI>().text = "You are dead. You lost !!!";
             endgamePanel.gameObject.SetActive(true);
         }
-        musicSource.PlayOneShot(musics[1]);
+        crosshair.gameObject.SetActive(false);
+        sniperZoomScreen.gameObject.SetActive(false);
+
+        musicSource.clip = musics[1];
+        musicSource.loop = true;
+        musicSource.Play();
+        
         ReduceOpacity(endgamePanel, 5, 3, false);
     }
 

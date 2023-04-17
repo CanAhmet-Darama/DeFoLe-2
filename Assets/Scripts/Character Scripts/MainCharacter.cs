@@ -18,6 +18,7 @@ public class MainCharacter : GeneralCharacter
     static Collider[] nearbyColliders;
 
     public static short maxHealth;
+    public static float healthRate;
 
     #region Some Stuff
     Vector3 middleScreen = new Vector3(.5f,.5f, 0f);
@@ -27,6 +28,7 @@ public class MainCharacter : GeneralCharacter
     {
         GeneralCharStart();
         maxHealth = health;
+        healthRate = 1;
 
         ChangeWeapon(weapons[0].GetComponent<GeneralWeapon>());
         closestCamp = 1;
