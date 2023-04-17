@@ -106,7 +106,7 @@ public class UI_Manager : MonoBehaviour
     {
         if(GameManager.mainCharScr.health > 0)
         {
-            playerHealthFill.transform.localScale = new Vector3(GameManager.mainCharScr.health / MainCharacter.maxHealth, playerHealthFill.transform.localScale.y, playerHealthFill.transform.localScale.z) ;
+            playerHealthFill.transform.localScale = new Vector3(MainCharacter.healthRate, 1, 1);
             playerHealthText.text = "Health : " + GameManager.mainCharScr.health;
         }
         else

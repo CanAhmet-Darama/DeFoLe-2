@@ -248,7 +248,7 @@ public class GeneralWeapon : MonoBehaviour
 
     IEnumerator WeaponExtraSound(bool forReload = true)
     {
-        float weaponExtraSoundVolume = 0.1f;
+        float weaponExtraSoundVolume = 0.2f;
         yield return null;
         switch (weaponType)
         {

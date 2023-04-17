@@ -72,12 +72,10 @@ public class LevelOfDetailManager : MonoBehaviour
             }
             else if((isDetailedNow || isDeactivated) && sqrDistancePlayer > sqrRangeInUse)
             {
-                Debug.Log("Not close enough");
                 DetermineMeshLevel(1);
             }
             else if(!isDetailedNow && sqrDistancePlayer < sqrRangeInUse)
             {
-                Debug.Log("Close enough");
                 DetermineMeshLevel(2);
             }
         }
