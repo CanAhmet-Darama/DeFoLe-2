@@ -180,8 +180,16 @@ public class GeneralVehicle : MonoBehaviour
     }
     public void DamageVehicle(short damage)
     {
-        vehicleHealth -= damage;
-        GameManager.uiManager.SetVehicleHealthUI();
+        if(vehicleHealth > 0)
+        {
+            vehicleHealth -= damage;
+            GameManager.uiManager.SetVehicleHealthUI();
+        }
+        else if(GameManager.mainState == PlayerState.inMainCar)
+        {
+            GeneralCharacter.GiveDamage(GameManager.mainCharScr, (short)(damage / 4));
+            
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -205,6 +213,18 @@ public class GeneralVehicle : MonoBehaviour
                 ImpactMarkManager.MakeBloodImpactAndSound(crashAudioSource.transform.position, Vector3.up, true);
                 EnemyScript.GiveDamage(collision.gameObject.GetComponent<EnemyScript>(), (short)(velocityRate * 1000));
             }
+            if (!EnemyManager.campsAlerted[GameManager.mainCharScr.closestCamp - 1])
+            {
+                Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, velocityRate * 50, LayerMask.GetMask("Player"));
+                for (int i = nearbyColliders.Length - 1; i >= 0; i--)
+                {
+                    if (nearbyColliders[i].CompareTag("Enemy"))
+                    {
+                        nearbyColliders[i].GetComponent<EnemyScript>().ChangeEnemyAIState(EnemyScript.EnemyAIState.Alerted);
+                    }
+                }
+            }
+
         }
     }
 }

@@ -29,7 +29,7 @@ public class AimManager : MonoBehaviour
     public bool isReloading;
     Coroutine willQuitAimingCompletely;
 
-    float lerpOrSnapSpeed = 0.05f;
+    float lerpOrSnapSpeed = 0.1f;
 
     [SerializeField]bool userIsPlayer;
 
@@ -78,10 +78,10 @@ public class AimManager : MonoBehaviour
             if(!(userIsPlayer && mainCharToUse.currentWeapon.weaponType == WeaponType.SR_1 
                 && mainCharToUse.currentWeapon.zoomedAlready))
             {
+                RightClickedOrNotManage(0.7f);
+                isReloading = charToAim.isReloading;
 
             }
-            RightClickedOrNotManage(0.7f);
-            isReloading = charToAim.isReloading;
 
             if (quitAimingCompletely)
             {
@@ -171,17 +171,17 @@ public class AimManager : MonoBehaviour
 
                 if (targetHit && hitInfo.distance > 3)
                 {
-                    aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.03f);
+                    aimTarget.position = GameManager.LerpOrSnap(aimTarget.position, hitInfo.point, 0.1f);
                 }
                 else
                 {
-                    aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 15), 0.03f);
+                    aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 15), 0.1f);
                 }
 
             }
             else
             {
-                aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 500), 0.03f);
+                aimTarget.localPosition = GameManager.LerpOrSnap(aimTarget.localPosition, new Vector3(0, 0, 500), 0.1f);
             }
             #endregion
 

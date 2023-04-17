@@ -14,8 +14,6 @@ public class RegionOptimizer : MonoBehaviour
     bool closeEnoughToPlayer = false;
     float sqrRangeInUse;
 
-    Transform mainChar;
-    Transform mainCam;
     CameraScript mainCamScr;
 
     float perspectiveAngle;
@@ -23,8 +21,6 @@ public class RegionOptimizer : MonoBehaviour
 
     void Start()
     {
-        mainChar = GameManager.mainChar;
-        mainCam = GameManager.mainCam;
         mainCamScr = GameManager.mainCam.GetComponent<CameraScript>();
         StartCoroutine(DeactivatingFarObjectsCoroutine());
     }
@@ -39,28 +35,22 @@ public class RegionOptimizer : MonoBehaviour
 
     void CheckRegion()
     {
-        Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
-        float AngleBetweenCam = Vector2.Angle(toTargetVector2D, LevelOfDetailManager.camForward2D);
+        //Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
+        //float AngleBetweenCam = Vector2.Angle(toTargetVector2D, LevelOfDetailManager.camForward2D);
 
-        perspectiveAngle = 80;
-        if (mainCamScr.camOwnState == CamState.zoomScope)
-        {
-            perspectiveAngle = 30;
-        }
-
-        if (!closeEnoughToPlayer && (((AngleBetweenCam < perspectiveAngle) && (sqrDistancePlayer < sqrRangeInUse)) || (sqrDistancePlayer < sqrRangeInUse/4)))
+        if (!closeEnoughToPlayer && (((sqrDistancePlayer < sqrRangeInUse)) || (sqrDistancePlayer < sqrRangeInUse/4)))
         {
             closeEnoughToPlayer = true;
             destroyableCollection.SetActive(true);
             interactableCollection.SetActive(true);
             enemiesCollection.SetActive(true);
         }
-        else if (closeEnoughToPlayer && sqrDistancePlayer > sqrRangeInUse*2)
-        {
-            closeEnoughToPlayer = false;
-            destroyableCollection.SetActive(false);
-            interactableCollection.SetActive(false);
-        }
+        //else if (closeEnoughToPlayer && sqrDistancePlayer > sqrRangeInUse*2)
+        //{
+        //    closeEnoughToPlayer = false;
+        //    destroyableCollection.SetActive(false);
+        //    interactableCollection.SetActive(false);
+        //}
 
     }
     

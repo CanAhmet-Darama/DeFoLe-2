@@ -243,7 +243,7 @@ public class CameraScript : MonoBehaviour
                     transform.LookAt(camCarPoint2Transform.position);
                     break;
             }
-            maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude, 0, 25);
+            maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude, 0, 15);
         }
     }
 

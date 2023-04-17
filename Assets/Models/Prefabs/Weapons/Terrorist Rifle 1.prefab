@@ -164,7 +164,6 @@ MonoBehaviour:
   gunAudioSource: {fileID: -1374471811974678420}
   magOutSound: {fileID: 8300000, guid: 38dda0b4832d5764085050dc7f217355, type: 3}
   magInSound: {fileID: 8300000, guid: a629384653519b4469722e4e82514286, type: 3}
-  putBulletInSound: {fileID: 0}
   pullBoltSound: {fileID: 0}
   pushBoltSound: {fileID: 0}
   weaponInternalPos: {x: -0.0042, y: 0.0131, z: 0.00171}

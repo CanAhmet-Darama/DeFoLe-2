@@ -392,6 +392,7 @@ public class GeneralCharacter : MonoBehaviour
     public IEnumerator CanReloadAgain(float durat)
     {
         canReload = false;
+        isReloading = true;
         yield return new WaitForSeconds(durat);
         canReload = true;
         isReloading = false;
