@@ -325,13 +325,17 @@ public class EnemyScript : GeneralCharacter
             else
             {
                 RotateCharToLookAt(targetTransform.position, 0.1f);
-                rb.velocity = GameManager.LerpOrSnap(rb.velocity, Vector3.zero, 0.1f);
             }
         }
         else if(!canSeeTarget)
         {
             if (cancelSemiDetectCoroutine == null)
                 cancelSemiDetectCoroutine = StartCoroutine(IfCantSeeBackToPatrol());
+
+            if(noticeCountdown > noticeDuration/2)
+            {
+
+            }
         }
 
     }
@@ -730,7 +734,6 @@ public class EnemyScript : GeneralCharacter
 
             enteredNewState = false;
         }
-        rb.velocity = Vector3.zero;
     }
 
 

@@ -188,7 +188,6 @@ public class GeneralVehicle : MonoBehaviour
         else if(GameManager.mainState == PlayerState.inMainCar)
         {
             GeneralCharacter.GiveDamage(GameManager.mainCharScr, (short)(damage / 4));
-            
         }
     }
 

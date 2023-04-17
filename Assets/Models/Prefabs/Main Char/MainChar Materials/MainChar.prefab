@@ -420,7 +420,11 @@ MonoBehaviour:
   runAcceleration: 50
   jumpForce: 450
   jumpCooldown: 1.5
-  health: 500
+<<<<<<< HEAD
+  health: 30000
+=======
+  health: 150
+>>>>>>> parent of e62581b (Commit 54_2)
   rb: {fileID: 1643108193539418682}
   isEnemy: 0
   currentWeapon: {fileID: 0}
@@ -458,7 +462,7 @@ MonoBehaviour:
   leftHandTBIK: {fileID: 2130464707804454431}
   leftHTarget: {fileID: 7176550493986937795}
   rightHTarget: {fileID: 971220282}
-  skeleton: {fileID: 5711636287097976886}
+  skeleton: {fileID: 0}
   animOverriders:
   - {fileID: 22100000, guid: 72b5af81e55c1c04480f9aabeeaee464, type: 2}
   - {fileID: 22100000, guid: f3e3d268218547d4fba41ce23107c9a4, type: 2}
@@ -2274,11 +2278,6 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!1 &5711636287097976886 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4928492724515802338, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
-  m_PrefabInstance: {fileID: 803409797422003412}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5799607903079124862 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2640780238740751446, guid: 3d53200f010c5a347878a0038f25d8cb, type: 3}
