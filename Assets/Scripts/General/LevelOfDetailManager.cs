@@ -17,14 +17,11 @@ public class LevelOfDetailManager : MonoBehaviour
 
     [Header("State Definers")]
     public MeshDetailLevel detailLevel;
-    DistanceInterval distanceInterval;
-    DistanceInterval previousDistanceInterval;
-    bool shouldChangeMesh;
+    public DistanceInterval distanceInterval;
     //public bool isDetailedNow = false;
     //public bool isDeactivated = false;
 
     [Header("Enemy Detail")]
-    public Transform mainCam;
     public bool enemyActivated = false;
     public EnemyScript enemyScr;
     public CameraScript mainCamScr;
@@ -38,8 +35,7 @@ public class LevelOfDetailManager : MonoBehaviour
 
     void Start()
     {
-        mainCam = GameManager.mainCam;
-        mainCamScr = mainCam.GetComponent<CameraScript>();
+        mainCamScr = GameManager.mainCam.GetComponent<CameraScript>();
 
         DetermineMeshLevel(MeshDetailLevel.highQ);
     }
@@ -47,13 +43,17 @@ public class LevelOfDetailManager : MonoBehaviour
 
     void Update()
     {
-        sqrDistancePlayer = GameManager.SqrDistance(mainCam.position, transform.position);
+        sqrDistancePlayer = GameManager.SqrDistance(GameManager.mainCam.position, transform.position);
         sqrRangeInUse = detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier; 
         sqrDeactivateRangeInUse = longDistance * longDistance;
 
 
         DistanceIntervalSetter();
         CheckRequiredLOD();
+        if(sqrDistancePlayer < sqrRangeInUse && distanceInterval == DistanceInterval.notClose)
+        {
+            Debug.Log("Cam : " + GameManager.mainCam.position + ", Distance : " + sqrDistancePlayer);
+        }
     }
 
 
@@ -116,7 +116,7 @@ public class LevelOfDetailManager : MonoBehaviour
     }*/
     void CheckRequiredLOD()
     {
-        Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
+        Vector2 toTargetVector2D = new Vector2((transform.position - GameManager.mainCam.position).x, (transform.position - GameManager.mainCam.position).z);
         float AngleBetweenCam = Vector2.Angle(toTargetVector2D, camForward2D);
 
         perspectiveAngle = 80;
@@ -160,8 +160,6 @@ public class LevelOfDetailManager : MonoBehaviour
         {
             case MeshDetailLevel.noMesh:
             {
-                lowMeshEnable = false;
-                highMeshEnable = false;
                 detailLevel = MeshDetailLevel.noMesh;
                 break;
             }
@@ -184,6 +182,11 @@ public class LevelOfDetailManager : MonoBehaviour
         {
             if (meshesNotDetailed[i] != null)
             {
+                if (i == meshesNotDetailed.Length-1 && meshesNotDetailed[i].enabled == lowMeshEnable)
+                {
+                    break;
+                }
+
                 meshesNotDetailed[i].enabled = lowMeshEnable;
             }
         }
@@ -191,6 +194,11 @@ public class LevelOfDetailManager : MonoBehaviour
         {
             if (meshesDetailed[i] != null)
             {
+                if (i == meshesDetailed.Length - 1 && meshesDetailed[i].enabled == highMeshEnable)
+                {
+                    break;
+                }
+
                 meshesDetailed[i].enabled = highMeshEnable;
             }
         }
@@ -210,14 +218,6 @@ public class LevelOfDetailManager : MonoBehaviour
         {
             distanceInterval = DistanceInterval.veryClose;
         }
-
-        shouldChangeMesh = false;
-        if (previousDistanceInterval != distanceInterval)
-        {
-            shouldChangeMesh = true;
-        }
-
-        previousDistanceInterval = distanceInterval;
     }
 
     //void DetermineMeshLevel(byte meshLevel)
@@ -308,4 +308,4 @@ public class LevelOfDetailManager : MonoBehaviour
 
 }
 public enum MeshDetailLevel { noMesh, lowQ, highQ }
-enum DistanceInterval { tooFar, notClose, veryClose }
+public enum DistanceInterval { tooFar, notClose, veryClose }

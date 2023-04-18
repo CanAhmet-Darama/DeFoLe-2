@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
                 mainCarScr.vehicleAudioSource.Play();
             }
 
-            EnemyScript.generalMeleeDistance = 2;
+            EnemyScript.generalMeleeDistance = 3;
 
 
             if (Input.GetMouseButton(1))
