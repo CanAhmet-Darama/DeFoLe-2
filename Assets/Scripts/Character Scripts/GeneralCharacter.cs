@@ -272,7 +272,7 @@ public class GeneralCharacter : MonoBehaviour
 
         if (currentWeapon != null && currentWeapon != newWeapon) {        
             currentWeapon.gameObject.SetActive(false);
-            if(currentWeapon.zoomedAlready)
+            if(currentWeapon.weaponType == WeaponType.SR_1 && currentWeapon.zoomedAlready)
             {
                 currentWeapon.SniperZoom(false);
             }

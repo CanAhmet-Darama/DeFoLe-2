@@ -14,11 +14,6 @@ public class InteractableSpecial : EnvObject
 
     public AudioClip pickUpSound;
 
-    void OnDestroy()
-    {
-        ImpactMarkManager.PlayOnShotClip(pickUpSound,transform.position);
-    }
-
     void Start()
     {
         AddInteractableToList(this);
