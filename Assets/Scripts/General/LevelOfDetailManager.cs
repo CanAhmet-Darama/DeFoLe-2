@@ -14,8 +14,14 @@ public class LevelOfDetailManager : MonoBehaviour
 
     public Renderer[] meshesDetailed;
     public Renderer[] meshesNotDetailed;
-    public bool isDetailedNow = false;
-    public bool isDeactivated = false;
+
+    [Header("State Definers")]
+    public MeshDetailLevel detailLevel;
+    DistanceInterval distanceInterval;
+    DistanceInterval previousDistanceInterval;
+    bool shouldChangeMesh;
+    //public bool isDetailedNow = false;
+    //public bool isDeactivated = false;
 
     [Header("Enemy Detail")]
     public Transform mainCam;
@@ -41,11 +47,72 @@ public class LevelOfDetailManager : MonoBehaviour
     {
         sqrDistancePlayer = GameManager.SqrDistance(mainCam.position, transform.position);
         sqrRangeInUse = detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier; 
-        sqrDeactivateRangeInUse = longDistance * longDistance; 
+        sqrDeactivateRangeInUse = longDistance * longDistance;
+
+        DetermineMeshLevel(MeshDetailLevel.highQ);
+
+        DistanceIntervalSetter();
         CheckRequiredLOD();
     }
 
 
+    /*void CheckRequiredLOD()
+    {
+        Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
+        float AngleBetweenCam = Vector2.Angle(toTargetVector2D, camForward2D);
+
+        perspectiveAngle = 80;
+        if(mainCamScr.camOwnState == CamState.zoomScope)
+        {
+            perspectiveAngle = 30;
+        }
+
+        if(AngleBetweenCam > perspectiveAngle && sqrDistancePlayer > 400)
+        {
+            if(detailLevel != MeshDetailLevel.noMesh && previousDetailLevel != MeshDetailLevel.noMesh)
+            {
+                DetermineMeshLevel(MeshDetailLevel.noMesh);
+            }
+        }
+        else
+        {
+            if (deactivateMeshOnLongDistance && distanceInterval == DistanceInterval.tooFar)
+            {
+                if (detailLevel != MeshDetailLevel.noMesh && previousDetailLevel != MeshDetailLevel.noMesh)
+                {
+                    DetermineMeshLevel(MeshDetailLevel.noMesh);
+                }
+            }
+            else if (detailLevel != MeshDetailLevel.lowQ && previousDetailLevel != MeshDetailLevel.lowQ && distanceInterval == DistanceInterval.notClose)
+            {
+                DetermineMeshLevel(MeshDetailLevel.lowQ);
+            }
+            else if (detailLevel != MeshDetailLevel.highQ && previousDetailLevel != MeshDetailLevel.highQ && distanceInterval == DistanceInterval.veryClose)
+            {
+                DetermineMeshLevel(MeshDetailLevel.highQ);
+            }
+            //if(deactivateMeshOnLongDistance && detailLevel != MeshDetailLevel.noMesh && previousDetailLevel != MeshDetailLevel.noMesh && distanceInterval == DistanceInterval.tooFar)
+            //{
+            //    DetermineMeshLevel(MeshDetailLevel.noMesh);
+            //}
+            //else if(detailLevel != MeshDetailLevel.lowQ && previousDetailLevel != MeshDetailLevel.lowQ && distanceInterval == DistanceInterval.notClose)
+            //{
+            //    DetermineMeshLevel(MeshDetailLevel.lowQ);
+            //}
+            //else if(detailLevel != MeshDetailLevel.highQ && previousDetailLevel != MeshDetailLevel.highQ && distanceInterval == DistanceInterval.veryClose)
+            //{
+            //    DetermineMeshLevel(MeshDetailLevel.highQ);
+            //}
+        }
+
+        if (!objectOrEnemy && !enemyActivated && sqrDistancePlayer < EnemyManager.enemyActivateRange * EnemyManager.enemyActivateRange)
+        {
+            EnemyManager.ActivateEnemy(enemyScr, true);
+            enemyActivated = true;
+        }
+
+        previousDetailLevel = detailLevel;
+    }*/
     void CheckRequiredLOD()
     {
         Vector2 toTargetVector2D = new Vector2((transform.position - mainCam.position).x, (transform.position - mainCam.position).z);
@@ -59,114 +126,191 @@ public class LevelOfDetailManager : MonoBehaviour
 
         if(AngleBetweenCam > perspectiveAngle && sqrDistancePlayer > 400)
         {
-            if(!isDeactivated)
-            {
-                DetermineMeshLevel(0);
-            }
+            DetermineMeshLevel(MeshDetailLevel.noMesh);
         }
         else
         {
-            if(!isDeactivated && deactivateMeshOnLongDistance &&sqrDistancePlayer > sqrDeactivateRangeInUse)
+            if (shouldChangeMesh)
             {
-                DetermineMeshLevel(0);
-            }
-            else if((isDetailedNow || isDeactivated) && sqrDistancePlayer > sqrRangeInUse)
-            {
-                DetermineMeshLevel(1);
-            }
-            else if(!isDetailedNow && sqrDistancePlayer < sqrRangeInUse)
-            {
-                DetermineMeshLevel(2);
+                if(distanceInterval == DistanceInterval.tooFar)
+                {
+                    DetermineMeshLevel(MeshDetailLevel.noMesh);
+                }
+                else if(distanceInterval == DistanceInterval.notClose)
+                {
+                    DetermineMeshLevel(MeshDetailLevel.lowQ);
+                }
+                else
+                {
+                    DetermineMeshLevel(MeshDetailLevel.highQ);
+                }
             }
         }
 
-        if(!objectOrEnemy && !enemyActivated && sqrDistancePlayer < EnemyManager.enemyActivateRange * EnemyManager.enemyActivateRange)
+        if (!objectOrEnemy && !enemyActivated && sqrDistancePlayer < EnemyManager.enemyActivateRange * EnemyManager.enemyActivateRange)
         {
             EnemyManager.ActivateEnemy(enemyScr, true);
             enemyActivated = true;
         }
-
     }
 
-    void DetermineMeshLevel(byte meshLevel)
+    void DetermineMeshLevel(MeshDetailLevel level)
     {
-        switch (meshLevel)
+        bool lowMeshEnable = false;
+        bool highMeshEnable = false;
+        switch(level)
         {
-            case 0:
-                isDeactivated = true;
-                isDetailedNow = false;
-                if (!objectOrEnemy)
-                {
-                    EnemyManager.UndetailEnemy(enemyScr, true);
-
-                }
-                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                {
-                    if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                    {
-                        break;
-                    }
-                    if (meshesDetailed[i] != null)
-                    {
-                        meshesDetailed[i].enabled = false;
-                    }
-                }
-
-                for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
-                {
-                    if (i == meshesNotDetailed.Length - 1 && !meshesNotDetailed[i].gameObject.activeInHierarchy)
-                    {
-                        break;
-                    }
-                    meshesNotDetailed[i].enabled = false;
-                }
-
+            case MeshDetailLevel.noMesh:
+            {
+                lowMeshEnable = false;
+                highMeshEnable = false;
+                detailLevel = MeshDetailLevel.noMesh;
                 break;
-            case 1:
-                isDeactivated = false;
-                isDetailedNow = false;
-                if (!objectOrEnemy)
-                {
-                    EnemyManager.UndetailEnemy(enemyScr, true);
-
-                }
-                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                {
-                    if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                    {
-                        break;
-                    }
-                    meshesDetailed[i].enabled = false;
-                }
-
-                for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
-                {
-                    meshesNotDetailed[i].enabled = true;
-                }
-
+            }
+            case MeshDetailLevel.lowQ:
+            {
+                lowMeshEnable = true;
+                highMeshEnable = false;
+                detailLevel = MeshDetailLevel.lowQ;
                 break;
-            case 2:
-                isDeactivated = false;
-                isDetailedNow = true;
-                if (!objectOrEnemy)
-                {
-                    EnemyManager.UndetailEnemy(enemyScr, false);
-                }
-                for (int i = meshesDetailed.Length - 1; i >= 0; i--)
-                {
-                    if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
-                    {
-                        break;
-                    }
-                    meshesDetailed[i].enabled = true;
-                }
-
-                for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
-                {
-                    meshesNotDetailed[i].enabled = false;
-                }
+            }
+            case MeshDetailLevel.highQ:
+            {
+                lowMeshEnable = false;
+                highMeshEnable = true;
+                detailLevel = MeshDetailLevel.highQ;
                 break;
+            }
         }
+        for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
+        {
+            if (meshesNotDetailed[i] != null)
+            {
+                meshesNotDetailed[i].enabled = lowMeshEnable;
+            }
+        }
+        for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+        {
+            if (meshesDetailed[i] != null)
+            {
+                meshesDetailed[i].enabled = highMeshEnable;
+            }
+        }
+
     }
+    void DistanceIntervalSetter()
+    {
+        if(sqrDistancePlayer > sqrDeactivateRangeInUse && deactivateMeshOnLongDistance)
+        {
+            distanceInterval = DistanceInterval.tooFar;
+        }
+        else if(sqrDistancePlayer <= sqrDeactivateRangeInUse && sqrDistancePlayer > sqrRangeInUse)
+        {
+            distanceInterval = DistanceInterval.notClose;
+        }
+        else
+        {
+            distanceInterval = DistanceInterval.veryClose;
+        }
+        
+        if(previousDistanceInterval != distanceInterval)
+        {
+            shouldChangeMesh = true;
+        }
+        else
+        {
+            shouldChangeMesh = false;
+        }
+
+        previousDistanceInterval = distanceInterval;
+    }
+
+    //void DetermineMeshLevel(byte meshLevel)
+    //{
+    //    switch (meshLevel)
+    //    {
+    //        case 0:
+    //            isDeactivated = true;
+    //            isDetailedNow = false;
+    //            if (!objectOrEnemy)
+    //            {
+    //                EnemyManager.UndetailEnemy(enemyScr, true);
+
+    //            }
+    //            for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+    //            {
+    //                //if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
+    //                //{
+    //                //    break;
+    //                //}
+    //                if (meshesDetailed[i] != null)
+    //                {
+    //                    meshesDetailed[i].enabled = false;
+    //                }
+    //            }
+
+    //            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
+    //            {
+    //                //if (i == meshesNotDetailed.Length - 1 && !meshesNotDetailed[i].gameObject.activeInHierarchy)
+    //                //{
+    //                //    break;
+    //                //}
+    //                if (meshesNotDetailed[i] != null)
+    //                    meshesNotDetailed[i].enabled = false;
+    //            }
+
+    //            break;
+    //        case 1:
+    //            isDeactivated = false;
+    //            isDetailedNow = false;
+    //            if (!objectOrEnemy)
+    //            {
+    //                EnemyManager.UndetailEnemy(enemyScr, true);
+
+    //            }
+    //            for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+    //            {
+    //                //if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
+    //                //{
+    //                //    break;
+    //                //}
+    //                if (meshesDetailed[i] != null)
+    //                    meshesDetailed[i].enabled = false;
+    //            }
+
+    //            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
+    //            {
+    //                if (meshesNotDetailed[i] != null)
+    //                    meshesNotDetailed[i].enabled = true;
+    //            }
+
+    //            break;
+    //        case 2:
+    //            isDeactivated = false;
+    //            isDetailedNow = true;
+    //            if (!objectOrEnemy)
+    //            {
+    //                EnemyManager.UndetailEnemy(enemyScr, false);
+    //            }
+    //            for (int i = meshesDetailed.Length - 1; i >= 0; i--)
+    //            {
+    //                //if (i == meshesDetailed.Length - 1 && !meshesDetailed[i].gameObject.activeInHierarchy)
+    //                //{
+    //                //    break;
+    //                //}
+    //                if(meshesDetailed[i] != null)
+    //                    meshesDetailed[i].enabled = true;
+    //            }
+
+    //            for (int i = meshesNotDetailed.Length - 1; i >= 0; i--)
+    //            {
+    //                if(meshesNotDetailed[i] != null)
+    //                    meshesNotDetailed[i].enabled = false;
+    //            }
+    //            break;
+    //    }
+    //}
 
 }
+public enum MeshDetailLevel { noMesh, lowQ, highQ }
+enum DistanceInterval { tooFar, notClose, veryClose }
