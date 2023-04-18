@@ -40,6 +40,8 @@ public class LevelOfDetailManager : MonoBehaviour
     {
         mainCam = GameManager.mainCam;
         mainCamScr = mainCam.GetComponent<CameraScript>();
+
+        DetermineMeshLevel(MeshDetailLevel.highQ);
     }
 
 
@@ -49,7 +51,6 @@ public class LevelOfDetailManager : MonoBehaviour
         sqrRangeInUse = detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier; 
         sqrDeactivateRangeInUse = longDistance * longDistance;
 
-        DetermineMeshLevel(MeshDetailLevel.highQ);
 
         DistanceIntervalSetter();
         CheckRequiredLOD();
@@ -130,21 +131,22 @@ public class LevelOfDetailManager : MonoBehaviour
         }
         else
         {
-            if (shouldChangeMesh)
-            {
-                if(distanceInterval == DistanceInterval.tooFar)
-                {
-                    DetermineMeshLevel(MeshDetailLevel.noMesh);
-                }
-                else if(distanceInterval == DistanceInterval.notClose)
-                {
-                    DetermineMeshLevel(MeshDetailLevel.lowQ);
-                }
-                else
-                {
-                    DetermineMeshLevel(MeshDetailLevel.highQ);
-                }
-            }
+            DetermineMeshLevel(MeshDetailLevel.highQ);
+            //if (shouldChangeMesh)
+            //{
+            //    if(distanceInterval == DistanceInterval.tooFar)
+            //    {
+            //        DetermineMeshLevel(MeshDetailLevel.noMesh);
+            //    }
+            //    else if(distanceInterval == DistanceInterval.notClose)
+            //    {
+            //        DetermineMeshLevel(MeshDetailLevel.lowQ);
+            //    }
+            //    else
+            //    {
+            //        DetermineMeshLevel(MeshDetailLevel.highQ);
+            //    }
+            //}
         }
 
         if (!objectOrEnemy && !enemyActivated && sqrDistancePlayer < EnemyManager.enemyActivateRange * EnemyManager.enemyActivateRange)
@@ -200,11 +202,11 @@ public class LevelOfDetailManager : MonoBehaviour
     }
     void DistanceIntervalSetter()
     {
-        if(sqrDistancePlayer > sqrDeactivateRangeInUse && deactivateMeshOnLongDistance)
+        if(deactivateMeshOnLongDistance && sqrDistancePlayer > sqrDeactivateRangeInUse)
         {
             distanceInterval = DistanceInterval.tooFar;
         }
-        else if(sqrDistancePlayer <= sqrDeactivateRangeInUse && sqrDistancePlayer > sqrRangeInUse)
+        else if(sqrDistancePlayer > sqrRangeInUse)
         {
             distanceInterval = DistanceInterval.notClose;
         }
@@ -213,13 +215,13 @@ public class LevelOfDetailManager : MonoBehaviour
             distanceInterval = DistanceInterval.veryClose;
         }
         
-        if(previousDistanceInterval != distanceInterval)
+        if(previousDistanceInterval == distanceInterval)
         {
-            shouldChangeMesh = true;
+            shouldChangeMesh = false;
         }
         else
         {
-            shouldChangeMesh = false;
+            shouldChangeMesh = true;
         }
 
         previousDistanceInterval = distanceInterval;
