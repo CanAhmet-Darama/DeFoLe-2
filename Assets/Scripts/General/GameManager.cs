@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public static UI_Manager uiManager;
     public static EnemyManager enemyManager;
     public static SettingsManager settingsManager;
+    public static AudioSource generalAudioSource;
+
 
     public static GameObject[] weaponPrefabs = new GameObject[6];
     public static GameObject[] enemyCamps;
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] UI_Manager userInterfaceManagerIsThis;
     [SerializeField] EnemyManager enemyManagerIsThis;
     [SerializeField] GameObject[] enemyCampsAreThese;
+    [SerializeField] AudioSource _generalAudioSource;
 
 
     [Header("General Numbers")]
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour
                 TerrainManager.mainTerrain = mainTerrain;
                 mainTerrain.detailObjectDistance = SettingsManager.detailDistance;
                 uiManager.settingsMenuPanel = SettingsManager.settingsPanel;
+                generalAudioSource = _generalAudioSource;
                 break;
         }
     }
@@ -146,6 +150,8 @@ public class GameManager : MonoBehaviour
             mainCharScr.ResetHandTargets(mainCharScr.currentWeapon);
             AimManager.ResetWeights(mainCharScr);
 
+            EnemyScript.generalMeleeDistance = 0.7f;
+
             if (Input.GetMouseButton(1))
             {
                 mainCam.GetComponent<CameraScript>().AdjustCameraPivotOrFollow(PlayerState.onFoot, CamState.pivot);
@@ -170,6 +176,9 @@ public class GameManager : MonoBehaviour
             {
                 mainCarScr.vehicleAudioSource.Play();
             }
+
+            EnemyScript.generalMeleeDistance = 2;
+
 
             if (Input.GetMouseButton(1))
             {

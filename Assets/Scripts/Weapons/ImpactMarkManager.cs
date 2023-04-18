@@ -367,6 +367,12 @@ public class ImpactMarkManager : MonoBehaviour
         impact.Play();
     }
 
+    public static void PlayOnShotClip(AudioClip clip, Vector3 pos, float volume = 1)
+    {
+        GameManager.generalAudioSource.transform.position = pos;
+        GameManager.generalAudioSource.PlayOneShot(clip, volume);
+    }
+
 
     void SoundsManagerStart()
     {

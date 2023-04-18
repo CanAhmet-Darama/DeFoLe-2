@@ -131,22 +131,18 @@ public class LevelOfDetailManager : MonoBehaviour
         }
         else
         {
-            DetermineMeshLevel(MeshDetailLevel.highQ);
-            //if (shouldChangeMesh)
-            //{
-            //    if(distanceInterval == DistanceInterval.tooFar)
-            //    {
-            //        DetermineMeshLevel(MeshDetailLevel.noMesh);
-            //    }
-            //    else if(distanceInterval == DistanceInterval.notClose)
-            //    {
-            //        DetermineMeshLevel(MeshDetailLevel.lowQ);
-            //    }
-            //    else
-            //    {
-            //        DetermineMeshLevel(MeshDetailLevel.highQ);
-            //    }
-            //}
+            if (distanceInterval == DistanceInterval.veryClose)
+            {
+                DetermineMeshLevel(MeshDetailLevel.highQ);
+            }
+            else if (distanceInterval == DistanceInterval.notClose)
+            {
+                DetermineMeshLevel(MeshDetailLevel.lowQ);
+            }
+            else
+            {
+                DetermineMeshLevel(MeshDetailLevel.noMesh);
+            }
         }
 
         if (!objectOrEnemy && !enemyActivated && sqrDistancePlayer < EnemyManager.enemyActivateRange * EnemyManager.enemyActivateRange)
@@ -214,12 +210,9 @@ public class LevelOfDetailManager : MonoBehaviour
         {
             distanceInterval = DistanceInterval.veryClose;
         }
-        
-        if(previousDistanceInterval == distanceInterval)
-        {
-            shouldChangeMesh = false;
-        }
-        else
+
+        shouldChangeMesh = false;
+        if (previousDistanceInterval != distanceInterval)
         {
             shouldChangeMesh = true;
         }

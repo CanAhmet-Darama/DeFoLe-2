@@ -8,7 +8,6 @@ using UnityEngine.AI;
 public class EnemyScript : GeneralCharacter
 {
     public static float generalMeleeDistance = 0.7f;
-    float generalMeleeDistanceInUse;
 
     [Header("Enemy AI")]
     public NavMeshAgent navAgent;
@@ -82,7 +81,6 @@ public class EnemyScript : GeneralCharacter
     public float enemyInaccuracy;
     [Range(0,1)] public float shootingFrequency;
     [HideInInspector] public GeneralWeapon mainWeapon;
-    [SerializeField] float meleeRange;
     public AimManager enemyAimer;
 
     [Header("Enemy Instance References")]
@@ -142,7 +140,6 @@ public class EnemyScript : GeneralCharacter
             visibleRange = visibleRange * 2;
         }
         weaponMeshes = mainWeapon.meshedPartOfWeapon;
-        generalMeleeDistanceInUse = generalMeleeDistance;
     }
     void NavAgentSetter()
     {
@@ -201,10 +198,6 @@ public class EnemyScript : GeneralCharacter
         {
             visibleRangeInUse *= 2;
             targetTransform = mainCar;
-            if(weaponState == WeaponState.melee)
-            {
-                generalMeleeDistanceInUse = generalMeleeDistance * 3;
-            }
         }
 
 
@@ -422,7 +415,7 @@ public class EnemyScript : GeneralCharacter
                             StopCoroutine(checkCoverCoroutine);
                         }
                         if (isCrouching) CrouchOrStand();
-                        navAgent.stoppingDistance = generalMeleeDistanceInUse;
+                        navAgent.stoppingDistance = generalMeleeDistance;
                         IsCoveredSetter(true);
                     }
                 }
@@ -434,7 +427,7 @@ public class EnemyScript : GeneralCharacter
         {
             navAgent.SetDestination(targetTransform.position);
             RotateCharToLookAt(targetTransform.position, 0.05f);
-            if(sqrDistFromPlayer < meleeRange*meleeRange)
+            if(sqrDistFromPlayer < generalMeleeDistance*generalMeleeDistance)
             {
                 EnemyFire();
             }

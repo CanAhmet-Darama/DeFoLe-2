@@ -193,7 +193,7 @@ public class GeneralVehicle : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(vehicleRb.velocity.sqrMagnitude > 25)
+        if(vehicleRb.velocity.sqrMagnitude > 9)
         {
             float velocityRate = vehicleRb.velocity.magnitude / maxSpeed;
             if(collision.gameObject == GameManager.mainTerrain.gameObject ||collision.gameObject.GetComponent<EnvObject>() != null)

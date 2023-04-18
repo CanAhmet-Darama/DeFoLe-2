@@ -387,7 +387,9 @@ public class MainCharacter : GeneralCharacter
                 }
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    IncreaseHealth(hitInfo.collider.GetComponent<InteractableSpecial>().healthAmount);
+                    InteractableSpecial intSpe = hitInfo.collider.GetComponent<InteractableSpecial>();
+                    IncreaseHealth(intSpe.healthAmount);
+                    ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
                     GameManager.uiManager.SetHealthUI();
                     Destroy(hitInfo.collider.gameObject);
                 }
@@ -404,7 +406,9 @@ public class MainCharacter : GeneralCharacter
                 }
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    IncreaseAmmo(hitInfo.collider.GetComponent<InteractableSpecial>().magazineCount);
+                    InteractableSpecial intSpe = hitInfo.collider.GetComponent<InteractableSpecial>();
+                    IncreaseHealth(intSpe.magazineCount);
+                    ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
                     GameManager.uiManager.SetAmmoUI();
                     Destroy(hitInfo.collider.gameObject);
                 }

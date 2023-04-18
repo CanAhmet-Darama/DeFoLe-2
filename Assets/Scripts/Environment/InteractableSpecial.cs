@@ -16,7 +16,7 @@ public class InteractableSpecial : EnvObject
 
     void OnDestroy()
     {
-        AudioSource.PlayClipAtPoint(pickUpSound,transform.position);
+        ImpactMarkManager.PlayOnShotClip(pickUpSound,transform.position);
     }
 
     void Start()
