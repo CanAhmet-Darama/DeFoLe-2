@@ -57,7 +57,7 @@ public class RegionOptimizer : MonoBehaviour
     
     IEnumerator DeactivatingFarObjectsCoroutine()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         destroyableCollection.SetActive(false);
         interactableCollection.SetActive(false);
         enemiesCollection.SetActive(false);

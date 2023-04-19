@@ -57,13 +57,13 @@ public class EnemyManager : MonoBehaviour
         //enemiesStaticIndexes[campNumber - 1] = new short[enemiesStaticIndexes[campNumber - 1].Length + 1];
         //GameManager.CopyArray(staticIndexHolderArray, ref enemiesStaticIndexes[campNumber - 1]);
         //enemiesStaticIndexes[campNumber - 1][staticIndexHolderArray.Length] = newEnemy.enemyStaticIndex;
-        GameManager.AddToArray(newEnemy.enemyStaticIndex, ref enemiesStaticIndexes[campNumber - 1]);
+        GameManager.AddToArray(ref newEnemy.enemyStaticIndex, ref enemiesStaticIndexes[campNumber - 1]);
 
         //EnemyScript[] holderArray = enemies[campNumber - 1];
         //enemies[campNumber - 1] = new EnemyScript[holderArray.Length + 1];
         //GameManager.CopyArray(holderArray, ref enemies[campNumber - 1]);
         //enemies[campNumber - 1][holderArray.Length] = newEnemy;
-        GameManager.AddToArray(newEnemy, ref enemies[campNumber - 1]);
+        GameManager.AddToArray(ref newEnemy, ref enemies[campNumber - 1]);
         newEnemy.enemyNumCode = (byte)(enemies[campNumber - 1].Length - 1);
 
         GameManager.IncreaseArray(ref enemiesDead[campNumber - 1]);

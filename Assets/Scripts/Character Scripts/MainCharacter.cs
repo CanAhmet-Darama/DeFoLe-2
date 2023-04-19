@@ -331,7 +331,7 @@ public class MainCharacter : GeneralCharacter
             if (Input.GetKeyDown(KeyCode.R) && canReload && ammoCounts[(int)currentWeapon.weaponType] > 0 && (currentWeapon.currentAmmo < currentWeapon.maxAmmo))
             {
                 currentWeapon.Reload();
-                StartCoroutine(WaitToSetAmmoUI());
+                StartCoroutine(WaitToSetAmmoUI(currentWeapon.reloadTime));
             }
 
             if(CameraScript.scrollInput > 0 && currentWeapon.weaponType == WeaponType.SR_1 && !currentWeapon.zoomedAlready)
@@ -399,15 +399,15 @@ public class MainCharacter : GeneralCharacter
             {
                 if (UI_Manager.isLookingInteractable == false)
                 {
-                    GameManager.uiManager.InteractionUISetter();
+                    UI_Manager.interactionType = UI_Manager.InteractableForUI.ammoPack;
                     GameManager.uiManager.interactionText.gameObject.SetActive(true);
                     UI_Manager.isLookingInteractable = true;
-                    UI_Manager.interactionType = UI_Manager.InteractableForUI.ammoPack;
+                    GameManager.uiManager.InteractionUISetter();
                 }
                 if (Input.GetKeyDown(KeyCode.F))
                 {
                     InteractableSpecial intSpe = hitInfo.collider.GetComponent<InteractableSpecial>();
-                    IncreaseHealth(intSpe.magazineCount);
+                    IncreaseAmmo(intSpe.magazineCount);
                     ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
                     GameManager.uiManager.SetAmmoUI();
                     Destroy(hitInfo.collider.gameObject);
@@ -501,8 +501,9 @@ public class MainCharacter : GeneralCharacter
         }
     }
 
-    IEnumerator WaitToSetAmmoUI()
+    IEnumerator WaitToSetAmmoUI(float durat)
     {
+        yield return new WaitForSeconds(durat);
         yield return null;
         GameManager.uiManager.SetAmmoUI();
     }

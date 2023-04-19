@@ -179,13 +179,14 @@ MonoBehaviour:
   detailDiminishDistance: 75
   sqrDistancePlayer: 0
   deactivateMeshOnLongDistance: 1
-  longDistance: 150
+  longDistance: 200
   meshesDetailed:
   - {fileID: 6164586162469390052}
   meshesNotDetailed:
   - {fileID: 7765328586130684425}
+  increaseQuality: 0
   detailLevel: 0
-  mainCam: {fileID: 0}
+  distanceInterval: 0
   enemyActivated: 0
   enemyScr: {fileID: 0}
   mainCamScr: {fileID: 0}

@@ -109,7 +109,7 @@ public class EnvObject : MonoBehaviour
 
     void AddDestroyableToList(EnvObject destroyObj)
     {
-        GameManager.AddToArray(destroyObj, ref destroyableObjects);
+        GameManager.AddToArray(ref destroyObj, ref destroyableObjects);
     }
 
     public static void SaveDestroyableObjects(GameData gameDataToUse)

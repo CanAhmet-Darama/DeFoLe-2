@@ -17,10 +17,10 @@ public class InteractableSpecial : EnvObject
     void Start()
     {
         AddInteractableToList(this);
-        if(gameObject.name == "Ammo Box" && transform.parent.name == "Start Point")
-        {
+        //if(gameObject.name == "Ammo Box" && transform.parent.name == "Start Point")
+        //{
             StartCoroutine(AssignInteractObjIndexCoroutine());
-        }
+        //}
     }
 
     void Update()
@@ -30,7 +30,7 @@ public class InteractableSpecial : EnvObject
 
     void AddInteractableToList(InteractableSpecial interactObj)
     {
-        GameManager.AddToArray(interactObj, ref interactableObjects);
+        GameManager.AddToArray(ref interactObj, ref interactableObjects);
     }
     public IEnumerator AssignInteractObjIndexCoroutine()
     {
@@ -43,7 +43,7 @@ public class InteractableSpecial : EnvObject
         GameManager.SortObjectArrayByDistance(ref interactableObjects, interactTransforms, Vector3.zero);
         for (int index = interactableObjects.Length - 1; index >= 0; index--)
         {
-            interactableObjects[index].interObjIndex = (short)index;
+                interactableObjects[index].interObjIndex = (short)index;
         }
     }
 

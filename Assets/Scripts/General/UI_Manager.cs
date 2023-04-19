@@ -5,6 +5,7 @@ using System.IO;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour
@@ -41,6 +42,7 @@ public class UI_Manager : MonoBehaviour
     public Image crosshair;
     public Image sniperZoomScreen;
     public Image weaponIcon;
+    public Image savingWheel;
 
     public Sprite[] weaponIconSprites;
 
@@ -211,6 +213,9 @@ public class UI_Manager : MonoBehaviour
         else
         {
             GameManager.SaveGame();
+            ReduceOpacity(savingWheel, 1, 1, false);
+            ChangePanels(PanelType.none);
+            GameManager.PauseGame();
         }
     }
     public void LoadGameButton()
@@ -227,6 +232,9 @@ public class UI_Manager : MonoBehaviour
         if (askingForSave)
         {
             GameManager.SaveGame();
+            ReduceOpacity(savingWheel, 1, 1, false);
+            ChangePanels(PanelType.none);
+            GameManager.PauseGame();
         }
         else
         {
@@ -236,6 +244,10 @@ public class UI_Manager : MonoBehaviour
     public void AreYouSureNo()
     {
         ChangePanels(PanelType.escMenu);
+    }
+    public void MainMenuButton()
+    {
+        SceneManager.LoadScene("Main Menu");
     }
 
     #endregion

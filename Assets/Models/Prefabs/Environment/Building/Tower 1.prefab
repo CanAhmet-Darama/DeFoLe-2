@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectOrEnemy: 1
-  detailDiminishDistance: 100
+  detailDiminishDistance: 125
   sqrDistancePlayer: 0
   deactivateMeshOnLongDistance: 0
   longDistance: 0
@@ -146,10 +146,9 @@ MonoBehaviour:
   - {fileID: 7912425872281168433}
   - {fileID: 4038106335362845880}
   - {fileID: 169370543053137059}
-  isDetailedNow: 0
-  isDeactivated: 0
-  skinnedMesh: {fileID: 0}
-  mainCam: {fileID: 0}
+  increaseQuality: 0
+  detailLevel: 0
+  distanceInterval: 0
   enemyActivated: 0
   enemyScr: {fileID: 0}
   mainCamScr: {fileID: 0}
@@ -649,6 +648,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0
@@ -720,6 +720,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0

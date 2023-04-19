@@ -476,6 +476,11 @@ public class GeneralCharacter : MonoBehaviour
             rb.velocity = Vector3.zero;
             GameManager.ChangeState(PlayerState.gameOver);
             GameManager.uiManager.GameOverDeathText();
+
+            if(mainChar.currentWeapon.weaponType == WeaponType.SR_1 && mainChar.currentWeapon.zoomedAlready)
+            {
+                mainChar.currentWeapon.SniperZoom(false);
+            }
         }
         animator.enabled = false;
         EnableRagdoll();

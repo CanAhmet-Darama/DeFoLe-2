@@ -50,6 +50,14 @@ public class GameManager : MonoBehaviour
     {
         saveDataPath = Application.dataPath + "/Saves/SaveData.json";
         weaponPrefabs = weaponPrefabsAreThese;
+        InteractableSpecial.interactableObjects = null;
+        EnvObject.destroyableObjects = null;
+
+        if (isGamePaused)
+        {
+            PauseGame();
+        }
+
         switch (SceneManager.GetActiveScene().name)
         {
             case "Level 1":
@@ -302,7 +310,7 @@ public class GameManager : MonoBehaviour
         Array.Copy(sourceArray, destinationArray, sourceArray.Length);
     }
 
-    public static void AddToArray<T>(T obj, ref T[] arrayToAdd)
+    public static void AddToArray<T>(ref T obj, ref T[] arrayToAdd)
     {
         IncreaseArray(ref arrayToAdd);
         arrayToAdd[arrayToAdd.Length - 1] = obj;
