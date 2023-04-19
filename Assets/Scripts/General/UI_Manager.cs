@@ -205,17 +205,20 @@ public class UI_Manager : MonoBehaviour
     }
     public void SaveGameButton()
     {
-        if(File.Exists(GameManager.saveDataPath))
+        if(GameManager.mainCharScr.health > 0)
         {
-            askingForSave = true;
-            ChangePanels(PanelType.areYouSure);
-        }
-        else
-        {
-            GameManager.SaveGame();
-            ReduceOpacity(savingWheel, 1, 1, false);
-            ChangePanels(PanelType.none);
-            GameManager.PauseGame();
+            if(File.Exists(GameManager.saveDataPath))
+            {
+                askingForSave = true;
+                ChangePanels(PanelType.areYouSure);
+            }
+            else
+            {
+                GameManager.SaveGame();
+                ReduceOpacity(savingWheel, 1, 1, false);
+                ChangePanels(PanelType.none);
+                GameManager.PauseGame();
+            }
         }
     }
     public void LoadGameButton()

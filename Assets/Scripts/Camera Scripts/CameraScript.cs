@@ -64,9 +64,12 @@ public class CameraScript : MonoBehaviour
 
     void Update()
     {
-        DetectMouseMotion();
-        LevelOfDetailManager.camForward2D = new Vector2(transform.forward.x, transform.forward.z);
-        LevelOfDetailManager.mainCamPos = transform.position;
+        if (!GameManager.isGamePaused)
+        {
+            DetectMouseMotion();
+            LevelOfDetailManager.camForward2D = new Vector2(transform.forward.x, transform.forward.z);
+            LevelOfDetailManager.mainCamPos = transform.position;
+        }
     }
     void LateUpdate()
     {
@@ -201,50 +204,53 @@ public class CameraScript : MonoBehaviour
 
     public void AdjustCameraPivotOrFollow(PlayerState pState,CamState stateCam)
     {
-        camPlayerState = pState;
-        camOwnState = stateCam;
-        if(pState == PlayerState.onFoot){
-            switch (stateCam)
-            {
-                case CamState.pivot:
-                    freeLookPivotOnFoot.eulerAngles = Vector3.zero;
-                    transform.SetParent(freeLookPivotOnFoot);
-                    transform.localPosition = offsetCharPivot;
-                    transform.eulerAngles = Vector3.zero;
-                    break;
-                case CamState.follow:
-                    camPointOnFoot.eulerAngles = transform.eulerAngles;
-                    transform.SetParent(camPointOnFoot);
-                    transform.localPosition = offsetCharFollow;
-                    transform.localEulerAngles = Vector3.zero;
-                    break;
-                case CamState.zoomScope:
-
-                    break;
-            }
-            if (holdNumeratorCar != null)
-            {
-                StopCoroutine(holdNumeratorCar);
-                camCanFollow = true;
-            }
-            maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude,0, 5);
-        }
-        else if(pState == PlayerState.inMainCar)
+        if (!GameManager.isGamePaused)
         {
-            switch (stateCam)
-            {
-                case CamState.pivot:
-                    transform.SetParent(freeLookPivotCar);
-                    transform.localPosition = freeOffsetCar;
-                    freeLookPivotCar.eulerAngles = transform.eulerAngles;
-                    transform.localEulerAngles = Vector3.zero;
-                    break;
-                case CamState.follow:
-                    transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
-                    transform.LookAt(camCarPoint2Transform.position);
-                    break;
+            camPlayerState = pState;
+            camOwnState = stateCam;
+            if(pState == PlayerState.onFoot){
+                switch (stateCam)
+                {
+                    case CamState.pivot:
+                        freeLookPivotOnFoot.eulerAngles = Vector3.zero;
+                        transform.SetParent(freeLookPivotOnFoot);
+                        transform.localPosition = offsetCharPivot;
+                        transform.eulerAngles = Vector3.zero;
+                        break;
+                    case CamState.follow:
+                        camPointOnFoot.eulerAngles = transform.eulerAngles;
+                        transform.SetParent(camPointOnFoot);
+                        transform.localPosition = offsetCharFollow;
+                        transform.localEulerAngles = Vector3.zero;
+                        break;
+                    case CamState.zoomScope:
+
+                        break;
+                }
+                if (holdNumeratorCar != null)
+                {
+                    StopCoroutine(holdNumeratorCar);
+                    camCanFollow = true;
+                }
+                maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude,0, 5);
             }
-            maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude, 0, 15);
+            else if(pState == PlayerState.inMainCar)
+            {
+                switch (stateCam)
+                {
+                    case CamState.pivot:
+                        transform.SetParent(freeLookPivotCar);
+                        transform.localPosition = freeOffsetCar;
+                        freeLookPivotCar.eulerAngles = transform.eulerAngles;
+                        transform.localEulerAngles = Vector3.zero;
+                        break;
+                    case CamState.follow:
+                        transform.position = camCarPointTransform.position + offsetVehicle.magnitude * (transform.position - mainCarTransform.position).normalized;
+                        transform.LookAt(camCarPoint2Transform.position);
+                        break;
+                }
+                maxCastDistance = Mathf.Clamp((mainChar.position - transform.position).magnitude, 0, 15);
+            }
         }
     }
 

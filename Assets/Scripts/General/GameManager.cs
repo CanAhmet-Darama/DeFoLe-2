@@ -48,15 +48,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        saveDataPath = Application.dataPath + "/Saves/SaveData.json";
+        saveDataPath = Application.streamingAssetsPath + "/Saves/SaveData.json";
         weaponPrefabs = weaponPrefabsAreThese;
         InteractableSpecial.interactableObjects = null;
         EnvObject.destroyableObjects = null;
-
-        if (isGamePaused)
-        {
-            PauseGame();
-        }
 
         switch (SceneManager.GetActiveScene().name)
         {
@@ -92,6 +87,10 @@ public class GameManager : MonoBehaviour
         if (MainMenuManager.hasLoadedGame)
         {
             LoadGame();
+        }
+        if (isGamePaused)
+        {
+            PauseGame();
         }
     }
 

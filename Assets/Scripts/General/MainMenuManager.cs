@@ -44,7 +44,7 @@ public class MainMenuManager : UI_Manager
         initialLightRotation = spotLight.transform.eulerAngles;
         StartCoroutine(RandomAngle());
 
-        GameManager.saveDataPath = Application.dataPath + "/Saves/SaveData.json";
+        GameManager.saveDataPath = Application.streamingAssetsPath + "/Saves/SaveData.json";
         hasSavedGame = File.Exists(GameManager.saveDataPath);
         if(!hasSavedGame )
         {
@@ -80,7 +80,7 @@ public class MainMenuManager : UI_Manager
             else
             {
                 ChangePanels(PanelTypeMainMenu.areYouSure);
-                areYouSureTextMainMenu.text = "Are you sure you want to start a new game by deleting the previous save game?";
+                areYouSureTextMainMenu.text = "Are you sure you want to start a new game?";
             }
             question = AreYouSureQuestion.newGame;
         }

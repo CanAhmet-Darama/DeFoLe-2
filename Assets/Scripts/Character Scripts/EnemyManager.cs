@@ -52,25 +52,13 @@ public class EnemyManager : MonoBehaviour
             enemiesDead[campNumber - 1] = new bool[0];
             enemiesStaticIndexes[campNumber - 1] = new short[0];
         }
-        //short[] staticIndexHolderArray = new short[enemiesStaticIndexes[campNumber - 1].Length];
-        //GameManager.CopyArray(enemiesStaticIndexes[campNumber - 1], ref staticIndexHolderArray);
-        //enemiesStaticIndexes[campNumber - 1] = new short[enemiesStaticIndexes[campNumber - 1].Length + 1];
-        //GameManager.CopyArray(staticIndexHolderArray, ref enemiesStaticIndexes[campNumber - 1]);
-        //enemiesStaticIndexes[campNumber - 1][staticIndexHolderArray.Length] = newEnemy.enemyStaticIndex;
         GameManager.AddToArray(ref newEnemy.enemyStaticIndex, ref enemiesStaticIndexes[campNumber - 1]);
 
-        //EnemyScript[] holderArray = enemies[campNumber - 1];
-        //enemies[campNumber - 1] = new EnemyScript[holderArray.Length + 1];
-        //GameManager.CopyArray(holderArray, ref enemies[campNumber - 1]);
-        //enemies[campNumber - 1][holderArray.Length] = newEnemy;
         GameManager.AddToArray(ref newEnemy, ref enemies[campNumber - 1]);
         newEnemy.enemyNumCode = (byte)(enemies[campNumber - 1].Length - 1);
 
         GameManager.IncreaseArray(ref enemiesDead[campNumber - 1]);
         GameManager.IncreaseArray(ref enemiesCanSee[campNumber - 1]);
-        //bool[] visionHolderArray = enemiesCanSee[campNumber- 1];
-        //enemiesCanSee[campNumber - 1] = new bool[visionHolderArray.Length + 1];
-        //GameManager.CopyArray(visionHolderArray, ref enemiesCanSee[campNumber - 1]);
     }
     public static void AlertWholeCamp(byte campNumber)
     {
