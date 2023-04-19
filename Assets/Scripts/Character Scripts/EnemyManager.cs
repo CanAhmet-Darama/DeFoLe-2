@@ -285,6 +285,12 @@ public class EnemyManager : MonoBehaviour
 
                     enemyScr.health = gameDataToUse.enemyHealths[campIndex][staticIndex];
 
+                    if(enemyScr.health < 0)
+                    {
+                        Destroy(enemyScr.gameObject);
+                        continue;
+                    }
+
                     GameManager.CopyArray(gameDataToUse.enemyAmmoCounts[campIndex][staticIndex], ref enemyScr.ammoCounts);
                     for (int i = enemyScr.weaponScripts.Length - 1; i >= 0; i--)
                     {
