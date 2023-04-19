@@ -200,6 +200,23 @@ public class GeneralWeapon : MonoBehaviour
         zoomedAlready = activateZoom;
         GameManager.uiManager.crosshair.gameObject.SetActive(!activateZoom);
         GameManager.uiManager.sniperZoomScreen.gameObject.SetActive(activateZoom);
+
+        if(LevelOfDetailManager.detailDistanceMultiplier < 0.1f)
+        {
+            switch (SettingsManager.qualityDropdown.value)
+            {
+                case 0:
+                    LevelOfDetailManager.detailDistanceMultiplier = 0.5f;
+                    break;
+                case 1:
+                    LevelOfDetailManager.detailDistanceMultiplier = 0.75f;
+                    break;
+                case 2:
+                    LevelOfDetailManager.detailDistanceMultiplier = 1;
+                    break;
+            }
+
+        }
     }
 
     IEnumerator AFrameThenTrail(GameObject bullet)

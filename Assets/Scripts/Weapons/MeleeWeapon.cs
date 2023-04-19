@@ -144,7 +144,7 @@ public class MeleeWeapon : MonoBehaviour
                     }
                 }
             }
-            else if((other.CompareTag("Player") || other.CompareTag("Enemy")) && other.gameObject != owner.gameObject)
+            else if((other.CompareTag("Player") || other.CompareTag("Enemy")) && other.GetComponent<CharColliderManager>().ownerCharacter != owner)
             {
                 if (other.gameObject.name == "Helmet Holder")
                     ImpactMarkManager.MakeBulletImpactWithoutMark(contactPoint + (transform.position - contactPoint).normalized * 0.01f, (contactPoint - transform.position).normalized + new Vector3(0,90,0), EnvObjType.metal);
@@ -164,7 +164,7 @@ public class MeleeWeapon : MonoBehaviour
                 }
             }
 
-            else if (other.tag == "Vehicle")
+            else if (other.CompareTag("Vehicle"))
             {
                 GeneralVehicle shotVehicle = other.gameObject.GetComponentInParent<GeneralVehicle>();
                 shotVehicle.DamageVehicle(damage);

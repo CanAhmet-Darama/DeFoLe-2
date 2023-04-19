@@ -124,7 +124,7 @@ public class GeneralBullet : MonoBehaviour
                     }
                 }
             }
-            else if(collision.collider.tag == "Vehicle")
+            else if(collision.collider.CompareTag("Vehicle"))
             {
                 GeneralVehicle shotVehicle = collision.gameObject.GetComponentInParent<GeneralVehicle>();
                 shotVehicle.DamageVehicle(itsOwnerWeapon.damage);
@@ -145,7 +145,7 @@ public class GeneralBullet : MonoBehaviour
                         EnvObjType.metal);
                 }
             }
-            else if (collision.collider.tag == "Player" || collision.collider.tag == "Enemy")
+            else if (collision.collider.CompareTag("Player") || collision.collider.CompareTag("Enemy"))
             {
                 if (collision.collider.gameObject.name == "Helmet Holder")
                     ImpactMarkManager.MakeBulletImpactWithoutMark(collision.contacts[0].point + contact.normal.normalized * 0.01f, contact.normal, EnvObjType.metal);

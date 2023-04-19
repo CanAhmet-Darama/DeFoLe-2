@@ -70,7 +70,6 @@ public class UI_Manager : MonoBehaviour
     void Start()
     {
         mainCar = GameManager.mainCar.GetComponent<MainCar>();
-        MainCharacter.maxHealth = GameManager.mainCharScr.health;
         maxVehicleHealth = mainCar.vehicleHealth;
 
         atStartingPoint = true;

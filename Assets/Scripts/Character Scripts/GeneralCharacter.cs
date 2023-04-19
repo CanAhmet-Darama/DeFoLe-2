@@ -443,6 +443,7 @@ public class GeneralCharacter : MonoBehaviour
             }
             else
             {
+                MainCharacter.healthRate = (float)GameManager.mainCharScr.health / MainCharacter.maxHealth;
                 GameManager.uiManager.SetHealthUI();
             }
             //Debug.Log(harmedChar.gameObject.name + " got damage : " + damage);

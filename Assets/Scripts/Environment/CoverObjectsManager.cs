@@ -90,10 +90,10 @@ public class CoverObjectsManager : MonoBehaviour
         coverObj.coveredObjectIndex = (short)(holderArray.Length);
     }
 
-    public static Vector3 GetCoverPoint(byte campNumber, EnemyScript enemyScriptIns = null, bool stayOnSamePeekCover = false)
+    public static Vector3 GetCoverPoint(byte campNumber, EnemyScript enemyScriptIns = null, bool stayOnTheSame = false)
     {
         enemyScriptIns.currentCoveredIndexes[0] = (short)(campNumber - 1);
-        if (!stayOnSamePeekCover)
+        if (!stayOnTheSame)
         {
             short coverIndex;
             while (true)

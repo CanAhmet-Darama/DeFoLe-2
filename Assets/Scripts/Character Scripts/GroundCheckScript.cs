@@ -25,7 +25,7 @@ public class GroundCheckScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Ground" || other.tag == "Vehicle")
+        if(other.CompareTag("Ground") || other.CompareTag("Vehicle") || other.CompareTag("Collectable"))
         {
             Char.isGrounded= true;
             Char.isJumping = false;
@@ -37,7 +37,7 @@ public class GroundCheckScript : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Ground" || other.tag == "Vehicle")
+        if (other.CompareTag("Ground") || other.CompareTag("Vehicle") || other.CompareTag("Collectable"))
         {
             Char.isGrounded = true;
             touchingGround = true;
@@ -45,7 +45,7 @@ public class GroundCheckScript : MonoBehaviour
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Ground" || other.tag == "Vehicle")
+        if (other.CompareTag("Ground") || other.CompareTag("Vehicle") || other.CompareTag("Collectable"))
         {
             groundedCounting = StartCoroutine(CountForNotGrounded());
             touchingGround = false;

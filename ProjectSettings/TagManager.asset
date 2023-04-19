@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - Enemy
   - Interface
+  - Collectable
   layers:
   - Default
   - TransparentFX

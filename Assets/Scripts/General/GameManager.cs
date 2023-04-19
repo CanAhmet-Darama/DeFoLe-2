@@ -108,6 +108,22 @@ public class GameManager : MonoBehaviour
                 uiManager.ChangePanels(PanelType.escMenu);
             }
         }
+        if (LevelOfDetailManager.detailDistanceMultiplier == 0)
+        {
+            switch (SettingsManager.qualityDropdown.value)
+            {
+                case 0:
+                    LevelOfDetailManager.detailDistanceMultiplier = 0.5f;
+                    break;
+                case 1:
+                    LevelOfDetailManager.detailDistanceMultiplier = 0.75f;
+                    break;
+                case 2:
+                    LevelOfDetailManager.detailDistanceMultiplier = 1;
+                    break;
+            }
+        }
+
     }
 
     public static void ChangeState()
@@ -243,7 +259,8 @@ public class GameManager : MonoBehaviour
         EnemyManager.LoadAllEnemies(gameDataForLoad);
         GameData.LoadFieldsOfCharAndVehicle(gameDataForLoad);
         GameData.LoadEnvironmentObjects(gameDataForLoad);
-
+        uiManager.SetAmmoUI();
+        uiManager.SetHealthUI();
     }
     public static void ExitGame()
     {

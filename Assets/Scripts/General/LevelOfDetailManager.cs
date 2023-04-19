@@ -45,22 +45,6 @@ public class LevelOfDetailManager : MonoBehaviour
 
     void Update()
     {
-        if(detailDistanceMultiplier == 0)
-        {
-            switch(SettingsManager.qualityDropdown.value)
-            {
-                case 0:
-                    detailDistanceMultiplier = 0.5f;
-                    break;
-                case 1:
-                    detailDistanceMultiplier = 0.75f;
-                    break;
-                case 2:
-                    detailDistanceMultiplier = 1;
-                    break;
-            }
-        }
-
         sqrDistancePlayer = GameManager.SqrDistance(mainCamPos, transform.position);
         sqrRangeInUse = detailDiminishDistance * detailDiminishDistance * detailDistanceMultiplier * detailDistanceMultiplier; 
         sqrDeactivateRangeInUse = longDistance * longDistance * detailDistanceMultiplier * detailDistanceMultiplier;

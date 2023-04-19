@@ -362,7 +362,6 @@ public class MainCharacter : GeneralCharacter
         if (Physics.Raycast(GameManager.mainCam.GetComponent<Camera>().ViewportPointToRay(middleScreen), out RaycastHit hitInfo, 5, defaultLayerMask))
         {
             Debug.DrawLine(GameManager.mainCam.position,hitInfo.point);
-            //Debug.Log(hitInfo.collider.gameObject);
             if (GameManager.SqrDistance(hitInfo.point, transform.position) < 9 && hitInfo.collider.CompareTag("Vehicle"))
             {
                 if (UI_Manager.isLookingInteractable == false)
@@ -376,41 +375,45 @@ public class MainCharacter : GeneralCharacter
                     GameManager.ChangeState(PlayerState.inMainCar);
                 }
             }
-            else if (GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && hitInfo.collider.name == "Health Pack")
+            else if(GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && hitInfo.collider.CompareTag("Collectable"))
             {
-                if (UI_Manager.isLookingInteractable == false)
-                {
-                    GameManager.uiManager.interactionText.gameObject.SetActive(true);
-                    UI_Manager.isLookingInteractable = true;
-                    UI_Manager.interactionType = UI_Manager.InteractableForUI.healthPack;
-                    GameManager.uiManager.InteractionUISetter();
-                }
-                if (Input.GetKeyDown(KeyCode.F))
-                {
-                    InteractableSpecial intSpe = hitInfo.collider.GetComponent<InteractableSpecial>();
-                    IncreaseHealth(intSpe.healthAmount);
-                    ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
-                    GameManager.uiManager.SetHealthUI();
-                    Destroy(hitInfo.collider.gameObject);
-                }
+                InteractableSpecial intSpe = hitInfo.collider.GetComponent<InteractableSpecial>();
 
-            }
-            else if (GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && hitInfo.collider.name == "Ammo Box")
-            {
-                if (UI_Manager.isLookingInteractable == false)
+                if (GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && intSpe.interactType == InteractableType.healthPack)
                 {
-                    UI_Manager.interactionType = UI_Manager.InteractableForUI.ammoPack;
-                    GameManager.uiManager.interactionText.gameObject.SetActive(true);
-                    UI_Manager.isLookingInteractable = true;
-                    GameManager.uiManager.InteractionUISetter();
+                    if (UI_Manager.isLookingInteractable == false)
+                    {
+                        GameManager.uiManager.interactionText.gameObject.SetActive(true);
+                        UI_Manager.isLookingInteractable = true;
+                        UI_Manager.interactionType = UI_Manager.InteractableForUI.healthPack;
+                        GameManager.uiManager.InteractionUISetter();
+                    }
+                    if (Input.GetKeyDown(KeyCode.F))
+                    {
+                        IncreaseHealth(intSpe.healthAmount);
+                        ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
+                        GameManager.uiManager.SetHealthUI();
+                        Destroy(hitInfo.collider.gameObject);
+                    }
+
                 }
-                if (Input.GetKeyDown(KeyCode.F))
+                else if (GameManager.SqrDistance(hitInfo.point, transform.position) < 4 && intSpe.interactType == InteractableType.ammoBox)
                 {
-                    InteractableSpecial intSpe = hitInfo.collider.GetComponent<InteractableSpecial>();
-                    IncreaseAmmo(intSpe.magazineCount);
-                    ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
-                    GameManager.uiManager.SetAmmoUI();
-                    Destroy(hitInfo.collider.gameObject);
+                    if (UI_Manager.isLookingInteractable == false)
+                    {
+                        UI_Manager.interactionType = UI_Manager.InteractableForUI.ammoPack;
+                        GameManager.uiManager.interactionText.gameObject.SetActive(true);
+                        UI_Manager.isLookingInteractable = true;
+                        GameManager.uiManager.InteractionUISetter();
+                    }
+                    if (Input.GetKeyDown(KeyCode.F))
+                    {
+                        IncreaseAmmo(intSpe.magazineCount);
+                        ImpactMarkManager.PlayOnShotClip(intSpe.pickUpSound, transform.position);
+                        GameManager.uiManager.SetAmmoUI();
+                        Destroy(hitInfo.collider.gameObject);
+                    }
+
                 }
 
             }
@@ -503,8 +506,7 @@ public class MainCharacter : GeneralCharacter
 
     IEnumerator WaitToSetAmmoUI(float durat)
     {
-        yield return new WaitForSeconds(durat);
-        yield return null;
+        yield return new WaitForSeconds(durat + 0.1f);
         GameManager.uiManager.SetAmmoUI();
     }
 
