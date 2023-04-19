@@ -233,6 +233,7 @@ public class UI_Manager : MonoBehaviour
     {
         if (askingForSave)
         {
+            File.Delete(GameManager.saveDataPath);
             GameManager.SaveGame();
             ReduceOpacity(savingWheel, 1, 1, false);
             ChangePanels(PanelType.none);

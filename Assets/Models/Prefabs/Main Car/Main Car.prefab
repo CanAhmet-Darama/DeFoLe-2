@@ -213,6 +213,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0
@@ -283,6 +284,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0
@@ -481,6 +483,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0
@@ -563,7 +566,7 @@ MonoBehaviour:
   steerAngle: 35
   steerSpeed: 4
   brakePower: 2000
-  vehicleHealth: 3500
+  vehicleHealth: 5000
   axles:
   - leftCol: {fileID: 5062277243917758868}
     rightCol: {fileID: 3919657009808483070}
@@ -742,6 +745,7 @@ MonoBehaviour:
   subPartObjs: []
   mainCollider: {fileID: 0}
   objRb: {fileID: 0}
+  subRbs: []
   navObstacle: {fileID: 0}
   isSubPartItself: 0
   destObjIndex: 0

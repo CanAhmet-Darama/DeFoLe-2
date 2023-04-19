@@ -146,14 +146,7 @@ public class CoverObjectsManager : MonoBehaviour
         }
         else
         {
-            Vector3 yResetPoint = new Vector3(enemyScriptIns.currentCoverPoint.worldPos.x, 0, enemyScriptIns.currentCoverPoint.worldPos.z);
-            Vector3 yResetPlayer = new Vector3(GameManager.mainChar.position.x, 0, GameManager.mainChar.position.z);
-
-            enemyScriptIns.currentCoverPoint.coverForwardForPeek = (yResetPoint - yResetPlayer).normalized;
-            return (enemyScriptIns.currentCoverPoint.worldPos + enemyScriptIns.currentCoverPoint.coverForwardForPeek
-                * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter + StairCheckScript.RotateVecAroundVec(
-                enemyScriptIns.currentCoverPoint.coverForwardForPeek * enemyScriptIns.currentCoverPoint.peekCoverDistanceFromCenter, Vector3.up, 90));
-
+            return enemyScriptIns.permanentCoverObject.coverPoints[enemyScriptIns.permanentCoverObject.coverPoints.Length - 1].worldPos;
         }
     }
 

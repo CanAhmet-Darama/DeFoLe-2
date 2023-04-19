@@ -443,7 +443,7 @@ public class EnemyScript : GeneralCharacter
         {
             if (isCrouching) { CrouchOrStand(); }
             StartCoroutine(IsCoveredSettingCoroutine());
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this));
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this, hasPermanentPlace));
             if(currentWeapon.currentAmmo < currentWeapon.maxAmmo && ammoCounts[(int)currentWeapon.weaponType] > 0 && canReload)
             {
                 currentWeapon.Reload();
@@ -453,7 +453,7 @@ public class EnemyScript : GeneralCharacter
             currentCoverPoint.worldPos - new Vector3(targetTransform.position.x, currentCoverPoint.worldPos.y, targetTransform.position.z))) > 15)
         {
             StartCoroutine(IsCoveredSettingCoroutine());
-            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this, true));
+            navAgent.SetDestination(CoverObjectsManager.GetCoverPoint(mainCharScript.closestCamp, this, hasPermanentPlace));
         }
         yield return new WaitForSeconds(Random.Range(frequency, frequency + 1));
         if(enemyState == EnemyAIState.Alerted)

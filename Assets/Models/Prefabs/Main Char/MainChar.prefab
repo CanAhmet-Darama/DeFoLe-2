@@ -420,7 +420,7 @@ MonoBehaviour:
   runAcceleration: 50
   jumpForce: 450
   jumpCooldown: 1.5
-  health: 1500
+  health: 2000
   rb: {fileID: 1643108193539418682}
   isEnemy: 0
   currentWeapon: {fileID: 0}
